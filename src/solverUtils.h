@@ -12,10 +12,10 @@ enum class SolverFlag
     QuadProgSparse
 };
 
-enum PreviewControllerFlag
+enum class PCFlag
 {
-    full,
-    last
+    Full,
+    Last
 };
     
 static const std::unique_ptr<SolverInterface> solverFactory(SolverFlag)
