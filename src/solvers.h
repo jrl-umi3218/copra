@@ -5,7 +5,7 @@
 
 // QP solvers
 #include <eigen-qld/QLD.h>
-#include <eigen-QuadProg/QuadProg.h>
+#include <eigen-quadprog/QuadProg.h>
 // #include <eigen-lssol/LSSOL.h>
 
 namespace pc
@@ -22,22 +22,13 @@ class SolverInterface //TODO: Add warning for all functions
 {
   public:
     /**
-	 * Get the iteration information output as define by the solver documentation.
-	 * @see QuadProgDenseSolver::SI_iter()
-	 * @see QuadProgSparseSolver::SI_iter()
-	 * @see QLDSolver::SI_iter()
-	 * @return The iterations result.
-	 */
-    virtual const Eigen::VectorXi &SI_iter() const {};
-
-    /**
 	 * Get information of eventual fail's solver output as define by the solver documentation.
 	 * @see QuadProgDenseSolver::SI_fail()
 	 * @see QuadProgSparseSolver::SI_fail()
 	 * @see QLDSolver::SI_fail()
 	 * @return The fail number.
 	 */
-    virtual int SI_fail() const {};
+    virtual int SI_fail() const;
 
     /**
 	 * Get the solver's solution.
@@ -46,7 +37,7 @@ class SolverInterface //TODO: Add warning for all functions
 	 * @see QLDSolver::SI_result()
 	 * @return The qp solver result.
 	 */
-    virtual const Eigen::VectorXd &SI_result() const {};
+    virtual const Eigen::VectorXd &SI_result() const;
 
     /**
 	 * Initialize the variables of the problem to solve.
@@ -55,7 +46,7 @@ class SolverInterface //TODO: Add warning for all functions
 	 * @see QLDSolver::SI_problem()
 	 * @return The qp solver result.
 	 */
-    virtual void SI_problem(int nrVar, int nrEq, int nrInEq){};
+    virtual void SI_problem(int nrVar, int nrEq, int nrInEq);
 
     /**
 	 * Solve the problem.
@@ -66,7 +57,8 @@ class SolverInterface //TODO: Add warning for all functions
 	 */
     virtual bool SI_solve(const Eigen::MatrixXd &Q, const Eigen::VectorXd &C,
 			  const Eigen::MatrixXd &Aeq, const Eigen::VectorXd &Beq,
-			  const Eigen::MatrixXd &Aineq, const Eigen::VectorXd &Bineq){};
+			  const Eigen::MatrixXd &Aineq, const Eigen::VectorXd &Bineq,
+			  const Eigen::VectorXd &XL, const Eigen::VectorXd &XU);
 };
 
 /**
@@ -78,7 +70,6 @@ class QuadProgDenseSolver : public SolverInterface
     QuadProgDenseSolver();
     QuadProgDenseSolver(int nrVar, int nrEq, int nrInEq);
 
-    const Eigen::VectorXi &SI_iter() const override;
     int SI_fail() const override;
 
     const Eigen::VectorXd &SI_result() const override;
@@ -115,55 +106,11 @@ class QuadProgDenseSolver : public SolverInterface
 	 */
     bool SI_solve(const Eigen::MatrixXd &Q, const Eigen::VectorXd &C,
 		  const Eigen::MatrixXd &Aeq, const Eigen::VectorXd &Beq,
-		  const Eigen::MatrixXd &Aineq, const Eigen::VectorXd &Bineq) override;
+		  const Eigen::MatrixXd &Aineq, const Eigen::VectorXd &Bineq,
+		  const Eigen::VectorXd &XL, const Eigen::VectorXd &XU) override;
 
   private:
-    std::unique_ptr<QuadProgDense> solver_;
-};
-
-/**
- * QuadProg solver for sparse matrix.
- */
-class QuadProgSparseSolver : public SolverInterface
-{
-  public:
-    QuadProgSparseSolver();
-    QuadProgSparseSolver(int nrVar, int nrEq, int nrInEq);
-
-    const Eigen::VectorXi &SI_iter() const override;
-    int SI_fail() const override;
-
-    const Eigen::VectorXd &SI_result() const override;
-
-    void SI_problem(int nrVar, int nrEq, int nrInEq) override;
-
-    /**
-	 * Solve the problem.
-	 * Solve the system 
-	 * \f[
-	 * 	 \left\{
-		 	\begin{array}{cl}
-			 {
-				 \min_x & \frac{1}{2} x^T Q x + c^T x \\
-				        & Aeq x = beq \\
-						& AInEq x \leq bInEq
-			 }
-		 \right.
-	 * \f]
-	 * @param Q An N-by-N symmetric positive definite sparse matrix.
-	 * @param C An N-by-1 sparse vector.
-	 * @param Aeq An M-by-N sparse matrix.
-	 * @param beq An M-by-1 sparse vector.
-	 * @param Aineq An P-by-N sparse matrix.
-	 * @param Bineq An P-by-1 sparse vector.
-	 * @return The qp solver result.
-	 */
-    bool SI_solve(const Eigen::MatrixXd &Q, const Eigen::VectorXd &C,
-		  const Eigen::MatrixXd &Aeq, const Eigen::VectorXd &Beq,
-		  const Eigen::MatrixXd &Aineq, const Eigen::VectorXd &Bineq) override;
-
-  private:
-    std::unique_ptr<QuadProgSparse> solver_;
+    std::unique_ptr<Eigen::QuadProgDense> solver_;
 };
 
 /**
@@ -175,7 +122,6 @@ class QLDSolver : public SolverInterface //TODO: Enable sparse matrix
     QLDSolver();
     QLDSolver(int nrVar, int nrEq, int nrInEq);
 
-    const Eigen::VectorXi &SI_iter() const override;
     int SI_fail() const override;
 
     const Eigen::VectorXd &SI_result() const override;
@@ -183,10 +129,11 @@ class QLDSolver : public SolverInterface //TODO: Enable sparse matrix
     void SI_problem(int nrVar, int nrEq, int nrInEq) override;
     bool SI_solve(const Eigen::MatrixXd &Q, const Eigen::VectorXd &C,
 		  const Eigen::MatrixXd &Aeq, const Eigen::VectorXd &Beq,
-		  const Eigen::MatrixXd &Aineq, const Eigen::VectorXd &Bineq) override;
+		  const Eigen::MatrixXd &Aineq, const Eigen::VectorXd &Bineq,
+		  const Eigen::VectorXd &XL, const Eigen::VectorXd &XU) override;
 
   private:
-    std::unique_ptr<QLD> solver_;
+    std::unique_ptr<Eigen::QLD> solver_;
 };
 
 } // namespace pc

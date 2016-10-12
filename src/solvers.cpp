@@ -7,22 +7,42 @@ namespace pc
 {
 
 /*
+ * SolverInterface
+ */
+int SolverInterface::SI_fail() const
+{
+    return 0;
+}
+
+const Eigen::VectorXd &SolverInterface::SI_result() const
+{
+    return std::move(Eigen::VectorXd());
+}
+
+void SolverInterface::SI_problem(int /* nrVar */, int /* nrEq */, int /* nrInEq */)
+{
+}
+
+bool SolverInterface::SI_solve(const Eigen::MatrixXd & /* Q */, const Eigen::VectorXd & /* C */,
+                               const Eigen::MatrixXd & /* Aeq */, const Eigen::VectorXd & /* Beq */,
+                               const Eigen::MatrixXd & /* Aineq */, const Eigen::VectorXd & /* Bineq */,
+                               const Eigen::VectorXd & /* XL */, const Eigen::VectorXd & /* XU */)
+{
+    return false;
+}
+
+/*
  * QuadProg dense
  */
 
 QuadProgDenseSolver::QuadProgDenseSolver()
-    : solver_(std::make_unique<QuadProgDense>())
+    : solver_(std::make_unique<Eigen::QuadProgDense>())
 {
 }
 
 QuadProgDenseSolver::QuadProgDenseSolver(int nrVar, int nrEq, int nrInEq)
-    : solver_(std::make_unique<QuadProgDense>(nrVar, nrEq, nrInEq))
+    : solver_(std::make_unique<Eigen::QuadProgDense>(nrVar, nrEq, nrInEq))
 {
-}
-
-const Eigen::VectorXi &QuadProgDenseSolver::SI_iter() const
-{
-    return solver_->iter();
 }
 
 int QuadProgDenseSolver::SI_fail() const
@@ -32,7 +52,7 @@ int QuadProgDenseSolver::SI_fail() const
 
 const Eigen::VectorXd &QuadProgDenseSolver::SI_result() const
 {
-    return seolver_->result();
+    return solver_->result();
 }
 
 void QuadProgDenseSolver::SI_problem(int nrVar, int nrEq, int nrInEq)
@@ -42,50 +62,22 @@ void QuadProgDenseSolver::SI_problem(int nrVar, int nrEq, int nrInEq)
 
 bool QuadProgDenseSolver::SI_solve(const Eigen::MatrixXd &Q, const Eigen::VectorXd &C,
                                    const Eigen::MatrixXd &Aeq, const Eigen::VectorXd &Beq,
-                                   const Eigen::MatrixXd &Aineq, const Eigen::VectorXd &Bineq)
+                                   const Eigen::MatrixXd &Aineq, const Eigen::VectorXd &Bineq,
+                                   const Eigen::VectorXd &XL, const Eigen::VectorXd &XU)
 {
-    solver_->solve(Q, C, Aeq, Beq, Aineq, Bineq);
-}
+    auto nrLines = XL.rows();
+    auto ALines = Aineq.rows();
+    Eigen::MatrixXd I = Eigen::MatrixXd::Identity(nrLines, nrLines);
+    Eigen::MatrixXd ineqMat(ALines + 2 * nrLines, Aineq.cols());
+    Eigen::VectorXd ineqVec(ALines + 2 * nrLines);
+    ineqMat.topRows(ALines) = Aineq;
+    ineqMat.block(ALines, 0, nrLines, nrLines) = I;
+    ineqMat.bottomRows(nrLines) = -I;
+    ineqVec.head(ALines) = Bineq;
+    ineqVec.segment(ALines, nrLines) = XU;
+    ineqVec.tail(nrLines) = -XL;
 
-/*
- * QuadProg sparse
- */
-
-QuadProgSparseSolver::QuadProgSparseSolver()
-    : solver_(std::make_unique<QuadProgSparse>())
-{
-}
-
-QuadProgSparseSolver::QuadProgSparseSolver(int nrVar, int nrEq, int nrInEq)
-    : solver_(std::make_unique<QuadProgSparse>(nrVar, nrEq, nrInEq))
-{
-}
-
-const Eigen::VectorXi &QuadProgSparseSolver::SI_iter() const
-{
-    return solver_->iter();
-}
-
-int QuadProgSparseSolver::SI_fail() const
-{
-    return solver_->fail();
-}
-
-const Eigen::VectorXd &QuadProgSparseSolver::SI_result() const
-{
-    return seolver_->result();
-}
-
-void QuadProgSparseSolver::SI_problem(int nrVar, int nrEq, int nrInEq)
-{
-    solver_->problem(nrVar, nrEq, nrInEq);
-}
-
-bool QuadProgSparseSolver::SI_solve(const Eigen::MatrixXd &Q, const Eigen::VectorXd &C,
-                                    const Eigen::MatrixXd &Aeq, const Eigen::VectorXd &Beq,
-                                    const Eigen::MatrixXd &Aineq, const Eigen::VectorXd &Bineq)
-{
-    solver_->solve(Q, C, Aeq, Beq, Aineq, Bineq);
+    return solver_->solve(Q, C, Aeq, Beq, ineqMat, ineqVec);
 }
 
 /*
@@ -93,18 +85,13 @@ bool QuadProgSparseSolver::SI_solve(const Eigen::MatrixXd &Q, const Eigen::Vecto
  */
 
 QLDSolver::QLDSolver()
-    : solver_(std::make_unique<QuadProgSparse>())
+    : solver_(std::make_unique<Eigen::QLD>())
 {
 }
 
 QLDSolver::QLDSolver(int nrVar, int nrEq, int nrInEq)
-    : solver_(std::make_unique<QuadProgSparse>(nrVar, nrEq, nrInEq))
+    : solver_(std::make_unique<Eigen::QLD>(nrVar, nrEq, nrInEq))
 {
-}
-
-const Eigen::VectorXi &QLDSolver::SI_iter() const
-{
-    return solver_->iter();
 }
 
 int QLDSolver::SI_fail() const
@@ -114,7 +101,7 @@ int QLDSolver::SI_fail() const
 
 const Eigen::VectorXd &QLDSolver::SI_result() const
 {
-    return seolver_->result();
+    return solver_->result();
 }
 
 void QLDSolver::SI_problem(int nrVar, int nrEq, int nrInEq)
@@ -124,9 +111,10 @@ void QLDSolver::SI_problem(int nrVar, int nrEq, int nrInEq)
 
 bool QLDSolver::SI_solve(const Eigen::MatrixXd &Q, const Eigen::VectorXd &C,
                          const Eigen::MatrixXd &Aeq, const Eigen::VectorXd &Beq,
-                         const Eigen::MatrixXd &Aineq, const Eigen::VectorXd &Bineq)
+                         const Eigen::MatrixXd &Aineq, const Eigen::VectorXd &Bineq,
+                         const Eigen::VectorXd &XL, const Eigen::VectorXd &XU)
 {
-    solver_->solve(Q, C, Aeq, Beq, Aineq, Bineq);
+    return solver_->solve(Q, C, Aeq, Beq, Aineq, Bineq, XL, XU, 1e-3); //TODO: Change harcoded value
 }
 
 } // namespace pc
