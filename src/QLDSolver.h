@@ -31,8 +31,23 @@ public:
 	 */
     int SI_fail() const override;
 
+	/**
+	 * Print an information on the current solver status.
+	 */
     void SI_inform() const override;
+
+	/**
+	 * Select the print level of the solver if available
+	 * @param pl The print level.
+	 * @param pl  =0 : Nothing is printed.
+	 * @param pl !=0 : Only a final error message is given.
+	 */
     void SI_printLevel(int pl) const override;
+
+	/**
+	 * Set the maximum error tolerance of the solution if available
+	 * @param tol The error tolerance
+	 */
     void SI_tol(double tol) const override;
 
     /**

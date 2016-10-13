@@ -15,19 +15,43 @@ class SolverInterface {
 public:
     /**
 	 * Get information of eventual fail's solver output as define by the solver documentation.
-	 * @see QuadProgDenseSolver::SI_fail()
-	 * @see QuadProgSparseSolver::SI_fail()
-	 * @see LSSOLSolver::SI_fail()
-	 * @see QLDSolver::SI_fail()
 	 * @return The fail number.
 	 */
     virtual int SI_fail() const;
 
+    /**
+	 * Print an information on the current solver status.
+	 */
     virtual void SI_inform() const;
+
+    /**
+	 * Get the number of needed iteration if available
+	 * @return The number of iteration
+	 */
     virtual int SI_iter() const;
+
+    /**
+	 * Select the print level of the solver if available
+	 * @param pl The print level
+	 */
     virtual void SI_printLevel(int pl) const;
+
+    /**
+	 * Set the maximum error tolerance of the solution if available
+	 * @param tol The error tolerance
+	 */
     virtual void SI_tol(double tol) const;
+
+    /**
+	 * Get the warm start status of the solver if available
+	 * @return True for warm start, False for cold start
+	 */
     virtual bool SI_warmStart() const;
+
+    /**
+	 * Set the warm start status of the solver if available
+	 * @param w True for warm start, False for cold start
+	 */
     virtual void SI_warmStart(bool w);
 
     /**
