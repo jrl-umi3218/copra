@@ -1,14 +1,11 @@
 #include "previewController.h"
 
+namespace pc {
 
-namespace pc
-{
-
-PreviewController::PreviewController(SolverFlag flag=SolverFlag::DEFAULT)
+PreviewController::PreviewController(SolverFlag flag = SolverFlag::DEFAULT)
     sol_(pb::solverFactory(flag)),
 
 {
 }
-
 
 } // namespace pc

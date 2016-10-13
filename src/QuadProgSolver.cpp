@@ -1,7 +1,7 @@
 #include "QuadProgSolver.h"
+#include <iostream>
 
-namespace pc
-{
+namespace pc {
 
 /*
  * QuadProg dense
@@ -17,23 +17,46 @@ int QuadProgDenseSolver::SI_fail() const
     return solver_->fail();
 }
 
-const Eigen::VectorXd &QuadProgDenseSolver::SI_result() const
+int QuadProgDenseSolver::SI_iter() const
+{
+    return solver_->iter()(0);
+}
+
+void QuadProgDenseSolver::SI_inform() const
+{
+    switch (solver_->fail()) {
+    case 0:
+        std::cout << "No problems" << std::endl;
+        break;
+    case 1:
+        std::cout << "The minimization problem has no solution" << std::endl;
+        break;
+    case 2:
+        std::cout << "Problems with the decomposition of Q (Is it symmetric?)"
+                  << std::endl;
+        break;
+    }
+}
+
+const Eigen::VectorXd& QuadProgDenseSolver::SI_result() const
 {
     return solver_->result();
 }
 
 void QuadProgDenseSolver::SI_problem(int nrVar, int nrEq, int nrInEq)
 {
-    //QuadProg does not have bound constrains.
-    //They will be transformed into inequality constrains.
-    //The bound limits constrain size is 2 times (upper and lower bound) the number of variables
+    // QuadProg does not have bound constrains.
+    // They will be transformed into inequality constrains.
+    // The bound limits constrain size is 2 times (upper and lower bound) the
+    // number of variables
     solver_->problem(nrVar, nrEq, nrInEq + 2 * nrVar);
 }
 
-bool QuadProgDenseSolver::SI_solve(const Eigen::MatrixXd &Q, const Eigen::VectorXd &C,
-                                   const Eigen::MatrixXd &Aeq, const Eigen::VectorXd &Beq,
-                                   const Eigen::MatrixXd &Aineq, const Eigen::VectorXd &Bineq,
-                                   const Eigen::VectorXd &XL, const Eigen::VectorXd &XU)
+bool QuadProgDenseSolver::SI_solve(
+    const Eigen::MatrixXd& Q, const Eigen::VectorXd& C,
+    const Eigen::MatrixXd& Aeq, const Eigen::VectorXd& Beq,
+    const Eigen::MatrixXd& Aineq, const Eigen::VectorXd& Bineq,
+    const Eigen::VectorXd& XL, const Eigen::VectorXd& XU)
 {
     auto nrLines = XL.rows();
     auto ALines = Aineq.rows();

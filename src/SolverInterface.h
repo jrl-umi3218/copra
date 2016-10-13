@@ -2,8 +2,7 @@
 
 #include <Eigen/Core>
 
-namespace pc
-{
+namespace pc {
 
 /**
  * An interface to the quadratic solvers.
@@ -12,9 +11,8 @@ namespace pc
  * It provides all the necessary functions for using a qp solver.
  * In case of a QP does not have a corresponding function it sends a warning.
  */
-class SolverInterface //TODO: Add warning for all functions
-{
-  public:
+class SolverInterface {
+public:
     /**
 	 * Get information of eventual fail's solver output as define by the solver documentation.
 	 * @see QuadProgDenseSolver::SI_fail()
@@ -25,11 +23,18 @@ class SolverInterface //TODO: Add warning for all functions
 	 */
     virtual int SI_fail() const;
 
+    virtual void SI_inform() const;
+    virtual int SI_iter() const;
+    virtual void SI_printLevel(int pl) const;
+    virtual void SI_tol(double tol) const;
+    virtual bool SI_warmStart() const;
+    virtual void SI_warmStart(bool w);
+
     /**
 	 * Get the solver's solution.
 	 * @return The qp solver result.
 	 */
-    virtual const Eigen::VectorXd &SI_result() const;
+    virtual const Eigen::VectorXd& SI_result() const;
 
     /**
 	 * Initialize the variables of the problem to solve.
@@ -63,10 +68,10 @@ class SolverInterface //TODO: Add warning for all functions
 	 * @param XU Upper bound of the decision vector. An N-by-1 dense vector.
 	 * @return The qp solver result.
 	 */
-    virtual bool SI_solve(const Eigen::MatrixXd &Q, const Eigen::VectorXd &C,
-			  const Eigen::MatrixXd &Aeq, const Eigen::VectorXd &Beq,
-			  const Eigen::MatrixXd &Aineq, const Eigen::VectorXd &Bineq,
-			  const Eigen::VectorXd &XL, const Eigen::VectorXd &XU);
+    virtual bool SI_solve(const Eigen::MatrixXd& Q, const Eigen::VectorXd& C,
+        const Eigen::MatrixXd& Aeq, const Eigen::VectorXd& Beq,
+        const Eigen::MatrixXd& Aineq, const Eigen::VectorXd& Bineq,
+        const Eigen::VectorXd& XL, const Eigen::VectorXd& XU);
 };
 
 } // namespace pc

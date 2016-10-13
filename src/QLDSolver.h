@@ -1,19 +1,19 @@
 #pragma once
 
-#include <memory>
+#include "SolverInterface.h"
 #include <Eigen/Core>
 #include <eigen-qld/QLD.h>
-#include "SolverInterface.h"
+#include <memory>
 
-namespace pc
-{
+namespace pc {
 
 /**
  * QLD solver for both dense matrix.
  */
-class QLDSolver : public SolverInterface //TODO: Enable sparse matrix
-{
-  public:
+
+//TODO: Enable sparse matrix
+class QLDSolver : public SolverInterface {
+public:
     /**
 	 * QLDSolver default constructor
 	 */
@@ -31,11 +31,15 @@ class QLDSolver : public SolverInterface //TODO: Enable sparse matrix
 	 */
     int SI_fail() const override;
 
+    void SI_inform() const override;
+    void SI_printLevel(int pl) const override;
+    void SI_tol(double tol) const override;
+
     /**
 	 * Get the solver's solution.
 	 * @return The qp solver result.
 	 */
-    const Eigen::VectorXd &SI_result() const override;
+    const Eigen::VectorXd& SI_result() const override;
 
     /**
 	 * Initialize the variables of the problem to solve.
@@ -49,12 +53,12 @@ class QLDSolver : public SolverInterface //TODO: Enable sparse matrix
 	 * @see SolverInterface::SI_solve()
 	 * @return The qp solver result.
 	 */
-    bool SI_solve(const Eigen::MatrixXd &Q, const Eigen::VectorXd &C,
-                  const Eigen::MatrixXd &Aeq, const Eigen::VectorXd &Beq,
-                  const Eigen::MatrixXd &Aineq, const Eigen::VectorXd &Bineq,
-                  const Eigen::VectorXd &XL, const Eigen::VectorXd &XU) override;
+    bool SI_solve(const Eigen::MatrixXd& Q, const Eigen::VectorXd& C,
+        const Eigen::MatrixXd& Aeq, const Eigen::VectorXd& Beq,
+        const Eigen::MatrixXd& Aineq, const Eigen::VectorXd& Bineq,
+        const Eigen::VectorXd& XL, const Eigen::VectorXd& XU) override;
 
-  private:
+private:
     std::unique_ptr<Eigen::QLD> solver_;
 };
 
