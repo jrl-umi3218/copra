@@ -1,6 +1,6 @@
-[submodule "src/eigen-quadprog"]
-	path = src/eigen-quadprog
-	url = https://github.com/jorisv/eigen-quadprog.git
-[submodule "src/eigen-qld"]
-	path = src/eigen-qld
+[submodule "eigen-qld"]
+	path = eigen-qld
 	url = https://github.com/jorisv/eigen-qld.git
+[submodule "eigen-quadprog"]
+	path = eigen-quadprog
+	url = https://github.com/jorisv/eigen-quadprog.git

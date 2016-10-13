@@ -1,25 +1,77 @@
-#define BOOST_TEST_MODULE Hello 
+#define BOOST_TEST_MODULE SolverTest
 #include <boost/test/unit_test.hpp>
-#include "solvers.h"
-#include <Eigen/Core>
 #include <numeric>
+#include <Eigen/Core>
+#include <iostream>
 
-BOOST_AUTO_TEST_CASE(SolverTest)
+#include "QLDSolver.h"
+#include "QuadProgSolver.h"
+#ifdef LSSOL_SOLVER_FOUND
+#include "LSSOLSolver.h"
+#endif
+
+// Test base on scilab qld example: https://help.scilab.org/doc/5.5.2/en_US/qld.html
+struct Problem
 {
-    pc::QLDSolver qp;
+    Problem()
+        : Q(6, 6),
+          Aeq(3, 6),
+          Aineq(2, 6),
+          c(6),
+          beq(3),
+          bineq(2),
+          XL(6),
+          XU(6),
+          nrvars(6),
+          nreqs(3),
+          nrineqs(2)
+    {
+        Q = Eigen::MatrixXd::Identity(6, 6);
+        c << 1, 2, 3, 4, 5, 6;
+        Aeq << 1, -1, 1, 0, 3, 1, -1, 0, -3, -4, 5, 6, 2, 5, 3, 0, 1, 0;
+        beq << 1, 2, 3;
+        Aineq << 0, 1, 0, 1, 2, -1, -1, 0, 2, 1, 1, 0;
+        bineq << -1, 2.5;
+        XL << -1000, -10000, 0, -1000, -1000, -1000;
+        XU << 10000, 100, 1.5, 100, 100, 1000;
+    }
 
-    Eigen::MatrixXd Q = Eigen::MatrixXd::Identity(3, 3);
-    Eigen::VectorXd c = Eigen::VectorXd::Zero(3);
-    Eigen::MatrixXd Aineq = -Eigen::MatrixXd::Ones(0, 3);
-    Eigen::VectorXd bineq = Eigen::VectorXd::Zero(0);
-    Eigen::MatrixXd Aeq = Eigen::MatrixXd::Zero(0, 3);
-    Eigen::VectorXd beq = Eigen::VectorXd::Zero(0);
-    Eigen::VectorXd XL = Eigen::VectorXd::Constant(3, 1);
-    Eigen::VectorXd XU = Eigen::VectorXd::Constant(3, std::numeric_limits<double>::infinity());
+    Eigen::MatrixXd Q, Aeq, Aineq;
+    Eigen::VectorXd c, beq, bineq, XL, XU;
+    int nrvars, nreqs, nrineqs;
+};
 
-    qp.SI_problem(3, 0, 3);
-    BOOST_REQUIRE(qp.SI_solve(Q, c, Aeq, beq, Aineq, bineq, XL, XU));
+BOOST_FIXTURE_TEST_CASE(QuadProgOnQLDTest, Problem)
+{
+    pc::QLDSolver qpQLD;
+    pc::QuadProgDenseSolver qpQuadProg;
 
-    Eigen::VectorXd res = qp.SI_result();
-    BOOST_CHECK(res.isApproxToConstant(1));
+    qpQLD.SI_problem(nrvars, nreqs, nrineqs);
+    qpQuadProg.SI_problem(nrvars, nreqs, nrineqs);
+    BOOST_REQUIRE(qpQLD.SI_solve(Q, c, Aeq, beq, Aineq, bineq, XL, XU));
+    BOOST_REQUIRE(qpQuadProg.SI_solve(Q, c, Aeq, beq, Aineq, bineq, XL, XU));
+
+    Eigen::VectorXd resQLD = qpQLD.SI_result();
+    Eigen::VectorXd resQuadProg = qpQuadProg.SI_result();
+    BOOST_CHECK(resQuadProg.isApprox(resQLD));
+    BOOST_REQUIRE_EQUAL(qpQLD.SI_fail(), 0);
+    BOOST_REQUIRE_EQUAL(qpQuadProg.SI_fail(), 0);
 }
+
+#ifdef LSSOL_SOLVER_FOUND
+BOOST_FIXTURE_TEST_CASE(LSSOLOnQLDTest, Problem)
+{
+    pc::QLDSolver qpQLD;
+    pc::LSSOLSolver qpLSSOL;
+
+    qpQLD.SI_problem(nrvars, nreqs, nrineqs);
+    qpLSSOL.SI_problem(nrvars, nreqs, nrineqs);
+    BOOST_REQUIRE(qpQLD.SI_solve(Q, c, Aeq, beq, Aineq, bineq, XL, XU));
+    BOOST_REQUIRE(qpLSSOL.SI_solve(Q, c, Aeq, beq, Aineq, bineq, XL, XU));
+
+    Eigen::VectorXd resQLD = qpQLD.SI_result();
+    Eigen::VectorXd resLSSOL = qpLSSOL.SI_result();
+    BOOST_CHECK(resLSSOL.isApprox(resQLD));
+    BOOST_REQUIRE_EQUAL(qpLSSOL.SI_fail(), 0);
+}
+#endif
