@@ -1,8 +1,17 @@
 #include "SolverInterface.h"
+#include "QuadProgSolver.h"
+#include "QLDSolver.h"
+#ifdef LSSOL_SOLVER_FOUND
+#include "LSSOLSolver.h"
+#endif
 
-namespace pc {
+#include <memory>
 
-enum class SolverFlag {
+namespace pc
+{
+
+enum class SolverFlag
+{
     DEFAULT,
 #ifdef LSSOL_SOLVER_FOUND
     LSSOL,
@@ -12,24 +21,29 @@ enum class SolverFlag {
     // QuadProgSparse
 };
 
-enum class PCFlag { Full,
-    Last };
-
-static const std::unique_ptr<SolverInterface> solverFactory(SolverFlag)
+enum class PCFlag
 {
-    switch (flag) {
+    Full,
+    Last
+};
+
+SolverInterface solverFactory(SolverFlag flag)
+{
+    switch (flag)
+    {
     case SolverFlag::DEFAULT:
-        return std::make_unique<QuadProgDenseSolver>();
+        return QuadProgDenseSolver();
 #ifdef LSSOL_SOLVER_FOUND
     case SolverFlag::LSSOL:
-        return std::make_unique<LSSOLSolver>();
+        return LSSOLSolver();
 #endif
     case SolverFlag::QLD:
-        return std::make_unique<QLDSolver>();
+        return QLDSolver();
     case SolverFlag::QuadProgDense:
-        return std::make_unique<QuadProgDenseSolver>();
+        return QuadProgDenseSolver();
         // case SolverFlag::QuadProgSparse:
-        //    return std::make_unique<QuadProgSparseSolver>();
+        //    return QuadProgSparseSolver();
     }
 }
-}
+
+} // namespace pc

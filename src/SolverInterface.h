@@ -2,7 +2,8 @@
 
 #include <Eigen/Core>
 
-namespace pc {
+namespace pc
+{
 
 /**
  * An interface to the quadratic solvers.
@@ -11,8 +12,9 @@ namespace pc {
  * It provides all the necessary functions for using a qp solver.
  * In case of a QP does not have a corresponding function it sends a warning.
  */
-class SolverInterface {
-public:
+class SolverInterface
+{
+  public:
     /**
 	 * Get information of eventual fail's solver output as define by the solver documentation.
 	 * @return The fail number.
@@ -58,7 +60,7 @@ public:
 	 * Get the solver's solution.
 	 * @return The qp solver result.
 	 */
-    virtual const Eigen::VectorXd& SI_result() const;
+    virtual const Eigen::VectorXd &SI_result() const;
 
     /**
 	 * Initialize the variables of the problem to solve.
@@ -92,10 +94,10 @@ public:
 	 * @param XU Upper bound of the decision vector. An N-by-1 dense vector.
 	 * @return The qp solver result.
 	 */
-    virtual bool SI_solve(const Eigen::MatrixXd& Q, const Eigen::VectorXd& C,
-        const Eigen::MatrixXd& Aeq, const Eigen::VectorXd& Beq,
-        const Eigen::MatrixXd& Aineq, const Eigen::VectorXd& Bineq,
-        const Eigen::VectorXd& XL, const Eigen::VectorXd& XU);
+    virtual bool SI_solve(const Eigen::MatrixXd &Q, const Eigen::VectorXd &C,
+			  const Eigen::MatrixXd &Aeq, const Eigen::VectorXd &Beq,
+			  const Eigen::MatrixXd &Aineq, const Eigen::VectorXd &Bineq,
+			  const Eigen::VectorXd &XL, const Eigen::VectorXd &XU);
 };
 
 } // namespace pc
