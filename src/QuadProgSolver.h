@@ -5,13 +5,15 @@
 #include <eigen-quadprog/QuadProg.h>
 #include <memory>
 
-namespace pc {
+namespace pc
+{
 
 /**
  * QuadProg solver for dense matrix.
  */
-class QuadProgDenseSolver : public SolverInterface {
-public:
+class QuadProgDenseSolver : public SolverInterface
+{
+  public:
     /**
      * QuadProgDenseSolver default constructor
      */
@@ -41,7 +43,7 @@ public:
      * Get the solver's solution.
      * @return The qp solver result.
      */
-    const Eigen::VectorXd& SI_result() const override;
+    const Eigen::VectorXd &SI_result() const override;
 
     /**
      * Initialize the variables of the problem to solve.
@@ -55,12 +57,12 @@ public:
      * @see SolverInterface::SI_solve()
      * @return The qp solver result.
      */
-    bool SI_solve(const Eigen::MatrixXd& Q, const Eigen::VectorXd& C,
-        const Eigen::MatrixXd& Aeq, const Eigen::VectorXd& Beq,
-        const Eigen::MatrixXd& Aineq, const Eigen::VectorXd& Bineq,
-        const Eigen::VectorXd& XL, const Eigen::VectorXd& XU) override;
+    bool SI_solve(const Eigen::MatrixXd &Q, const Eigen::VectorXd &C,
+                  const Eigen::MatrixXd &Aeq, const Eigen::VectorXd &Beq,
+                  const Eigen::MatrixXd &Aineq, const Eigen::VectorXd &Bineq,
+                  const Eigen::VectorXd &XL, const Eigen::VectorXd &XU) override;
 
-private:
+  private:
     std::unique_ptr<Eigen::QuadProgDense> solver_;
 };
 

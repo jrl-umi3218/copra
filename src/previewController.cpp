@@ -88,7 +88,7 @@ bool PreviewController::solve()
                                   Eigen::VectorXd::Constant(psd_->fullUDim, std::numeric_limits<double>::infinity()));
     solveTime_.stop();
     solveAndBuildTime_.stop();
-    if(!success)
+    if (!success)
         sol_->SI_inform();
 
     return success;

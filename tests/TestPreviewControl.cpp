@@ -49,7 +49,7 @@ struct System
 
 BOOST_FIXTURE_TEST_CASE(OneDofSystemFlagLast, System)
 {
-    std::vector<std::pair<std::string, double> > solveTime;
+    std::vector<std::pair<std::string, double>> solveTime;
 
     auto controller = pc::PreviewController(A, B, c, x0, xd, nbStep, pc::PCFlag::Last);
     auto trajConstr = pc::TrajectoryConstrain(E, f);
@@ -89,7 +89,7 @@ BOOST_FIXTURE_TEST_CASE(OneDofSystemFlagLast, System)
     pcCheck("LSSOL", pc::SolverFlag::LSSOL);
     pcCheck("QLD", pc::SolverFlag::QLD);
 
-    std::sort(solveTime.begin(), solveTime.end(), [](const auto& lhs, const auto& rhs) {
+    std::sort(solveTime.begin(), solveTime.end(), [](const auto &lhs, const auto &rhs) {
         return lhs.second < rhs.second;
     });
     std::stringstream ss;
@@ -103,7 +103,7 @@ BOOST_FIXTURE_TEST_CASE(OneDofSystemFlagLast, System)
 
 BOOST_FIXTURE_TEST_CASE(OneDofSystemFlagFull, System)
 {
-    std::vector<std::pair<std::string, double> > solveTime;
+    std::vector<std::pair<std::string, double>> solveTime;
 
     auto controller = pc::PreviewController(A, B, c, x0, xd, nbStep, pc::PCFlag::Full);
     auto trajConstr = pc::TrajectoryConstrain(E, f);
@@ -143,7 +143,7 @@ BOOST_FIXTURE_TEST_CASE(OneDofSystemFlagFull, System)
     pcCheck("LSSOL", pc::SolverFlag::LSSOL);
     pcCheck("QLD", pc::SolverFlag::QLD);
 
-    std::sort(solveTime.begin(), solveTime.end(), [](const auto& lhs, const auto& rhs) {
+    std::sort(solveTime.begin(), solveTime.end(), [](const auto &lhs, const auto &rhs) {
         return lhs.second < rhs.second;
     });
     std::stringstream ss;
