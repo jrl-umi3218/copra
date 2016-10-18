@@ -17,7 +17,7 @@ PreviewSystemData::PreviewSystemData(const Eigen::MatrixXd &state, const Eigen::
       uDim(static_cast<int>(control.cols())),
       fullXDim(xDim * nrStep),
       fullUDim(uDim * nrStep), x0(xInit),
-      xd(xTraj),
+      xd(fullXDim),
       A(state),
       B(control),
       d(bias),
@@ -25,6 +25,11 @@ PreviewSystemData::PreviewSystemData(const Eigen::MatrixXd &state, const Eigen::
       Psi(fullXDim, fullUDim),
       xi(fullXDim)
 {
+    assert(xTraj.rows() == xDim || xTraj.rows() == fullXDim);
+
+    auto xTrajLen = static_cast<int>(xTraj.rows());
+    for (auto i = 0; i < fullXDim; i += xTrajLen)
+        xd.segment(i, xTrajLen) = xTraj;
     Phi.setZero();
     Psi.setZero();
     xi.setZero();
@@ -44,16 +49,16 @@ PreviewController::PreviewController(const Eigen::MatrixXd &state, const Eigen::
 PreviewController::PreviewController(const Eigen::MatrixXd &state, const Eigen::MatrixXd &control,
                                      const Eigen::VectorXd &bias, const Eigen::VectorXd &xInit, const Eigen::VectorXd &xTraj,
                                      int numberOfSteps, PCFlag pcFlag, SolverFlag sFlag)
-    : flag_(pcFlag),
+    : pcFlag_(pcFlag),
       nrConstr_(0),
       psd_(std::make_unique<PreviewSystemData>(state, control, bias, xInit, xTraj, numberOfSteps)),
       constr_(),
-      sol_(std::make_unique<SolverInterface>(solverFactory(sFlag))),
+      sol_(solverFactory(sFlag)),
       Q_(psd_->fullUDim, psd_->fullUDim),
       AInEq_(3 * psd_->fullUDim, 3 * psd_->fullUDim), // max size is 1 equality (= 2 inequalities) + 1 inequality
       c_(psd_->fullUDim),
       bInEq_(3 * psd_->fullUDim),
-      Wx_(psd_->fullXDim),
+      Wx_(pcFlag == PCFlag::Last ? psd_->xDim : psd_->fullXDim),
       Wu_(psd_->fullUDim),
       solveTime_(),
       solveAndBuildTime_()
@@ -62,11 +67,12 @@ PreviewController::PreviewController(const Eigen::MatrixXd &state, const Eigen::
     assert(state.rows() == bias.rows());
     assert(state.rows() == xInit.rows());
     assert(state.rows() == xTraj.rows());
+    assert(state.cols() == xInit.rows());
 }
 
-void PreviewController::selectQPSolveur(SolverFlag flag)
+void PreviewController::selectQPSolver(SolverFlag flag)
 {
-    sol_ = std::make_unique<SolverInterface>(solverFactory(flag));
+    sol_ = solverFactory(flag);
 }
 
 bool PreviewController::solve()
@@ -74,14 +80,16 @@ bool PreviewController::solve()
     solveAndBuildTime_.start();
     previewSystem();
     makeQPForm();
-    sol_->SI_problem(psd_->fullUDim, 0, nrConstr_);
+    sol_->SI_problem(psd_->fullUDim, 1, nrConstr_);
     solveTime_.start();
-    bool success = sol_->SI_solve(Q_, c_, Eigen::MatrixXd(0, psd_->fullUDim),
-                                  Eigen::VectorXd(psd_->fullUDim), AInEq_, bInEq_,
-                                  Eigen::VectorXd::Constant(psd_->xDim, std::numeric_limits<double>::min()),
-                                  Eigen::VectorXd::Constant(psd_->xDim, std::numeric_limits<double>::max()));
+    bool success = sol_->SI_solve(Q_, c_, Eigen::MatrixXd::Zero(0, psd_->fullUDim),
+                                  Eigen::VectorXd::Zero(0), AInEq_, bInEq_,
+                                  Eigen::VectorXd::Constant(psd_->fullUDim, -std::numeric_limits<double>::infinity()),
+                                  Eigen::VectorXd::Constant(psd_->fullUDim, std::numeric_limits<double>::infinity()));
     solveTime_.stop();
     solveAndBuildTime_.stop();
+    if(!success)
+        sol_->SI_inform();
 
     return success;
 }
@@ -117,11 +125,14 @@ void PreviewController::weights(const Eigen::VectorXd &Wx, const Eigen::VectorXd
     assert(Wx.rows() == psd_->xDim);
     assert(Wu.rows() == psd_->uDim);
 
+    if (pcFlag_ == PCFlag::Last)
+        Wx_ = Wx;
+    else
+        for (auto i = 0; i < psd_->nrStep; ++i)
+            Wx_.segment(i * psd_->xDim, psd_->xDim) = Wx;
+
     for (auto i = 0; i < psd_->nrStep; ++i)
-    {
-        Wx_.segment(i * psd_->xDim, psd_->xDim) = Wx;
         Wu_.segment(i * psd_->uDim, psd_->uDim) = Wu;
-    }
 }
 
 void PreviewController::addConstrain(Constrain &constr)
@@ -156,10 +167,11 @@ void PreviewController::previewSystem()
     for (auto i = 1; i < psd_->nrStep; ++i)
     {
         psd_->Phi.block(i * xDim, 0, xDim, xDim) = psd_->A * psd_->Phi.block((i - 1) * xDim, 0, xDim, xDim);
-        for (auto j = 0; j < psd_->nrStep; ++j)
+        for (auto j = 0; j < i; ++j)
+        {
             psd_->Psi.block(i * xDim, j * uDim, xDim, uDim) = psd_->A * psd_->Psi.block((i - 1) * xDim, j * uDim, xDim, uDim);
-
-        psd_->Psi.block(i * xDim, i * xDim, xDim, uDim) = psd_->B;
+        }
+        psd_->Psi.block(i * xDim, i * uDim, xDim, uDim) = psd_->B;
         psd_->xi.segment(i * xDim, xDim) = psd_->A * psd_->xi.segment((i - 1) * xDim, xDim) + psd_->d;
     }
 
@@ -169,22 +181,21 @@ void PreviewController::previewSystem()
 
 void PreviewController::makeQPForm()
 {
-    if (flag_ == PCFlag::Last)
+    if (pcFlag_ == PCFlag::Last)
     {
         auto xDim = psd_->xDim;
         const Eigen::MatrixXd &psi = psd_->Psi.bottomRows(xDim);
         Q_ = psi.transpose() * Eigen::MatrixXd(Wx_.asDiagonal()) * psi + Eigen::MatrixXd(Wu_.asDiagonal());
-        c_ = 2 * psi.transpose() * (psd_->Phi.bottomRows(xDim) * psd_->x0 - psd_->xd + psd_->xi.tail(xDim));
+        c_ = psi.transpose() * Eigen::MatrixXd(Wx_.asDiagonal()) * (psd_->Phi.bottomRows(xDim) * psd_->x0 - psd_->xd.tail(xDim) + psd_->xi.tail(xDim));
     }
     else
     {
         Q_ = psd_->Psi.transpose() * Eigen::MatrixXd(Wx_.asDiagonal()) * psd_->Psi + Eigen::MatrixXd(Wu_.asDiagonal());
-        c_ = 2 * psd_->Psi.transpose() * (psd_->Phi * psd_->x0 - psd_->xd + psd_->xi);
+        c_ = psd_->Psi.transpose() * Eigen::MatrixXd(Wx_.asDiagonal()) * (psd_->Phi * psd_->x0 - psd_->xd + psd_->xi);
     }
-
+    int nrLines = 0;
     for (auto cstr : constr_)
     {
-        int nrLines = 0;
         AInEq_.block(nrLines, 0, cstr->nrConstr(), psd_->fullUDim) = cstr->A();
         bInEq_.segment(nrLines, cstr->nrConstr()) = cstr->b();
         nrLines += cstr->nrConstr();

@@ -6,6 +6,7 @@ namespace pc
 {
 
 /**
+ * TODO: make it pure virtual and use cloning
  * An interface to the quadratic solvers.
  * This interface is more like a pseudo-interface (it is not an abstract class).
  * This class allows to have a base class for all solvers. 

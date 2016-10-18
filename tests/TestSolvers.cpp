@@ -1,4 +1,4 @@
-#define BOOST_TEST_MODULE SolverTest
+#define BOOST_TEST_MODULE TestSolvers
 #include <boost/test/unit_test.hpp>
 #include <numeric>
 #include <Eigen/Core>

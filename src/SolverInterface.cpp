@@ -17,7 +17,7 @@ int SolverInterface::SI_fail() const
 int SolverInterface::SI_iter() const
 {
     return 0;
-};
+}
 
 void SolverInterface::SI_inform() const
 {

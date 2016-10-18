@@ -1,7 +1,8 @@
 #include "QuadProgSolver.h"
 #include <iostream>
 
-namespace pc {
+namespace pc
+{
 
 /*
  * QuadProg dense
@@ -24,7 +25,8 @@ int QuadProgDenseSolver::SI_iter() const
 
 void QuadProgDenseSolver::SI_inform() const
 {
-    switch (solver_->fail()) {
+    switch (solver_->fail())
+    {
     case 0:
         std::cout << "No problems" << std::endl;
         break;
@@ -38,7 +40,7 @@ void QuadProgDenseSolver::SI_inform() const
     }
 }
 
-const Eigen::VectorXd& QuadProgDenseSolver::SI_result() const
+const Eigen::VectorXd &QuadProgDenseSolver::SI_result() const
 {
     return solver_->result();
 }
@@ -53,10 +55,10 @@ void QuadProgDenseSolver::SI_problem(int nrVar, int nrEq, int nrInEq)
 }
 
 bool QuadProgDenseSolver::SI_solve(
-    const Eigen::MatrixXd& Q, const Eigen::VectorXd& C,
-    const Eigen::MatrixXd& Aeq, const Eigen::VectorXd& Beq,
-    const Eigen::MatrixXd& Aineq, const Eigen::VectorXd& Bineq,
-    const Eigen::VectorXd& XL, const Eigen::VectorXd& XU)
+    const Eigen::MatrixXd &Q, const Eigen::VectorXd &C,
+    const Eigen::MatrixXd &Aeq, const Eigen::VectorXd &Beq,
+    const Eigen::MatrixXd &Aineq, const Eigen::VectorXd &Bineq,
+    const Eigen::VectorXd &XL, const Eigen::VectorXd &XU)
 {
     auto nrLines = XL.rows();
     auto ALines = Aineq.rows();

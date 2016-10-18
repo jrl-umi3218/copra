@@ -39,7 +39,7 @@ class PreviewController
                       const Eigen::VectorXd &bias, const Eigen::VectorXd &xInit, const Eigen::VectorXd &xTraj,
                       int numberOfSteps, PCFlag pcFlag = PCFlag::Last, SolverFlag sFlag = SolverFlag::DEFAULT);
 
-    void selectQPSolveur(SolverFlag flag);
+    void selectQPSolver(SolverFlag flag);
     bool solve();
 
     const Eigen::VectorXd &control() const noexcept;
@@ -58,7 +58,7 @@ class PreviewController
     void makeQPForm();
 
   private:
-    PCFlag flag_;
+    PCFlag pcFlag_;
     int nrConstr_;
 
     std::unique_ptr<PreviewSystemData> psd_;
@@ -101,6 +101,7 @@ class Constrain
 class TrajectoryConstrain final : public Constrain
 {
   public:
+    using Constrain::Constrain; //Inherits base class constructor
     void initializeConstrain(const std::unique_ptr<PreviewSystemData> &psd) override;
     void update(const std::unique_ptr<PreviewSystemData> &psd) override;
 };
@@ -108,6 +109,7 @@ class TrajectoryConstrain final : public Constrain
 class ControlConstrain final : public Constrain
 {
   public:
+    using Constrain::Constrain; //Inherits base class constructor
     void initializeConstrain(const std::unique_ptr<PreviewSystemData> &psd) override;
     void update(const std::unique_ptr<PreviewSystemData> &ps) override;
 };
