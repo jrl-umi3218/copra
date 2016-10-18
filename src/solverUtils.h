@@ -13,23 +13,34 @@
 namespace pc
 {
 
+/**
+ * Enum class that handles flag for selecting a qp solver.
+ */
 enum class SolverFlag
 {
-    DEFAULT,
+    DEFAULT, /**< Default solver (QuadProgDense solver) */
 #ifdef LSSOL_SOLVER_FOUND
-    LSSOL,
+    LSSOL, /**< Standford LSSOL solver */
 #endif
-    QLD,
-    QuadProgDense,
+    QLD, /**< Scilab QLD solver */
+    QuadProgDense, /**< DenseMatrix version of QuadProg solver */
     // QuadProgSparse
 };
 
+/**
+ * Enum class that Allows selecting between two types of preview control.
+ */
 enum class PCFlag
 {
-    Full,
-    Last
+    Full, /**< All the matrix is considered (from t=0 to t=tf) */
+    Last /**< Only the last matrix is considered (at t=tf) */
 };
 
+/**
+ * Helper function to get an unique pointer to a desired solver.
+ * @param flag Flag of the solver. @see SolverFlag.
+ * @return An unique pointer to the desired solver.
+ */
 std::unique_ptr<SolverInterface> solverFactory(SolverFlag flag)
 {
     switch (flag)
