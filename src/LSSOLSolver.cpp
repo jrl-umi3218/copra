@@ -1,6 +1,6 @@
 #include "LSSOLSolver.h"
 
-namespace pc
+namespace mpc
 {
 
 /*

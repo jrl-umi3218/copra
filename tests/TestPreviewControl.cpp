@@ -6,7 +6,9 @@
 #include <vector>
 #include <algorithm>
 
-#include "previewController.h"
+#include "Constrains.h"
+#include "PreviewController.h"
+#include "PreviewSystem.h"
 #include "solverUtils.h"
 
 // The final point of the trajectory should be [val, 0] where val can be any value inferior to 0;
@@ -47,26 +49,29 @@ struct System
     Eigen::VectorXd c, h, f, x0, xd, wx, wu;
 };
 
-BOOST_FIXTURE_TEST_CASE(OneDofSystemFlagLast, System)
+BOOST_FIXTURE_TEST_CASE(OneDofSystemTypeLast, System)
 {
     std::vector<std::pair<std::string, double>> solveTime;
 
-    auto controller = pc::PreviewController(A, B, c, x0, xd, nbStep, pc::PCFlag::Last);
-    auto trajConstr = pc::TrajectoryConstrain(E, f);
-    auto contConstr = pc::ControlConstrain(G, h);
+    auto ps = mpc::PreviewSystem();
+    ps.system(A, B, c, x0, xd, nbStep);
+    auto controller = mpc::MPCTypeLast(ps);
+    auto trajConstr = mpc::TrajectoryConstrain(E, f);
+    auto contConstr = mpc::ControlConstrain(G, h);
 
-    controller.addConstrain(trajConstr);
-    controller.addConstrain(contConstr);
+    controller.addConstrain(ps, trajConstr);
+    controller.addConstrain(ps, contConstr);
 
-    controller.weights(wx, wu);
+    controller.weights(ps, wx, wu);
 
-    auto pcCheck = [&](const std::string &solverName, pc::SolverFlag sFlag) {
+    auto pcCheck = [&](const std::string &solverName, mpc::SolverFlag sFlag) {
         controller.selectQPSolver(sFlag);
 
-        BOOST_REQUIRE(controller.solve());
+        controller.updateSystem(ps);
+        BOOST_REQUIRE(controller.solve(ps));
         solveTime.emplace_back(solverName, static_cast<double>(controller.solveTime().wall) * 1e-6);
 
-        Eigen::VectorXd fullTraj = controller.trajectory();
+        Eigen::VectorXd fullTraj = controller.trajectory(ps);
         auto trajLen = fullTraj.rows() / 2;
         Eigen::VectorXd posTraj(trajLen);
         Eigen::VectorXd velTraj(trajLen);
@@ -85,9 +90,9 @@ BOOST_FIXTURE_TEST_CASE(OneDofSystemFlagLast, System)
         BOOST_REQUIRE_LE(control.maxCoeff(), h(0));
     };
 
-    pcCheck("Default (QuadProgDense)", pc::SolverFlag::DEFAULT);
-    pcCheck("LSSOL", pc::SolverFlag::LSSOL);
-    pcCheck("QLD", pc::SolverFlag::QLD);
+    pcCheck("Default (QuadProgDense)", mpc::SolverFlag::DEFAULT);
+    pcCheck("LSSOL", mpc::SolverFlag::LSSOL);
+    pcCheck("QLD", mpc::SolverFlag::QLD);
 
     std::sort(solveTime.begin(), solveTime.end(), [](const auto &lhs, const auto &rhs) {
         return lhs.second < rhs.second;
@@ -101,26 +106,29 @@ BOOST_FIXTURE_TEST_CASE(OneDofSystemFlagLast, System)
     BOOST_MESSAGE(ss.str());
 }
 
-BOOST_FIXTURE_TEST_CASE(OneDofSystemFlagFull, System)
+BOOST_FIXTURE_TEST_CASE(OneDofSystemTypeFull, System)
 {
     std::vector<std::pair<std::string, double>> solveTime;
 
-    auto controller = pc::PreviewController(A, B, c, x0, xd, nbStep, pc::PCFlag::Full);
-    auto trajConstr = pc::TrajectoryConstrain(E, f);
-    auto contConstr = pc::ControlConstrain(G, h);
+    auto ps = mpc::PreviewSystem();
+    ps.system(A, B, c, x0, xd, nbStep);
+    auto controller = mpc::MPCTypeFull(ps);
+    auto trajConstr = mpc::TrajectoryConstrain(E, f);
+    auto contConstr = mpc::ControlConstrain(G, h);
 
-    controller.addConstrain(trajConstr);
-    controller.addConstrain(contConstr);
+    controller.addConstrain(ps, trajConstr);
+    controller.addConstrain(ps, contConstr);
 
-    controller.weights(wx, wu);
+    controller.weights(ps, wx, wu);
 
-    auto pcCheck = [&](const std::string &solverName, pc::SolverFlag sFlag) {
+    auto pcCheck = [&](const std::string &solverName, mpc::SolverFlag sFlag) {
         controller.selectQPSolver(sFlag);
 
-        BOOST_REQUIRE(controller.solve());
+        controller.updateSystem(ps);
+        BOOST_REQUIRE(controller.solve(ps));
         solveTime.emplace_back(solverName, static_cast<double>(controller.solveTime().wall) * 1e-6);
 
-        Eigen::VectorXd fullTraj = controller.trajectory();
+        Eigen::VectorXd fullTraj = controller.trajectory(ps);
         auto trajLen = fullTraj.rows() / 2;
         Eigen::VectorXd posTraj(trajLen);
         Eigen::VectorXd velTraj(trajLen);
@@ -139,9 +147,9 @@ BOOST_FIXTURE_TEST_CASE(OneDofSystemFlagFull, System)
         BOOST_REQUIRE_LE(control.maxCoeff(), h(0) + 1e-3); //QuadProg allows to exceeds the constrain of a small mount.
     };
 
-    pcCheck("Default (QuadProgDense)", pc::SolverFlag::DEFAULT);
-    pcCheck("LSSOL", pc::SolverFlag::LSSOL);
-    pcCheck("QLD", pc::SolverFlag::QLD);
+    pcCheck("Default (QuadProgDense)", mpc::SolverFlag::DEFAULT);
+    pcCheck("LSSOL", mpc::SolverFlag::LSSOL);
+    pcCheck("QLD", mpc::SolverFlag::QLD);
 
     std::sort(solveTime.begin(), solveTime.end(), [](const auto &lhs, const auto &rhs) {
         return lhs.second < rhs.second;

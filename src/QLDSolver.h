@@ -5,7 +5,7 @@
 #include <eigen-qld/QLD.h>
 #include <memory>
 
-namespace pc
+namespace mpc
 {
 
 /**

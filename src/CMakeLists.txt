@@ -1,6 +1,9 @@
 #To complete
-set(SOURCES SolverInterface.cpp QuadProgSolver.cpp QLDSolver.cpp previewController.cpp)
-set(HEADERS SolverInterface.h QuadProgSolver.h QLDSolver.h previewController.h solverUtils.h)
+set(SOURCES SolverInterface.cpp QuadProgSolver.cpp QLDSolver.cpp 
+    PreviewController.cpp PreviewSystem.cpp Constrains.cpp)
+set(HEADERS SolverInterface.h QuadProgSolver.h QLDSolver.h 
+    PreviewController.h PreviewSystem.h Constrains.h
+    solverUtils.h)
 
 if(${EIGEN_LSSOL_FOUND})
     list(APPEND SOURCES LSSOLSolver.cpp)

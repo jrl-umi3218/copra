@@ -5,7 +5,7 @@
 #include <eigen-quadprog/QuadProg.h>
 #include <memory>
 
-namespace pc
+namespace mpc
 {
 
 /**

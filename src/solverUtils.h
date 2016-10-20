@@ -10,7 +10,7 @@
 #include <memory>
 #include <utility>
 
-namespace pc
+namespace mpc
 {
 
 /**
@@ -28,17 +28,8 @@ enum class SolverFlag
 };
 
 /**
- * Enum class that Allows selecting between two types of preview control.
- */
-enum class PCFlag
-{
-    Full, /**< All the matrix is considered (from t=0 to t=tf) */
-    Last /**< Only the last matrix is considered (at t=tf) */
-};
-
-/**
  * Helper function to get an unique pointer to a desired solver.
- * @param flag Flag of the solver. @see SolverFlag.
+ * @param flag Flag of the solver.
  * @return An unique pointer to the desired solver.
  */
 std::unique_ptr<SolverInterface> solverFactory(SolverFlag flag)

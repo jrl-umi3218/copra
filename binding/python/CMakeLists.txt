@@ -1,0 +1,16 @@
+find_package(Boost COMPONENTS python REQUIRED)
+find_package(PythonLibs 2.7 REQUIRED)
+
+include_directories("${PROJECT_SOURCE_DIR}/src")
+include_directories(${Boost_INCLUDE_DIRS})
+include_directories(${PYTHON_INCLUDE_DIRS})
+
+add_library(previewController_ext SHARED previewController_ext.cpp)
+target_link_libraries(previewController_ext ${Boost_LIBRARIES} ${PRJECT_NAME})
+PKG_CONFIG_USE_DEPENDENCY(previewController_ext eigen-qld)
+PKG_CONFIG_USE_DEPENDENCY(previewController_ext eigen-quadprog)
+if(${EIGEN_LSSOL_FOUND})
+    PKG_CONFIG_USE_DEPENDENCY(previewController_ext eigen-lssol)
+    add_definitions(-DLSSOL_SOLVER_FOUND)
+endif()
+set_target_properties(previewController_ext PROPERTIES PREFIX "")

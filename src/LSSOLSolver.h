@@ -5,7 +5,7 @@
 #include <eigen-lssol/LSSOL.h>
 #include <memory>
 
-namespace pc
+namespace mpc
 {
 
 /**

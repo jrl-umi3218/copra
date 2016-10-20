@@ -43,8 +43,8 @@ struct Problem
 
 BOOST_FIXTURE_TEST_CASE(QuadProgOnQLDTest, Problem)
 {
-    pc::QLDSolver qpQLD;
-    pc::QuadProgDenseSolver qpQuadProg;
+    mpc::QLDSolver qpQLD;
+    mpc::QuadProgDenseSolver qpQuadProg;
 
     qpQLD.SI_problem(nrvars, nreqs, nrineqs);
     qpQuadProg.SI_problem(nrvars, nreqs, nrineqs);
@@ -61,8 +61,8 @@ BOOST_FIXTURE_TEST_CASE(QuadProgOnQLDTest, Problem)
 #ifdef LSSOL_SOLVER_FOUND
 BOOST_FIXTURE_TEST_CASE(LSSOLOnQLDTest, Problem)
 {
-    pc::QLDSolver qpQLD;
-    pc::LSSOLSolver qpLSSOL;
+    mpc::QLDSolver qpQLD;
+    mpc::LSSOLSolver qpLSSOL;
 
     qpQLD.SI_problem(nrvars, nreqs, nrineqs);
     qpLSSOL.SI_problem(nrvars, nreqs, nrineqs);

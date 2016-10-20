@@ -1,7 +1,7 @@
 #include "QuadProgSolver.h"
 #include <iostream>
 
-namespace pc
+namespace mpc
 {
 
 /*

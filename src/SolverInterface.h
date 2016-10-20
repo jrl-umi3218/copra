@@ -2,7 +2,7 @@
 
 #include <Eigen/Core>
 
-namespace pc
+namespace mpc
 {
 
 /**

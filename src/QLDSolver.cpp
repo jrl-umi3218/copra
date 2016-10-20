@@ -1,6 +1,6 @@
 #include "QLDSolver.h"
 
-namespace pc
+namespace mpc
 {
 
 /*

@@ -6,7 +6,7 @@ add_definitions(-DBOOST_TEST_DYN_LINK)
 include_directories("${PROJECT_SOURCE_DIR}/src")
 include_directories(${Boost_INCLUDE_DIRS})
 
-macro(addTest testName )
+macro(addTest testName)
     add_executable(${testName} ${testName}.cpp)
     target_link_libraries(${testName} ${Boost_LIBRARIES} ${PROJECT_NAME})
     PKG_CONFIG_USE_DEPENDENCY(${testName} eigen-qld)
