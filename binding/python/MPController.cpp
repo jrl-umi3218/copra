@@ -4,7 +4,7 @@
 #include "PreviewSystem.h"
 #include <boost/python.hpp>
 
-BOOST_PYTHON_MODULE(previewController_ext)
+BOOST_PYTHON_MODULE(MPController)
 {
     using namespace mpc;
     using namespace boost::python;
