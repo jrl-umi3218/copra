@@ -63,11 +63,11 @@ BOOST_PYTHON_MODULE(_mpcontroller)
         .def("A", &Constrain::A, return_internal_reference<>())
         .def("b", &Constrain::b, return_internal_reference<>());
 
-    class_<TrajectoryConstrain, boost::noncopyable, bases<ConstrainWrap>>("TrajectoryConstrain",
-                                                                          init<const Eigen::MatrixXd &, const Eigen::VectorXd &>());
+    class_<TrajectoryConstrain, boost::noncopyable, bases<Constrain>>("TrajectoryConstrain",
+                                                                      init<const Eigen::MatrixXd &, const Eigen::VectorXd &>());
 
-    class_<TrajectoryConstrain, boost::noncopyable, bases<ConstrainWrap>>("ControlConstrain",
-                                                                          init<const Eigen::MatrixXd &, const Eigen::VectorXd &>());
+    class_<ControlConstrain, boost::noncopyable, bases<Constrain>>("ControlConstrain",
+                                                                   init<const Eigen::MatrixXd &, const Eigen::VectorXd &>());
 
     //MPCTypeFull
     struct MPCTypeFullWrap : MPCTypeFull, wrapper<MPCTypeFull>
@@ -78,7 +78,8 @@ BOOST_PYTHON_MODULE(_mpcontroller)
         {
             if (override weights = this->get_override("weights"))
                 weights(ps, wx, wu);
-            MPCTypeFull::weights(ps, wx, wu);
+            else
+                MPCTypeFull::weights(ps, wx, wu);
         }
 
         void default_weights(const PreviewSystem &ps, const Eigen::VectorXd &wx, const Eigen::VectorXd &wu)
@@ -89,7 +90,7 @@ BOOST_PYTHON_MODULE(_mpcontroller)
 
     // The default copy-ctor is implicitely deleted due to ctor overloading
     class_<MPCTypeFullWrap, boost::noncopyable>("MPCTypeFull",
-                                                init<const PreviewSystem &, SolverFlag>())
+                                                init<const PreviewSystem &, optional<SolverFlag>>())
         .def("selectQPSolver", &MPCTypeFull::selectQPSolver)
         .def("updateSystem", &MPCTypeFull::updateSystem) //Need an internal ref
         .def("solve", &MPCTypeFull::solve)
@@ -100,6 +101,6 @@ BOOST_PYTHON_MODULE(_mpcontroller)
         .def("resetConstrains", &MPCTypeFull::resetConstrains);
 
     //MPCTypeLast
-    class_<MPCTypeLast, boost::noncopyable, bases<MPCTypeFullWrap>>("MPCTypeFull",
-                                                                    init<const PreviewSystem &, SolverFlag>());
+    class_<MPCTypeLast, boost::noncopyable, bases<MPCTypeFull>>("MPCTypeLast",
+                                                                init<const PreviewSystem &, optional<SolverFlag>>());
 }
