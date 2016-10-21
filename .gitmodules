@@ -4,3 +4,6 @@
 [submodule "eigen-quadprog"]
 	path = eigen-quadprog
 	url = https://github.com/jorisv/eigen-quadprog.git
+[submodule "minieigen"]
+	path = minieigen
+	url = https://github.com/eudoxos/minieigen.git
