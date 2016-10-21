@@ -21,6 +21,6 @@ if(${EIGEN_LSSOL_FOUND})
     add_definitions(-DLSSOL_SOLVER_FOUND)
 endif()
 
-set(INSTALL_PATH include/PC)
+set(INSTALL_PATH include/${PROJECT_NAME})
 install(FILES ${HEADERS} DESTINATION ${INSTALL_PATH})
 install(TARGETS ${PROJECT_NAME} DESTINATION "lib")

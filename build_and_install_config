@@ -1,0 +1,5 @@
+readonly BUILD_DIR="_build"
+readonly BUILD_TYPE="Debug"
+readonly INSTALL_PREFIX="/home/vsamy/softwares/qp/sideLibs"
+readonly BUILD_CORE=8
+readonly BOOST_ROOT_DIR=

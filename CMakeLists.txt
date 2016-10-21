@@ -4,7 +4,7 @@ include(cmake/base.cmake)
 include(cmake/eigen.cmake)
 include(cmake/boost.cmake)
 
-set(PROJECT_NAME PreviewControl)
+set(PROJECT_NAME ModelPreviewControl)
 set(PROJECT_DESCRIPTION "...")
 set(PROJECT_URL "")
 
@@ -43,9 +43,5 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -std=c++14 -pedantic")
 add_subdirectory(src)
 add_subdirectory(tests)
 add_subdirectory(binding/python)
-
-# untill the lib works fine
-set(CMAKE_INSTALL_PREFIX ${CMAKE_SOURCE_DIR}/_build/tmp_install)
-set(CMAKE_BUILD_TYPE DEBUG) 
 
 SETUP_PROJECT_FINALIZE()
