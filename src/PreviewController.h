@@ -114,7 +114,7 @@ class MPCTypeFull
  * Thus, this class has way faster results with the disadvantages of not considering a minimization along all the trajectory.
  * @warning This class waits for a discretized system ! Continuous systems are not yet implemented.
  */
-class MPCTypeLast : public MPCTypeFull
+class MPCTypeLast final: public MPCTypeFull
 {
   public:
     /**

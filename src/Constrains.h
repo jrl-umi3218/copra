@@ -69,7 +69,7 @@ class Constrain
     Eigen::VectorXd f_, b_;
 };
 
-class TrajectoryConstrain : public Constrain
+class TrajectoryConstrain final : public Constrain
 {
   public:
     /**
@@ -83,7 +83,7 @@ class TrajectoryConstrain : public Constrain
     void update(const PreviewSystem &ps) override;
 };
 
-class ControlConstrain : public Constrain
+class ControlConstrain final : public Constrain
 {
   public:
     /**
