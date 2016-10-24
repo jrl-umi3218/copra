@@ -49,7 +49,7 @@ cd _build/tests
 
 For python
 ```sh
-cd _build/binding/python/tests
+cd binding/python/tests
 python TestPreviewControl.py
 ```
 
