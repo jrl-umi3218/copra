@@ -34,11 +34,26 @@ class TestMPC(unittest.TestCase):
 
         controller.weights(ps, self.wx, self.wu)
 
-        controller.selectQPSolver(mpc.SolverFlag.LSSOL)
         controller.updateSystem(ps)
+        
         self.assertTrue(controller.solve(ps))
+        control = controller.control()
         fullTraj = controller.trajectory(ps)
-        print fullTraj[599]
+        fTLen = len(fullTraj)/2
+        posTraj = [0.]*fTLen
+        velTraj = [0.]*fTLen
+        for i in xrange(fTLen):
+            posTraj[i] = fullTraj[2*i]
+            velTraj[i] = fullTraj[2*i+1]
+
+        self.assertAlmostEqual(self.xd[1], velTraj[-1], places=3)
+        self.assertLessEqual(max(posTraj), self.x0[0])
+        self.assertLessEqual(control.maxCoeff(), self.h[0])
+
+    def printMat(self, name, mat):
+        print name
+        print mat
+        print 
 
 if __name__ == '__main__':
     unittest.main()
