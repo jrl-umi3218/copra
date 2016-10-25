@@ -54,6 +54,8 @@ MPCTypeFull::MPCTypeFull(const PreviewSystem &ps, SolverFlag sFlag)
       solveTime_(),
       solveAndBuildTime_()
 {
+    Wx_.setOnes();
+    Wu_.setOnes();
 }
 
 void MPCTypeFull::selectQPSolver(SolverFlag flag)
@@ -69,6 +71,8 @@ void MPCTypeFull::initializeController(const PreviewSystem &ps)
     bInEq_.resize(3 * ps.fullUDim);
     Wx_.resize(ps.fullXDim);
     Wu_.resize(ps.fullUDim);
+    Wx_.setOnes();
+    Wu_.setOnes();
 }
 
 void MPCTypeFull::updateSystem(PreviewSystem &ps)
@@ -99,7 +103,7 @@ bool MPCTypeFull::solve(const PreviewSystem &ps)
 {
     solveAndBuildTime_.start();
     makeQPForm(ps);
-    sol_->SI_problem(ps.fullUDim, 1, nrConstr_);
+    sol_->SI_problem(ps.fullUDim, 0, nrConstr_);
     solveTime_.start();
     bool success = sol_->SI_solve(Q_, c_, Eigen::MatrixXd::Zero(0, ps.fullUDim),
                                   Eigen::VectorXd::Zero(0), AInEq_, bInEq_,
@@ -202,6 +206,8 @@ void MPCTypeLast::initializeController(const PreviewSystem &ps)
     bInEq_.resize(3 * ps.fullUDim);
     Wx_.resize(ps.xDim);
     Wu_.resize(ps.fullUDim);
+    Wx_.setOnes();
+    Wu_.setOnes();
 }
 
 void MPCTypeLast::weights(const PreviewSystem &ps, const Eigen::VectorXd &Wx, const Eigen::VectorXd &Wu)
