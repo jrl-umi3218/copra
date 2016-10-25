@@ -74,6 +74,19 @@ BOOST_PYTHON_MODULE(_mpcontroller)
     {
         using MPCTypeFull::MPCTypeFull;
 
+        void initializeController(const PreviewSystem &ps)
+        {
+            if (override initializeController = this->get_override("initializeController"))
+                initializeController(ps);
+            else
+                MPCTypeFull::initializeController(ps);
+        }
+
+        void default_initializeController(const PreviewSystem &ps)
+        {
+            this->MPCTypeFull::initializeController(ps);
+        }
+
         void weights(const PreviewSystem &ps, const Eigen::VectorXd &wx, const Eigen::VectorXd &wu)
         {
             if (override weights = this->get_override("weights"))
@@ -90,8 +103,10 @@ BOOST_PYTHON_MODULE(_mpcontroller)
 
     // The default copy-ctor is implicitely deleted due to ctor overloading
     class_<MPCTypeFullWrap, boost::noncopyable>("MPCTypeFull",
-                                                init<const PreviewSystem &, optional<SolverFlag>>())
+                                                init<optional<SolverFlag>>())
+        .def(init<const PreviewSystem &, optional<SolverFlag>>())
         .def("selectQPSolver", &MPCTypeFull::selectQPSolver)
+        .def("initializeController", &MPCTypeFull::initializeController, &MPCTypeFullWrap::default_initializeController)
         .def("updateSystem", &MPCTypeFull::updateSystem) //Need an internal ref
         .def("solve", &MPCTypeFull::solve)
         .def("weights", &MPCTypeFull::weights, &MPCTypeFullWrap::default_weights)
@@ -102,5 +117,6 @@ BOOST_PYTHON_MODULE(_mpcontroller)
 
     //MPCTypeLast
     class_<MPCTypeLast, boost::noncopyable, bases<MPCTypeFull>>("MPCTypeLast",
-                                                                init<const PreviewSystem &, optional<SolverFlag>>());
+                                                                init<optional<SolverFlag>>())
+        .def(init<const PreviewSystem &, optional<SolverFlag>>());
 }

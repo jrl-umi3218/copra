@@ -37,7 +37,14 @@ class MPCTypeFull
 {
   public:
     /**
-     * Make a copy of the PreviewSystem and get the desired solver
+     * Initialize problem variables to default and get the desired solver
+     * You need to call initializeController before using the MPCTypeFull
+     * @param ps A preview system to amke a copy from.
+     * @param sFlag The flag corresponding to the desired solver.
+     */
+    MPCTypeFull(SolverFlag sFlag = SolverFlag::DEFAULT);
+    /**
+     * Initialize problem variables w.r.t. the PreviewSystem and get the desired solver
      * @param ps A preview system to amke a copy from.
      * @param sFlag The flag corresponding to the desired solver.
      */
@@ -50,11 +57,18 @@ class MPCTypeFull
     void selectQPSolver(SolverFlag flag);
 
     /**
-	 * Update the system and its constrains.
-	 * @param ps The preview system
-	 * Fill Phi, Psi, xi in PreviewSystem
-	 * Fill A, b in Constrains
-	 */
+     * Initialize the controller w.r.t. the preview system.
+     * This function needs to be called each time the system dimension changes.
+     * @param ps The preview system
+     */
+    virtual void initializeController(const PreviewSystem& ps);
+
+    /**
+     * Update the system and its constrains.
+     * @param ps The preview system
+     * Fill Phi, Psi, xi in PreviewSystem
+     * Fill A, b in Constrains
+     */
     void updateSystem(PreviewSystem &ps);
 
     /**
@@ -103,10 +117,6 @@ class MPCTypeFull
 
   protected:
     /**
-     * Compute the preview system.
-     */
-    void previewSystem(const PreviewSystem &ps);
-    /**
      * QP-like format.
      */
     virtual void makeQPForm(const PreviewSystem &ps);
@@ -129,13 +139,22 @@ class MPCTypeFull
  * Thus, this class has way faster results with the disadvantages of not considering a minimization along all the trajectory.
  * @warning This class waits for a discretized system ! Continuous systems are not yet implemented.
  */
-class MPCTypeLast final: public MPCTypeFull
+class MPCTypeLast final : public MPCTypeFull
 {
   public:
     /**
      * See @see MPCTypeFull::MPCTypeFull
      */
+    MPCTypeLast(SolverFlag sFlag = SolverFlag::DEFAULT);
+    /**
+     * See @see MPCTypeFull::MPCTypeFull
+     */
     MPCTypeLast(const PreviewSystem &ps, SolverFlag sFlag = SolverFlag::DEFAULT);
+
+    /**
+     * See @see  MPCTypeFull::initializeController
+     */
+    void initializeController(const PreviewSystem& ps) override;
 
     /**
      * See @see MPCTypeFull::weights

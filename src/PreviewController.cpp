@@ -26,6 +26,21 @@ namespace mpc
  *                                         MPCTypeFull                                           *
  *************************************************************************************************/
 
+MPCTypeFull::MPCTypeFull(SolverFlag sFlag)
+    : nrConstr_(0),
+      constr_(),
+      sol_(solverFactory(sFlag)),
+      Q_(),
+      AInEq_(),
+      c_(),
+      bInEq_(),
+      Wx_(),
+      Wu_(),
+      solveTime_(),
+      solveAndBuildTime_()
+{
+}
+
 MPCTypeFull::MPCTypeFull(const PreviewSystem &ps, SolverFlag sFlag)
     : nrConstr_(0),
       constr_(),
@@ -44,6 +59,40 @@ MPCTypeFull::MPCTypeFull(const PreviewSystem &ps, SolverFlag sFlag)
 void MPCTypeFull::selectQPSolver(SolverFlag flag)
 {
     sol_ = solverFactory(flag);
+}
+
+void MPCTypeFull::initializeController(const PreviewSystem &ps)
+{
+    Q_.resize(ps.fullUDim, ps.fullUDim);
+    AInEq_.resize(3 * ps.fullUDim, 3 * ps.fullUDim); // max size is 1 equality (= 2 inequalities) + 1 inequality
+    c_.resize(ps.fullUDim);
+    bInEq_.resize(3 * ps.fullUDim);
+    Wx_.resize(ps.fullXDim);
+    Wu_.resize(ps.fullUDim);
+}
+
+void MPCTypeFull::updateSystem(PreviewSystem &ps)
+{
+    auto xDim = ps.xDim;
+    auto uDim = ps.uDim;
+
+    ps.Phi.block(0, 0, xDim, xDim) = ps.A;
+    ps.Psi.block(0, 0, xDim, uDim) = ps.B;
+    ps.xi.segment(0, xDim) = ps.d;
+
+    for (auto i = 1; i < ps.nrStep; ++i)
+    {
+        ps.Phi.block(i * xDim, 0, xDim, xDim) = ps.A * ps.Phi.block((i - 1) * xDim, 0, xDim, xDim);
+        for (auto j = 0; j < i; ++j)
+        {
+            ps.Psi.block(i * xDim, j * uDim, xDim, uDim) = ps.A * ps.Psi.block((i - 1) * xDim, j * uDim, xDim, uDim);
+        }
+        ps.Psi.block(i * xDim, i * uDim, xDim, uDim) = ps.B;
+        ps.xi.segment(i * xDim, xDim) = ps.A * ps.xi.segment((i - 1) * xDim, xDim) + ps.d;
+    }
+
+    for (auto cstr : constr_)
+        cstr->update(ps);
 }
 
 bool MPCTypeFull::solve(const PreviewSystem &ps)
@@ -116,30 +165,6 @@ void MPCTypeFull::resetConstrains() noexcept
  *  Protected methods
  */
 
-void MPCTypeFull::updateSystem(PreviewSystem &ps)
-{
-    auto xDim = ps.xDim;
-    auto uDim = ps.uDim;
-
-    ps.Phi.block(0, 0, xDim, xDim) = ps.A;
-    ps.Psi.block(0, 0, xDim, uDim) = ps.B;
-    ps.xi.segment(0, xDim) = ps.d;
-
-    for (auto i = 1; i < ps.nrStep; ++i)
-    {
-        ps.Phi.block(i * xDim, 0, xDim, xDim) = ps.A * ps.Phi.block((i - 1) * xDim, 0, xDim, xDim);
-        for (auto j = 0; j < i; ++j)
-        {
-            ps.Psi.block(i * xDim, j * uDim, xDim, uDim) = ps.A * ps.Psi.block((i - 1) * xDim, j * uDim, xDim, uDim);
-        }
-        ps.Psi.block(i * xDim, i * uDim, xDim, uDim) = ps.B;
-        ps.xi.segment(i * xDim, xDim) = ps.A * ps.xi.segment((i - 1) * xDim, xDim) + ps.d;
-    }
-
-    for (auto cstr : constr_)
-        cstr->update(ps);
-}
-
 void MPCTypeFull::makeQPForm(const PreviewSystem &ps)
 {
     Q_ = ps.Psi.transpose() * Eigen::MatrixXd(Wx_.asDiagonal()) * ps.Psi + Eigen::MatrixXd(Wu_.asDiagonal());
@@ -158,10 +183,25 @@ void MPCTypeFull::makeQPForm(const PreviewSystem &ps)
  *                                         MPCTypeLast                                           *
  *************************************************************************************************/
 
+MPCTypeLast::MPCTypeLast(SolverFlag sFlag)
+    : MPCTypeFull::MPCTypeFull(sFlag)
+{
+}
+
 MPCTypeLast::MPCTypeLast(const PreviewSystem &ps, SolverFlag sFlag)
     : MPCTypeFull::MPCTypeFull(ps, sFlag)
 {
     Wx_.resize(ps.xDim);
+}
+
+void MPCTypeLast::initializeController(const PreviewSystem &ps)
+{
+    Q_.resize(ps.fullUDim, ps.fullUDim);
+    AInEq_.resize(3 * ps.fullUDim, 3 * ps.fullUDim); // max size is 1 equality (= 2 inequalities) + 1 inequality
+    c_.resize(ps.fullUDim);
+    bInEq_.resize(3 * ps.fullUDim);
+    Wx_.resize(ps.xDim);
+    Wu_.resize(ps.fullUDim);
 }
 
 void MPCTypeLast::weights(const PreviewSystem &ps, const Eigen::VectorXd &Wx, const Eigen::VectorXd &Wu)

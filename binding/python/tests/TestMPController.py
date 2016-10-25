@@ -50,10 +50,21 @@ class TestMPC(unittest.TestCase):
         self.assertLessEqual(max(posTraj), self.x0[0])
         self.assertLessEqual(control.maxCoeff(), self.h[0])
 
-    def printMat(self, name, mat):
-        print name
-        print mat
-        print 
+    def test_constructors_initialisations(self):
+        ps = mpc.PreviewSystem()
+        ps.system(self.A, self.B, self.c, self.x0, self.xd, self.nbStep)
+
+        c1 = mpc.MPCTypeFull()
+        mpc.MPCTypeFull(mpc.SolverFlag.LSSOL)
+        mpc.MPCTypeFull(ps)
+        mpc.MPCTypeFull(ps, mpc.SolverFlag.LSSOL)
+        c2 = mpc.MPCTypeLast()
+        mpc.MPCTypeLast(mpc.SolverFlag.LSSOL)
+        mpc.MPCTypeLast(ps)
+        mpc.MPCTypeLast(ps, mpc.SolverFlag.LSSOL)
+
+        c1.initializeController(ps)
+        c2.initializeController(ps)
 
 if __name__ == '__main__':
     unittest.main()
