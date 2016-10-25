@@ -108,7 +108,7 @@ BOOST_PYTHON_MODULE(_mpcontroller)
         .def(init<const PreviewSystem &, optional<SolverFlag>>())
         .def("selectQPSolver", &MPCTypeFull::selectQPSolver)
         .def("initializeController", &MPCTypeFull::initializeController, &MPCTypeFullWrap::default_initializeController)
-        .def("updateSystem", &MPCTypeFull::updateSystem) //Need an internal ref
+        .def("updateSystem", &MPCTypeFull::updateSystem)
         .def("solve", &MPCTypeFull::solve)
         .def("solveTime", &MPCTypeFull::solveTime)
         .def("solveAndBuildTime", &MPCTypeFull::solveAndBuildTime)
