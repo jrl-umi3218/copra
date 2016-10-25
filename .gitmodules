@@ -1,9 +1,9 @@
 [submodule "eigen-qld"]
 	path = eigen-qld
-	url = https://github.com/jorisv/eigen-qld.git
+	url = https://github.com/vsamy/eigen-qld.git
 [submodule "eigen-quadprog"]
 	path = eigen-quadprog
-	url = https://github.com/jorisv/eigen-quadprog.git
+	url = https://github.com/vsamy/eigen-quadprog.git
 [submodule "minieigen"]
 	path = minieigen
-	url = https://github.com/eudoxos/minieigen.git
+	url = https://github.com/vsamy/minieigen.git
