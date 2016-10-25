@@ -3,6 +3,7 @@
 #include "PreviewController.h"
 #include "PreviewSystem.h"
 #include <boost/python.hpp>
+#include <boost/timer/timer.hpp>
 
 BOOST_PYTHON_MODULE(_mpcontroller)
 {
@@ -109,6 +110,8 @@ BOOST_PYTHON_MODULE(_mpcontroller)
         .def("initializeController", &MPCTypeFull::initializeController, &MPCTypeFullWrap::default_initializeController)
         .def("updateSystem", &MPCTypeFull::updateSystem) //Need an internal ref
         .def("solve", &MPCTypeFull::solve)
+        .def("solveTime", &MPCTypeFull::solveTime)
+        .def("solveAndBuildTime", &MPCTypeFull::solveAndBuildTime)
         .def("weights", &MPCTypeFull::weights, &MPCTypeFullWrap::default_weights)
         .def("control", &MPCTypeFull::control, return_internal_reference<>())
         .def("trajectory", &MPCTypeFull::trajectory)
@@ -119,4 +122,13 @@ BOOST_PYTHON_MODULE(_mpcontroller)
     class_<MPCTypeLast, boost::noncopyable, bases<MPCTypeFull>>("MPCTypeLast",
                                                                 init<optional<SolverFlag>>())
         .def(init<const PreviewSystem &, optional<SolverFlag>>());
+
+
+    //cpu_times
+    using namespace boost::timer;
+    class_<cpu_times>("cpu_times")
+        .def_readwrite("wall", &cpu_times::wall)
+        .def_readwrite("user", &cpu_times::user)
+        .def_readwrite("system", &cpu_times::system)
+        .def("clear", &cpu_times::clear);
 }

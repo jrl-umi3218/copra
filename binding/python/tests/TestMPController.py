@@ -50,6 +50,11 @@ class TestMPC(unittest.TestCase):
         self.assertLessEqual(max(posTraj), self.x0[0])
         self.assertLessEqual(control.maxCoeff(), self.h[0])
 
+        print
+        print controller.solveTime().wall*1e-6
+        print controller.solveAndBuildTime().wall*1e-6
+        print
+
     def test_constructors_initialisations(self):
         ps = mpc.PreviewSystem()
         ps.system(self.A, self.B, self.c, self.x0, self.xd, self.nbStep)

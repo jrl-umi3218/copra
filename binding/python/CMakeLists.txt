@@ -2,7 +2,7 @@ include(../../cmake/python.cmake)
 
 configure_file(__init__.py ${CMAKE_CURRENT_BINARY_DIR}/mpcontroller/__init__.py COPYONLY)
 
-find_package(Boost COMPONENTS python REQUIRED)
+find_package(Boost COMPONENTS python timer REQUIRED)
 FINDPYTHON()
 
 include_directories("${PROJECT_SOURCE_DIR}/src")
