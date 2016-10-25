@@ -20,8 +20,8 @@
 namespace mpc
 {
 
-//Forward declare
-class PreviewSystem;
+//forward declaration
+struct PreviewSystem;
 
 /**
  * Constrain to add to the system.

@@ -26,7 +26,7 @@ namespace mpc
 
 //Forward declaration
 class Constrain;
-class PreviewSystem;
+struct PreviewSystem;
 
 /**
  * The controller itself.
