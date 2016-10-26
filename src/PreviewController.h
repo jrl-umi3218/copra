@@ -25,7 +25,7 @@ namespace mpc
 {
 
 //Forward declaration
-class Constrain;
+class Constraint;
 struct PreviewSystem;
 
 /**
@@ -48,7 +48,7 @@ class MPCTypeFull
      * @param ps A preview system to amke a copy from.
      * @param sFlag The flag corresponding to the desired solver.
      */
-    MPCTypeFull(const PreviewSystem &ps, SolverFlag sFlag = SolverFlag::DEFAULT);
+    MPCTypeFull(const std::shared_ptr<PreviewSystem> &ps, SolverFlag sFlag = SolverFlag::DEFAULT);
 
     /**
      * Select a solver. This function can be called at any time.
@@ -61,7 +61,7 @@ class MPCTypeFull
      * This function needs to be called each time the system dimension changes.
      * @param ps The preview system
      */
-    virtual void initializeController(const PreviewSystem& ps);
+    virtual void initializeController(const std::shared_ptr<PreviewSystem> &ps);
 
     /**
      * Update the system and its constrains.
@@ -69,13 +69,15 @@ class MPCTypeFull
      * Fill Phi, Psi, xi in PreviewSystem
      * Fill A, b in Constrains
      */
-    void updateSystem(PreviewSystem &ps);
+    void updateSystem();
 
     /**
      * Solve the system. 
      * @return True if a solution has been found.
+     * Fill Phi, Psi, xi in PreviewSystem
+     * Fill A, b in Constrains
      */
-    bool solve(const PreviewSystem &ps);
+    bool solve();
 
     /**
      * Get the solver result.
@@ -86,7 +88,7 @@ class MPCTypeFull
      * Get the preview trajectory.
      * @return The trajectory vector \f$X\f$.
      */
-    Eigen::VectorXd trajectory(const PreviewSystem &ps) const noexcept;
+    Eigen::VectorXd trajectory() const noexcept;
     /**
      * The time needed to solve the qp problem.
      * @return The elapsed time for solving.
@@ -103,28 +105,36 @@ class MPCTypeFull
      * @param wx Weight of the state.
      * @param wu Weight of the control.
      */
-    virtual void weights(const PreviewSystem &ps, const Eigen::VectorXd &Wx, const Eigen::VectorXd &Wu);
+    virtual void weights(const Eigen::VectorXd &Wx, const Eigen::VectorXd &Wu);
 
     /**
-     * Add a constrain to the system.
-     * @param constr A constrain type @see TrajectoryConstrain. @see ControlConstrain.
+     * Add a constraint to the system.
+     * @param constr A constraint type @see TrajectoryConstrain. @see ControlConstrain.
      */
-    void addConstrain(const PreviewSystem &ps, Constrain &constr);
+    void addConstraint(std::shared_ptr<Constraint> constr);
     /**
      * Clear the constrains
      */
-    void resetConstrains() noexcept;
+    void resetConstraints() noexcept;
 
   protected:
+	
     /**
      * QP-like format.
      */
-    virtual void makeQPForm(const PreviewSystem &ps);
+    virtual void makeQPForm();
+
+    /**
+	 * Check if the constraints still exist.
+	 * Output into std::cerr if something wrong happened.
+	 */
+    void checkConstraints();
 
   protected:
     int nrConstr_;
 
-    std::vector<Constrain *> constr_;
+	std::shared_ptr<PreviewSystem> ps_;
+    std::vector<std::pair<std::weak_ptr<Constraint>, std::string>> wpc_;
     std::unique_ptr<SolverInterface> sol_;
 
     Eigen::MatrixXd Q_, AInEq_;
@@ -149,20 +159,20 @@ class MPCTypeLast final : public MPCTypeFull
     /**
      * See @see MPCTypeFull::MPCTypeFull
      */
-    MPCTypeLast(const PreviewSystem &ps, SolverFlag sFlag = SolverFlag::DEFAULT);
+    MPCTypeLast(const std::shared_ptr<PreviewSystem> &ps, SolverFlag sFlag = SolverFlag::DEFAULT);
 
     /**
      * See @see  MPCTypeFull::initializeController
      */
-    void initializeController(const PreviewSystem& ps) override;
+    void initializeController(const std::shared_ptr<PreviewSystem> &ps) override;
 
     /**
      * See @see MPCTypeFull::weights
      */
-    void weights(const PreviewSystem &ps, const Eigen::VectorXd &Wx, const Eigen::VectorXd &Wu) override;
+    void weights(const Eigen::VectorXd &Wx, const Eigen::VectorXd &Wu) override;
 
   protected:
-    void makeQPForm(const PreviewSystem &ps) override;
+    void makeQPForm() override;
 };
 
 } // namespace pc

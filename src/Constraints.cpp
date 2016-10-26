@@ -13,7 +13,7 @@
 //You should have received a copy of the GNU Lesser General Public License
 //along with ModelPreviewController.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "Constrains.h"
+#include "Constraints.h"
 
 #include "PreviewSystem.h"
 
@@ -24,7 +24,7 @@ namespace mpc
  *                                          Constrains                                           *
  *************************************************************************************************/
 
-Constrain::Constrain(const Eigen::MatrixXd &E, const Eigen::VectorXd &f)
+Constraint::Constraint(const Eigen::MatrixXd &E, const Eigen::VectorXd &f)
     : nrConstr_(0),
       E_(E),
       A_(),
@@ -38,7 +38,7 @@ Constrain::Constrain(const Eigen::MatrixXd &E, const Eigen::VectorXd &f)
  *                                  Trajectory Constrains                                        *
  *************************************************************************************************/
 
-void TrajectoryConstrain::initializeConstrain(const PreviewSystem &ps)
+void TrajectoryConstraint::initializeConstraint(const PreviewSystem &ps)
 {
     assert(E_.cols() == ps.xDim);
 
@@ -47,7 +47,7 @@ void TrajectoryConstrain::initializeConstrain(const PreviewSystem &ps)
     b_.resize(nrConstr_);
 }
 
-void TrajectoryConstrain::update(const PreviewSystem &ps)
+void TrajectoryConstraint::update(const PreviewSystem &ps)
 {
     auto nrLines = static_cast<int>(E_.rows());
     for (int i = 0; i < ps.nrStep; ++i)
@@ -57,11 +57,16 @@ void TrajectoryConstrain::update(const PreviewSystem &ps)
     }
 }
 
+std::string TrajectoryConstraint::name() const noexcept
+{
+    return "Trajectory constraint";
+}
+
 /*************************************************************************************************
  *                                    Constrol Constrains                                        *
  *************************************************************************************************/
 
-void ControlConstrain::initializeConstrain(const PreviewSystem &ps)
+void ControlConstraint::initializeConstraint(const PreviewSystem &ps)
 {
     assert(E_.cols() == ps.uDim);
 
@@ -71,7 +76,7 @@ void ControlConstrain::initializeConstrain(const PreviewSystem &ps)
     A_.setZero();
 }
 
-void ControlConstrain::update(const PreviewSystem &ps)
+void ControlConstraint::update(const PreviewSystem &ps)
 {
     auto nrLines = static_cast<int>(E_.rows());
     for (int i = 0; i < ps.nrStep; ++i)
@@ -79,6 +84,11 @@ void ControlConstrain::update(const PreviewSystem &ps)
         A_.block(i * nrLines, i * ps.uDim, nrLines, ps.uDim) = E_;
         b_.segment(i * nrLines, nrLines) = f_;
     }
+}
+
+std::string ControlConstraint::name() const noexcept
+{
+    return "Control constraint";
 }
 
 } // namespace mpc

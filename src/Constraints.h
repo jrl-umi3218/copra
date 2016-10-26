@@ -16,6 +16,7 @@
 #pragma once
 
 #include <Eigen/Core>
+#include <string>
 
 namespace mpc
 {
@@ -24,34 +25,40 @@ namespace mpc
 struct PreviewSystem;
 
 /**
- * Constrain to add to the system.
+ * Constraint to add to the system.
  * This is a pure virtual class
  */
-class Constrain
+class Constraint
 {
   public:
     /**
-     * Constructor of a constrain.
-     * @param E The inequality constrain matrix.
-     * @param f The inequality constrain vector.
+     * Constructor of a constraint.
+     * @param E The inequality constraint matrix.
+     * @param f The inequality constraint vector.
      */
-    Constrain(const Eigen::MatrixXd &E, const Eigen::VectorXd &f);
+    Constraint(const Eigen::MatrixXd &E, const Eigen::VectorXd &f);
 
     /**
      * Declare virtual desturctor
      */
-    virtual ~Constrain() = default;
+    virtual ~Constraint() = default;
 
     /**
-     * Initialization of the constrain.
+     * Initialization of the constraint.
      * @param ps An unique pointer to a PreviewSystem.
      */
-    virtual void initializeConstrain(const PreviewSystem &ps) = 0;
+    virtual void initializeConstraint(const PreviewSystem &ps) = 0;
     /**
-     * Update the constrain.
+     * Update the constraint.
      * @param ps An unique pointer to a PreviewSystem.
      */
     virtual void update(const PreviewSystem &ps) = 0;
+
+    /**
+     * Function that return the number of constrains.
+     * @return The number of constrains.
+     */
+    virtual std::string name() const noexcept = 0;
 
     /**
      * Function that return the number of constrains.
@@ -79,36 +86,39 @@ class Constrain
     }
 
   protected:
+    std::string name_;
     int nrConstr_;
     Eigen::MatrixXd E_, A_;
     Eigen::VectorXd f_, b_;
 };
 
-class TrajectoryConstrain final : public Constrain
+class TrajectoryConstraint final : public Constraint
 {
   public:
     /**
-     * Constructor of a constrain.
-     * Constrain of type \f$EX <= f\f$ 
-     * @param E The inequality constrain matrix.
-     * @param f The inequality constrain vector.
+     * Constructor of a constraint.
+     * Constraint of type \f$EX <= f\f$ 
+     * @param E The inequality constraint matrix.
+     * @param f The inequality constraint vector.
      */
-    using Constrain::Constrain; //Inherits base class constructor
-    void initializeConstrain(const PreviewSystem &ps) override;
+    using Constraint::Constraint; //Inherits base class constructor
+    std::string name() const noexcept override;
+    void initializeConstraint(const PreviewSystem &ps) override;
     void update(const PreviewSystem &ps) override;
 };
 
-class ControlConstrain final : public Constrain
+class ControlConstraint final : public Constraint
 {
   public:
     /**
-     * Constructor of a constrain.
-     * Constrain of type \f$EU <= f\f$ 
-     * @param E The inequality constrain matrix.
-     * @param f The inequality constrain vector.
+     * Constructor of a constraint.
+     * Constraint of type \f$EU <= f\f$ 
+     * @param E The inequality constraint matrix.
+     * @param f The inequality constraint vector.
      */
-    using Constrain::Constrain; //Inherits base class constructor
-    void initializeConstrain(const PreviewSystem &ps) override;
+    using Constraint::Constraint; //Inherits base class constructor
+    std::string name() const noexcept override;
+    void initializeConstraint(const PreviewSystem &ps) override;
     void update(const PreviewSystem &ps) override;
 };
 

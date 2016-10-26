@@ -22,23 +22,23 @@ class TestMPC(unittest.TestCase):
         self.wu = VectorXd.Ones(1) * 1e-4
 
     def test_mpcLast(self):
-        ps = mpc.PreviewSystem()
+        ps = mpc.NewPreviewSystem()
         ps.system(self.A, self.B, self.c, self.x0, self.xd, self.nbStep)
 
         controller = mpc.MPCTypeLast(ps)
-        trajConstr = mpc.TrajectoryConstrain(self.E, self.f)
-        contConstr = mpc.ControlConstrain(self.G, self.h)
+        trajConstr = mpc.NewTrajectoryConstraint(self.E, self.f)
+        contConstr = mpc.NewControlConstraint(self.G, self.h)
 
-        controller.addConstrain(ps, trajConstr)
-        controller.addConstrain(ps, contConstr)
+        controller.addConstraint(trajConstr)
+        controller.addConstraint(contConstr)
 
-        controller.weights(ps, self.wx, self.wu)
+        controller.weights(self.wx, self.wu)
 
-        controller.updateSystem(ps)
+        controller.updateSystem()
         
-        self.assertTrue(controller.solve(ps))
+        self.assertTrue(controller.solve())
         control = controller.control()
-        fullTraj = controller.trajectory(ps)
+        fullTraj = controller.trajectory()
         fTLen = len(fullTraj)/2
         posTraj = [0.]*fTLen
         velTraj = [0.]*fTLen
@@ -56,20 +56,84 @@ class TestMPC(unittest.TestCase):
         print
 
     def test_constructors_initialisations(self):
-        ps = mpc.PreviewSystem()
+        ps = mpc.NewPreviewSystem()
         ps.system(self.A, self.B, self.c, self.x0, self.xd, self.nbStep)
 
-        c1 = mpc.MPCTypeFull()
+        c1 = mpc.MPCTypeFull(ps)
         mpc.MPCTypeFull(mpc.SolverFlag.LSSOL)
         mpc.MPCTypeFull(ps)
         mpc.MPCTypeFull(ps, mpc.SolverFlag.LSSOL)
-        c2 = mpc.MPCTypeLast()
+        c2 = mpc.MPCTypeLast(ps)
         mpc.MPCTypeLast(mpc.SolverFlag.LSSOL)
         mpc.MPCTypeLast(ps)
         mpc.MPCTypeLast(ps, mpc.SolverFlag.LSSOL)
 
         c1.initializeController(ps)
         c2.initializeController(ps)
+
+    @unittest.expectedFailure
+    def test_fail_construct_previewsystem(self):
+        ps = mpc.PreviewSystem()
+
+    @unittest.expectedFailure
+    def test_fail_construct_trajectory(self):
+        ps = mpc.TrajectoryConstraint()
+
+    @unittest.expectedFailure
+    def test_fail_construct_control(self):
+        ps = mpc.ControlConstraint()
+
+    def test_constraint_dangling_pointer(self):
+        ps = mpc.NewPreviewSystem()
+        ps.system(self.A, self.B, self.c, self.x0, self.xd, self.nbStep)
+
+        controller = mpc.MPCTypeLast(ps)
+        trajConstr = mpc.NewTrajectoryConstraint(self.E, self.f)
+        contConstr = mpc.NewControlConstraint(self.G, self.h)
+
+        controller.addConstraint(trajConstr)
+        controller.addConstraint(contConstr)
+
+        controller.weights(self.wx, self.wu)
+
+        del trajConstr
+
+        controller.updateSystem()
+
+        del contConstr
+        
+        self.assertTrue(controller.solve())
+
+    def test_preview_systeme_still_exist(self):
+        ps = mpc.NewPreviewSystem()
+        ps.system(self.A, self.B, self.c, self.x0, self.xd, self.nbStep)
+
+        controller = mpc.MPCTypeLast(ps)
+        del ps
+        trajConstr = mpc.NewTrajectoryConstraint(self.E, self.f)
+        contConstr = mpc.NewControlConstraint(self.G, self.h)
+
+        controller.addConstraint(trajConstr)
+        controller.addConstraint(contConstr)
+
+        controller.weights(self.wx, self.wu)
+
+        controller.updateSystem()
+        
+        self.assertTrue(controller.solve())
+        control = controller.control()
+        fullTraj = controller.trajectory()
+        fTLen = len(fullTraj)/2
+        posTraj = [0.]*fTLen
+        velTraj = [0.]*fTLen
+        for i in xrange(fTLen):
+            posTraj[i] = fullTraj[2*i]
+            velTraj[i] = fullTraj[2*i+1]
+
+        self.assertAlmostEqual(self.xd[1], velTraj[-1], places=3)
+        self.assertLessEqual(max(posTraj), self.x0[0])
+        self.assertLessEqual(control.maxCoeff(), self.h[0])
+
 
 if __name__ == '__main__':
     unittest.main()

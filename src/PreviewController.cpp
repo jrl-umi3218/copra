@@ -16,7 +16,10 @@
 #include "PreviewController.h"
 
 #include <numeric>
-#include "Constrains.h"
+#include <exception>
+#include <iostream>
+#include <algorithm>
+#include "Constraints.h"
 #include "PreviewSystem.h"
 
 namespace mpc
@@ -28,7 +31,8 @@ namespace mpc
 
 MPCTypeFull::MPCTypeFull(SolverFlag sFlag)
     : nrConstr_(0),
-      constr_(),
+      ps_(),
+      wpc_(),
       sol_(solverFactory(sFlag)),
       Q_(),
       AInEq_(),
@@ -41,16 +45,17 @@ MPCTypeFull::MPCTypeFull(SolverFlag sFlag)
 {
 }
 
-MPCTypeFull::MPCTypeFull(const PreviewSystem &ps, SolverFlag sFlag)
+MPCTypeFull::MPCTypeFull(const std::shared_ptr<PreviewSystem> &ps, SolverFlag sFlag)
     : nrConstr_(0),
-      constr_(),
+      ps_(ps),
+      wpc_(),
       sol_(solverFactory(sFlag)),
-      Q_(ps.fullUDim, ps.fullUDim),
-      AInEq_(3 * ps.fullUDim, 3 * ps.fullUDim), // max size is 1 equality (= 2 inequalities) + 1 inequality
-      c_(ps.fullUDim),
-      bInEq_(3 * ps.fullUDim),
-      Wx_(ps.fullXDim),
-      Wu_(ps.fullUDim),
+      Q_(ps_->fullUDim, ps_->fullUDim),
+      AInEq_(3 * ps_->fullUDim, 3 * ps_->fullUDim), // max size is 1 equality (= 2 inequalities) + 1 inequality
+      c_(ps_->fullUDim),
+      bInEq_(3 * ps_->fullUDim),
+      Wx_(ps_->fullXDim),
+      Wu_(ps_->fullUDim),
       solveTime_(),
       solveAndBuildTime_()
 {
@@ -63,52 +68,30 @@ void MPCTypeFull::selectQPSolver(SolverFlag flag)
     sol_ = solverFactory(flag);
 }
 
-void MPCTypeFull::initializeController(const PreviewSystem &ps)
+void MPCTypeFull::initializeController(const std::shared_ptr<PreviewSystem> &ps)
 {
-    Q_.resize(ps.fullUDim, ps.fullUDim);
-    AInEq_.resize(3 * ps.fullUDim, 3 * ps.fullUDim); // max size is 1 equality (= 2 inequalities) + 1 inequality
-    c_.resize(ps.fullUDim);
-    bInEq_.resize(3 * ps.fullUDim);
-    Wx_.resize(ps.fullXDim);
-    Wu_.resize(ps.fullUDim);
+    ps_ = ps;
+    Q_.resize(ps_->fullUDim, ps_->fullUDim);
+    AInEq_.resize(3 * ps_->fullUDim, 3 * ps_->fullUDim); // max size is 1 equality (= 2 inequalities) + 1 inequality
+    c_.resize(ps_->fullUDim);
+    bInEq_.resize(3 * ps_->fullUDim);
+    Wx_.resize(ps_->fullXDim);
+    Wu_.resize(ps_->fullUDim);
     Wx_.setOnes();
     Wu_.setOnes();
 }
 
-void MPCTypeFull::updateSystem(PreviewSystem &ps)
-{
-    auto xDim = ps.xDim;
-    auto uDim = ps.uDim;
-
-    ps.Phi.block(0, 0, xDim, xDim) = ps.A;
-    ps.Psi.block(0, 0, xDim, uDim) = ps.B;
-    ps.xi.segment(0, xDim) = ps.d;
-
-    for (auto i = 1; i < ps.nrStep; ++i)
-    {
-        ps.Phi.block(i * xDim, 0, xDim, xDim) = ps.A * ps.Phi.block((i - 1) * xDim, 0, xDim, xDim);
-        for (auto j = 0; j < i; ++j)
-        {
-            ps.Psi.block(i * xDim, j * uDim, xDim, uDim) = ps.A * ps.Psi.block((i - 1) * xDim, j * uDim, xDim, uDim);
-        }
-        ps.Psi.block(i * xDim, i * uDim, xDim, uDim) = ps.B;
-        ps.xi.segment(i * xDim, xDim) = ps.A * ps.xi.segment((i - 1) * xDim, xDim) + ps.d;
-    }
-
-    for (auto cstr : constr_)
-        cstr->update(ps);
-}
-
-bool MPCTypeFull::solve(const PreviewSystem &ps)
+bool MPCTypeFull::solve()
 {
     solveAndBuildTime_.start();
-    makeQPForm(ps);
-    sol_->SI_problem(ps.fullUDim, 0, nrConstr_);
+    checkConstraints();
+    makeQPForm();
+    sol_->SI_problem(ps_->fullUDim, 0, nrConstr_);
     solveTime_.start();
-    bool success = sol_->SI_solve(Q_, c_, Eigen::MatrixXd::Zero(0, ps.fullUDim),
+    bool success = sol_->SI_solve(Q_, c_, Eigen::MatrixXd::Zero(0, ps_->fullUDim),
                                   Eigen::VectorXd::Zero(0), AInEq_, bInEq_,
-                                  Eigen::VectorXd::Constant(ps.fullUDim, -std::numeric_limits<double>::infinity()),
-                                  Eigen::VectorXd::Constant(ps.fullUDim, std::numeric_limits<double>::infinity()));
+                                  Eigen::VectorXd::Constant(ps_->fullUDim, -std::numeric_limits<double>::infinity()),
+                                  Eigen::VectorXd::Constant(ps_->fullUDim, std::numeric_limits<double>::infinity()));
     solveTime_.stop();
     solveAndBuildTime_.stop();
     if (!success)
@@ -122,9 +105,9 @@ const Eigen::VectorXd &MPCTypeFull::control() const noexcept
     return sol_->SI_result();
 }
 
-Eigen::VectorXd MPCTypeFull::trajectory(const PreviewSystem &ps) const noexcept
+Eigen::VectorXd MPCTypeFull::trajectory() const noexcept
 {
-    return ps.Phi * ps.x0 + ps.Psi * control() + ps.xi;
+    return ps_->Phi * ps_->x0 + ps_->Psi * control() + ps_->xi;
 }
 
 boost::timer::cpu_times MPCTypeFull::solveTime() const noexcept
@@ -137,49 +120,107 @@ boost::timer::cpu_times MPCTypeFull::solveAndBuildTime() const noexcept
     return solveAndBuildTime_.elapsed();
 }
 
-void MPCTypeFull::weights(const PreviewSystem &ps, const Eigen::VectorXd &Wx, const Eigen::VectorXd &Wu)
+void MPCTypeFull::weights(const Eigen::VectorXd &Wx, const Eigen::VectorXd &Wu)
 {
-    assert(Wx.rows() == ps.xDim);
-    assert(Wu.rows() == ps.uDim);
+    assert(Wx.rows() == ps_->xDim);
+    assert(Wu.rows() == ps_->uDim);
 
-    for (auto i = 0; i < ps.nrStep; ++i)
+    for (auto i = 0; i < ps_->nrStep; ++i)
     {
-        Wx_.segment(i * ps.xDim, ps.xDim) = Wx;
-        Wu_.segment(i * ps.uDim, ps.uDim) = Wu;
+        Wx_.segment(i * ps_->xDim, ps_->xDim) = Wx;
+        Wu_.segment(i * ps_->uDim, ps_->uDim) = Wu;
     }
 }
 
-void MPCTypeFull::addConstrain(const PreviewSystem &ps, Constrain &constr)
+void MPCTypeFull::addConstraint(std::shared_ptr<Constraint> constr)
 {
-    constr_.push_back(&constr);
-    constr.initializeConstrain(ps);
-    nrConstr_ += constr.nrConstr();
+    wpc_.emplace_back(std::move(constr), constr->name());
+    constr->initializeConstraint(*ps_);
+    nrConstr_ += constr->nrConstr();
 
-    AInEq_.resize(nrConstr_, ps.fullUDim);
+    AInEq_.resize(nrConstr_, ps_->fullUDim);
     bInEq_.resize(nrConstr_);
 }
 
-void MPCTypeFull::resetConstrains() noexcept
+void MPCTypeFull::resetConstraints() noexcept
 {
     nrConstr_ = 0;
-    constr_.clear();
+    wpc_.clear();
 }
 
 /* 
  *  Protected methods
  */
 
-void MPCTypeFull::makeQPForm(const PreviewSystem &ps)
+void MPCTypeFull::updateSystem()
 {
-    Q_ = ps.Psi.transpose() * Eigen::MatrixXd(Wx_.asDiagonal()) * ps.Psi + Eigen::MatrixXd(Wu_.asDiagonal());
-    c_ = ps.Psi.transpose() * Eigen::MatrixXd(Wx_.asDiagonal()) * (ps.Phi * ps.x0 - ps.xd + ps.xi);
+    auto xDim = ps_->xDim;
+    auto uDim = ps_->uDim;
+
+    ps_->Phi.block(0, 0, xDim, xDim) = ps_->A;
+    ps_->Psi.block(0, 0, xDim, uDim) = ps_->B;
+    ps_->xi.segment(0, xDim) = ps_->d;
+
+    for (auto i = 1; i < ps_->nrStep; ++i)
+    {
+        ps_->Phi.block(i * xDim, 0, xDim, xDim) = ps_->A * ps_->Phi.block((i - 1) * xDim, 0, xDim, xDim);
+        for (auto j = 0; j < i; ++j)
+        {
+            ps_->Psi.block(i * xDim, j * uDim, xDim, uDim) = ps_->A * ps_->Psi.block((i - 1) * xDim, j * uDim, xDim, uDim);
+        }
+        ps_->Psi.block(i * xDim, i * uDim, xDim, uDim) = ps_->B;
+        ps_->xi.segment(i * xDim, xDim) = ps_->A * ps_->xi.segment((i - 1) * xDim, xDim) + ps_->d;
+    }
+
+    checkConstraints();
+    for (auto &wpc : wpc_)
+        wpc.first.lock()->update(*ps_);
+}
+
+void MPCTypeFull::makeQPForm()
+{
+    Q_ = ps_->Psi.transpose() * Eigen::MatrixXd(Wx_.asDiagonal()) * ps_->Psi + Eigen::MatrixXd(Wu_.asDiagonal());
+    c_ = ps_->Psi.transpose() * Eigen::MatrixXd(Wx_.asDiagonal()) * (ps_->Phi * ps_->x0 - ps_->xd + ps_->xi);
 
     int nrLines = 0;
-    for (auto cstr : constr_)
+    for (auto &wpc : wpc_)
     {
-        AInEq_.block(nrLines, 0, cstr->nrConstr(), ps.fullUDim) = cstr->A();
+        auto cstr = wpc.first.lock();
+        AInEq_.block(nrLines, 0, cstr->nrConstr(), ps_->fullUDim) = cstr->A();
         bInEq_.segment(nrLines, cstr->nrConstr()) = cstr->b();
         nrLines += cstr->nrConstr();
+    }
+}
+
+void MPCTypeFull::checkConstraints()
+{
+    bool needResizing = false;
+    for (auto itr = wpc_.begin(); itr != wpc_.end();)
+    {
+        if ((*itr).first.expired())
+        {
+            std::cerr << std::endl
+                      << "Dangling pointer to constrain.\nA '"
+                      << (*itr).second
+                      << "' has been destroyed unexpectedly.\n"
+                         "The constraint has been removed from the controller"
+                      << std::endl;
+            itr = wpc_.erase(itr);
+            needResizing = true;
+        }
+        else
+        {
+            ++itr;
+        }
+    }
+
+    if (needResizing)
+    {
+        nrConstr_ = 0;
+        for (auto &wpc : wpc_)
+            nrConstr_ += wpc.first.lock()->nrConstr();
+        AInEq_.resize(nrConstr_, ps_->fullUDim);
+        bInEq_.resize(nrConstr_);
     }
 }
 
@@ -192,49 +233,53 @@ MPCTypeLast::MPCTypeLast(SolverFlag sFlag)
 {
 }
 
-MPCTypeLast::MPCTypeLast(const PreviewSystem &ps, SolverFlag sFlag)
+MPCTypeLast::MPCTypeLast(const std::shared_ptr<PreviewSystem> &ps, SolverFlag sFlag)
     : MPCTypeFull::MPCTypeFull(ps, sFlag)
 {
-    Wx_.resize(ps.xDim);
+    Wx_.resize(ps_->xDim);
+    Wx_.setOnes();
 }
 
-void MPCTypeLast::initializeController(const PreviewSystem &ps)
+void MPCTypeLast::initializeController(const std::shared_ptr<PreviewSystem> &ps)
 {
-    Q_.resize(ps.fullUDim, ps.fullUDim);
-    AInEq_.resize(3 * ps.fullUDim, 3 * ps.fullUDim); // max size is 1 equality (= 2 inequalities) + 1 inequality
-    c_.resize(ps.fullUDim);
-    bInEq_.resize(3 * ps.fullUDim);
-    Wx_.resize(ps.xDim);
-    Wu_.resize(ps.fullUDim);
+    ps_ = ps;
+    Q_.resize(ps_->fullUDim, ps_->fullUDim);
+    AInEq_.resize(3 * ps_->fullUDim, 3 * ps_->fullUDim); // max size is 1 equality (= 2 inequalities) + 1 inequality
+    c_.resize(ps_->fullUDim);
+    bInEq_.resize(3 * ps_->fullUDim);
+    Wx_.resize(ps_->xDim);
+    Wu_.resize(ps_->fullUDim);
     Wx_.setOnes();
     Wu_.setOnes();
 }
 
-void MPCTypeLast::weights(const PreviewSystem &ps, const Eigen::VectorXd &Wx, const Eigen::VectorXd &Wu)
+void MPCTypeLast::weights(const Eigen::VectorXd &Wx, const Eigen::VectorXd &Wu)
 {
-    assert(Wx.rows() == ps.xDim);
-    assert(Wu.rows() == ps.uDim);
+    assert(Wx.rows() == ps_->xDim);
+    assert(Wu.rows() == ps_->uDim);
 
     Wx_ = Wx;
-    for (auto i = 0; i < ps.nrStep; ++i)
-        Wu_.segment(i * ps.uDim, ps.uDim) = Wu;
+    for (auto i = 0; i < ps_->nrStep; ++i)
+        Wu_.segment(i * ps_->uDim, ps_->uDim) = Wu;
 }
 
 /* 
  *  Protected methods
  */
 
-void MPCTypeLast::makeQPForm(const PreviewSystem &ps)
+void MPCTypeLast::makeQPForm()
 {
-    auto xDim = ps.xDim;
-    const Eigen::MatrixXd &psi = ps.Psi.bottomRows(xDim);
+    auto xDim = ps_->xDim;
+    const Eigen::MatrixXd &psi = ps_->Psi.bottomRows(xDim);
     Q_ = psi.transpose() * Eigen::MatrixXd(Wx_.asDiagonal()) * psi + Eigen::MatrixXd(Wu_.asDiagonal());
-    c_ = psi.transpose() * Eigen::MatrixXd(Wx_.asDiagonal()) * (ps.Phi.bottomRows(xDim) * ps.x0 - ps.xd.tail(xDim) + ps.xi.tail(xDim));
+    c_ = psi.transpose() * Eigen::MatrixXd(Wx_.asDiagonal()) * (ps_->Phi.bottomRows(xDim) * ps_->x0 - ps_->xd.tail(xDim) + ps_->xi.tail(xDim));
 
     int nrLines = 0;
-    for (auto cstr : constr_)
+    checkConstraints();
+    for (auto &wpc : wpc_)
     {
-        AInEq_.block(nrLines, 0, cstr->nrConstr(), ps.fullUDim) = cstr->A();
+        auto cstr = wpc.first.lock();
+        AInEq_.block(nrLines, 0, cstr->nrConstr(), ps_->fullUDim) = cstr->A();
         bInEq_.segment(nrLines, cstr->nrConstr()) = cstr->b();
         nrLines += cstr->nrConstr();
     }

@@ -5,8 +5,9 @@
 #include <Eigen/Core>
 #include <vector>
 #include <algorithm>
+#include <memory>
 
-#include "Constrains.h"
+#include "Constraints.h"
 #include "PreviewController.h"
 #include "PreviewSystem.h"
 #include "solverUtils.h"
@@ -53,25 +54,25 @@ BOOST_FIXTURE_TEST_CASE(OneDofSystemTypeLast, System)
 {
     std::vector<std::pair<std::string, double>> solveTime;
 
-    auto ps = mpc::PreviewSystem();
-    ps.system(A, B, c, x0, xd, nbStep);
+    auto ps = std::make_shared<mpc::PreviewSystem>();
+    ps->system(A, B, c, x0, xd, nbStep);
     auto controller = mpc::MPCTypeLast(ps);
-    auto trajConstr = mpc::TrajectoryConstrain(E, f);
-    auto contConstr = mpc::ControlConstrain(G, h);
+    auto trajConstr = std::make_shared<mpc::TrajectoryConstraint>(E, f);
+    auto contConstr = std::make_shared<mpc::ControlConstraint>(G, h);
 
-    controller.addConstrain(ps, trajConstr);
-    controller.addConstrain(ps, contConstr);
+    controller.addConstraint(trajConstr);
+    controller.addConstraint(contConstr);
 
-    controller.weights(ps, wx, wu);
+    controller.weights(wx, wu);
 
     auto pcCheck = [&](const std::string &solverName, mpc::SolverFlag sFlag) {
         controller.selectQPSolver(sFlag);
 
-        controller.updateSystem(ps);
-        BOOST_REQUIRE(controller.solve(ps));
+        controller.updateSystem();
+        BOOST_REQUIRE(controller.solve());
         solveTime.emplace_back(solverName, static_cast<double>(controller.solveTime().wall) * 1e-6);
 
-        Eigen::VectorXd fullTraj = controller.trajectory(ps);
+        Eigen::VectorXd fullTraj = controller.trajectory();
         auto trajLen = fullTraj.rows() / 2;
         Eigen::VectorXd posTraj(trajLen);
         Eigen::VectorXd velTraj(trajLen);
@@ -110,25 +111,25 @@ BOOST_FIXTURE_TEST_CASE(OneDofSystemTypeFull, System)
 {
     std::vector<std::pair<std::string, double>> solveTime;
 
-    auto ps = mpc::PreviewSystem();
-    ps.system(A, B, c, x0, xd, nbStep);
+    auto ps = std::make_shared<mpc::PreviewSystem>();
+    ps->system(A, B, c, x0, xd, nbStep);
     auto controller = mpc::MPCTypeFull(ps);
-    auto trajConstr = mpc::TrajectoryConstrain(E, f);
-    auto contConstr = mpc::ControlConstrain(G, h);
+    auto trajConstr = std::make_shared<mpc::TrajectoryConstraint>(E, f);
+    auto contConstr = std::make_shared<mpc::ControlConstraint>(G, h);
 
-    controller.addConstrain(ps, trajConstr);
-    controller.addConstrain(ps, contConstr);
+    controller.addConstraint(trajConstr);
+    controller.addConstraint(contConstr);
 
-    controller.weights(ps, wx, wu);
+    controller.weights(wx, wu);
 
     auto pcCheck = [&](const std::string &solverName, mpc::SolverFlag sFlag) {
         controller.selectQPSolver(sFlag);
 
-        controller.updateSystem(ps);
-        BOOST_REQUIRE(controller.solve(ps));
+        controller.updateSystem();
+        BOOST_REQUIRE(controller.solve());
         solveTime.emplace_back(solverName, static_cast<double>(controller.solveTime().wall) * 1e-6);
 
-        Eigen::VectorXd fullTraj = controller.trajectory(ps);
+        Eigen::VectorXd fullTraj = controller.trajectory();
         auto trajLen = fullTraj.rows() / 2;
         Eigen::VectorXd posTraj(trajLen);
         Eigen::VectorXd velTraj(trajLen);
