@@ -32,8 +32,8 @@ load_build_config() {
 build_and_install() {
 	local path=$1
 	(
-		mkdir -p $BUILD_DIR/$path
-		cd $BUILD_DIR/$path
+		mkdir -p $BUILD_DIR/$BUILD_TYPE/$path
+		cd $BUILD_DIR/$BUILD_TYPE/$path
 
 		cmake $PROGDIR/$path -G"CodeBlocks - Unix Makefiles"\
 			-DCMAKE_BUILD_TYPE=$BUILD_TYPE \
