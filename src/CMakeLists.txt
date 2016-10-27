@@ -3,7 +3,7 @@ set(SOURCES SolverInterface.cpp QuadProgSolver.cpp QLDSolver.cpp
     PreviewController.cpp PreviewSystem.cpp Constraints.cpp)
 set(HEADERS SolverInterface.h QuadProgSolver.h QLDSolver.h 
     PreviewController.h PreviewSystem.h Constraints.h
-    solverUtils.h)
+    solverUtils.h debugUtils.h)
 
 if(${EIGEN_LSSOL_FOUND})
     list(APPEND SOURCES LSSOLSolver.cpp)

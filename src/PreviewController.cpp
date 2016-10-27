@@ -17,10 +17,11 @@
 
 #include <numeric>
 #include <exception>
-#include <iostream>
+#include <sstream>
 #include <algorithm>
 #include "Constraints.h"
 #include "PreviewSystem.h"
+#include "debugUtils.h"
 
 namespace mpc
 {
@@ -85,6 +86,7 @@ bool MPCTypeFull::solve()
 {
     solveAndBuildTime_.start();
     checkConstraints();
+    updateSystem();
     makeQPForm();
     sol_->SI_problem(ps_->fullUDim, 0, nrConstr_);
     solveTime_.start();
@@ -172,7 +174,6 @@ void MPCTypeFull::updateSystem()
         ps_->xi.segment(i * xDim, xDim) = ps_->A * ps_->xi.segment((i - 1) * xDim, xDim) + ps_->d;
     }
 
-    checkConstraints();
     for (auto &wpc : wpc_)
         wpc.first.lock()->update(*ps_);
 }
@@ -199,12 +200,12 @@ void MPCTypeFull::checkConstraints()
     {
         if ((*itr).first.expired())
         {
-            std::cerr << std::endl
-                      << "Dangling pointer to constrain.\nA '"
-                      << (*itr).second
-                      << "' has been destroyed unexpectedly.\n"
-                         "The constraint has been removed from the controller"
-                      << std::endl;
+            std::stringstream ss;
+            ss << "Dangling pointer to constrain.\nA '"
+               << (*itr).second
+               << "' has been destroyed unexpectedly.\n"
+                  "The constraint has been removed from the controller";
+            DEBUG_WARN(ss.str());
             itr = wpc_.erase(itr);
             needResizing = true;
         }

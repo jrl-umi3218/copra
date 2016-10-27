@@ -68,7 +68,6 @@ BOOST_FIXTURE_TEST_CASE(OneDofSystemTypeLast, System)
     auto pcCheck = [&](const std::string &solverName, mpc::SolverFlag sFlag) {
         controller.selectQPSolver(sFlag);
 
-        controller.updateSystem();
         BOOST_REQUIRE(controller.solve());
         solveTime.emplace_back(solverName, static_cast<double>(controller.solveTime().wall) * 1e-6);
 
@@ -125,7 +124,6 @@ BOOST_FIXTURE_TEST_CASE(OneDofSystemTypeFull, System)
     auto pcCheck = [&](const std::string &solverName, mpc::SolverFlag sFlag) {
         controller.selectQPSolver(sFlag);
 
-        controller.updateSystem();
         BOOST_REQUIRE(controller.solve());
         solveTime.emplace_back(solverName, static_cast<double>(controller.solveTime().wall) * 1e-6);
 

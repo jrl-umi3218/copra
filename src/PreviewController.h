@@ -64,14 +64,6 @@ class MPCTypeFull
     virtual void initializeController(const std::shared_ptr<PreviewSystem> &ps);
 
     /**
-     * Update the system and its constrains.
-     * @param ps The preview system
-     * Fill Phi, Psi, xi in PreviewSystem
-     * Fill A, b in Constrains
-     */
-    void updateSystem();
-
-    /**
      * Solve the system. 
      * @return True if a solution has been found.
      * Fill Phi, Psi, xi in PreviewSystem
@@ -118,12 +110,19 @@ class MPCTypeFull
     void resetConstraints() noexcept;
 
   protected:
-	
+    /**
+     * Update the system and its constrains.
+     * @param ps The preview system
+     * Fill Phi, Psi, xi in PreviewSystem
+     * Fill A, b in Constrains
+     */
+    void updateSystem();
+
     /**
      * QP-like format.
      */
     virtual void makeQPForm();
-
+    
     /**
 	 * Check if the constraints still exist.
 	 * Output into std::cerr if something wrong happened.
@@ -133,7 +132,7 @@ class MPCTypeFull
   protected:
     int nrConstr_;
 
-	std::shared_ptr<PreviewSystem> ps_;
+    std::shared_ptr<PreviewSystem> ps_;
     std::vector<std::pair<std::weak_ptr<Constraint>, std::string>> wpc_;
     std::unique_ptr<SolverInterface> sol_;
 

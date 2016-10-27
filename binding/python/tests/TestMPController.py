@@ -34,8 +34,6 @@ class TestMPC(unittest.TestCase):
 
         controller.weights(self.wx, self.wu)
 
-        controller.updateSystem()
-        
         self.assertTrue(controller.solve())
         control = controller.control()
         fullTraj = controller.trajectory()
@@ -94,11 +92,9 @@ class TestMPC(unittest.TestCase):
         controller.addConstraint(trajConstr)
         controller.addConstraint(contConstr)
 
-        controller.weights(self.wx, self.wu)
-
         del trajConstr
 
-        controller.updateSystem()
+        controller.weights(self.wx, self.wu)
 
         del contConstr
         
@@ -118,8 +114,6 @@ class TestMPC(unittest.TestCase):
 
         controller.weights(self.wx, self.wu)
 
-        controller.updateSystem()
-        
         self.assertTrue(controller.solve())
         control = controller.control()
         fullTraj = controller.trajectory()
