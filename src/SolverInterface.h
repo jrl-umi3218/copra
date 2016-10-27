@@ -21,7 +21,6 @@ namespace mpc
 {
 
 /**
- * TODO: make it pure virtual and use cloning
  * An interface to the quadratic solvers.
  * This interface is more like a pseudo-interface (it is not an abstract class).
  * This class allows to have a base class for all solvers. 
@@ -35,12 +34,12 @@ class SolverInterface
 	 * Get information of eventual fail's solver output as define by the solver documentation.
 	 * @return The fail number.
 	 */
-    virtual int SI_fail() const;
+    virtual int SI_fail() const = 0;
 
     /**
 	 * Print an information on the current solver status.
 	 */
-    virtual void SI_inform() const;
+    virtual void SI_inform() const = 0;
 
     /**
 	 * Get the number of needed iteration if available
@@ -76,7 +75,7 @@ class SolverInterface
 	 * Get the solver's solution.
 	 * @return The qp solver result.
 	 */
-    virtual const Eigen::VectorXd &SI_result() const;
+    virtual const Eigen::VectorXd &SI_result() const = 0;
 
     /**
 	 * Initialize the variables of the problem to solve.
@@ -85,7 +84,7 @@ class SolverInterface
 	 * @param nrInEq The number of inequality constrains
 	 * @return The qp solver result.
 	 */
-    virtual void SI_problem(int nrVar, int nrEq, int nrInEq);
+    virtual void SI_problem(int nrVar, int nrEq, int nrInEq) = 0;
 
     /**
 	 * Solve the problem.
@@ -113,7 +112,7 @@ class SolverInterface
     virtual bool SI_solve(const Eigen::MatrixXd &Q, const Eigen::VectorXd &C,
 			  const Eigen::MatrixXd &Aeq, const Eigen::VectorXd &Beq,
 			  const Eigen::MatrixXd &Aineq, const Eigen::VectorXd &Bineq,
-			  const Eigen::VectorXd &XL, const Eigen::VectorXd &XU);
+			  const Eigen::VectorXd &XL, const Eigen::VectorXd &XU) = 0;
 };
 
 } // namespace pc
