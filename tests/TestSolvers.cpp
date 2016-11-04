@@ -1,8 +1,25 @@
+// This file is part of ModelPreviewController.
+
+// ModelPreviewController is free software: you can redistribute it and/or
+// modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// ModelPreviewController is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with ModelPreviewController.  If not, see
+// <http://www.gnu.org/licenses/>.
+
 #define BOOST_TEST_MODULE TestSolvers
-#include <boost/test/unit_test.hpp>
-#include <numeric>
 #include <Eigen/Core>
+#include <boost/test/unit_test.hpp>
 #include <iostream>
+#include <numeric>
 
 #include "QLDSolver.h"
 #include "QuadProgSolver.h"
@@ -10,21 +27,21 @@
 #include "LSSOLSolver.h"
 #endif
 
-// Test base on scilab qld example: https://help.scilab.org/doc/5.5.2/en_US/qld.html
-struct Problem
-{
+// Test base on scilab qld example:
+// https://help.scilab.org/doc/5.5.2/en_US/qld.html
+struct Problem {
     Problem()
-        : Q(6, 6),
-          Aeq(3, 6),
-          Aineq(2, 6),
-          c(6),
-          beq(3),
-          bineq(2),
-          XL(6),
-          XU(6),
-          nrvars(6),
-          nreqs(3),
-          nrineqs(2)
+        : Q(6, 6)
+        , Aeq(3, 6)
+        , Aineq(2, 6)
+        , c(6)
+        , beq(3)
+        , bineq(2)
+        , XL(6)
+        , XU(6)
+        , nrvars(6)
+        , nreqs(3)
+        , nrineqs(2)
     {
         Q = Eigen::MatrixXd::Identity(6, 6);
         c << 1, 2, 3, 4, 5, 6;

@@ -1,24 +1,29 @@
-//This file is part of ModelPreviewController.
+// This file is part of ModelPreviewController.
 
-//ModelPreviewController is free software: you can redistribute it and/or modify
-//it under the terms of the GNU Lesser General Public License as published by
-//the Free Software Foundation, either version 3 of the License, or
-//(at your option) any later version.
+// ModelPreviewController is free software: you can redistribute it and/or
+// modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
 //
-//ModelPreviewController is distributed in the hope that it will be useful,
-//but WITHOUT ANY WARRANTY; without even the implied warranty of
-//MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//GNU Lesser General Public License for more details.
+// ModelPreviewController is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
 //
-//You should have received a copy of the GNU Lesser General Public License
-//along with ModelPreviewController.  If not, see <http://www.gnu.org/licenses/>.
+// You should have received a copy of the GNU Lesser General Public License
+// along with ModelPreviewController.  If not, see
+// <http://www.gnu.org/licenses/>.
 
 #pragma once
 
 #include <iostream>
 
 #ifndef _DEBUG
-#define DEBUG_WARN(x) 
+#define DEBUG_WARN(x)
 #else
-#define DEBUG_WARN(x) do { std::cerr << x << std::endl; } while(0)
+#define DEBUG_WARN(x)                \
+    do {                             \
+        std::cerr << x << std::endl; \
+    } while (0)
 #endif

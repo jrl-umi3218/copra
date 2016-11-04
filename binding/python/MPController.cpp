@@ -1,41 +1,55 @@
-#include "solverUtils.h"
+// This file is part of ModelPreviewController.
+
+// ModelPreviewController is free software: you can redistribute it and/or
+// modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// ModelPreviewController is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with ModelPreviewController.  If not, see
+// <http://www.gnu.org/licenses/>.
+
 #include "Constraints.h"
 #include "PreviewController.h"
 #include "PreviewSystem.h"
+#include "solverUtils.h"
 #include <boost/python.hpp>
 #include <boost/timer/timer.hpp>
 #include <memory>
 #include <string>
 
-namespace boost
-{
+namespace boost {
 
 // Make boost::python understand std::shared_ptr
 template <class T>
-T *get_pointer(std::shared_ptr<T> p)
+T* get_pointer(std::shared_ptr<T> p)
 {
     return p.get();
 }
 }
 
-namespace mpc
-{
+namespace mpc {
 
 std::shared_ptr<PreviewSystem> NewPreviewSystem()
 {
     return std::make_shared<PreviewSystem>();
 }
 
-std::shared_ptr<TrajectoryConstraint> NewTrajectoryConstraint(const Eigen::MatrixXd & E, const Eigen::VectorXd & f)
+std::shared_ptr<TrajectoryConstraint> NewTrajectoryConstraint(const Eigen::MatrixXd& E, const Eigen::VectorXd& f)
 {
     return std::make_shared<TrajectoryConstraint>(E, f);
 }
 
-std::shared_ptr<ControlConstraint> NewControlConstraint(const Eigen::MatrixXd & E, const Eigen::VectorXd & f)
+std::shared_ptr<ControlConstraint> NewControlConstraint(const Eigen::MatrixXd& E, const Eigen::VectorXd& f)
 {
     return std::make_shared<ControlConstraint>(E, f);
 }
-
 }
 
 BOOST_PYTHON_MODULE(_mpcontroller)
@@ -55,11 +69,16 @@ BOOST_PYTHON_MODULE(_mpcontroller)
         .value("QLD", SolverFlag::QLD)
         .value("QuadProgDense", SolverFlag::QuadProgDense);
 
+    // Solvers
+    def("pythonSolverFactory", &pythonSolverFactory, return_value_policy<manage_new_object>());
+
     // Preview System
-    void (PreviewSystem::*sys1)(const Eigen::MatrixXd &, const Eigen::MatrixXd &,
-                                const Eigen::VectorXd &, const Eigen::VectorXd &, int) = &PreviewSystem::system;
-    void (PreviewSystem::*sys2)(const Eigen::MatrixXd &, const Eigen::MatrixXd &,
-                                const Eigen::VectorXd &, const Eigen::VectorXd &, const Eigen::VectorXd &, int) = &PreviewSystem::system;
+    void (PreviewSystem::*sys1)(const Eigen::MatrixXd&, const Eigen::MatrixXd&,
+        const Eigen::VectorXd&, const Eigen::VectorXd&, int)
+        = &PreviewSystem::system;
+    void (PreviewSystem::*sys2)(const Eigen::MatrixXd&, const Eigen::MatrixXd&,
+        const Eigen::VectorXd&, const Eigen::VectorXd&, const Eigen::VectorXd&, int)
+        = &PreviewSystem::system;
 
     class_<PreviewSystem>("PreviewSystem", no_init)
         .def("system", sys1)
@@ -79,16 +98,15 @@ BOOST_PYTHON_MODULE(_mpcontroller)
         .def_readwrite("xi", &PreviewSystem::xi);
 
     //Constraint
-    struct ConstraintWrap : Constraint, wrapper<Constraint>
-    {
+    struct ConstraintWrap : Constraint, wrapper<Constraint> {
         using Constraint::Constraint;
 
-        void initializeConstraint(const PreviewSystem &ps)
+        void initializeConstraint(const PreviewSystem& ps)
         {
             this->get_override("initializeConstraint")(ps);
         }
 
-        void update(const PreviewSystem &ps)
+        void update(const PreviewSystem& ps)
         {
             this->get_override("update")(ps);
         }
@@ -99,7 +117,7 @@ BOOST_PYTHON_MODULE(_mpcontroller)
         }
     };
 
-    class_<ConstraintWrap, boost::noncopyable>("Constraint", init<const Eigen::MatrixXd &, const Eigen::VectorXd &>())
+    class_<ConstraintWrap, boost::noncopyable>("Constraint", init<const Eigen::MatrixXd&, const Eigen::VectorXd&>())
         .def("initializeConstraint", pure_virtual(&Constraint::initializeConstraint))
         .def("update", pure_virtual(&Constraint::update))
         .def("name", pure_virtual(&Constraint::name))
@@ -107,16 +125,15 @@ BOOST_PYTHON_MODULE(_mpcontroller)
         .def("A", &Constraint::A, return_internal_reference<>())
         .def("b", &Constraint::b, return_internal_reference<>());
 
-    class_<TrajectoryConstraint, boost::noncopyable, bases<Constraint>>("TrajectoryConstraint", no_init);
+    class_<TrajectoryConstraint, boost::noncopyable, bases<Constraint> >("TrajectoryConstraint", no_init);
 
-    class_<ControlConstraint, boost::noncopyable, bases<Constraint>>("ControlConstraint", no_init);
+    class_<ControlConstraint, boost::noncopyable, bases<Constraint> >("ControlConstraint", no_init);
 
     //MPCTypeFull
-    struct MPCTypeFullWrap : MPCTypeFull, wrapper<MPCTypeFull>
-    {
+    struct MPCTypeFullWrap : MPCTypeFull, wrapper<MPCTypeFull> {
         using MPCTypeFull::MPCTypeFull;
 
-        void initializeController(const std::shared_ptr<PreviewSystem> &ps)
+        void initializeController(const std::shared_ptr<PreviewSystem>& ps)
         {
             if (override initializeController = this->get_override("initializeController"))
                 initializeController(ps);
@@ -124,12 +141,12 @@ BOOST_PYTHON_MODULE(_mpcontroller)
                 MPCTypeFull::initializeController(ps);
         }
 
-        void default_initializeController(const std::shared_ptr<PreviewSystem> &ps)
+        void default_initializeController(const std::shared_ptr<PreviewSystem>& ps)
         {
             this->MPCTypeFull::initializeController(ps);
         }
 
-        void weights(const Eigen::VectorXd &wx, const Eigen::VectorXd &wu)
+        void weights(const Eigen::VectorXd& wx, const Eigen::VectorXd& wu)
         {
             if (override weights = this->get_override("weights"))
                 weights(wx, wu);
@@ -137,7 +154,7 @@ BOOST_PYTHON_MODULE(_mpcontroller)
                 MPCTypeFull::weights(wx, wu);
         }
 
-        void default_weights(const Eigen::VectorXd &wx, const Eigen::VectorXd &wu)
+        void default_weights(const Eigen::VectorXd& wx, const Eigen::VectorXd& wu)
         {
             this->MPCTypeFull::weights(wx, wu);
         }
@@ -145,8 +162,8 @@ BOOST_PYTHON_MODULE(_mpcontroller)
 
     // The default copy-ctor is implicitely deleted due to ctor overloading
     class_<MPCTypeFullWrap, boost::noncopyable>("MPCTypeFull",
-                                                init<optional<SolverFlag>>())
-        .def(init<const std::shared_ptr<PreviewSystem> &, optional<SolverFlag>>())
+        init<optional<SolverFlag> >())
+        .def(init<const std::shared_ptr<PreviewSystem>&, optional<SolverFlag> >())
         .def("selectQPSolver", &MPCTypeFull::selectQPSolver)
         .def("initializeController", &MPCTypeFull::initializeController, &MPCTypeFullWrap::default_initializeController)
         .def("solve", &MPCTypeFull::solve)
@@ -159,9 +176,9 @@ BOOST_PYTHON_MODULE(_mpcontroller)
         .def("resetConstraints", &MPCTypeFull::resetConstraints);
 
     //MPCTypeLast
-    class_<MPCTypeLast, boost::noncopyable, bases<MPCTypeFull>>("MPCTypeLast",
-                                                                init<optional<SolverFlag>>())
-        .def(init<const std::shared_ptr<PreviewSystem> &, optional<SolverFlag>>());
+    class_<MPCTypeLast, boost::noncopyable, bases<MPCTypeFull> >("MPCTypeLast",
+        init<optional<SolverFlag> >())
+        .def(init<const std::shared_ptr<PreviewSystem>&, optional<SolverFlag> >());
 
     //cpu_times
     using namespace boost::timer;
@@ -171,9 +188,9 @@ BOOST_PYTHON_MODULE(_mpcontroller)
         .def_readwrite("system", &cpu_times::system)
         .def("clear", &cpu_times::clear);
 
-    register_ptr_to_python<std::shared_ptr<TrajectoryConstraint>>();
-    register_ptr_to_python<std::shared_ptr<ControlConstraint>>();
-    register_ptr_to_python<std::shared_ptr<PreviewSystem>>();
+    register_ptr_to_python<std::shared_ptr<TrajectoryConstraint> >();
+    register_ptr_to_python<std::shared_ptr<ControlConstraint> >();
+    register_ptr_to_python<std::shared_ptr<PreviewSystem> >();
     implicitly_convertible<std::shared_ptr<TrajectoryConstraint>, std::shared_ptr<Constraint> >();
-    implicitly_convertible<std::shared_ptr<ControlConstraint>, std::shared_ptr<Constraint>>();
+    implicitly_convertible<std::shared_ptr<ControlConstraint>, std::shared_ptr<Constraint> >();
 }

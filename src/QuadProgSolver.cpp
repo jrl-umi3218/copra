@@ -1,23 +1,24 @@
-//This file is part of ModelPreviewController.
+// This file is part of ModelPreviewController.
 
-//ModelPreviewController is free software: you can redistribute it and/or modify
-//it under the terms of the GNU Lesser General Public License as published by
-//the Free Software Foundation, either version 3 of the License, or
-//(at your option) any later version.
+// ModelPreviewController is free software: you can redistribute it and/or
+// modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
 //
-//ModelPreviewController is distributed in the hope that it will be useful,
-//but WITHOUT ANY WARRANTY; without even the implied warranty of
-//MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//GNU Lesser General Public License for more details.
+// ModelPreviewController is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License for more details.
 //
-//You should have received a copy of the GNU Lesser General Public License
-//along with ModelPreviewController.  If not, see <http://www.gnu.org/licenses/>.
+// You should have received a copy of the GNU Lesser General Public License
+// along with ModelPreviewController.  If not, see
+// <http://www.gnu.org/licenses/>.
 
 #include "QuadProgSolver.h"
 #include <iostream>
 
-namespace mpc
-{
+namespace mpc {
 
 /*
  * QuadProg dense
@@ -40,8 +41,7 @@ int QuadProgDenseSolver::SI_iter() const
 
 void QuadProgDenseSolver::SI_inform() const
 {
-    switch (solver_->fail())
-    {
+    switch (solver_->fail()) {
     case 0:
         std::cout << "No problems" << std::endl;
         break;
@@ -55,7 +55,8 @@ void QuadProgDenseSolver::SI_inform() const
     }
 }
 
-const Eigen::VectorXd &QuadProgDenseSolver::SI_result() const
+const Eigen::VectorXd&
+QuadProgDenseSolver::SI_result() const
 {
     return solver_->result();
 }
@@ -70,10 +71,10 @@ void QuadProgDenseSolver::SI_problem(int nrVar, int nrEq, int nrInEq)
 }
 
 bool QuadProgDenseSolver::SI_solve(
-    const Eigen::MatrixXd &Q, const Eigen::VectorXd &C,
-    const Eigen::MatrixXd &Aeq, const Eigen::VectorXd &Beq,
-    const Eigen::MatrixXd &Aineq, const Eigen::VectorXd &Bineq,
-    const Eigen::VectorXd &XL, const Eigen::VectorXd &XU)
+    const Eigen::MatrixXd& Q, const Eigen::VectorXd& C,
+    const Eigen::MatrixXd& Aeq, const Eigen::VectorXd& Beq,
+    const Eigen::MatrixXd& Aineq, const Eigen::VectorXd& Bineq,
+    const Eigen::VectorXd& XL, const Eigen::VectorXd& XU)
 {
     auto nrLines = XL.rows();
     auto ALines = Aineq.rows();
