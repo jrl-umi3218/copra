@@ -82,7 +82,7 @@ BOOST_FIXTURE_TEST_CASE(OneDofSystemTypeLast, System)
 
     controller.weights(wx, wu);
 
-    auto pcCheck = [&](const std::string& solverName, mpc::SolverFlag sFlag) {
+    auto pcCheck = [&](const std::string &solverName, mpc::SolverFlag sFlag) {
         controller.selectQPSolver(sFlag);
 
         BOOST_REQUIRE(controller.solve());
@@ -93,7 +93,8 @@ BOOST_FIXTURE_TEST_CASE(OneDofSystemTypeLast, System)
         auto trajLen = fullTraj.rows() / 2;
         Eigen::VectorXd posTraj(trajLen);
         Eigen::VectorXd velTraj(trajLen);
-        for (auto i = 0; i < trajLen; ++i) {
+        for (auto i = 0; i < trajLen; ++i)
+        {
             posTraj(i) = fullTraj(2 * i);
             velTraj(i) = fullTraj(2 * i + 1);
         }
@@ -110,6 +111,7 @@ BOOST_FIXTURE_TEST_CASE(OneDofSystemTypeLast, System)
     pcCheck("Default (QuadProgDense)", mpc::SolverFlag::DEFAULT);
     pcCheck("LSSOL", mpc::SolverFlag::LSSOL);
     pcCheck("QLD", mpc::SolverFlag::QLD);
+    pcCheck("GUROBIDense", mpc::SolverFlag::GUROBIDense);
 
     std::sort(
         solveTime.begin(), solveTime.end(),
@@ -167,6 +169,7 @@ BOOST_FIXTURE_TEST_CASE(OneDofSystemTypeFull, System)
     pcCheck("Default (QuadProgDense)", mpc::SolverFlag::DEFAULT);
     pcCheck("LSSOL", mpc::SolverFlag::LSSOL);
     pcCheck("QLD", mpc::SolverFlag::QLD);
+    pcCheck("GUROBI", mpc::SolverFlag::GUROBIDense);
 
     std::sort(
         solveTime.begin(), solveTime.end(),

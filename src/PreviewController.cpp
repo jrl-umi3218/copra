@@ -97,10 +97,8 @@ bool MPCTypeFull::solve()
     solveTime_.start();
     bool success = sol_->SI_solve(
         Q_, c_, Eigen::MatrixXd::Zero(0, ps_->fullUDim), Eigen::VectorXd::Zero(0),
-        AInEq_, bInEq_, Eigen::VectorXd::Constant(
-                            ps_->fullUDim, -std::numeric_limits<double>::infinity()),
-        Eigen::VectorXd::Constant(ps_->fullUDim,
-            std::numeric_limits<double>::infinity()));
+        AInEq_, bInEq_, Eigen::VectorXd::Constant(ps_->fullUDim, -std::numeric_limits<double>::infinity()),
+        Eigen::VectorXd::Constant(ps_->fullUDim, std::numeric_limits<double>::infinity()));
     solveTime_.stop();
     solveAndBuildTime_.stop();
     if (!success)

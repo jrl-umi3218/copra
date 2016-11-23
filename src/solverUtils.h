@@ -23,6 +23,9 @@
 #ifdef LSSOL_SOLVER_FOUND
 #include "LSSOLSolver.h"
 #endif
+#ifdef GUROBI_SOLVER_FOUND
+#include "GUROBISolver.h"
+#endif
 
 #include <memory>
 #include <utility>
@@ -36,6 +39,9 @@ enum class SolverFlag {
     DEFAULT, /**< Default solver (QuadProgDense solver) */
 #ifdef LSSOL_SOLVER_FOUND
     LSSOL, /**< Standford LSSOL solver */
+#endif
+#ifdef GUROBI_SOLVER_FOUND
+    GUROBIDense, /**< Gurobi quadratic dense solver */
 #endif
     QLD, /**< Scilab QLD solver */
     QuadProgDense, /**< DenseMatrix version of QuadProg solver */
@@ -53,6 +59,10 @@ std::unique_ptr<SolverInterface> solverFactory(SolverFlag flag)
 #ifdef LSSOL_SOLVER_FOUND
     case SolverFlag::LSSOL:
         return std::make_unique<LSSOLSolver>();
+#endif
+#ifdef GUROBI_SOLVER_FOUND
+    case SolverFlag::GUROBIDense:
+        return std::make_unique<GUROBISolver>();
 #endif
     case SolverFlag::QLD:
         return std::make_unique<QLDSolver>();
@@ -76,6 +86,10 @@ SolverInterface* pythonSolverFactory(SolverFlag flag)
 #ifdef LSSOL_SOLVER_FOUND
     case SolverFlag::LSSOL:
         return new LSSOLSolver;
+#endif
+#ifdef GUROBI_SOLVER_FOUND
+    case SolverFlag::GUROBIDense:
+        return new GUROBISolver;
 #endif
     case SolverFlag::QLD:
         return new QLDSolver;

@@ -10,6 +10,11 @@ if(${EIGEN_LSSOL_FOUND})
     list(APPEND HEADERS LSSOLSolver.h)
 endif()
 
+if(${EIGEN_GUROBI_FOUND})
+    list(APPEND SOURCES GUROBISolver.cpp)
+    list(APPEND HEADERS GUROBISolver.h)
+endif()
+
 include_directories(${Boost_INCLUDE_DIRS})
 add_library(${PROJECT_NAME} SHARED ${SOURCES} ${HEADERS})
 
@@ -19,6 +24,10 @@ PKG_CONFIG_USE_DEPENDENCY(${PROJECT_NAME} eigen-quadprog)
 if(${EIGEN_LSSOL_FOUND})
     PKG_CONFIG_USE_DEPENDENCY(${PROJECT_NAME} eigen-lssol)
     add_definitions(-DLSSOL_SOLVER_FOUND)
+endif()
+if(${EIGEN_GUROBI_FOUND})
+    PKG_CONFIG_USE_DEPENDENCY(${PROJECT_NAME} eigen-gurobi)
+    add_definitions(-DGUROBI_SOLVER_FOUND)
 endif()
 
 set(INSTALL_PATH include/${PROJECT_NAME})

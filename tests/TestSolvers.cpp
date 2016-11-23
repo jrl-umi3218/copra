@@ -26,6 +26,9 @@
 #ifdef LSSOL_SOLVER_FOUND
 #include "LSSOLSolver.h"
 #endif
+#ifdef GUROBI_SOLVER_FOUND
+#include "GUROBISolver.h"
+#endif
 
 // Test base on scilab qld example:
 // https://help.scilab.org/doc/5.5.2/en_US/qld.html
@@ -90,5 +93,23 @@ BOOST_FIXTURE_TEST_CASE(LSSOLOnQLDTest, Problem)
     Eigen::VectorXd resLSSOL = qpLSSOL.SI_result();
     BOOST_CHECK(resLSSOL.isApprox(resQLD));
     BOOST_REQUIRE_EQUAL(qpLSSOL.SI_fail(), 0);
+}
+#endif
+
+#ifdef GUROBI_SOLVER_FOUND
+BOOST_FIXTURE_TEST_CASE(GUROBIOnQLDTest, Problem)
+{
+    mpc::QLDSolver qpQLD;
+    mpc::GUROBISolver qpGUROBI;
+
+    qpQLD.SI_problem(nrvars, nreqs, nrineqs);
+    qpGUROBI.SI_problem(nrvars, nreqs, nrineqs);
+    BOOST_REQUIRE(qpQLD.SI_solve(Q, c, Aeq, beq, Aineq, bineq, XL, XU));
+    BOOST_REQUIRE(qpGUROBI.SI_solve(Q, c, Aeq, beq, Aineq, bineq, XL, XU));
+
+    Eigen::VectorXd resQLD = qpQLD.SI_result();
+    Eigen::VectorXd resGUROBI = qpGUROBI.SI_result();
+    BOOST_CHECK(resGUROBI.isApprox(resQLD, 1e-6));
+    BOOST_REQUIRE_EQUAL(qpGUROBI.SI_fail(), 2); // 2 is optimal for gurobi
 }
 #endif

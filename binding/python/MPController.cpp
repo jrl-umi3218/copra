@@ -66,6 +66,9 @@ BOOST_PYTHON_MODULE(_mpcontroller)
 #ifdef LSSOL_SOLVER_FOUND
         .value("LSSOL", SolverFlag::LSSOL)
 #endif
+#ifdef GUROBI_SOLVER_FOUND
+        .value("GUROBIDense", SolverFlag::GUROBIDense)
+#endif
         .value("QLD", SolverFlag::QLD)
         .value("QuadProgDense", SolverFlag::QuadProgDense);
 

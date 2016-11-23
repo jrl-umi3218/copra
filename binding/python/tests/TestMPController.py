@@ -2,19 +2,22 @@ import unittest
 import mpcontroller as mpc
 from minieigen import *
 
+
 class TestMPC(unittest.TestCase):
+
     def setUp(self):
         self.timestep = 0.005
         self.mass = 5
         self.nbStep = 300
         self.A = MatrixXd.Identity(2, 2)
-        self.A[0,1] = self.timestep
-        self.B = Vector2d(0.5 * self.timestep * self.timestep / self.mass, self.timestep / self.mass)
+        self.A[0, 1] = self.timestep
+        self.B = Vector2d(0.5 * self.timestep * self.timestep /
+                          self.mass, self.timestep / self.mass)
         self.c = Vector2d(0, -9.81 * self.timestep)
         self.G = MatrixXd.Ones(1, 1)
         self.h = VectorXd.Ones(1) * 200.
         self.E = MatrixXd.Zero(1, 2)
-        self.E[0,1] = 1
+        self.E[0, 1] = 1
         self.f = VectorXd.Zero(1)
         self.x0 = Vector2d(0, -5)
         self.xd = Vector2d.Zero
@@ -37,20 +40,20 @@ class TestMPC(unittest.TestCase):
         self.assertTrue(controller.solve())
         control = controller.control()
         fullTraj = controller.trajectory()
-        fTLen = len(fullTraj)/2
-        posTraj = [0.]*fTLen
-        velTraj = [0.]*fTLen
+        fTLen = len(fullTraj) / 2
+        posTraj = [0.] * fTLen
+        velTraj = [0.] * fTLen
         for i in xrange(fTLen):
-            posTraj[i] = fullTraj[2*i]
-            velTraj[i] = fullTraj[2*i+1]
+            posTraj[i] = fullTraj[2 * i]
+            velTraj[i] = fullTraj[2 * i + 1]
 
         self.assertAlmostEqual(self.xd[1], velTraj[-1], places=3)
         self.assertLessEqual(max(posTraj), self.x0[0])
         self.assertLessEqual(control.maxCoeff(), self.h[0])
 
         print
-        print controller.solveTime().wall*1e-6
-        print controller.solveAndBuildTime().wall*1e-6
+        print controller.solveTime().wall * 1e-6
+        print controller.solveAndBuildTime().wall * 1e-6
         print
 
     def test_constructors_initialisations(self):
@@ -97,7 +100,7 @@ class TestMPC(unittest.TestCase):
         controller.weights(self.wx, self.wu)
 
         del contConstr
-        
+
         self.assertTrue(controller.solve())
 
     def test_preview_systeme_still_exist(self):
@@ -117,12 +120,12 @@ class TestMPC(unittest.TestCase):
         self.assertTrue(controller.solve())
         control = controller.control()
         fullTraj = controller.trajectory()
-        fTLen = len(fullTraj)/2
-        posTraj = [0.]*fTLen
-        velTraj = [0.]*fTLen
+        fTLen = len(fullTraj) / 2
+        posTraj = [0.] * fTLen
+        velTraj = [0.] * fTLen
         for i in xrange(fTLen):
-            posTraj[i] = fullTraj[2*i]
-            velTraj[i] = fullTraj[2*i+1]
+            posTraj[i] = fullTraj[2 * i]
+            velTraj[i] = fullTraj[2 * i + 1]
 
         self.assertAlmostEqual(self.xd[1], velTraj[-1], places=3)
         self.assertLessEqual(max(posTraj), self.x0[0])
