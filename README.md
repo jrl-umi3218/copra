@@ -21,6 +21,12 @@ To compile you need the following tools:
  * [Boost](http://www.boost.org/doc/libs/1_58_0/more/getting_started/unix-variants.html) >= 1.58 (>= 1.49 may work)
  * [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) >= 3.2
 
+#### Optional dependencies
+
+To have more qp solver:
+ * [GUROBI](http://www.gurobi.com/) >= 4.0
+ * [eigen-gurobi](https://github.com/jrl-umi3218/eigen-gurobi)
+
 #### Building
 
 ```sh
