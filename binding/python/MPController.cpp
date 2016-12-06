@@ -41,16 +41,26 @@ std::shared_ptr<PreviewSystem> NewPreviewSystem()
     return std::make_shared<PreviewSystem>();
 }
 
-std::shared_ptr<TrajectoryConstraint> NewTrajectoryConstraint(const Eigen::MatrixXd& E, const Eigen::VectorXd& f)
+std::shared_ptr<TrajectoryConstraint> NewTrajectoryConstraint(const Eigen::MatrixXd& E, const Eigen::VectorXd& f, bool isInequalityConstraint = true)
 {
-    return std::make_shared<TrajectoryConstraint>(E, f);
+    return std::make_shared<TrajectoryConstraint>(E, f, isInequalityConstraint);
 }
 
-std::shared_ptr<ControlConstraint> NewControlConstraint(const Eigen::MatrixXd& E, const Eigen::VectorXd& f)
+std::shared_ptr<ControlConstraint> NewControlConstraint(const Eigen::MatrixXd& E, const Eigen::VectorXd& f, bool isInequalityConstraint = true)
 {
-    return std::make_shared<ControlConstraint>(E, f);
+    return std::make_shared<ControlConstraint>(E, f, isInequalityConstraint);
 }
+
+std::shared_ptr<TrajectoryBoundConstraint> NewTrajectoryBoundConstraint(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper)
+{
+    return std::make_shared<TrajectoryBoundConstraint>(lower, upper);
 }
+
+std::shared_ptr<ControlBoundConstraint> NewControlBoundConstraint(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper)
+{
+    return std::make_shared<ControlBoundConstraint>(lower, upper);
+}
+} // namespace mpc
 
 BOOST_PYTHON_MODULE(_mpcontroller)
 {
@@ -60,6 +70,8 @@ BOOST_PYTHON_MODULE(_mpcontroller)
     def("NewPreviewSystem", &NewPreviewSystem);
     def("NewTrajectoryConstraint", &NewTrajectoryConstraint);
     def("NewControlConstraint", &NewControlConstraint);
+    def("NewTrajectoryBoundConstraint", &NewTrajectoryBoundConstraint);
+    def("NewControlBoundConstraint", &NewControlBoundConstraint);
 
     enum_<SolverFlag>("SolverFlag")
         .value("DEFAULT", SolverFlag::DEFAULT)
@@ -101,6 +113,11 @@ BOOST_PYTHON_MODULE(_mpcontroller)
         .def_readwrite("xi", &PreviewSystem::xi);
 
     //Constraint
+    enum_<ConstraintFlag>("ConstraintFlag")
+        .value("EqualityConstraint", ConstraintFlag::EqualityConstraint)
+        .value("InequalityConstraint", ConstraintFlag::InequalityConstraint)
+        .value("BoundConstraint", ConstraintFlag::BoundConstraint);
+
     struct ConstraintWrap : Constraint, wrapper<Constraint> {
         using Constraint::Constraint;
 
@@ -114,23 +131,49 @@ BOOST_PYTHON_MODULE(_mpcontroller)
             this->get_override("update")(ps);
         }
 
-        std::string name() const noexcept
+        ConstraintFlag constraintType()
         {
-            return this->get_override("name")();
+            return this->get_override("constraintType")();
         }
     };
 
-    class_<ConstraintWrap, boost::noncopyable>("Constraint", init<const Eigen::MatrixXd&, const Eigen::VectorXd&>())
+    class_<ConstraintWrap, boost::noncopyable>("Constraint", init<const std::string&>())
         .def("initializeConstraint", pure_virtual(&Constraint::initializeConstraint))
         .def("update", pure_virtual(&Constraint::update))
-        .def("name", pure_virtual(&Constraint::name))
-        .def("nrConstr", &Constraint::nrConstr)
-        .def("A", &Constraint::A, return_internal_reference<>())
-        .def("b", &Constraint::b, return_internal_reference<>());
+        .def("constraintType", pure_virtual(&Constraint::constraintType))
+        .def("name", &Constraint::name, return_internal_reference<>())
+        .def("nrConstr", &Constraint::nrConstr);
 
-    class_<TrajectoryConstraint, boost::noncopyable, bases<Constraint> >("TrajectoryConstraint", no_init);
+    struct EqIneqConstraintWrap : EqIneqConstraint, wrapper<EqIneqConstraint> {
+        using EqIneqConstraint::EqIneqConstraint;
 
-    class_<ControlConstraint, boost::noncopyable, bases<Constraint> >("ControlConstraint", no_init);
+        void initializeConstraint(const PreviewSystem& ps)
+        {
+            this->get_override("initializeConstraint")(ps);
+        }
+
+        void update(const PreviewSystem& ps)
+        {
+            this->get_override("update")(ps);
+        }
+
+        ConstraintFlag constraintType()
+        {
+            return this->get_override("constraintType")();
+        }
+    };
+
+    class_<EqIneqConstraintWrap, boost::noncopyable, bases<Constraint> >("EqIneqConstraint", init<const std::string&, bool>())
+        .def("A", &EqIneqConstraint::A, return_internal_reference<>())
+        .def("b", &EqIneqConstraint::b, return_internal_reference<>());
+
+    // Delete constructor to enforce call of New<Name_of_constraint> function that return a shared_ptr.
+    class_<TrajectoryConstraint, boost::noncopyable, bases<EqIneqConstraint> >("TrajectoryConstraint", no_init);
+    class_<ControlConstraint, boost::noncopyable, bases<EqIneqConstraint> >("ControlConstraint", no_init);
+    class_<TrajectoryBoundConstraint, boost::noncopyable, bases<EqIneqConstraint> >("TrajectoryBoundConstraint", no_init);
+    class_<ControlBoundConstraint, boost::noncopyable, bases<Constraint> >("ControlBoundConstraint", no_init)
+        .def("lower", &ControlBoundConstraint::lower, return_internal_reference<>())
+        .def("upper", &ControlBoundConstraint::upper, return_internal_reference<>());
 
     //MPCTypeFull
     struct MPCTypeFullWrap : MPCTypeFull, wrapper<MPCTypeFull> {
@@ -191,9 +234,13 @@ BOOST_PYTHON_MODULE(_mpcontroller)
         .def_readwrite("system", &cpu_times::system)
         .def("clear", &cpu_times::clear);
 
+    register_ptr_to_python<std::shared_ptr<PreviewSystem> >();
     register_ptr_to_python<std::shared_ptr<TrajectoryConstraint> >();
     register_ptr_to_python<std::shared_ptr<ControlConstraint> >();
-    register_ptr_to_python<std::shared_ptr<PreviewSystem> >();
+    register_ptr_to_python<std::shared_ptr<TrajectoryBoundConstraint> >();
+    register_ptr_to_python<std::shared_ptr<ControlBoundConstraint> >();
     implicitly_convertible<std::shared_ptr<TrajectoryConstraint>, std::shared_ptr<Constraint> >();
     implicitly_convertible<std::shared_ptr<ControlConstraint>, std::shared_ptr<Constraint> >();
+    implicitly_convertible<std::shared_ptr<TrajectoryBoundConstraint>, std::shared_ptr<Constraint> >();
+    implicitly_convertible<std::shared_ptr<ControlBoundConstraint>, std::shared_ptr<Constraint> >();
 }
