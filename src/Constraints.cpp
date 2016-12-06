@@ -22,22 +22,38 @@
 namespace mpc {
 
 /*************************************************************************************************
- *                                          Constrains                                           *
+ *                                         Constraint                                            *
  *************************************************************************************************/
 
-Constraint::Constraint(const Eigen::MatrixXd& E, const Eigen::VectorXd& f)
-    : nrConstr_(0)
-    , E_(E)
-    , A_()
-    , f_(f)
-    , b_()
+Constraint::Constraint(const std::string& name)
+    : name_(name)
+    , nrConstr_(0)
 {
-    assert(E_.rows() == f.rows());
 }
 
 /*************************************************************************************************
- *                                  Trajectory Constrains                                        *
+ *                           Equality or Inequality Constraint                                   *
  *************************************************************************************************/
+
+EqIneqConstraint::EqIneqConstraint(const std::string& constrQualifier, bool isInequalityConstraint)
+    : Constraint(constrQualifier + (isInequalityConstraint ? " inequality constraint" : " equality constraint"))
+    , A_()
+    , b_()
+    , isIneq_(isInequalityConstraint)
+{
+}
+
+/*************************************************************************************************
+ *                                  Trajectory Constraint                                        *
+ *************************************************************************************************/
+
+TrajectoryConstraint::TrajectoryConstraint(const Eigen::MatrixXd& E, const Eigen::VectorXd& f, bool isInequalityConstraint)
+    : EqIneqConstraint("Trajectory", isInequalityConstraint)
+    , E_(E)
+    , f_(f)
+{
+    assert(E_.rows() == f.rows());
+}
 
 void TrajectoryConstraint::initializeConstraint(const PreviewSystem& ps)
 {
@@ -46,6 +62,8 @@ void TrajectoryConstraint::initializeConstraint(const PreviewSystem& ps)
     nrConstr_ = static_cast<int>(E_.rows()) * ps.nrStep;
     A_.resize(nrConstr_, ps.fullUDim);
     b_.resize(nrConstr_);
+    A_.setZero();
+    b_.setZero();
 }
 
 void TrajectoryConstraint::update(const PreviewSystem& ps)
@@ -57,14 +75,25 @@ void TrajectoryConstraint::update(const PreviewSystem& ps)
     }
 }
 
-std::string TrajectoryConstraint::name() const noexcept
+ConstraintFlag TrajectoryConstraint::constraintType()
 {
-    return "Trajectory constraint";
+    if (isIneq_)
+        return ConstraintFlag::InequalityConstraint;
+    else
+        return ConstraintFlag::EqualityConstraint;
 }
 
 /*************************************************************************************************
- *                                    Constrol Constrains                                        *
+ *                                    Control Constraint                                         *
  *************************************************************************************************/
+
+ControlConstraint::ControlConstraint(const Eigen::MatrixXd& E, const Eigen::VectorXd& f, bool isInequalityConstraint)
+    : EqIneqConstraint("Control", isInequalityConstraint)
+    , E_(E)
+    , f_(f)
+{
+    assert(E_.rows() == f.rows());
+}
 
 void ControlConstraint::initializeConstraint(const PreviewSystem& ps)
 {
@@ -74,6 +103,7 @@ void ControlConstraint::initializeConstraint(const PreviewSystem& ps)
     A_.resize(nrConstr_, ps.fullUDim);
     b_.resize(nrConstr_);
     A_.setZero();
+    b_.setZero();
 }
 
 void ControlConstraint::update(const PreviewSystem& ps)
@@ -85,9 +115,88 @@ void ControlConstraint::update(const PreviewSystem& ps)
     }
 }
 
-std::string ControlConstraint::name() const noexcept
+ConstraintFlag ControlConstraint::constraintType()
 {
-    return "Control constraint";
+    if (isIneq_)
+        return ConstraintFlag::InequalityConstraint;
+    else
+        return ConstraintFlag::EqualityConstraint;
+}
+
+/*************************************************************************************************
+ *                               Trajectory Bound Constraint                                     *
+ *************************************************************************************************/
+
+TrajectoryBoundConstraint::TrajectoryBoundConstraint(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper)
+    : EqIneqConstraint("Trajectory bound", true)
+    , lower_(lower)
+    , upper_(upper)
+{
+    assert(lower_.rows() == upper_.rows());
+}
+
+void TrajectoryBoundConstraint::initializeConstraint(const PreviewSystem& ps)
+{
+    assert(lower_.rows() == ps.xDim);
+
+    nrConstr_ = 2 * ps.fullXDim;
+    A_.resize(nrConstr_, ps.fullUDim);
+    b_.resize(nrConstr_);
+    A_.setZero();
+    b_.setZero();
+}
+
+void TrajectoryBoundConstraint::update(const PreviewSystem& ps)
+{
+    A_.block(0, 0, ps.fullXDim, ps.fullUDim) = ps.Psi;
+    A_.block(ps.fullXDim, 0, ps.fullXDim, ps.fullUDim) = ps.Psi;
+    for (int i = 0; i < ps.nrStep; ++i) {
+        b_.segment(i * ps.xDim, ps.xDim) = upper_ - ps.Phi.block(i * ps.xDim, 0, ps.xDim, ps.xDim) * ps.x0 - ps.xi.segment(i * ps.xDim, ps.xDim);
+        b_.segment(ps.fullXDim + i * ps.xDim, ps.xDim) = lower_ - ps.Phi.block(i * ps.xDim, 0, ps.xDim, ps.xDim) * ps.x0 - ps.xi.segment(i * ps.xDim, ps.xDim);
+    }
+}
+
+ConstraintFlag TrajectoryBoundConstraint::constraintType()
+{
+    return ConstraintFlag::InequalityConstraint;
+}
+
+/*************************************************************************************************
+ *                                 Control Bound Constraint                                      *
+ *************************************************************************************************/
+
+ControlBoundConstraint::ControlBoundConstraint(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper)
+    : Constraint("Control bound constraint")
+    , lower_(lower)
+    , upper_(upper)
+    , lb_()
+    , ub_()
+{
+    assert(lower_.rows() == upper_.rows());
+}
+
+void ControlBoundConstraint::initializeConstraint(const PreviewSystem& ps)
+{
+    assert(lower_.rows() == ps.uDim);
+
+    nrConstr_ = ps.fullXDim;
+    lb_.resize(nrConstr_);
+    ub_.resize(nrConstr_);
+    lb_.setZero();
+    ub_.setZero();
+}
+
+void ControlBoundConstraint::update(const PreviewSystem& ps)
+{
+    for (int i = 0; i < ps.nrStep; ++i) {
+        ub_.segment(i * ps.uDim, ps.uDim) = upper_;
+        lb_.segment(i * ps.uDim, ps.uDim) = lower_;
+    }
+}
+
+ConstraintFlag ControlBoundConstraint::constraintType()
+{
+    return ConstraintFlag::BoundConstraint;
 }
 
 } // namespace mpc
