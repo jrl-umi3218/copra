@@ -291,12 +291,9 @@ void MPCTypeFull::checkConstraints()
     auto checkConstr = [&needResizing](auto wpc, bool useWarn = false) {
         for (auto itr = wpc.begin(); itr != wpc.end();) {
             if ((*itr).first.expired()) {
-                if (useWarn) {
-                    std::stringstream ss;
-                    ss << "Dangling pointer to constrain.\nA '" << (*itr).second
-                       << "' has been destroyed.\nThe constraint has been removed from the controller";
-                    DEBUG_WARN(ss.str());
-                }
+                (void)useWarn; // Just to make the compiler understand it is used.
+                CONSTRAINT_DELETION_WARN(useWarn, "%s%s%s", "Dangling pointer to constrain.\nA '", (*itr).second.c_str(),
+                    "' has been destroyed.\nThe constraint has been removed from the controller");
                 itr = wpc.erase(itr);
                 needResizing = true;
             } else {

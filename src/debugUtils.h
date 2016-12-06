@@ -20,10 +20,7 @@
 #include <iostream>
 
 #ifndef _DEBUG
-#define DEBUG_WARN(x)
+#define CONSTRAINT_DELETION_WARN(warn, format, ...)
 #else
-#define DEBUG_WARN(x)                \
-    do {                             \
-        std::cerr << x << std::endl; \
-    } while (0)
+#define CONSTRAINT_DELETION_WARN(warn, format, ...) if((warn)) { fprintf(stderr, format, ##__VA_ARGS__) }
 #endif

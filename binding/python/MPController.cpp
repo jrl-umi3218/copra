@@ -24,6 +24,8 @@
 #include <memory>
 #include <string>
 
+//TODO: Add python docstring
+
 namespace boost {
 
 // Make boost::python understand std::shared_ptr
