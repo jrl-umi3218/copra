@@ -22,8 +22,7 @@
 namespace mpc {
 
 /**
- * Structure representing all variables of a system for performing preview
- * control.
+ * Structure representing all variables of a system for performing preview control.
  * Such system is defined as follow:
  * \f$X_{k+1} = Ax_{k} + Bu_{k} + d\f$.
  * After performing a recursion, this system can be represented in as:

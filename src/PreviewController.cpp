@@ -71,7 +71,7 @@ void MPCTypeFull::Constraints::clear()
 }
 
 /*************************************************************************************************
- *                                         MPCTypeFull *
+ *                                         MPCTypeFull                                           *
  *************************************************************************************************/
 
 MPCTypeFull::MPCTypeFull(SolverFlag sFlag)
@@ -123,13 +123,15 @@ void MPCTypeFull::initializeController(const std::shared_ptr<PreviewSystem>& ps)
 {
     ps_ = ps;
     Q_.resize(ps_->fullUDim, ps_->fullUDim);
-    Aineq_.resize(0, 0);
-    Aeq_.resize(0, 0);
+    Aineq_.resize(0, ps_->fullUDim);
+    Aeq_.resize(0, ps_->fullUDim);
     c_.resize(ps_->fullUDim);
     bineq_.resize(0);
     beq_.resize(0);
-    lb_.resize(0);
-    ub_.resize(0);
+    lb_.resize(ps_->fullUDim);
+    lb_.setConstant(-std::numeric_limits<double>::max());
+    ub_.resize(ps_->fullUDim);
+    ub_.setConstant(std::numeric_limits<double>::max());
     Wx_.resize(ps_->fullXDim);
     Wu_.resize(ps_->fullUDim);
     Wx_.setOnes();
@@ -292,7 +294,7 @@ void MPCTypeFull::checkConstraints()
         for (auto itr = wpc.begin(); itr != wpc.end();) {
             if ((*itr).first.expired()) {
                 (void)useWarn; // Just to make the compiler understand it is used.
-                CONSTRAINT_DELETION_WARN(useWarn, "%s%s%s", "Dangling pointer to constrain.\nA '", (*itr).second.c_str(),
+                CONSTRAINT_DELETION_WARN(useWarn, "%s%s%s", "Dangling pointer to constraint.\nA '", (*itr).second.c_str(),
                     "' has been destroyed.\nThe constraint has been removed from the controller");
                 itr = wpc.erase(itr);
                 needResizing = true;
@@ -319,7 +321,7 @@ void MPCTypeFull::checkConstraints()
 }
 
 /*************************************************************************************************
- *                                         MPCTypeLast *
+ *                                         MPCTypeLast                                           *
  *************************************************************************************************/
 
 MPCTypeLast::MPCTypeLast(SolverFlag sFlag)
@@ -338,14 +340,16 @@ void MPCTypeLast::initializeController(const std::shared_ptr<PreviewSystem>& ps)
 {
     ps_ = ps;
     Q_.resize(ps_->fullUDim, ps_->fullUDim);
-    Aineq_.resize(0, 0);
-    Aeq_.resize(0, 0);
+    Aineq_.resize(0, ps_->fullUDim);
+    Aeq_.resize(0, ps_->fullUDim);
     c_.resize(ps_->fullUDim);
     bineq_.resize(0);
     beq_.resize(0);
-    lb_.resize(0);
-    ub_.resize(0);
-    Wx_.resize(ps_->xDim);
+    lb_.resize(ps_->fullUDim);
+    lb_.setConstant(-std::numeric_limits<double>::max())
+        ub_.resize(ps_->fullUDim);
+    ub_.setConstant(std::numeric_limits<double>::max())
+        Wx_.resize(ps_->xDim);
     Wu_.resize(ps_->fullUDim);
     Wx_.setOnes();
     Wu_.setOnes();
