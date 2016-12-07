@@ -72,13 +72,13 @@ public:
      * the constraints values Cx and the constraints status.
      * @param pl >30 : For an understanding of this, see the official documentation.
 	 */
-    void SI_printLevel(int pl) const override;
+    void SI_printLevel(int pl) override;
 
     /**
 	 * Set the maximum error tolerance of the solution if available
 	 * @param tol The error tolerance
 	 */
-    void SI_tol(double tol) const override;
+    void SI_feasibilityTolerance(double tol) override;
 
     /**
 	 * Get the warm start status of the solver if available

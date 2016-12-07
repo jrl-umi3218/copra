@@ -43,12 +43,12 @@ void LSSOLSolver::SI_inform() const
     solver_->inform();
 }
 
-void LSSOLSolver::SI_printLevel(int pl) const
+void LSSOLSolver::SI_printLevel(int pl)
 {
     solver_->printLevel(pl);
 }
 
-void LSSOLSolver::SI_tol(double tol) const
+void LSSOLSolver::SI_feasibilityTolerance(double tol)
 {
     solver_->feasibilityTol(tol);
 }

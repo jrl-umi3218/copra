@@ -57,18 +57,17 @@ public:
     void SI_inform() const override;
 
     /**
-     * Select the print level of the solver if available
-     * @param pl The print level.
-     * @param pl  =0 : Nothing is printed.
-     * @param pl !=0 : Only a final error message is given.
+     * Select the print level of the solver
+     * QLD can only show final results or nothing
+     * @param pl 0 (hide) or else (show display)
      */
-    void SI_printLevel(int pl) const override;
+    void SI_printLevel(int pl) override;
 
     /**
-     * Set the maximum error tolerance of the solution if available
+     * Set the maximum error tolerance of the solution
      * @param tol The error tolerance
      */
-    void SI_tol(double tol) const override;
+    void SI_feasibilityTolerance(double tol) override;
 
     /**
      * Get the solver's solution.

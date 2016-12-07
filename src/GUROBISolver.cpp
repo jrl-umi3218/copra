@@ -27,6 +27,8 @@ namespace mpc {
 GUROBISolver::GUROBISolver()
     : solver_(std::make_unique<Eigen::GurobiDense>())
 {
+    solver_->displayOutput(false);
+    solver_->feasibilityTolerance(1e-8);
 }
 
 int GUROBISolver::SI_fail() const
@@ -39,9 +41,33 @@ int GUROBISolver::SI_iter() const
     return solver_->iter();
 }
 
+void GUROBISolver::SI_printLevel(int pl)
+{
+    solver_->displayOutput(pl != 0);
+}
+
+void GUROBISolver::SI_feasibilityTolerance(double tol)
+{
+    solver_->feasibilityTolerance(tol); //primal feasible tolerance
+    solver_->optimalityTolerance(tol); //dual feasible tolerance
+}
+
+bool GUROBISolver::SI_warmStart() const
+{
+    // 2 is for non-warmstart solver
+    return solver_->warmStart() != 2;
+}
+
+void GUROBISolver::SI_warmStart(bool w)
+{
+    // -1 is is for default warmstart
+    // 2 is for non-warmstart solver
+    solver_->warmStart((w ? -1 : 2));
+}
+
 void GUROBISolver::SI_inform() const
 {
-    std::cout << "Please add the inform() method" << std::endl;
+    solver_->inform();
 }
 
 const Eigen::VectorXd& GUROBISolver::SI_result() const

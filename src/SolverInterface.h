@@ -52,13 +52,13 @@ public:
      * Select the print level of the solver if available
      * @param pl The print level
      */
-    virtual void SI_printLevel(int pl) const;
+    virtual void SI_printLevel(int pl);
 
     /**
      * Set the maximum error tolerance of the solution if available
      * @param tol The error tolerance
      */
-    virtual void SI_tol(double tol) const;
+    virtual void SI_feasibilityTolerance(double tol);
 
     /**
      * Get the warm start status of the solver if available
