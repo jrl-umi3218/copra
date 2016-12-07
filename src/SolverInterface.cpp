@@ -32,12 +32,12 @@ int SolverInterface::SI_iter() const
     return 0;
 }
 
-void SolverInterface::SI_printLevel(int /* pl */) const
+void SolverInterface::SI_printLevel(int /* pl */)
 {
     std::cout << "No printLevel() function for this qp" << std::endl;
 }
 
-void SolverInterface::SI_tol(double /* tol */) const
+void SolverInterface::SI_feasibilityTolerance(double /* tol */)
 {
     std::cout << "No tol(double) function for this qp" << std::endl;
 }

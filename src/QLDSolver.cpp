@@ -38,12 +38,12 @@ void QLDSolver::SI_inform() const
     solver_->inform();
 }
 
-void QLDSolver::SI_printLevel(int pl) const
+void QLDSolver::SI_printLevel(int pl)
 {
-    solver_->verbose(static_cast<bool>(pl));
+    solver_->verbose(pl != 0);
 }
 
-void QLDSolver::SI_tol(double tol) const
+void QLDSolver::SI_feasibilityTolerance(double tol)
 {
     solver_->accuracyTol(tol);
 }
