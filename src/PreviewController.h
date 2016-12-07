@@ -124,8 +124,15 @@ public:
 
 protected:
     /**
+     * Add constraints into constraints_ @see Constraints
+     * @param constr The constraint to add
      */
-    void addConstraintByType(const std::shared_ptr<Constraint>& constr);
+    void addConstraintByType(std::shared_ptr<Constraint> constr);
+
+    /**
+     * Resize Aeq, beq, Aineq, bineq, ub, lb to default.
+     */
+    void clearConstraintMatrices();
 
     /**
      * Update the system and its constraints.

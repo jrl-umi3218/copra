@@ -29,6 +29,7 @@ struct PreviewSystem;
  * Flags to identify the type of the constraints
  */
 enum class ConstraintFlag {
+    Constraint, /**< Any constraints */
     EqualityConstraint, /**< Equality constraint flag */
     InequalityConstraint, /**< Inequality constraint flag */
     BoundConstraint /**< Bound constraint tag */
@@ -219,7 +220,6 @@ public:
 private:
     Eigen::MatrixXd E_;
     Eigen::VectorXd f_;
-    bool isIneq_;
 };
 
 /**

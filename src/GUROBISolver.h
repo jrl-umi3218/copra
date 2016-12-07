@@ -71,9 +71,9 @@ public:
      * @see SolverInterface::SI_solve()
      * @return The qp solver result.
      */
-    bool SI_solve(const Eigen::MatrixXd& Q, const Eigen::VectorXd& C,
-        const Eigen::MatrixXd& Aeq, const Eigen::VectorXd& Beq,
-        const Eigen::MatrixXd& Aineq, const Eigen::VectorXd& Bineq,
+    bool SI_solve(const Eigen::MatrixXd& Q, const Eigen::VectorXd& c,
+        const Eigen::MatrixXd& Aeq, const Eigen::VectorXd& beq,
+        const Eigen::MatrixXd& Aineq, const Eigen::VectorXd& bineq,
         const Eigen::VectorXd& XL, const Eigen::VectorXd& XU) override;
 
 private:

@@ -70,9 +70,9 @@ void QuadProgDenseSolver::SI_problem(int nrVar, int nrEq, int nrInEq)
     solver_->problem(nrVar, nrEq, nrInEq + 2 * nrVar);
 }
 
-bool QuadProgDenseSolver::SI_solve(const Eigen::MatrixXd& Q, const Eigen::VectorXd& C,
-    const Eigen::MatrixXd& Aeq, const Eigen::VectorXd& Beq,
-    const Eigen::MatrixXd& Aineq, const Eigen::VectorXd& Bineq,
+bool QuadProgDenseSolver::SI_solve(const Eigen::MatrixXd& Q, const Eigen::VectorXd& c,
+    const Eigen::MatrixXd& Aeq, const Eigen::VectorXd& beq,
+    const Eigen::MatrixXd& Aineq, const Eigen::VectorXd& bineq,
     const Eigen::VectorXd& XL, const Eigen::VectorXd& XU)
 {
     auto nrLines = XL.rows();
@@ -83,11 +83,11 @@ bool QuadProgDenseSolver::SI_solve(const Eigen::MatrixXd& Q, const Eigen::Vector
     ineqMat.topRows(ALines) = Aineq;
     ineqMat.block(ALines, 0, nrLines, nrLines) = I;
     ineqMat.bottomRows(nrLines) = -I;
-    ineqVec.head(ALines) = Bineq;
+    ineqVec.head(ALines) = bineq;
     ineqVec.segment(ALines, nrLines) = XU;
     ineqVec.tail(nrLines) = -XL;
 
-    return solver_->solve(Q, C, Aeq, Beq, ineqMat, ineqVec);
+    return solver_->solve(Q, c, Aeq, beq, ineqMat, ineqVec);
 }
 
 } // namespace pc

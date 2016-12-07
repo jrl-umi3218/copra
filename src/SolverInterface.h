@@ -110,9 +110,9 @@ public:
      * @param XU Upper bound of the decision vector. An N-by-1 dense vector.
      * @return The qp solver result.
      */
-    virtual bool SI_solve(const Eigen::MatrixXd& Q, const Eigen::VectorXd& C,
-        const Eigen::MatrixXd& Aeq, const Eigen::VectorXd& Beq,
-        const Eigen::MatrixXd& Aineq, const Eigen::VectorXd& Bineq,
+    virtual bool SI_solve(const Eigen::MatrixXd& Q, const Eigen::VectorXd& c,
+        const Eigen::MatrixXd& Aeq, const Eigen::VectorXd& beq,
+        const Eigen::MatrixXd& Aineq, const Eigen::VectorXd& bineq,
         const Eigen::VectorXd& XL, const Eigen::VectorXd& XU)
         = 0;
 };

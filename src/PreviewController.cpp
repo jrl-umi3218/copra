@@ -23,7 +23,6 @@
 #include <algorithm>
 #include <exception>
 #include <numeric>
-#include <sstream>
 
 namespace mpc {
 
@@ -75,7 +74,7 @@ void MPCTypeFull::Constraints::clear()
  *************************************************************************************************/
 
 MPCTypeFull::MPCTypeFull(SolverFlag sFlag)
-    : ps_()
+    : ps_(nullptr)
     , sol_(solverFactory(sFlag))
     , constraints_()
     , Q_()
@@ -98,11 +97,11 @@ MPCTypeFull::MPCTypeFull(const std::shared_ptr<PreviewSystem>& ps, SolverFlag sF
     , sol_(solverFactory(sFlag))
     , constraints_()
     , Q_(ps_->fullUDim, ps_->fullUDim)
-    , Aineq_()
-    , Aeq_()
+    , Aineq_(0, ps_->fullUDim)
+    , Aeq_(0, ps_->fullUDim)
     , c_(ps_->fullUDim)
-    , bineq_()
-    , beq_()
+    , bineq_(static_cast<int>(0))
+    , beq_(static_cast<int>(0))
     , lb_(ps_->fullUDim)
     , ub_(ps_->fullUDim)
     , Wx_(ps_->fullXDim)
@@ -112,6 +111,8 @@ MPCTypeFull::MPCTypeFull(const std::shared_ptr<PreviewSystem>& ps, SolverFlag sF
 {
     Wx_.setOnes();
     Wu_.setOnes();
+    lb_.setConstant(-std::numeric_limits<double>::max());
+    ub_.setConstant(std::numeric_limits<double>::max());
 }
 
 void MPCTypeFull::selectQPSolver(SolverFlag flag)
@@ -122,16 +123,10 @@ void MPCTypeFull::selectQPSolver(SolverFlag flag)
 void MPCTypeFull::initializeController(const std::shared_ptr<PreviewSystem>& ps)
 {
     ps_ = ps;
+    clearConstraintMatrices();
+
     Q_.resize(ps_->fullUDim, ps_->fullUDim);
-    Aineq_.resize(0, ps_->fullUDim);
-    Aeq_.resize(0, ps_->fullUDim);
     c_.resize(ps_->fullUDim);
-    bineq_.resize(0);
-    beq_.resize(0);
-    lb_.resize(ps_->fullUDim);
-    lb_.setConstant(-std::numeric_limits<double>::max());
-    ub_.resize(ps_->fullUDim);
-    ub_.setConstant(std::numeric_limits<double>::max());
     Wx_.resize(ps_->fullXDim);
     Wu_.resize(ps_->fullUDim);
     Wx_.setOnes();
@@ -190,25 +185,19 @@ void MPCTypeFull::addConstraint(const std::shared_ptr<Constraint>& constr)
 {
     constr->initializeConstraint(*ps_);
     addConstraintByType(constr);
-
-    Aeq_.resize(constraints_.nrEqConstr, ps_->fullUDim);
-    beq_.resize(constraints_.nrEqConstr);
-    Aineq_.resize(constraints_.nrIneqConstr, ps_->fullUDim);
-    bineq_.resize(constraints_.nrIneqConstr);
-    lb_.resize(constraints_.nrBoundConstr);
-    ub_.resize(constraints_.nrBoundConstr);
 }
 
 void MPCTypeFull::resetConstraints() noexcept
 {
     constraints_.clear();
+    clearConstraintMatrices();
 }
 
 /*
  *  Protected methods
  */
 
-void MPCTypeFull::addConstraintByType(const std::shared_ptr<Constraint>& constr)
+void MPCTypeFull::addConstraintByType(std::shared_ptr<Constraint> constr)
 {
     constraints_.nrConstr += constr->nrConstr();
     constraints_.wpConstr.emplace_back(constr, constr->name());
@@ -218,20 +207,42 @@ void MPCTypeFull::addConstraintByType(const std::shared_ptr<Constraint>& constr)
         // DownCasting to std::shared_ptr<EqIneqConstraint>
         // This is a safe operation since we know that the object is a derived class of a EqIneqConstraint
         constraints_.wpEqConstr.emplace_back(std::static_pointer_cast<EqIneqConstraint>(constr), constr->name());
+        Aeq_.resize(constraints_.nrEqConstr, ps_->fullUDim);
+        beq_.resize(constraints_.nrEqConstr);
     } break;
     case ConstraintFlag::InequalityConstraint: {
         constraints_.nrIneqConstr += constr->nrConstr();
         // DownCasting to std::shared_ptr<EqIneqConstraint>
         // This is a safe operation since we know that the object is a derived class of a EqIneqConstraint
         constraints_.wpIneqConstr.emplace_back(std::static_pointer_cast<EqIneqConstraint>(constr), constr->name());
+        Aineq_.resize(constraints_.nrIneqConstr, ps_->fullUDim);
+        bineq_.resize(constraints_.nrIneqConstr);
     } break;
     case ConstraintFlag::BoundConstraint: {
         constraints_.nrBoundConstr += constr->nrConstr();
         // DownCasting to std::shared_ptr<ControlBoundConstraint>
         // This is a safe operation since we know that the object is a ControlBoundConstraint
         constraints_.wpBoundConstr.emplace_back(std::static_pointer_cast<ControlBoundConstraint>(constr), constr->name());
+        lb_.resize(constraints_.nrBoundConstr);
+        ub_.resize(constraints_.nrBoundConstr);
     } break;
+    default:
+        break;
     }
+}
+
+void MPCTypeFull::clearConstraintMatrices()
+{
+    assert(ps_ != nullptr);
+
+    Aineq_.resize(0, ps_->fullUDim);
+    Aeq_.resize(0, ps_->fullUDim);
+    bineq_.resize(0);
+    beq_.resize(0);
+    lb_.resize(ps_->fullUDim);
+    ub_.resize(ps_->fullUDim);
+    lb_.setConstant(-std::numeric_limits<double>::max());
+    ub_.setConstant(std::numeric_limits<double>::max());
 }
 
 void MPCTypeFull::updateSystem()
@@ -290,36 +301,45 @@ void MPCTypeFull::makeQPForm()
 
 void MPCTypeFull::checkConstraints()
 {
-    bool needResizing = false;
+    bool needNrUpdate = false;
 
-    auto checkConstr = [&needResizing](auto wpc, bool useWarn = false) {
+    auto checkConstr = [&needNrUpdate, this](auto wpc, ConstraintFlag type, bool useWarn = false) {
         for (auto itr = wpc.begin(); itr != wpc.end();) {
             if ((*itr).first.expired()) {
-                (void)useWarn; // Just to make the compiler understand it is used.
                 CONSTRAINT_DELETION_WARN(useWarn, "%s%s%s", "Dangling pointer to constraint.\nA '", (*itr).second.c_str(),
                     "' has been destroyed.\nThe constraint has been removed from the controller");
+                needNrUpdate = true;
+                (void)useWarn; // Just to make the compiler understand it is used.
+                switch (type) {
+                case ConstraintFlag::EqualityConstraint: {
+                    Aeq_.resize(constraints_.nrEqConstr, ps_->fullUDim);
+                    beq_.resize(constraints_.nrEqConstr);
+                } break;
+                case ConstraintFlag::InequalityConstraint: {
+                    Aineq_.resize(constraints_.nrIneqConstr, ps_->fullUDim);
+                    bineq_.resize(constraints_.nrIneqConstr);
+                } break;
+                case ConstraintFlag::BoundConstraint: {
+                    lb_.resize(constraints_.nrBoundConstr);
+                    ub_.resize(constraints_.nrBoundConstr);
+                } break;
+                default:
+                    break;
+                }
                 itr = wpc.erase(itr);
-                needResizing = true;
             } else {
                 ++itr;
             }
         }
     };
 
-    checkConstr(constraints_.wpConstr, true);
-    checkConstr(constraints_.wpEqConstr);
-    checkConstr(constraints_.wpIneqConstr);
-    checkConstr(constraints_.wpBoundConstr);
+    checkConstr(constraints_.wpConstr, ConstraintFlag::Constraint, true);
+    checkConstr(constraints_.wpEqConstr, ConstraintFlag::EqualityConstraint);
+    checkConstr(constraints_.wpIneqConstr, ConstraintFlag::InequalityConstraint);
+    checkConstr(constraints_.wpBoundConstr, ConstraintFlag::BoundConstraint);
 
-    if (needResizing) {
+    if (needNrUpdate)
         constraints_.updateNr();
-        Aineq_.resize(constraints_.nrIneqConstr, ps_->fullUDim);
-        bineq_.resize(constraints_.nrIneqConstr);
-        Aeq_.resize(constraints_.nrEqConstr, ps_->fullUDim);
-        beq_.resize(constraints_.nrEqConstr);
-        lb_.resize(constraints_.nrBoundConstr);
-        ub_.resize(constraints_.nrBoundConstr);
-    }
 }
 
 /*************************************************************************************************

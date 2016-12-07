@@ -16,7 +16,6 @@
 // <http://www.gnu.org/licenses/>.
 
 #include "Constraints.h"
-
 #include "PreviewSystem.h"
 
 namespace mpc {

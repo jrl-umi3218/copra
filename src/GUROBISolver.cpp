@@ -54,12 +54,12 @@ void GUROBISolver::SI_problem(int nrVar, int nrEq, int nrInEq)
     solver_->problem(nrVar, nrEq, nrInEq);
 }
 
-bool GUROBISolver::SI_solve(const Eigen::MatrixXd& Q, const Eigen::VectorXd& C,
-    const Eigen::MatrixXd& Aeq, const Eigen::VectorXd& Beq,
-    const Eigen::MatrixXd& Aineq, const Eigen::VectorXd& Bineq,
+bool GUROBISolver::SI_solve(const Eigen::MatrixXd& Q, const Eigen::VectorXd& c,
+    const Eigen::MatrixXd& Aeq, const Eigen::VectorXd& beq,
+    const Eigen::MatrixXd& Aineq, const Eigen::VectorXd& bineq,
     const Eigen::VectorXd& XL, const Eigen::VectorXd& XU)
 {
-    return solver_->solve(Q, C, Aeq, Beq, Aineq, Bineq, XL, XU);
+    return solver_->solve(Q, c, Aeq, beq, Aineq, bineq, XL, XU);
 }
 
 } // namespace pc
