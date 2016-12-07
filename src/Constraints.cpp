@@ -70,8 +70,8 @@ void TrajectoryConstraint::update(const PreviewSystem& ps)
 {
     auto nrLines = static_cast<int>(E_.rows());
     for (int i = 0; i < ps.nrStep; ++i) {
-        A_.block(i * nrLines, 0, nrLines, ps.fullUDim) = E_ * ps.Psi.block(i * ps.xDim, 0, ps.xDim, ps.fullUDim);
-        b_.segment(i * nrLines, nrLines) = f_ - E_ * (ps.Phi.block(i * ps.xDim, 0, ps.xDim, ps.xDim) * ps.x0 + ps.xi.segment(i * ps.xDim, ps.xDim));
+        A_.block(i * nrLines, 0, nrLines, ps.fullUDim).noalias() = E_ * ps.Psi.block(i * ps.xDim, 0, ps.xDim, ps.fullUDim);
+        b_.segment(i * nrLines, nrLines).nolias() = f_ - E_ * (ps.Phi.block(i * ps.xDim, 0, ps.xDim, ps.xDim) * ps.x0 + ps.xi.segment(i * ps.xDim, ps.xDim));
     }
 }
 
@@ -148,11 +148,11 @@ void TrajectoryBoundConstraint::initializeConstraint(const PreviewSystem& ps)
 
 void TrajectoryBoundConstraint::update(const PreviewSystem& ps)
 {
-    A_.block(0, 0, ps.fullXDim, ps.fullUDim) = ps.Psi;
-    A_.block(ps.fullXDim, 0, ps.fullXDim, ps.fullUDim) = ps.Psi;
+    A_.block(0, 0, ps.fullXDim, ps.fullUDim).noalias() = ps.Psi;
+    A_.block(ps.fullXDim, 0, ps.fullXDim, ps.fullUDim).noalias() = ps.Psi;
     for (int i = 0; i < ps.nrStep; ++i) {
-        b_.segment(i * ps.xDim, ps.xDim) = upper_ - ps.Phi.block(i * ps.xDim, 0, ps.xDim, ps.xDim) * ps.x0 - ps.xi.segment(i * ps.xDim, ps.xDim);
-        b_.segment(ps.fullXDim + i * ps.xDim, ps.xDim) = lower_ - ps.Phi.block(i * ps.xDim, 0, ps.xDim, ps.xDim) * ps.x0 - ps.xi.segment(i * ps.xDim, ps.xDim);
+        b_.segment(i * ps.xDim, ps.xDim).noalias() = upper_ - ps.Phi.block(i * ps.xDim, 0, ps.xDim, ps.xDim) * ps.x0 - ps.xi.segment(i * ps.xDim, ps.xDim);
+        b_.segment(ps.fullXDim + i * ps.xDim, ps.xDim).noalias() = lower_ - ps.Phi.block(i * ps.xDim, 0, ps.xDim, ps.xDim) * ps.x0 - ps.xi.segment(i * ps.xDim, ps.xDim);
     }
 }
 

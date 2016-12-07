@@ -70,8 +70,7 @@ void QuadProgDenseSolver::SI_problem(int nrVar, int nrEq, int nrInEq)
     solver_->problem(nrVar, nrEq, nrInEq + 2 * nrVar);
 }
 
-bool QuadProgDenseSolver::SI_solve(
-    const Eigen::MatrixXd& Q, const Eigen::VectorXd& C,
+bool QuadProgDenseSolver::SI_solve(const Eigen::MatrixXd& Q, const Eigen::VectorXd& C,
     const Eigen::MatrixXd& Aeq, const Eigen::VectorXd& Beq,
     const Eigen::MatrixXd& Aineq, const Eigen::VectorXd& Bineq,
     const Eigen::VectorXd& XL, const Eigen::VectorXd& XU)

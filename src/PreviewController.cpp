@@ -213,21 +213,24 @@ void MPCTypeFull::addConstraintByType(const std::shared_ptr<Constraint>& constr)
     constraints_.nrConstr += constr->nrConstr();
     constraints_.wpConstr.emplace_back(constr, constr->name());
     switch (constr->constraintType()) {
-    case ConstraintFlag::EqualityConstraint:
+    case ConstraintFlag::EqualityConstraint: {
         constraints_.nrEqConstr += constr->nrConstr();
         // DownCasting to std::shared_ptr<EqIneqConstraint>
+        // This is a safe operation since we know that the object is a derived class of a EqIneqConstraint
         constraints_.wpEqConstr.emplace_back(std::static_pointer_cast<EqIneqConstraint>(constr), constr->name());
-        break;
-    case ConstraintFlag::InequalityConstraint:
+    } break;
+    case ConstraintFlag::InequalityConstraint: {
         constraints_.nrIneqConstr += constr->nrConstr();
         // DownCasting to std::shared_ptr<EqIneqConstraint>
+        // This is a safe operation since we know that the object is a derived class of a EqIneqConstraint
         constraints_.wpIneqConstr.emplace_back(std::static_pointer_cast<EqIneqConstraint>(constr), constr->name());
-        break;
-    case ConstraintFlag::BoundConstraint:
+    } break;
+    case ConstraintFlag::BoundConstraint: {
         constraints_.nrBoundConstr += constr->nrConstr();
         // DownCasting to std::shared_ptr<ControlBoundConstraint>
+        // This is a safe operation since we know that the object is a ControlBoundConstraint
         constraints_.wpBoundConstr.emplace_back(std::static_pointer_cast<ControlBoundConstraint>(constr), constr->name());
-        break;
+    } break;
     }
 }
 
@@ -241,12 +244,11 @@ void MPCTypeFull::updateSystem()
     ps_->xi.segment(0, xDim) = ps_->d;
 
     for (auto i = 1; i < ps_->nrStep; ++i) {
-        ps_->Phi.block(i * xDim, 0, xDim, xDim) = ps_->A * ps_->Phi.block((i - 1) * xDim, 0, xDim, xDim);
-        for (auto j = 0; j < i; ++j) {
-            ps_->Psi.block(i * xDim, j * uDim, xDim, uDim) = ps_->A * ps_->Psi.block((i - 1) * xDim, j * uDim, xDim, uDim);
-        }
-        ps_->Psi.block(i * xDim, i * uDim, xDim, uDim) = ps_->B;
-        ps_->xi.segment(i * xDim, xDim) = ps_->A * ps_->xi.segment((i - 1) * xDim, xDim) + ps_->d;
+        ps_->Phi.block(i * xDim, 0, xDim, xDim).noalias() = ps_->A * ps_->Phi.block((i - 1) * xDim, 0, xDim, xDim);
+        for (auto j = 0; j < i; ++j)
+            ps_->Psi.block(i * xDim, j * uDim, xDim, uDim).noalias() = ps_->A * ps_->Psi.block((i - 1) * xDim, j * uDim, xDim, uDim);
+        ps_->Psi.block(i * xDim, i * uDim, xDim, uDim).noalias() = ps_->B;
+        ps_->xi.segment(i * xDim, xDim).noalias() = ps_->A * ps_->xi.segment((i - 1) * xDim, xDim) + ps_->d;
     }
 
     for (auto& wpc : constraints_.wpConstr)
@@ -255,8 +257,8 @@ void MPCTypeFull::updateSystem()
 
 void MPCTypeFull::makeQPForm()
 {
-    Q_ = ps_->Psi.transpose() * Eigen::MatrixXd(Wx_.asDiagonal()) * ps_->Psi + Eigen::MatrixXd(Wu_.asDiagonal());
-    c_ = ps_->Psi.transpose() * Eigen::MatrixXd(Wx_.asDiagonal()) * (ps_->Phi * ps_->x0 - ps_->xd + ps_->xi);
+    Q_.noalias() = ps_->Psi.transpose() * Eigen::MatrixXd(Wx_.asDiagonal()) * ps_->Psi + Eigen::MatrixXd(Wu_.asDiagonal());
+    c_.noalias() = ps_->Psi.transpose() * Eigen::MatrixXd(Wx_.asDiagonal()) * (ps_->Phi * ps_->x0 - ps_->xd + ps_->xi);
 
     int nrLines = 0;
     // Get Equality constraints
@@ -373,8 +375,8 @@ void MPCTypeLast::makeQPForm()
 {
     auto xDim = ps_->xDim;
     const Eigen::MatrixXd& psi = ps_->Psi.bottomRows(xDim);
-    Q_ = psi.transpose() * Eigen::MatrixXd(Wx_.asDiagonal()) * psi + Eigen::MatrixXd(Wu_.asDiagonal());
-    c_ = psi.transpose() * Eigen::MatrixXd(Wx_.asDiagonal()) * (ps_->Phi.bottomRows(xDim) * ps_->x0 - ps_->xd.tail(xDim) + ps_->xi.tail(xDim));
+    Q_.noalias() = psi.transpose() * Eigen::MatrixXd(Wx_.asDiagonal()) * psi + Eigen::MatrixXd(Wu_.asDiagonal());
+    c_.noalias() = psi.transpose() * Eigen::MatrixXd(Wx_.asDiagonal()) * (ps_->Phi.bottomRows(xDim) * ps_->x0 - ps_->xd.tail(xDim) + ps_->xi.tail(xDim));
 
     int nrLines = 0;
     // Get Equality constraints
