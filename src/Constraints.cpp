@@ -71,7 +71,7 @@ void TrajectoryConstraint::update(const PreviewSystem& ps)
     auto nrLines = static_cast<int>(E_.rows());
     for (int i = 0; i < ps.nrStep; ++i) {
         A_.block(i * nrLines, 0, nrLines, ps.fullUDim).noalias() = E_ * ps.Psi.block(i * ps.xDim, 0, ps.xDim, ps.fullUDim);
-        b_.segment(i * nrLines, nrLines).nolias() = f_ - E_ * (ps.Phi.block(i * ps.xDim, 0, ps.xDim, ps.xDim) * ps.x0 + ps.xi.segment(i * ps.xDim, ps.xDim));
+        b_.segment(i * nrLines, nrLines).noalias() = f_ - E_ * (ps.Phi.block(i * ps.xDim, 0, ps.xDim, ps.xDim) * ps.x0 + ps.xi.segment(i * ps.xDim, ps.xDim));
     }
 }
 

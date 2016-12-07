@@ -348,10 +348,10 @@ void MPCTypeLast::initializeController(const std::shared_ptr<PreviewSystem>& ps)
     bineq_.resize(0);
     beq_.resize(0);
     lb_.resize(ps_->fullUDim);
-    lb_.setConstant(-std::numeric_limits<double>::max())
-        ub_.resize(ps_->fullUDim);
-    ub_.setConstant(std::numeric_limits<double>::max())
-        Wx_.resize(ps_->xDim);
+    lb_.setConstant(-std::numeric_limits<double>::max());
+    ub_.resize(ps_->fullUDim);
+    ub_.setConstant(std::numeric_limits<double>::max());
+    Wx_.resize(ps_->xDim);
     Wu_.resize(ps_->fullUDim);
     Wx_.setOnes();
     Wu_.setOnes();
