@@ -110,6 +110,6 @@ BOOST_FIXTURE_TEST_CASE(GUROBIOnQLDTest, Problem)
     Eigen::VectorXd resQLD = qpQLD.SI_result();
     Eigen::VectorXd resGUROBI = qpGUROBI.SI_result();
     BOOST_CHECK(resGUROBI.isApprox(resQLD, 1e-6));
-    BOOST_REQUIRE_EQUAL(qpGUROBI.SI_fail(), 2); // 2 is optimal for gurobi
+    BOOST_REQUIRE_EQUAL(qpGUROBI.SI_fail(), GRB_OPTIMAL);
 }
 #endif

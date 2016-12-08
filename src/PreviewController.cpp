@@ -135,11 +135,28 @@ void MPCTypeFull::initializeController(const std::shared_ptr<PreviewSystem>& ps)
 
 bool MPCTypeFull::solve()
 {
+    /*
+    auto printMat = [](const std::string& name, const Eigen::MatrixXd& mat) {
+        std::cout << name << "(" << mat.rows() << "," << mat.cols() << ")" << std::endl;
+        std::cout << mat << std::endl;
+    };
+    */
+
     solveAndBuildTime_.start();
     checkConstraints();
     updateSystem();
     makeQPForm();
     sol_->SI_problem(ps_->fullUDim, constraints_.nrEqConstr, constraints_.nrIneqConstr);
+    /*
+    printMat("Q", Q_);
+    printMat("c", c_);
+    printMat("Aeq", Aeq_);
+    printMat("beq", beq_);
+    printMat("Aineq", Aineq_);
+    printMat("bineq", bineq_);
+    printMat("lb", lb_);
+    printMat("ub", ub_);
+    */
     solveTime_.start();
     bool success = sol_->SI_solve(Q_, c_, Aeq_, beq_, Aineq_, bineq_, lb_, ub_);
     solveTime_.stop();

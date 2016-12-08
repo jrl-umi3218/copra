@@ -55,14 +55,15 @@ void GUROBISolver::SI_feasibilityTolerance(double tol)
 bool GUROBISolver::SI_warmStart() const
 {
     // 2 is for non-warmstart solver
-    return solver_->warmStart() != 2;
+    return solver_->warmStart() != Eigen::GurobiCommon::WarmStatus::NONE;
 }
 
 void GUROBISolver::SI_warmStart(bool w)
 {
     // -1 is is for default warmstart
     // 2 is for non-warmstart solver
-    solver_->warmStart((w ? -1 : 2));
+    using WS = Eigen::GurobiCommon::WarmStatus;
+    solver_->warmStart((w ? WS::DEFAULT : WS::NONE));
 }
 
 void GUROBISolver::SI_inform() const

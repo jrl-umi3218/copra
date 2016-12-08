@@ -227,17 +227,18 @@ private:
  * Even if it is a bound constraint, the optimization vector is \f$U\f$ 
  * so this constraint has to be transformed to an Inequality constraint.
  * @warning This constraint is defined in the QP as an Inequality constraint. 
+ * It might be faster to transform yourself this constraint into an inequality constraint.
  */
 class TrajectoryBoundConstraint final : public EqIneqConstraint {
 public:
     /**
      * Constructor of the trajectory Bound constraint.
-     * Create a constraint of type \f$\underbar{x}\leq x\leq\bar{x}\f$.
+     * Create a constraint of type \f$\underline{x}\leq x\leq\overline{x}\f$.
      * As \f$U\f$ is the optimization variable,
      * it is transformed to be \f$AU\leq b\f$.
-     * @warning \f$\underbar{x}\f$ and \f$\bar{x}\f$ size must be the size of one iteration.
-     * @param lower The lower bound \f$\underbar{x}\f$ of the constraint
-     * @param upper The upper bound \f$\bar{x}\f$ of the constraint
+     * @warning \f$\underline{x}\f$ and \f$\overline{x}\f$ size must be the size of one iteration.
+     * @param lower The lower bound \f$\underline{x}\f$ of the constraint
+     * @param upper The upper bound \f$\overline{x}\f$ of the constraint
      */
     TrajectoryBoundConstraint(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper);
 
@@ -262,23 +263,24 @@ public:
 
 private:
     Eigen::VectorXd lower_, upper_;
+    std::vector<int> lowerLines_, upperLines_;
 };
 
 /**
  * Control Bound constraint.
- * It bounds the optimization \f$\underbar{u}\leq u \leq\bar{u}\f$
- * @todo Gives the possiblity to set directly \f$\underbar{U}\f$ and \f$\bar{U}\f$. 
+ * It bounds the optimization \f$\underline{u}\leq u \leq\overline{u}\f$
+ * @todo Gives the possiblity to set directly \f$\underline{U}\f$ and \f$\overline{U}\f$. 
  */
 class ControlBoundConstraint final : public Constraint {
 public:
     /**
      * Constructor of the trajectory Bound constraint.
-     * Create a constraint of type \f$\underbar{u}\leq u\leq\bar{u}\f$.
+     * Create a constraint of type \f$\underline{u}\leq u\leq\overline{u}\f$.
      * As \f$U\f$ is the optimization variable,
-     * it is transformed to be \f$\underbar{U}\leq U\leq\bar{U}\f$.
-     * @warning \f$\underbar{u}\f$ and \f$\bar{u}\f$ size must be the size of one iteration.
-     * @param lower The lower bound \f$\underbar{u}\f$ of the constraint
-     * @param upper The upper bound \f$\bar{u}\f$ of the constraint
+     * it is transformed to be \f$\underline{U}\leq U\leq\overline{U}\f$.
+     * @warning \f$\underline{u}\f$ and \f$\overline{u}\f$ size must be the size of one iteration.
+     * @param lower The lower bound \f$\underline{u}\f$ of the constraint
+     * @param upper The upper bound \f$\overline{u}\f$ of the constraint
      */
     ControlBoundConstraint(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper);
 
@@ -290,7 +292,7 @@ public:
     void initializeConstraint(const PreviewSystem& ps) override;
 
     /**
-     * Compute \f$\underbar{U}\f$ and \f$\bar{U}\f$ from \f$\underbar{u}\f$, \f$\bar{u}\f$ and the preview system.
+     * Compute \f$\underline{U}\f$ and \f$\overline{U}\f$ from \f$\underline{u}\f$, \f$\overline{u}\f$ and the preview system.
      * @param ps A preview system.
      */
     void update(const PreviewSystem& ps) override;
