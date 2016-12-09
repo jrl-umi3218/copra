@@ -191,9 +191,15 @@ BOOST_FIXTURE_TEST_CASE(OneDofSystemTypeLastForBoundedSystem, BoundedSystem)
     };
 
     pcCheck("Default (QuadProgDense)", mpc::SolverFlag::DEFAULT);
+#ifdef LSSOL_SOLVER_FOUND
     pcCheck("LSSOL", mpc::SolverFlag::LSSOL);
+#endif
+#ifdef QLD_SOLVER_FOUND
     pcCheck("QLD", mpc::SolverFlag::QLD);
+#endif
+#ifdef GUROBI_SOLVER_FOUND
     pcCheck("GUROBIDense", mpc::SolverFlag::GUROBIDense);
+#endif
 
     std::sort(solveTime.begin(), solveTime.end(),
         [](const auto& lhs, const auto& rhs) { return lhs.second < rhs.second; });
@@ -246,9 +252,15 @@ BOOST_FIXTURE_TEST_CASE(OneDofSystemTypeFullForBoundedSystem, BoundedSystem)
     };
 
     pcCheck("Default (QuadProgDense)", mpc::SolverFlag::DEFAULT);
+#ifdef LSSOL_SOLVER_FOUND
     pcCheck("LSSOL", mpc::SolverFlag::LSSOL);
+#endif
+#ifdef QLD_SOLVER_FOUND
     pcCheck("QLD", mpc::SolverFlag::QLD);
-    pcCheck("GUROBI", mpc::SolverFlag::GUROBIDense);
+#endif
+#ifdef GUROBI_SOLVER_FOUND
+    pcCheck("GUROBIDense", mpc::SolverFlag::GUROBIDense);
+#endif
 
     std::sort(solveTime.begin(), solveTime.end(),
         [](const auto& lhs, const auto& rhs) { return lhs.second < rhs.second; });
@@ -300,9 +312,15 @@ BOOST_FIXTURE_TEST_CASE(OneDofSystemTypeLastForIneqSystem, IneqSystem)
     };
 
     pcCheck("Default (QuadProgDense)", mpc::SolverFlag::DEFAULT);
+#ifdef LSSOL_SOLVER_FOUND
     pcCheck("LSSOL", mpc::SolverFlag::LSSOL);
+#endif
+#ifdef QLD_SOLVER_FOUND
     pcCheck("QLD", mpc::SolverFlag::QLD);
+#endif
+#ifdef GUROBI_SOLVER_FOUND
     pcCheck("GUROBIDense", mpc::SolverFlag::GUROBIDense);
+#endif
 
     std::sort(solveTime.begin(), solveTime.end(),
         [](const auto& lhs, const auto& rhs) { return lhs.second < rhs.second; });
@@ -355,9 +373,15 @@ BOOST_FIXTURE_TEST_CASE(OneDofSystemTypeFullForIneqSystem, IneqSystem)
     };
 
     pcCheck("Default (QuadProgDense)", mpc::SolverFlag::DEFAULT);
+#ifdef LSSOL_SOLVER_FOUND
     pcCheck("LSSOL", mpc::SolverFlag::LSSOL);
+#endif
+#ifdef QLD_SOLVER_FOUND
     pcCheck("QLD", mpc::SolverFlag::QLD);
-    pcCheck("GUROBI", mpc::SolverFlag::GUROBIDense);
+#endif
+#ifdef GUROBI_SOLVER_FOUND
+    pcCheck("GUROBIDense", mpc::SolverFlag::GUROBIDense);
+#endif
 
     std::sort(solveTime.begin(), solveTime.end(),
         [](const auto& lhs, const auto& rhs) { return lhs.second < rhs.second; });
@@ -406,9 +430,15 @@ BOOST_FIXTURE_TEST_CASE(OneDofSystemTypeLastForEqSystem, EqSystem)
     };
 
     pcCheck("Default (QuadProgDense)", mpc::SolverFlag::DEFAULT);
+#ifdef LSSOL_SOLVER_FOUND
     pcCheck("LSSOL", mpc::SolverFlag::LSSOL);
+#endif
+#ifdef QLD_SOLVER_FOUND
     pcCheck("QLD", mpc::SolverFlag::QLD);
+#endif
+#ifdef GUROBI_SOLVER_FOUND
     pcCheck("GUROBIDense", mpc::SolverFlag::GUROBIDense);
+#endif
 
     std::sort(solveTime.begin(), solveTime.end(),
         [](const auto& lhs, const auto& rhs) { return lhs.second < rhs.second; });
@@ -458,9 +488,15 @@ BOOST_FIXTURE_TEST_CASE(OneDofSystemTypeFullForEqSystem, EqSystem)
     };
 
     pcCheck("Default (QuadProgDense)", mpc::SolverFlag::DEFAULT);
+#ifdef LSSOL_SOLVER_FOUND
     pcCheck("LSSOL", mpc::SolverFlag::LSSOL);
+#endif
+#ifdef QLD_SOLVER_FOUND
     pcCheck("QLD", mpc::SolverFlag::QLD);
-    pcCheck("GUROBI", mpc::SolverFlag::GUROBIDense);
+#endif
+#ifdef GUROBI_SOLVER_FOUND
+    pcCheck("GUROBIDense", mpc::SolverFlag::GUROBIDense);
+#endif
 
     std::sort(solveTime.begin(), solveTime.end(),
         [](const auto& lhs, const auto& rhs) { return lhs.second < rhs.second; });

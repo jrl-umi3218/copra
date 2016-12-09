@@ -61,7 +61,18 @@ struct Problem {
     int nrvars, nreqs, nrineqs;
 };
 
-BOOST_FIXTURE_TEST_CASE(QuadProgOnQLDTest, Problem)
+BOOST_FIXTURE_TEST_CASE(QuadProgTest, Problem)
+{
+    mpc::QuadProgDenseSolver qpQuadProg;
+
+    qpQuadProg.SI_problem(nrvars, nreqs, nrineqs);
+    BOOST_REQUIRE(qpQuadProg.SI_solve(Q, c, Aeq, beq, Aineq, bineq, XL, XU));
+
+    BOOST_REQUIRE_EQUAL(qpQuadProg.SI_fail(), 0);
+}
+
+#ifdef QLD_SOLVER_FOUND
+BOOST_FIXTURE_TEST_CASE(QLDOnQuadProgTest, Problem)
 {
     mpc::QLDSolver qpQLD;
     mpc::QuadProgDenseSolver qpQuadProg;
@@ -77,39 +88,40 @@ BOOST_FIXTURE_TEST_CASE(QuadProgOnQLDTest, Problem)
     BOOST_REQUIRE_EQUAL(qpQLD.SI_fail(), 0);
     BOOST_REQUIRE_EQUAL(qpQuadProg.SI_fail(), 0);
 }
+#endif
 
 #ifdef LSSOL_SOLVER_FOUND
-BOOST_FIXTURE_TEST_CASE(LSSOLOnQLDTest, Problem)
+BOOST_FIXTURE_TEST_CASE(LSSOLOnQuadProgTest, Problem)
 {
-    mpc::QLDSolver qpQLD;
+    mpc::QuadProgDenseSolver qpQuadProg;
     mpc::LSSOLSolver qpLSSOL;
 
-    qpQLD.SI_problem(nrvars, nreqs, nrineqs);
+    qpQuadProg.SI_problem(nrvars, nreqs, nrineqs);
     qpLSSOL.SI_problem(nrvars, nreqs, nrineqs);
-    BOOST_REQUIRE(qpQLD.SI_solve(Q, c, Aeq, beq, Aineq, bineq, XL, XU));
+    BOOST_REQUIRE(qpQuadProg.SI_solve(Q, c, Aeq, beq, Aineq, bineq, XL, XU));
     BOOST_REQUIRE(qpLSSOL.SI_solve(Q, c, Aeq, beq, Aineq, bineq, XL, XU));
 
-    Eigen::VectorXd resQLD = qpQLD.SI_result();
+    Eigen::VectorXd resQuadProg = qpQuadProg.SI_result();
     Eigen::VectorXd resLSSOL = qpLSSOL.SI_result();
-    BOOST_CHECK(resLSSOL.isApprox(resQLD));
+    BOOST_CHECK(resLSSOL.isApprox(resQuadProg));
     BOOST_REQUIRE_EQUAL(qpLSSOL.SI_fail(), 0);
 }
 #endif
 
 #ifdef GUROBI_SOLVER_FOUND
-BOOST_FIXTURE_TEST_CASE(GUROBIOnQLDTest, Problem)
+BOOST_FIXTURE_TEST_CASE(GUROBIOnQuadProgTest, Problem)
 {
-    mpc::QLDSolver qpQLD;
+    mpc::QuadProgDenseSolver qpQuadProg;
     mpc::GUROBISolver qpGUROBI;
 
-    qpQLD.SI_problem(nrvars, nreqs, nrineqs);
+    qpQuadProg.SI_problem(nrvars, nreqs, nrineqs);
     qpGUROBI.SI_problem(nrvars, nreqs, nrineqs);
-    BOOST_REQUIRE(qpQLD.SI_solve(Q, c, Aeq, beq, Aineq, bineq, XL, XU));
+    BOOST_REQUIRE(qpQuadProg.SI_solve(Q, c, Aeq, beq, Aineq, bineq, XL, XU));
     BOOST_REQUIRE(qpGUROBI.SI_solve(Q, c, Aeq, beq, Aineq, bineq, XL, XU));
 
-    Eigen::VectorXd resQLD = qpQLD.SI_result();
+    Eigen::VectorXd resQuadProg = qpQuadProg.SI_result();
     Eigen::VectorXd resGUROBI = qpGUROBI.SI_result();
-    BOOST_CHECK(resGUROBI.isApprox(resQLD, 1e-6));
+    BOOST_CHECK(resGUROBI.isApprox(resQuadProg, 1e-6));
     BOOST_REQUIRE_EQUAL(qpGUROBI.SI_fail(), GRB_OPTIMAL);
 }
 #endif

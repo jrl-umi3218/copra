@@ -17,6 +17,8 @@
 
 #include "QLDSolver.h"
 
+#include <iostream>
+
 namespace mpc {
 
 /*
@@ -25,6 +27,7 @@ namespace mpc {
 
 QLDSolver::QLDSolver()
     : solver_(std::make_unique<Eigen::QLD>())
+    , eps_(1e-8)
 {
 }
 
@@ -35,7 +38,37 @@ int QLDSolver::SI_fail() const
 
 void QLDSolver::SI_inform() const
 {
-    solver_->inform();
+    switch (solver_->fail()) {
+    case 0:
+        std::cout << "The optimality conditions are satisfied." << std::endl;
+        break;
+    case 1:
+        std::cout << "The algorithm has been stopped after too many "
+                     "MAXIT iterations (40*(N+M))."
+                  << std::endl;
+        break;
+    case 2:
+        std::cout << "Termination accuracy insufficient to satisfy "
+                     "convergence criterion."
+                  << std::endl;
+        break;
+    case 3:
+        std::cout << "Internal inconsistency of QL, division by zero." << std::endl;
+        break;
+    case 4:
+        std::cout << "Numerical instability prevents successful termination. "
+                     "Use tolerance specified in WAR(1) for a restart."
+                  << std::endl;
+        break;
+    case 5:
+        std::cout << "Length of a working array is too short." << std::endl;
+        break;
+    default:
+        std::cout << "Constraints are inconsistent and IFAIL=100+ICON, "
+                     "where ICON denotes a constraint causing the conflict."
+                  << std::endl;
+        break;
+    }
 }
 
 void QLDSolver::SI_printLevel(int pl)
@@ -45,7 +78,7 @@ void QLDSolver::SI_printLevel(int pl)
 
 void QLDSolver::SI_feasibilityTolerance(double tol)
 {
-    solver_->accuracyTol(tol);
+    eps_ = tol;
 }
 
 const Eigen::VectorXd&
@@ -64,7 +97,7 @@ bool QLDSolver::SI_solve(const Eigen::MatrixXd& Q, const Eigen::VectorXd& c,
     const Eigen::MatrixXd& Aineq, const Eigen::VectorXd& bineq,
     const Eigen::VectorXd& XL, const Eigen::VectorXd& XU)
 {
-    return solver_->solve(Q, c, Aeq, beq, Aineq, bineq, XL, XU);
+    return solver_->solve(Q, c, Aeq, beq, Aineq, bineq, XL, XU, eps_);
 }
 
 } // namespace pc

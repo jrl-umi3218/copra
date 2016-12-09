@@ -94,6 +94,7 @@ public:
 
 private:
     std::unique_ptr<Eigen::QLD> solver_;
+    double eps_;
 };
 
 } // namespace pc

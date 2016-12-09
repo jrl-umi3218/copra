@@ -60,7 +60,7 @@ main() {
 	fi
 
 	load_build_config
-	for module in 'eigen-qld' 'eigen-quadprog' 'minieigen'
+	for module in 'eigen-quadprog' 'minieigen'
 	do
 		build_and_install $module
 	done

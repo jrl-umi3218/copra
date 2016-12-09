@@ -83,7 +83,9 @@ BOOST_PYTHON_MODULE(_mpcontroller)
 #ifdef GUROBI_SOLVER_FOUND
         .value("GUROBIDense", SolverFlag::GUROBIDense)
 #endif
+#ifdef QLD_SOLVER_FOUND
         .value("QLD", SolverFlag::QLD)
+#endif
         .value("QuadProgDense", SolverFlag::QuadProgDense);
 
     // Solvers

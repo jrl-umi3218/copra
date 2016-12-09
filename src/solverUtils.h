@@ -43,7 +43,9 @@ enum class SolverFlag {
 #ifdef GUROBI_SOLVER_FOUND
     GUROBIDense, /**< Gurobi quadratic dense solver */
 #endif
+#ifdef QLD_SOLVER_FOUND
     QLD, /**< Scilab QLD solver */
+#endif
     QuadProgDense, /**< DenseMatrix version of QuadProg solver */
     // QuadProgSparse
 };
@@ -64,8 +66,10 @@ std::unique_ptr<SolverInterface> solverFactory(SolverFlag flag)
     case SolverFlag::GUROBIDense:
         return std::make_unique<GUROBISolver>();
 #endif
+#ifdef QLD_SOLVER_FOUND
     case SolverFlag::QLD:
         return std::make_unique<QLDSolver>();
+#endif
     // case SolverFlag::QuadProgSparse:
     //    return std::make_unique<QuadProgSparseSolver>();
     case SolverFlag::QuadProgDense:
@@ -91,8 +95,10 @@ SolverInterface* pythonSolverFactory(SolverFlag flag)
     case SolverFlag::GUROBIDense:
         return new GUROBISolver;
 #endif
+#ifdef QLD_SOLVER_FOUND
     case SolverFlag::QLD:
         return new QLDSolver;
+#endif
     case SolverFlag::QuadProgDense:
     default:
         return new QuadProgDenseSolver;
