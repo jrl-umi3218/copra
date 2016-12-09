@@ -24,6 +24,7 @@ To compile you need the following tools:
 #### Optional dependencies
 
 To have more qp solver:
+ * [eigen-qld](https://github.com/jrl-umi3218/eigen-qld.git)
  * [GUROBI](http://www.gurobi.com/) >= 4.0
  * [eigen-gurobi](https://github.com/jrl-umi3218/eigen-gurobi)
 
@@ -61,5 +62,5 @@ python TestPreviewControl.py
 
 #### Examples
 
-There is not basic examples yet. Please see test files for an overview.
+There is no basic examples yet. Please see test files for an overview.
 Please see the doxygen files for the documentation.
