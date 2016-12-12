@@ -55,8 +55,7 @@ void QuadProgDenseSolver::SI_inform() const
     }
 }
 
-const Eigen::VectorXd&
-QuadProgDenseSolver::SI_result() const
+const Eigen::VectorXd& QuadProgDenseSolver::SI_result() const
 {
     return solver_->result();
 }
@@ -82,7 +81,7 @@ bool QuadProgDenseSolver::SI_solve(const Eigen::MatrixXd& Q, const Eigen::Vector
     Eigen::VectorXd ineqVec(ALines + 2 * nrLines);
     ineqMat.topRows(ALines) = Aineq;
     ineqMat.block(ALines, 0, nrLines, nrLines) = I;
-    ineqMat.bottomRows(nrLines) = -I;
+    ineqMat.block(ALines + nrLines, 0, nrLines, nrLines) = -I;
     ineqVec.head(ALines) = bineq;
     ineqVec.segment(ALines, nrLines) = XU;
     ineqVec.tail(nrLines) = -XL;

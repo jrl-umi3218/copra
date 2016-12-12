@@ -2,6 +2,10 @@ include(../../cmake/python.cmake)
 
 configure_file(__init__.py ${CMAKE_CURRENT_BINARY_DIR}/mpcontroller/__init__.py COPYONLY)
 
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    set(CMAKE_CXX_FLAGS "-std=c++14") # g++ fails with -Werror on boost_python for whatever reason...
+endif()
+
 find_package(Boost COMPONENTS python timer REQUIRED)
 FINDPYTHON()
 

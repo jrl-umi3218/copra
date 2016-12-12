@@ -24,6 +24,6 @@
 #else
 #define CONSTRAINT_DELETION_WARN(warn, format, ...) \
     if ((warn)) {                                   \
-        fprintf(stderr, format, ##__VA_ARGS__)      \
+        fprintf(stderr, format, __VA_ARGS__);       \
     }
 #endif

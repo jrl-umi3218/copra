@@ -118,6 +118,7 @@ BOOST_PYTHON_MODULE(_mpcontroller)
 
     //Constraint
     enum_<ConstraintFlag>("ConstraintFlag")
+        .value("Constraint", ConstraintFlag::Constraint)
         .value("EqualityConstraint", ConstraintFlag::EqualityConstraint)
         .value("InequalityConstraint", ConstraintFlag::InequalityConstraint)
         .value("BoundConstraint", ConstraintFlag::BoundConstraint);

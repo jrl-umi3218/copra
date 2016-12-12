@@ -100,8 +100,8 @@ MPCTypeFull::MPCTypeFull(const std::shared_ptr<PreviewSystem>& ps, SolverFlag sF
     , Aineq_(0, ps_->fullUDim)
     , Aeq_(0, ps_->fullUDim)
     , c_(ps_->fullUDim)
-    , bineq_(static_cast<int>(0))
-    , beq_(static_cast<int>(0))
+    , bineq_()
+    , beq_()
     , lb_(ps_->fullUDim)
     , ub_(ps_->fullUDim)
     , Wx_(ps_->fullXDim)
@@ -113,6 +113,8 @@ MPCTypeFull::MPCTypeFull(const std::shared_ptr<PreviewSystem>& ps, SolverFlag sF
     Wu_.setOnes();
     lb_.setConstant(-std::numeric_limits<double>::max());
     ub_.setConstant(std::numeric_limits<double>::max());
+    bineq_.resize(0);
+    beq_.resize(0);
 }
 
 void MPCTypeFull::selectQPSolver(SolverFlag flag)
@@ -303,29 +305,13 @@ void MPCTypeFull::checkConstraints()
 {
     bool needNrUpdate = false;
 
-    auto checkConstr = [&needNrUpdate, this](auto wpc, ConstraintFlag type, bool useWarn = false) {
+    auto checkConstr = [&needNrUpdate](auto& wpc, bool useWarn = false) {
         for (auto itr = wpc.begin(); itr != wpc.end();) {
             if ((*itr).first.expired()) {
                 CONSTRAINT_DELETION_WARN(useWarn, "%s%s%s", "Dangling pointer to constraint.\nA '", (*itr).second.c_str(),
                     "' has been destroyed.\nThe constraint has been removed from the controller");
                 needNrUpdate = true;
                 (void)useWarn; // Just to make the compiler understand it is used.
-                switch (type) {
-                case ConstraintFlag::EqualityConstraint: {
-                    Aeq_.resize(constraints_.nrEqConstr, ps_->fullUDim);
-                    beq_.resize(constraints_.nrEqConstr);
-                } break;
-                case ConstraintFlag::InequalityConstraint: {
-                    Aineq_.resize(constraints_.nrIneqConstr, ps_->fullUDim);
-                    bineq_.resize(constraints_.nrIneqConstr);
-                } break;
-                case ConstraintFlag::BoundConstraint: {
-                    lb_.resize(constraints_.nrBoundConstr);
-                    ub_.resize(constraints_.nrBoundConstr);
-                } break;
-                default:
-                    break;
-                }
                 itr = wpc.erase(itr);
             } else {
                 ++itr;
@@ -333,13 +319,20 @@ void MPCTypeFull::checkConstraints()
         }
     };
 
-    checkConstr(constraints_.wpConstr, ConstraintFlag::Constraint, true);
-    checkConstr(constraints_.wpEqConstr, ConstraintFlag::EqualityConstraint);
-    checkConstr(constraints_.wpIneqConstr, ConstraintFlag::InequalityConstraint);
-    checkConstr(constraints_.wpBoundConstr, ConstraintFlag::BoundConstraint);
+    checkConstr(constraints_.wpConstr, true);
+    checkConstr(constraints_.wpEqConstr);
+    checkConstr(constraints_.wpIneqConstr);
+    checkConstr(constraints_.wpBoundConstr);
 
-    if (needNrUpdate)
+    if (needNrUpdate) {
         constraints_.updateNr();
+        Aeq_.resize(constraints_.nrEqConstr, ps_->fullUDim);
+        beq_.resize(constraints_.nrEqConstr);
+        Aineq_.resize(constraints_.nrIneqConstr, ps_->fullUDim);
+        bineq_.resize(constraints_.nrIneqConstr);
+        lb_.resize(constraints_.nrBoundConstr);
+        ub_.resize(constraints_.nrBoundConstr);
+    }
 }
 
 /*************************************************************************************************

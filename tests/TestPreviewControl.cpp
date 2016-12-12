@@ -140,7 +140,7 @@ struct EqSystem {
 
         // Trajectory equality constraint
         E.setZero();
-        E(0, 0) = 1.;
+        E(0, 0) = 1;
         f = x0;
     }
 
