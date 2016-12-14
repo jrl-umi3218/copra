@@ -19,6 +19,7 @@
 
 #include <Eigen/Core>
 #include <string>
+#include <vector>
 
 namespace mpc {
 
