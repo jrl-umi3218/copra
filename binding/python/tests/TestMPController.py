@@ -32,11 +32,11 @@ class TestMPC(unittest.TestCase):
         self.uUpper = VectorXd.Zero(1)
         self.xLower = VectorXd.Zero(2)
         self.xUpper = VectorXd.Zero(2)
-        self.uLower[0] = -float_info.max
+        self.uLower[0] = -float('Inf')
         self.uUpper[0] = 200
-        self.xLower[0] = -float_info.max
-        self.xLower[1] = -float_info.max
-        self.xUpper[0] = float_info.max
+        self.xLower[0] = -float('Inf')
+        self.xLower[1] = -float('Inf')
+        self.xUpper[0] = float('Inf')
         self.xUpper[1] = 0
 
         # Equality constraints

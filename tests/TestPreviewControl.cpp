@@ -58,12 +58,12 @@ struct BoundedSystem {
         wu << 1e-4;
 
         // Control bound
-        uLower.setConstant(-std::numeric_limits<double>::max());
+        uLower.setConstant(-std::numeric_limits<double>::infinity());
         uUpper.setConstant(200); // The force can't be superior to 200
 
         // Trajectory bound
-        xLower.setConstant(-std::numeric_limits<double>::max());
-        xUpper(0) = std::numeric_limits<double>::max();
+        xLower.setConstant(-std::numeric_limits<double>::infinity());
+        xUpper(0) = std::numeric_limits<double>::infinity();
         xUpper(1) = 0; // The velocity can't be positive
     }
 

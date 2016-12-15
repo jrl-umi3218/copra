@@ -132,9 +132,9 @@ TrajectoryBoundConstraint::TrajectoryBoundConstraint(const Eigen::VectorXd& lowe
 {
     assert(lower_.rows() == upper_.rows());
     for (auto line = 0; line < lower_.rows(); ++line) {
-        if (lower_(line) != -std::numeric_limits<double>::max())
+        if (lower_(line) != -std::numeric_limits<double>::infinity())
             lowerLines_.push_back(line);
-        if (upper_(line) != std::numeric_limits<double>::max())
+        if (upper_(line) != std::numeric_limits<double>::infinity())
             upperLines_.push_back(line);
     }
 }
