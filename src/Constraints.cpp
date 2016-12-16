@@ -17,7 +17,6 @@
 
 #include "Constraints.h"
 #include "PreviewSystem.h"
-#include <iostream>
 
 namespace mpc {
 
@@ -57,9 +56,9 @@ TrajectoryConstraint::TrajectoryConstraint(const Eigen::MatrixXd& E, const Eigen
 
 void TrajectoryConstraint::initializeConstraint(const PreviewSystem& ps)
 {
-    assert(E_.cols() == ps.uDim || E_.cols() == ps.fullUDim);
+    assert(E_.cols() == ps.xDim || E_.cols() == ps.fullXDim);
 
-    if (E_.cols() == ps.uDim)
+    if (E_.cols() == ps.xDim)
         nrConstr_ = static_cast<int>(E_.rows()) * ps.nrStep;
     else
         nrConstr_ = static_cast<int>(E_.rows());
@@ -104,7 +103,6 @@ ControlConstraint::ControlConstraint(const Eigen::MatrixXd& E, const Eigen::Vect
 
 void ControlConstraint::initializeConstraint(const PreviewSystem& ps)
 {
-    std::cout << E_.cols() << " " << ps.fullUDim << std::endl;
     assert(E_.cols() == ps.uDim || E_.cols() == ps.fullUDim);
 
     if (E_.cols() == ps.uDim)
