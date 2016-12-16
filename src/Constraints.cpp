@@ -17,6 +17,7 @@
 
 #include "Constraints.h"
 #include "PreviewSystem.h"
+#include <iostream>
 
 namespace mpc {
 
@@ -56,19 +57,28 @@ TrajectoryConstraint::TrajectoryConstraint(const Eigen::MatrixXd& E, const Eigen
 
 void TrajectoryConstraint::initializeConstraint(const PreviewSystem& ps)
 {
-    assert(E_.cols() == ps.xDim);
+    assert(E_.cols() == ps.uDim || E_.cols() == ps.fullUDim);
 
-    nrConstr_ = static_cast<int>(E_.rows()) * ps.nrStep;
+    if (E_.cols() == ps.uDim)
+        nrConstr_ = static_cast<int>(E_.rows()) * ps.nrStep;
+    else
+        nrConstr_ = static_cast<int>(E_.rows());
+
     A_.resize(nrConstr_, ps.fullUDim);
     b_.resize(nrConstr_);
 }
 
 void TrajectoryConstraint::update(const PreviewSystem& ps)
 {
-    auto nrLines = static_cast<int>(E_.rows());
-    for (int i = 0; i < ps.nrStep; ++i) {
-        A_.block(i * nrLines, 0, nrLines, ps.fullUDim).noalias() = E_ * ps.Psi.block(i * ps.xDim, 0, ps.xDim, ps.fullUDim);
-        b_.segment(i * nrLines, nrLines).noalias() = f_ - E_ * (ps.Phi.block(i * ps.xDim, 0, ps.xDim, ps.xDim) * ps.x0 + ps.xi.segment(i * ps.xDim, ps.xDim));
+    if (E_.rows() == nrConstr_) {
+        A_ = E_ * ps.Psi;
+        b_ = f_ - E_ * (ps.Phi * ps.x0 + ps.xi);
+    } else {
+        auto nrLines = static_cast<int>(E_.rows());
+        for (int i = 0; i < ps.nrStep; ++i) {
+            A_.block(i * nrLines, 0, nrLines, ps.fullUDim).noalias() = E_ * ps.Psi.block(i * ps.xDim, 0, ps.xDim, ps.fullUDim);
+            b_.segment(i * nrLines, nrLines).noalias() = f_ - E_ * (ps.Phi.block(i * ps.xDim, 0, ps.xDim, ps.xDim) * ps.x0 + ps.xi.segment(i * ps.xDim, ps.xDim));
+        }
     }
 }
 
@@ -94,9 +104,14 @@ ControlConstraint::ControlConstraint(const Eigen::MatrixXd& E, const Eigen::Vect
 
 void ControlConstraint::initializeConstraint(const PreviewSystem& ps)
 {
-    assert(E_.cols() == ps.uDim);
+    std::cout << E_.cols() << " " << ps.fullUDim << std::endl;
+    assert(E_.cols() == ps.uDim || E_.cols() == ps.fullUDim);
 
-    nrConstr_ = static_cast<int>(E_.rows()) * ps.nrStep;
+    if (E_.cols() == ps.uDim)
+        nrConstr_ = static_cast<int>(E_.rows()) * ps.nrStep;
+    else
+        nrConstr_ = static_cast<int>(E_.rows());
+
     A_.resize(nrConstr_, ps.fullUDim);
     b_.resize(nrConstr_);
     A_.setZero();
@@ -104,10 +119,15 @@ void ControlConstraint::initializeConstraint(const PreviewSystem& ps)
 
 void ControlConstraint::update(const PreviewSystem& ps)
 {
-    auto nrLines = static_cast<int>(E_.rows());
-    for (int i = 0; i < ps.nrStep; ++i) {
-        A_.block(i * nrLines, i * ps.uDim, nrLines, ps.uDim) = E_;
-        b_.segment(i * nrLines, nrLines) = f_;
+    if (E_.rows() == nrConstr_) {
+        A_ = E_;
+        b_ = f_;
+    } else {
+        auto nrLines = static_cast<int>(E_.rows());
+        for (int i = 0; i < ps.nrStep; ++i) {
+            A_.block(i * nrLines, i * ps.uDim, nrLines, ps.uDim) = E_;
+            b_.segment(i * nrLines, nrLines) = f_;
+        }
     }
 }
 
