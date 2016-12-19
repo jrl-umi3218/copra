@@ -55,6 +55,7 @@ struct PreviewSystem {
         const Eigen::VectorXd& bias, const Eigen::VectorXd& xInit,
         const Eigen::VectorXd& xTraj, int numberOfSteps);
 
+    bool isUpdated; /**< State whether or not the preview system has been updated. This is done when calling the solve function of a mpc. Setting this to false will force a new update*/
     int nrStep; /**< The number of iteration to perform. */
     int xDim; /**< The dimension of the state vector */
     int uDim; /**< The dimension of the control vector */

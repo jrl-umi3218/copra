@@ -105,8 +105,16 @@ public:
      * Set the weights of the system.
      * @param wx Weight of the state.
      * @param wu Weight of the control.
+     * @throw Throw a std::runtime_error is Wx or Wu are badly dimension.
      */
     virtual void weights(const Eigen::VectorXd& Wx, const Eigen::VectorXd& Wu);
+
+    /**
+     * Set the weights of the system. All variables are set to the same weight.
+     * @param wx Weight of the state.
+     * @param wu Weight of the control.
+     */
+    void weights(double Wx, double Wu);
 
     /**
      * Add a constraint to the system. The shared_ptr if not copied !
@@ -151,7 +159,7 @@ protected:
      * Check if the constraints still exist.
      * Output into std::cerr if something wrong happened.
      */
-    void checkConstraints();
+    void checkAndSecureConstraints();
 
 protected:
     struct Constraints {
@@ -172,6 +180,7 @@ protected:
 protected:
     std::shared_ptr<PreviewSystem> ps_;
     std::unique_ptr<SolverInterface> sol_;
+    std::vector<std::shared_ptr<Constraint>> securedConstraints_;
     Constraints constraints_;
 
     Eigen::MatrixXd Q_, Aineq_, Aeq_;

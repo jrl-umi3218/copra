@@ -76,6 +76,7 @@ void MPCTypeFull::Constraints::clear()
 MPCTypeFull::MPCTypeFull(SolverFlag sFlag)
     : ps_(nullptr)
     , sol_(solverFactory(sFlag))
+    , securedConstraints_()
     , constraints_()
     , Q_()
     , Aineq_()
@@ -138,13 +139,14 @@ void MPCTypeFull::initializeController(const std::shared_ptr<PreviewSystem>& ps)
 bool MPCTypeFull::solve()
 {
     solveAndBuildTime_.start();
-    checkConstraints();
+    checkAndSecureConstraints();
     updateSystem();
     makeQPForm();
     sol_->SI_problem(ps_->fullUDim, constraints_.nrEqConstr, constraints_.nrIneqConstr);
     solveTime_.start();
     bool success = sol_->SI_solve(Q_, c_, Aeq_, beq_, Aineq_, bineq_, lb_, ub_);
     solveTime_.stop();
+    securedConstraints_.clear(); // Release the constraints
     solveAndBuildTime_.stop();
     if (!success)
         sol_->SI_inform();
@@ -174,13 +176,27 @@ boost::timer::cpu_times MPCTypeFull::solveAndBuildTime() const noexcept
 
 void MPCTypeFull::weights(const Eigen::VectorXd& Wx, const Eigen::VectorXd& Wu)
 {
-    assert(Wx.rows() == ps_->xDim);
-    assert(Wu.rows() == ps_->uDim);
+    if (Wx.rows() == ps_->xDim && Wu.rows() == ps_->uDim) {
 
-    for (auto i = 0; i < ps_->nrStep; ++i) {
-        Wx_.segment(i * ps_->xDim, ps_->xDim) = Wx;
-        Wu_.segment(i * ps_->uDim, ps_->uDim) = Wu;
+        for (auto i = 0; i < ps_->nrStep; ++i) {
+            Wx_.segment(i * ps_->xDim, ps_->xDim) = Wx;
+            Wu_.segment(i * ps_->uDim, ps_->uDim) = Wu;
+        }
+    } else if (Wx.rows() == ps_->fullXDim && Wu.rows() == ps_->fullUDim) {
+        Wx_ = Wx;
+        Wu_ = Wu;
+    } else {
+        throw std::runtime_error("Wx and Wu should be respectively vectors of size (" + std::to_string(ps_->xDim)
+            + "-by-1) and (" + std::to_string(ps_->uDim) + "-by-1) or (" + std::to_string(ps_->fullXDim)
+            + "-by-1) and (" + std::to_string(ps_->fullUDim) + "-by-1) but you gave vectors of size (" + std::to_string(Wx.rows())
+            + "-by-1) and (" + std::to_string(Wu.rows()) + "-by-1).");
     }
+}
+
+void MPCTypeFull::weights(double Wx, double Wu)
+{
+    Wx_.setConstant(Wx);
+    Wu_.setConstant(Wu);
 }
 
 void MPCTypeFull::addConstraint(const std::shared_ptr<Constraint>& constr)
@@ -249,6 +265,8 @@ void MPCTypeFull::clearConstraintMatrices()
 
 void MPCTypeFull::updateSystem()
 {
+    if (ps_->isUpdated)
+        return;
     auto xDim = ps_->xDim;
     auto uDim = ps_->uDim;
 
@@ -264,8 +282,10 @@ void MPCTypeFull::updateSystem()
         ps_->xi.segment(i * xDim, xDim).noalias() = ps_->A * ps_->xi.segment((i - 1) * xDim, xDim) + ps_->d;
     }
 
-    for (auto& wpc : constraints_.wpConstr)
-        wpc.first.lock()->update(*ps_);
+    ps_->isUpdated = true;
+
+    for (auto& sp : securedConstraints_)
+        sp->update(*ps_);
 }
 
 void MPCTypeFull::makeQPForm()
@@ -301,28 +321,29 @@ void MPCTypeFull::makeQPForm()
     }
 }
 
-void MPCTypeFull::checkConstraints()
+void MPCTypeFull::checkAndSecureConstraints()
 {
     bool needNrUpdate = false;
 
-    auto checkConstr = [&needNrUpdate](auto& wpc, bool useWarn = false) {
+    auto checkConstr = [&needNrUpdate](auto& wpc, auto& sc, bool isCheckAllConstr = false) {
         for (auto itr = wpc.begin(); itr != wpc.end();) {
             if ((*itr).first.expired()) {
-                CONSTRAINT_DELETION_WARN(useWarn, "%s%s%s", "Dangling pointer to constraint.\nA '", (*itr).second.c_str(),
+                CONSTRAINT_DELETION_WARN(isCheckAllConstr, "%s%s%s", "Dangling pointer to constraint.\nA '", (*itr).second.c_str(),
                     "' has been destroyed.\nThe constraint has been removed from the controller");
                 needNrUpdate = true;
-                (void)useWarn; // Just to make the compiler understand it is used.
                 itr = wpc.erase(itr);
             } else {
+                if (isCheckAllConstr)
+                    sc.emplace_back((*itr).first.lock());
                 ++itr;
             }
         }
     };
 
-    checkConstr(constraints_.wpConstr, true);
-    checkConstr(constraints_.wpEqConstr);
-    checkConstr(constraints_.wpIneqConstr);
-    checkConstr(constraints_.wpBoundConstr);
+    checkConstr(constraints_.wpConstr, securedConstraints_, true);
+    checkConstr(constraints_.wpEqConstr, securedConstraints_);
+    checkConstr(constraints_.wpIneqConstr, securedConstraints_);
+    checkConstr(constraints_.wpBoundConstr, securedConstraints_);
 
     if (needNrUpdate) {
         constraints_.updateNr();
@@ -372,12 +393,19 @@ void MPCTypeLast::initializeController(const std::shared_ptr<PreviewSystem>& ps)
 
 void MPCTypeLast::weights(const Eigen::VectorXd& Wx, const Eigen::VectorXd& Wu)
 {
-    assert(Wx.rows() == ps_->xDim);
-    assert(Wu.rows() == ps_->uDim);
-
-    Wx_ = Wx;
-    for (auto i = 0; i < ps_->nrStep; ++i)
-        Wu_.segment(i * ps_->uDim, ps_->uDim) = Wu;
+    if (Wx.rows() == ps_->xDim && Wu.rows() == ps_->uDim) {
+        Wx_ = Wx;
+        for (auto i = 0; i < ps_->nrStep; ++i)
+            Wu_.segment(i * ps_->uDim, ps_->uDim) = Wu;
+    } else if (Wx.rows() == ps_->xDim && Wu.rows() == ps_->fullUDim) {
+        Wx_ = Wx;
+        Wu_ = Wu;
+    } else {
+        throw std::runtime_error("Wx and Wu should be respectively vectors of size (" + std::to_string(ps_->xDim)
+            + "-by-1) and (" + std::to_string(ps_->uDim) + "-by-1) or (" + std::to_string(ps_->xDim)
+            + "-by-1) and (" + std::to_string(ps_->fullUDim) + "-by-1) but you gave vectors of size (" + std::to_string(Wx.rows())
+            + "-by-1) and (" + std::to_string(Wu.rows()) + "-by-1).");
+    }
 }
 
 /*

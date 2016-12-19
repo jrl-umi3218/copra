@@ -102,6 +102,7 @@ BOOST_PYTHON_MODULE(_mpcontroller)
     class_<PreviewSystem>("PreviewSystem", no_init)
         .def("system", sys1)
         .def("system", sys2)
+        .def_readwrite("isUpdated", &PreviewSystem::isUpdated)
         .def_readwrite("nrStep", &PreviewSystem::nrStep)
         .def_readwrite("xDim", &PreviewSystem::xDim)
         .def_readwrite("uDim", &PreviewSystem::uDim)
@@ -197,7 +198,7 @@ BOOST_PYTHON_MODULE(_mpcontroller)
             this->MPCTypeFull::initializeController(ps);
         }
 
-        void weights(const Eigen::VectorXd& wx, const Eigen::VectorXd& wu)
+        void eigenWeights(const Eigen::VectorXd& wx, const Eigen::VectorXd& wu)
         {
             if (override weights = this->get_override("weights"))
                 weights(wx, wu);
@@ -205,7 +206,12 @@ BOOST_PYTHON_MODULE(_mpcontroller)
                 MPCTypeFull::weights(wx, wu);
         }
 
-        void default_weights(const Eigen::VectorXd& wx, const Eigen::VectorXd& wu)
+        void doubleWeight(double wx, double wu)
+        {
+            this->MPCTypeFull::weights(wx, wu);
+        }
+
+        void default_eigenWeights(const Eigen::VectorXd& wx, const Eigen::VectorXd& wu)
         {
             this->MPCTypeFull::weights(wx, wu);
         }
@@ -220,7 +226,8 @@ BOOST_PYTHON_MODULE(_mpcontroller)
         .def("solve", &MPCTypeFull::solve)
         .def("solveTime", &MPCTypeFull::solveTime)
         .def("solveAndBuildTime", &MPCTypeFull::solveAndBuildTime)
-        .def("weights", &MPCTypeFull::weights, &MPCTypeFullWrap::default_weights)
+        .def("weights", &MPCTypeFullWrap::eigenWeights, &MPCTypeFullWrap::default_eigenWeights)
+        .def("weights", &MPCTypeFullWrap::doubleWeight)
         .def("control", &MPCTypeFull::control, return_internal_reference<>())
         .def("trajectory", &MPCTypeFull::trajectory)
         .def("addConstraint", &MPCTypeFull::addConstraint)

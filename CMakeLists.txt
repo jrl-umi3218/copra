@@ -35,6 +35,7 @@ SETUP_PROJECT()
 
 set(BOOST_REQUIRED 1.48)
 set(BOOST_COMPONENTS system timer)
+set(Eigen_REQUIRED "eigen3 >= 3.2.7") # This eigen version allows move semantics.
 SEARCH_FOR_BOOST()
 SEARCH_FOR_EIGEN()
 

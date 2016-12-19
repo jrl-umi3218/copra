@@ -35,6 +35,7 @@ void PreviewSystem::system(const Eigen::MatrixXd& state, const Eigen::MatrixXd& 
     assert(state.rows() == xTraj.rows());
     assert(state.cols() == xInit.rows());
 
+    isUpdated = false;
     nrStep = numberOfSteps;
     xDim = static_cast<int>(state.cols());
     uDim = static_cast<int>(control.cols());

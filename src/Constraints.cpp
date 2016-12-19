@@ -27,6 +27,7 @@ namespace mpc {
 Constraint::Constraint(const std::string& name)
     : name_(name)
     , nrConstr_(0)
+    , fullSizeEntry_(false)
 {
 }
 
@@ -51,17 +52,35 @@ TrajectoryConstraint::TrajectoryConstraint(const Eigen::MatrixXd& E, const Eigen
     , E_(E)
     , f_(f)
 {
-    assert(E_.rows() == f.rows());
+    if (E.rows() != f.rows())
+        throw std::runtime_error("E and f should have same number of rows. E has "
+            + std::to_string(E.rows()) + " rows and f has " + std::to_string(f.rows()) + " rows.");
+}
+
+void TrajectoryConstraint::trajectory(const Eigen::MatrixXd& E, const Eigen::VectorXd& f)
+{
+    if (E_.rows() != E.rows() || E_.cols() != E.cols())
+        throw std::runtime_error("Bad dimension for E. It should be an (" + std::to_string(E_.rows()) + "-by-" + std::to_string(E_.cols())
+            + ") matrix but you gave an (" + std::to_string(E.rows()) + "-by-" + std::to_string(E.cols()) + ") matrix");
+    if (f_.rows() != f.rows())
+        throw std::runtime_error("Bad dimension for f. It should be an (" + std::to_string(f_.rows()) + "-by-1 column vector"
+            + ") but you gave an (" + std::to_string(f.rows()) + "-by-1 vector");
+    E_ = E;
+    f_ = f;
 }
 
 void TrajectoryConstraint::initializeConstraint(const PreviewSystem& ps)
 {
-    assert(E_.cols() == ps.xDim || E_.cols() == ps.fullXDim);
-
-    if (E_.cols() == ps.xDim)
+    if (E_.cols() == ps.xDim) {
         nrConstr_ = static_cast<int>(E_.rows()) * ps.nrStep;
-    else
+
+    } else if (E_.cols() == ps.fullXDim) {
+        fullSizeEntry_ = true;
         nrConstr_ = static_cast<int>(E_.rows());
+    } else {
+        throw std::runtime_error("E has a bad dimension. It should be an (nrConstr-by-" + std::to_string(ps.xDim) + ") or (nrConstr-by-"
+            + std::to_string(ps.fullXDim) + ") matrix and you gave an (nrConstr-by-" + std::to_string(E_.cols()) + ") matrix");
+    }
 
     A_.resize(nrConstr_, ps.fullUDim);
     b_.resize(nrConstr_);
@@ -69,9 +88,9 @@ void TrajectoryConstraint::initializeConstraint(const PreviewSystem& ps)
 
 void TrajectoryConstraint::update(const PreviewSystem& ps)
 {
-    if (E_.rows() == nrConstr_) {
-        A_ = E_ * ps.Psi;
-        b_ = f_ - E_ * (ps.Phi * ps.x0 + ps.xi);
+    if (fullSizeEntry_) {
+        A_.noalias() = E_ * ps.Psi;
+        b_.noalias() = f_ - E_ * (ps.Phi * ps.x0 + ps.xi);
     } else {
         auto nrLines = static_cast<int>(E_.rows());
         for (int i = 0; i < ps.nrStep; ++i) {
@@ -98,29 +117,44 @@ ControlConstraint::ControlConstraint(const Eigen::MatrixXd& E, const Eigen::Vect
     , E_(E)
     , f_(f)
 {
-    assert(E_.rows() == f.rows());
+    if (E_.rows() != f.rows())
+        throw std::runtime_error("E and f should have same number of rows. E has "
+            + std::to_string(E.rows()) + " rows and f has " + std::to_string(f.rows()) + " rows.");
+}
+
+void ControlConstraint::control(const Eigen::MatrixXd& E, const Eigen::VectorXd& f)
+{
+    if (E_.rows() != E.rows() || E_.cols() != E.cols())
+        throw std::runtime_error("Bad dimension for E. It should be an (" + std::to_string(E_.rows()) + "-by-" + std::to_string(E_.cols())
+            + ") matrix but you gave an (" + std::to_string(E.rows()) + "-by-" + std::to_string(E.cols()) + ") matrix");
+    if (f_.rows() != f.rows())
+        throw std::runtime_error("Bad dimension for f. It should be an (" + std::to_string(f_.rows()) + "-by-1 column vector"
+            + ") but you gave an (" + std::to_string(f.rows()) + "-by-1) vector");
+    E_ = E;
+    f_ = f;
 }
 
 void ControlConstraint::initializeConstraint(const PreviewSystem& ps)
 {
-    assert(E_.cols() == ps.uDim || E_.cols() == ps.fullUDim);
-
-    if (E_.cols() == ps.uDim)
+    if (E_.cols() == ps.uDim) {
         nrConstr_ = static_cast<int>(E_.rows()) * ps.nrStep;
-    else
+        A_.resize(nrConstr_, ps.fullUDim);
+        b_.resize(nrConstr_);
+        A_.setZero();
+    } else if (E_.cols() == ps.fullUDim) {
+        fullSizeEntry_ = true;
         nrConstr_ = static_cast<int>(E_.rows());
-
-    A_.resize(nrConstr_, ps.fullUDim);
-    b_.resize(nrConstr_);
-    A_.setZero();
+        A_ = std::move(E_);
+        b_ = std::move(f_);
+    } else {
+        throw std::runtime_error("E has a bad dimension. It should be an (nrConstr-by-" + std::to_string(ps.uDim) + ") or (nrConstr-by-"
+            + std::to_string(ps.fullUDim) + ") matrix but you gave an (nrConstr-by-" + std::to_string(E_.cols()) + ") matrix.");
+    }
 }
 
 void ControlConstraint::update(const PreviewSystem& ps)
 {
-    if (E_.rows() == nrConstr_) {
-        A_ = E_;
-        b_ = f_;
-    } else {
+    if (!fullSizeEntry_) {
         auto nrLines = static_cast<int>(E_.rows());
         for (int i = 0; i < ps.nrStep; ++i) {
             A_.block(i * nrLines, i * ps.uDim, nrLines, ps.uDim) = E_;
@@ -148,7 +182,10 @@ TrajectoryBoundConstraint::TrajectoryBoundConstraint(const Eigen::VectorXd& lowe
     , lowerLines_()
     , upperLines_()
 {
-    assert(lower_.rows() == upper_.rows());
+    if (lower.rows() != upper.rows())
+        throw std::runtime_error("lower and upper should have same number of rows. lower has "
+            + std::to_string(lower.rows()) + " rows and upper has " + std::to_string(upper.rows()) + " rows.");
+
     for (auto line = 0; line < lower_.rows(); ++line) {
         if (lower_(line) != -std::numeric_limits<double>::infinity())
             lowerLines_.push_back(line);
@@ -159,7 +196,9 @@ TrajectoryBoundConstraint::TrajectoryBoundConstraint(const Eigen::VectorXd& lowe
 
 void TrajectoryBoundConstraint::initializeConstraint(const PreviewSystem& ps)
 {
-    assert(lower_.rows() == ps.xDim);
+    if (lower_.rows() != ps.xDim && lower_.rows() != ps.fullXDim)
+        throw std::runtime_error("The lower and upper limit should be of dimension (" + std::to_string(ps.xDim) + "-by-1) or ("
+            + std::to_string(ps.fullXDim) + "-by-1) but are of size (" + std::to_string(lower_.rows()) + "-by-1).");
 
     nrConstr_ = static_cast<int>((lowerLines_.size() + upperLines_.size())) * ps.nrStep;
     A_.resize(nrConstr_, ps.fullUDim);
@@ -203,23 +242,47 @@ ControlBoundConstraint::ControlBoundConstraint(const Eigen::VectorXd& lower, con
     , lb_()
     , ub_()
 {
-    assert(lower_.rows() == upper_.rows());
+    if (lower.rows() != upper.rows())
+        throw std::runtime_error("lower and upper should have same number of rows. lower has "
+            + std::to_string(lower.rows()) + " rows and upper has " + std::to_string(upper.rows()) + " rows.");
+}
+
+void ControlBoundConstraint::controlBound(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper)
+{
+    if (lower_.rows() != lower.rows())
+        throw std::runtime_error("Bad dimension for lower. It should be an (" + std::to_string(lower_.rows())
+            + "-by-1) vector but you gave an (" + std::to_string(lower.rows()) + "-by-1) vector");
+    if (upper_.rows() != upper.rows())
+        throw std::runtime_error("Bad dimension for upper. It should be an (" + std::to_string(upper_.rows())
+            + "-by-1 vector) but you gave an (" + std::to_string(upper.rows()) + "-by-1) vector");
+    lower_ = lower;
+    upper_ = upper;
 }
 
 void ControlBoundConstraint::initializeConstraint(const PreviewSystem& ps)
 {
-    assert(lower_.rows() == ps.uDim);
-
-    nrConstr_ = ps.fullUDim;
-    lb_.resize(nrConstr_);
-    ub_.resize(nrConstr_);
+    if (lower_.rows() == ps.uDim && upper_.rows() == ps.uDim) {
+        nrConstr_ = ps.fullUDim;
+        lb_.resize(nrConstr_);
+        ub_.resize(nrConstr_);
+    } else if (lower_.rows() == ps.fullUDim && upper_.rows() == ps.fullUDim) {
+        fullSizeEntry_ = true;
+        nrConstr_ = static_cast<int>(lower_.rows());
+        lb_ = std::move(lower_);
+        ub_ = std::move(upper_);
+    } else {
+        throw std::runtime_error("The lower and upper limit should be of dimension (" + std::to_string(ps.uDim) + "-by-1) or ("
+            + std::to_string(ps.fullUDim) + "-by-1) but are of size (" + std::to_string(lower_.rows()) + "-by-1).");
+    }
 }
 
 void ControlBoundConstraint::update(const PreviewSystem& ps)
 {
-    for (int i = 0; i < ps.nrStep; ++i) {
-        ub_.segment(i * ps.uDim, ps.uDim) = upper_;
-        lb_.segment(i * ps.uDim, ps.uDim) = lower_;
+    if (!fullSizeEntry_) {
+        for (int i = 0; i < ps.nrStep; ++i) {
+            ub_.segment(i * ps.uDim, ps.uDim) = upper_;
+            lb_.segment(i * ps.uDim, ps.uDim) = lower_;
+        }
     }
 }
 

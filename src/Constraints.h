@@ -92,6 +92,7 @@ public:
 protected:
     std::string name_;
     int nrConstr_;
+    bool fullSizeEntry_;
 };
 
 /**
@@ -148,14 +149,26 @@ public:
      * @warning \f$E\f$ and \f$f\f$ size must be the size of one iteration.
      * @param E The matrix side of the constraint
      * @param f The vector side of the constraint
-     * @param isInequalityConstraint Whether the constraint is an Inequality (true) or an Equality (false).
+     * @param isInequalityConstraint Whether the constraint is an Inequality (true) or an Equality (false)
+     * @throw Throw an std::runtime_error if E and f have not the same number of rows
      */
     TrajectoryConstraint(const Eigen::MatrixXd& E, const Eigen::VectorXd& f, bool isInequalityConstraint = true);
+
+    /**
+     * Allow to modify the constraint. Thus, there is no need of recreating a new constraint 
+     * if several mpc are runned one after the other.
+     * @warning The dimension of E and f should not change!
+     * @param E The matrix side of the constraint
+     * @param f The vector side of the constraint
+     * @throw Throw an std::runtime_error if E or f is badly dimension
+     */
+    void trajectory(const Eigen::MatrixXd& E, const Eigen::VectorXd& f);
 
     /**
      * Initialize the constraint by resizing its inner matrices and vectors
      * and setting the number of constraints.
      * @param ps A preview system.
+     * @throw Throw an std::runtime_error if E or f is not of the dimension of the preview system.
      */
     void initializeConstraint(const PreviewSystem& ps) override;
 
@@ -182,7 +195,6 @@ private:
  * Depending on the parameter 'isInequalityConstraint' during the construction
  * it can be an Equality constraints \f$Eu = f\f$
  * or an Inequality constraints \f$Eu\leq f\f$.
- * @todo Gives the possiblity to set directly \f$A\f$ and \f$b\f$. 
  */
 class ControlConstraint final : public EqIneqConstraint {
 public:
@@ -195,8 +207,19 @@ public:
      * @param E The matrix side of the constraint
      * @param f The vector side of the constraint
      * @param isInequalityConstraint Whether the constraint is an Inequality (true) or an Equality (false).
+     * @throw Throw an std::runtime_error if E and f have not the same number of rows
      */
     ControlConstraint(const Eigen::MatrixXd& E, const Eigen::VectorXd& f, bool isInequalityConstraint = true);
+
+    /**
+     * Allow to modify the constraint. Thus, there is no need of recreating a new constraint 
+     * if several mpc are runned one after the other.
+     * @warning The dimension of E and f should not change!
+     * @param E The matrix side of the constraint
+     * @param f The vector side of the constraint
+     * @throw Throw an std::runtime_error if E or f is badly dimension
+     */
+    void control(const Eigen::MatrixXd& E, const Eigen::VectorXd& f);
 
     /**
      * Initialize the constraint by resizing its inner matrices and vectors
@@ -240,6 +263,7 @@ public:
      * @warning \f$\underline{x}\f$ and \f$\overline{x}\f$ size must be the size of one iteration.
      * @param lower The lower bound \f$\underline{x}\f$ of the constraint
      * @param upper The upper bound \f$\overline{x}\f$ of the constraint
+     * @throw Throw an std::runtime_error if lower and upper are not of the same dimension
      */
     TrajectoryBoundConstraint(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper);
 
@@ -247,6 +271,7 @@ public:
      * Initialize the constraint by resizing its inner matrices and vectors
      * and setting the number of constraints.
      * @param ps A preview system.
+     * @throw Throw an std::runtime_error if lower or upper is badly dimension
      */
     void initializeConstraint(const PreviewSystem& ps) override;
 
@@ -282,13 +307,25 @@ public:
      * @warning \f$\underline{u}\f$ and \f$\overline{u}\f$ size must be the size of one iteration.
      * @param lower The lower bound \f$\underline{u}\f$ of the constraint
      * @param upper The upper bound \f$\overline{u}\f$ of the constraint
+     * @throw Throw an std::runtime_error if lower and upper are not of the same dimension
      */
     ControlBoundConstraint(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper);
+
+    /**
+     * Allow to modify the constraint. Thus, there is no need of recreating a new constraint 
+     * if several mpc are runned one after the other.
+     * @warning The dimension of lower and upper should not change!
+     * @param lower The lower bound \f$\underline{u}\f$ of the constraint
+     * @param upper The upper bound \f$\overline{u}\f$ of the constraint
+     * @throw Throw an std::runtime_error if lower or upper is badly dimension
+     */
+    void controlBound(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper);
 
     /**
      * Initialize the constraint by resizing its inner matrices and vectors
      * and setting the number of constraints.
      * @param ps A preview system.
+     * @throw Throw an std::runtime_error if lower or upper is badly dimension
      */
     void initializeConstraint(const PreviewSystem& ps) override;
 
