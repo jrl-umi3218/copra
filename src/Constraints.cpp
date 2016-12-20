@@ -63,8 +63,8 @@ void TrajectoryConstraint::trajectory(const Eigen::MatrixXd& E, const Eigen::Vec
         throw std::runtime_error("Bad dimension for E. It should be an (" + std::to_string(E_.rows()) + "-by-" + std::to_string(E_.cols())
             + ") matrix but you gave an (" + std::to_string(E.rows()) + "-by-" + std::to_string(E.cols()) + ") matrix");
     if (f_.rows() != f.rows())
-        throw std::runtime_error("Bad dimension for f. It should be an (" + std::to_string(f_.rows()) + "-by-1 column vector"
-            + ") but you gave an (" + std::to_string(f.rows()) + "-by-1 vector");
+        throw std::runtime_error("Bad dimension for f. It should be an (" + std::to_string(f_.rows()) + "-by-1) vector"
+            + ") but you gave an (" + std::to_string(f.rows()) + "-by-1) vector");
     E_ = E;
     f_ = f;
 }
@@ -194,6 +194,29 @@ TrajectoryBoundConstraint::TrajectoryBoundConstraint(const Eigen::VectorXd& lowe
     }
 }
 
+void TrajectoryBoundConstraint::trajectoryBound(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper)
+{
+    if (lower_.rows() != lower.rows())
+        throw std::runtime_error("Bad dimension for lower. It should be an (" + std::to_string(lower_.rows())
+            + "-by-1) vector but you gave an (" + std::to_string(lower.rows()) + "-by-1) vector");
+    if (upper_.rows() != upper.rows())
+        throw std::runtime_error("Bad dimension for upper. It should be an (" + std::to_string(upper_.rows())
+            + "-by-1) vector but you gave an (" + std::to_string(upper.rows()) + "-by-1) vector");
+
+    lower_ = lower;
+    upper_ = upper;
+
+    lowerLines_.clear();
+    upperLines_.clear();
+
+    for (auto line = 0; line < lower_.rows(); ++line) {
+        if (lower_(line) != -std::numeric_limits<double>::infinity())
+            lowerLines_.push_back(line);
+        if (upper_(line) != std::numeric_limits<double>::infinity())
+            upperLines_.push_back(line);
+    }
+}
+
 void TrajectoryBoundConstraint::initializeConstraint(const PreviewSystem& ps)
 {
     if (lower_.rows() != ps.xDim && lower_.rows() != ps.fullXDim)
@@ -254,7 +277,7 @@ void ControlBoundConstraint::controlBound(const Eigen::VectorXd& lower, const Ei
             + "-by-1) vector but you gave an (" + std::to_string(lower.rows()) + "-by-1) vector");
     if (upper_.rows() != upper.rows())
         throw std::runtime_error("Bad dimension for upper. It should be an (" + std::to_string(upper_.rows())
-            + "-by-1 vector) but you gave an (" + std::to_string(upper.rows()) + "-by-1) vector");
+            + "-by-1) vector but you gave an (" + std::to_string(upper.rows()) + "-by-1) vector");
     lower_ = lower;
     upper_ = upper;
 }

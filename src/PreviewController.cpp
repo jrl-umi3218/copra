@@ -176,21 +176,25 @@ boost::timer::cpu_times MPCTypeFull::solveAndBuildTime() const noexcept
 
 void MPCTypeFull::weights(const Eigen::VectorXd& Wx, const Eigen::VectorXd& Wu)
 {
-    if (Wx.rows() == ps_->xDim && Wu.rows() == ps_->uDim) {
-
-        for (auto i = 0; i < ps_->nrStep; ++i) {
+    if (Wx.rows() == ps_->xDim)
+        for (auto i = 0; i < ps_->nrStep; ++i)
             Wx_.segment(i * ps_->xDim, ps_->xDim) = Wx;
-            Wu_.segment(i * ps_->uDim, ps_->uDim) = Wu;
-        }
-    } else if (Wx.rows() == ps_->fullXDim && Wu.rows() == ps_->fullUDim) {
+    else if (Wx.rows() == ps_->fullXDim)
         Wx_ = Wx;
+    else
+        throw std::runtime_error("Wx should be a vector of size (" + std::to_string(ps_->xDim)
+            + "-by-1) or (" + std::to_string(ps_->fullXDim)
+            + "-by-1) but you gave a vector of size (" + std::to_string(Wx.rows()) + "-by-1).");
+
+    if (Wu.rows() == ps_->uDim)
+        for (auto i = 0; i < ps_->nrStep; ++i)
+            Wu_.segment(i * ps_->uDim, ps_->uDim) = Wu;
+    else if (Wu.rows() == ps_->fullUDim)
         Wu_ = Wu;
-    } else {
-        throw std::runtime_error("Wx and Wu should be respectively vectors of size (" + std::to_string(ps_->xDim)
-            + "-by-1) and (" + std::to_string(ps_->uDim) + "-by-1) or (" + std::to_string(ps_->fullXDim)
-            + "-by-1) and (" + std::to_string(ps_->fullUDim) + "-by-1) but you gave vectors of size (" + std::to_string(Wx.rows())
-            + "-by-1) and (" + std::to_string(Wu.rows()) + "-by-1).");
-    }
+    else
+        throw std::runtime_error("Wu should be a vector of size (" + std::to_string(ps_->uDim)
+            + "-by-1) or (" + std::to_string(ps_->fullUDim)
+            + "-by-1) but you gave a vector of size (" + std::to_string(Wu.rows()) + "-by-1).");
 }
 
 void MPCTypeFull::weights(double Wx, double Wu)
@@ -265,24 +269,24 @@ void MPCTypeFull::clearConstraintMatrices()
 
 void MPCTypeFull::updateSystem()
 {
-    if (ps_->isUpdated)
-        return;
-    auto xDim = ps_->xDim;
-    auto uDim = ps_->uDim;
+    if (!ps_->isUpdated) {
+        auto xDim = ps_->xDim;
+        auto uDim = ps_->uDim;
 
-    ps_->Phi.block(0, 0, xDim, xDim) = ps_->A;
-    ps_->Psi.block(0, 0, xDim, uDim) = ps_->B;
-    ps_->xi.segment(0, xDim) = ps_->d;
+        ps_->Phi.block(0, 0, xDim, xDim) = ps_->A;
+        ps_->Psi.block(0, 0, xDim, uDim) = ps_->B;
+        ps_->xi.segment(0, xDim) = ps_->d;
 
-    for (auto i = 1; i < ps_->nrStep; ++i) {
-        ps_->Phi.block(i * xDim, 0, xDim, xDim).noalias() = ps_->A * ps_->Phi.block((i - 1) * xDim, 0, xDim, xDim);
-        for (auto j = 0; j < i; ++j)
-            ps_->Psi.block(i * xDim, j * uDim, xDim, uDim).noalias() = ps_->A * ps_->Psi.block((i - 1) * xDim, j * uDim, xDim, uDim);
-        ps_->Psi.block(i * xDim, i * uDim, xDim, uDim).noalias() = ps_->B;
-        ps_->xi.segment(i * xDim, xDim).noalias() = ps_->A * ps_->xi.segment((i - 1) * xDim, xDim) + ps_->d;
+        for (auto i = 1; i < ps_->nrStep; ++i) {
+            ps_->Phi.block(i * xDim, 0, xDim, xDim).noalias() = ps_->A * ps_->Phi.block((i - 1) * xDim, 0, xDim, xDim);
+            for (auto j = 0; j < i; ++j)
+                ps_->Psi.block(i * xDim, j * uDim, xDim, uDim).noalias() = ps_->A * ps_->Psi.block((i - 1) * xDim, j * uDim, xDim, uDim);
+            ps_->Psi.block(i * xDim, i * uDim, xDim, uDim).noalias() = ps_->B;
+            ps_->xi.segment(i * xDim, xDim).noalias() = ps_->A * ps_->xi.segment((i - 1) * xDim, xDim) + ps_->d;
+        }
+
+        ps_->isUpdated = true;
     }
-
-    ps_->isUpdated = true;
 
     for (auto& sp : securedConstraints_)
         sp->update(*ps_);
@@ -393,19 +397,21 @@ void MPCTypeLast::initializeController(const std::shared_ptr<PreviewSystem>& ps)
 
 void MPCTypeLast::weights(const Eigen::VectorXd& Wx, const Eigen::VectorXd& Wu)
 {
-    if (Wx.rows() == ps_->xDim && Wu.rows() == ps_->uDim) {
+    if (Wx.rows() == ps_->xDim)
         Wx_ = Wx;
+    else
+        throw std::runtime_error("Wx should be a vector of size (" + std::to_string(ps_->xDim)
+            + "-by-1) but you gave a vector of size (" + std::to_string(Wx.rows()) + "-by-1).");
+
+    if (Wu.rows() == ps_->uDim)
         for (auto i = 0; i < ps_->nrStep; ++i)
             Wu_.segment(i * ps_->uDim, ps_->uDim) = Wu;
-    } else if (Wx.rows() == ps_->xDim && Wu.rows() == ps_->fullUDim) {
-        Wx_ = Wx;
+    else if (Wu.rows() == ps_->fullUDim)
         Wu_ = Wu;
-    } else {
-        throw std::runtime_error("Wx and Wu should be respectively vectors of size (" + std::to_string(ps_->xDim)
-            + "-by-1) and (" + std::to_string(ps_->uDim) + "-by-1) or (" + std::to_string(ps_->xDim)
-            + "-by-1) and (" + std::to_string(ps_->fullUDim) + "-by-1) but you gave vectors of size (" + std::to_string(Wx.rows())
-            + "-by-1) and (" + std::to_string(Wu.rows()) + "-by-1).");
-    }
+    else
+        throw std::runtime_error("Wu should be a vector of size (" + std::to_string(ps_->uDim)
+            + "-by-1) or (" + std::to_string(ps_->fullUDim)
+            + "-by-1) but you gave a vector of size (" + std::to_string(Wu.rows()) + "-by-1).");
 }
 
 /*

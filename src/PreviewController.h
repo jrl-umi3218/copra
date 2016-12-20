@@ -200,6 +200,7 @@ protected:
  */
 class MPCTypeLast final : public MPCTypeFull {
 public:
+    using MPCTypeFull::weights;
     /**
      * See @see MPCTypeFull::MPCTypeFull
      */

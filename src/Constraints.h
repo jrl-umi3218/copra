@@ -268,6 +268,16 @@ public:
     TrajectoryBoundConstraint(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper);
 
     /**
+     * Allow to modify the constraint. Thus, there is no need of recreating a new constraint 
+     * if several mpc are runned one after the other.
+     * @warning The dimension of lower and upper should not change!
+     * @param lower The lower bound \f$\underline{x}\f$ of the constraint
+     * @param upper The upper bound \f$\overline{x}\f$ of the constraint
+     * @throw Throw an std::runtime_error if lower or upper is badly dimension
+     */
+    void trajectoryBound(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper);
+
+    /**
      * Initialize the constraint by resizing its inner matrices and vectors
      * and setting the number of constraints.
      * @param ps A preview system.

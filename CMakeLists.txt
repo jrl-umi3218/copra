@@ -4,9 +4,9 @@ include(cmake/base.cmake)
 include(cmake/eigen.cmake)
 include(cmake/boost.cmake)
 
-set(PROJECT_NAME ModelPreviewControl)
-set(PROJECT_DESCRIPTION "...")
-set(PROJECT_URL "")
+set(PROJECT_NAME modelpreviewcontrol)
+set(PROJECT_DESCRIPTION "This a generic model preview control")
+set(PROJECT_URL "https://github.com/vsamy/preview_controller")
 
 #SET(CXX_DISABLE_WERROR True)
 set(DOXYGEN_USE_MATHJAX "YES")
@@ -26,7 +26,8 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     endif()
 endif()
 
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+string(TOLOWER "${CMAKE_BUILD_TYPE}" lower_case)
+if(lower_case STREQUAL "debug")
     set(CMAKE_CXX_FLAGS_DEBUG "-D_DEBUG")
 endif()
 
