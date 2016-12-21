@@ -198,7 +198,7 @@ protected:
  * @warning This class waits for a discretized system ! Continuous systems are
  * not yet implemented.
  */
-class MPCTypeLast final : public MPCTypeFull {
+class MPCTypeLast : public MPCTypeFull {
 public:
     using MPCTypeFull::weights;
     /**

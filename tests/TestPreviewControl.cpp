@@ -144,6 +144,13 @@ struct EqSystem {
         f = x0;
     }
 
+    bool printErrorMessage(const std::runtime_error& e)
+    {
+        std::cout << e.what() << std::endl
+                  << std::endl;
+        return true;
+    }
+
     double T, mass;
     int nbStep;
     Eigen::MatrixXd A, B, E;
@@ -516,33 +523,16 @@ BOOST_FIXTURE_TEST_CASE(weightsErrorHandler, IneqSystem)
 
     fullController.weights(1.1, 2.2);
     lastController.weights(1.1, 2.2);
-    try {
-        fullController.weights(Eigen::VectorXd::Ones(5), wu);
-        BOOST_CHECK(false);
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl << std::endl;
-        BOOST_CHECK(true);
-    }
-    try {
-        fullController.weights(wx, Eigen::VectorXd::Ones(5));
-        BOOST_CHECK(false);
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl << std::endl;
-        BOOST_CHECK(true);
-    }
-    try {
-        lastController.weights(Eigen::VectorXd::Ones(5), wu);
-        BOOST_CHECK(false);
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl << std::endl;
-        BOOST_CHECK(true);
-    }
+    BOOST_REQUIRE_THROW(fullController.weights(Eigen::VectorXd::Ones(5), wu), std::runtime_error);
+    BOOST_REQUIRE_THROW(fullController.weights(wx, Eigen::VectorXd::Ones(5)), std::runtime_error);
+    BOOST_REQUIRE_THROW(lastController.weights(Eigen::VectorXd::Ones(5), wu), std::runtime_error);
+    BOOST_REQUIRE_THROW(lastController.weights(wx, Eigen::VectorXd::Ones(5)), std::runtime_error);
     try {
         lastController.weights(wx, Eigen::VectorXd::Ones(5));
-        BOOST_CHECK(false);
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl << std::endl;
-        BOOST_CHECK(true);
+    } catch (const std::runtime_error& e) {
+        std::cerr << "Test error message output" << std::endl;
+        std::cerr << e.what() << std::endl
+                  << std::endl;
     }
 }
 
@@ -552,37 +542,11 @@ BOOST_FIXTURE_TEST_CASE(TrajectoryConstrErrorHandler, IneqSystem)
     ps->system(A, B, c, x0, xd, nbStep);
     auto controller = mpc::MPCTypeFull(ps);
 
-    try {
-        auto trajConstr = std::make_shared<mpc::TrajectoryConstraint>(Eigen::MatrixXd::Identity(5, 5), Eigen::VectorXd::Ones(2));
-        BOOST_CHECK(false);
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl << std::endl;
-        BOOST_CHECK(true);
-    }
-    try {
-        auto trajConstr = std::make_shared<mpc::TrajectoryConstraint>(E, f);
-        trajConstr->trajectory(Eigen::MatrixXd::Identity(5, 5), f);
-        BOOST_CHECK(false);
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl << std::endl;
-        BOOST_CHECK(true);
-    }
-    try {
-        auto trajConstr = std::make_shared<mpc::TrajectoryConstraint>(E, f);
-        trajConstr->trajectory(E, Eigen::VectorXd::Ones(2));
-        BOOST_CHECK(false);
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl << std::endl;
-        BOOST_CHECK(true);
-    }
-    try {
-        auto trajConstr = std::make_shared<mpc::TrajectoryConstraint>(Eigen::MatrixXd::Identity(5, 5), Eigen::VectorXd::Ones(5));
-        controller.addConstraint(trajConstr);
-        BOOST_CHECK(false);
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl << std::endl;
-        BOOST_CHECK(true);
-    }
+    BOOST_REQUIRE_THROW(mpc::TrajectoryConstraint(Eigen::MatrixXd::Identity(5, 5), Eigen::VectorXd::Ones(2)), std::runtime_error);
+    auto trajConstr = std::make_shared<mpc::TrajectoryConstraint>(Eigen::MatrixXd::Identity(5, 5), Eigen::VectorXd::Ones(5));
+    BOOST_REQUIRE_THROW(trajConstr->trajectory(Eigen::MatrixXd::Identity(5, 5), f), std::runtime_error);
+    BOOST_REQUIRE_THROW(trajConstr->trajectory(E, Eigen::VectorXd::Ones(2)), std::runtime_error);
+    BOOST_REQUIRE_THROW(controller.addConstraint(trajConstr), std::runtime_error);
 }
 
 BOOST_FIXTURE_TEST_CASE(ControlConstrErrorHandler, IneqSystem)
@@ -591,37 +555,11 @@ BOOST_FIXTURE_TEST_CASE(ControlConstrErrorHandler, IneqSystem)
     ps->system(A, B, c, x0, xd, nbStep);
     auto controller = mpc::MPCTypeFull(ps);
 
-    try {
-        auto contConstr = std::make_shared<mpc::ControlConstraint>(Eigen::MatrixXd::Identity(5, 5), Eigen::VectorXd::Ones(2));
-        BOOST_CHECK(false);
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl << std::endl;
-        BOOST_CHECK(true);
-    }
-    try {
-        auto contConstr = std::make_shared<mpc::ControlConstraint>(G, h);
-        contConstr->control(Eigen::MatrixXd::Identity(5, 5), h);
-        BOOST_CHECK(false);
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl << std::endl;
-        BOOST_CHECK(true);
-    }
-    try {
-        auto contConstr = std::make_shared<mpc::ControlConstraint>(E, f);
-        contConstr->control(G, Eigen::VectorXd::Ones(2));
-        BOOST_CHECK(false);
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl << std::endl;
-        BOOST_CHECK(true);
-    }
-    try {
-        auto contConstr = std::make_shared<mpc::ControlConstraint>(Eigen::MatrixXd::Identity(5, 5), Eigen::VectorXd::Ones(5));
-        controller.addConstraint(contConstr);
-        BOOST_CHECK(false);
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl << std::endl;
-        BOOST_CHECK(true);
-    }
+    BOOST_REQUIRE_THROW(mpc::ControlConstraint(Eigen::MatrixXd::Identity(5, 5), Eigen::VectorXd::Ones(2)), std::runtime_error);
+    auto contConstr = std::make_shared<mpc::ControlConstraint>(Eigen::MatrixXd::Identity(5, 5), Eigen::VectorXd::Ones(5));
+    BOOST_REQUIRE_THROW(contConstr->control(Eigen::MatrixXd::Identity(5, 5), h), std::runtime_error);
+    BOOST_REQUIRE_THROW(contConstr->control(G, Eigen::VectorXd::Ones(2)), std::runtime_error);
+    BOOST_REQUIRE_THROW(controller.addConstraint(contConstr), std::runtime_error);
 }
 
 BOOST_FIXTURE_TEST_CASE(TrajectoryBoundConstrErrorHandler, BoundedSystem)
@@ -630,37 +568,11 @@ BOOST_FIXTURE_TEST_CASE(TrajectoryBoundConstrErrorHandler, BoundedSystem)
     ps->system(A, B, c, x0, xd, nbStep);
     auto controller = mpc::MPCTypeFull(ps);
 
-    try {
-        auto trajBoundConstr = std::make_shared<mpc::TrajectoryBoundConstraint>(Eigen::VectorXd::Ones(3), Eigen::VectorXd::Ones(2));
-        BOOST_CHECK(false);
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl << std::endl;
-        BOOST_CHECK(true);
-    }
-    try {
-        auto trajBoundConstr = std::make_shared<mpc::TrajectoryBoundConstraint>(xLower, xUpper);
-        trajBoundConstr->trajectoryBound(Eigen::VectorXd::Ones(3), xUpper);
-        BOOST_CHECK(false);
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl << std::endl;
-        BOOST_CHECK(true);
-    }
-    try {
-        auto trajBoundConstr = std::make_shared<mpc::TrajectoryBoundConstraint>(xLower, xUpper);
-        trajBoundConstr->trajectoryBound(xLower, Eigen::VectorXd::Ones(3));
-        BOOST_CHECK(false);
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl << std::endl;
-        BOOST_CHECK(true);
-    }
-    try {
-        auto trajBoundConstr = std::make_shared<mpc::TrajectoryBoundConstraint>(Eigen::VectorXd::Ones(3), Eigen::VectorXd::Ones(3));
-        controller.addConstraint(trajBoundConstr);
-        BOOST_CHECK(false);
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl << std::endl;
-        BOOST_CHECK(true);
-    }
+    BOOST_REQUIRE_THROW(mpc::TrajectoryBoundConstraint(Eigen::VectorXd::Ones(3), Eigen::VectorXd::Ones(2)), std::runtime_error);
+    auto tbConstr = std::make_shared<mpc::TrajectoryBoundConstraint>(Eigen::VectorXd::Ones(3), Eigen::VectorXd::Ones(3));
+    BOOST_REQUIRE_THROW(tbConstr->trajectoryBound(Eigen::VectorXd::Ones(3), xUpper), std::runtime_error);
+    BOOST_REQUIRE_THROW(tbConstr->trajectoryBound(xLower, Eigen::VectorXd::Ones(3)), std::runtime_error);
+    BOOST_REQUIRE_THROW(controller.addConstraint(tbConstr), std::runtime_error);
 }
 
 BOOST_FIXTURE_TEST_CASE(ControlBoundConstrErrorHandler, BoundedSystem)
@@ -669,35 +581,9 @@ BOOST_FIXTURE_TEST_CASE(ControlBoundConstrErrorHandler, BoundedSystem)
     ps->system(A, B, c, x0, xd, nbStep);
     auto controller = mpc::MPCTypeFull(ps);
 
-    try {
-        auto contBoundConstr = std::make_shared<mpc::ControlBoundConstraint>(Eigen::VectorXd::Ones(3), Eigen::VectorXd::Ones(2));
-        BOOST_CHECK(false);
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl << std::endl;
-        BOOST_CHECK(true);
-    }
-    try {
-        auto contBoundConstr = std::make_shared<mpc::ControlBoundConstraint>(uLower, uUpper);
-        contBoundConstr->controlBound(Eigen::VectorXd::Ones(3), uUpper);
-        BOOST_CHECK(false);
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl << std::endl;
-        BOOST_CHECK(true);
-    }
-    try {
-        auto contBoundConstr = std::make_shared<mpc::ControlBoundConstraint>(uLower, uUpper);
-        contBoundConstr->controlBound(uLower, Eigen::VectorXd::Ones(3));
-        BOOST_CHECK(false);
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl << std::endl;
-        BOOST_CHECK(true);
-    }
-    try {
-        auto contBoundConstr = std::make_shared<mpc::ControlBoundConstraint>(Eigen::VectorXd::Ones(3), Eigen::VectorXd::Ones(3));
-        controller.addConstraint(contBoundConstr);
-        BOOST_CHECK(false);
-    } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl << std::endl;
-        BOOST_CHECK(true);
-    }
+    BOOST_REQUIRE_THROW(mpc::ControlBoundConstraint(Eigen::VectorXd::Ones(3), Eigen::VectorXd::Ones(2)), std::runtime_error);
+    auto cbConstr = std::make_shared<mpc::ControlBoundConstraint>(Eigen::VectorXd::Ones(3), Eigen::VectorXd::Ones(3));
+    BOOST_REQUIRE_THROW(cbConstr->controlBound(Eigen::VectorXd::Ones(3), uUpper), std::runtime_error);
+    BOOST_REQUIRE_THROW(cbConstr->controlBound(uLower, Eigen::VectorXd::Ones(3)), std::runtime_error);
+    BOOST_REQUIRE_THROW(controller.addConstraint(cbConstr), std::runtime_error);
 }

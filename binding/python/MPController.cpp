@@ -43,12 +43,22 @@ std::shared_ptr<PreviewSystem> NewPreviewSystem()
     return std::make_shared<PreviewSystem>();
 }
 
-std::shared_ptr<TrajectoryConstraint> NewTrajectoryConstraint(const Eigen::MatrixXd& E, const Eigen::VectorXd& f, bool isInequalityConstraint = true)
+std::shared_ptr<TrajectoryConstraint> NewTrajectoryConstraint1(const Eigen::MatrixXd& E, const Eigen::VectorXd& f)
+{
+    return std::make_shared<TrajectoryConstraint>(E, f);
+}
+
+std::shared_ptr<TrajectoryConstraint> NewTrajectoryConstraint2(const Eigen::MatrixXd& E, const Eigen::VectorXd& f, bool isInequalityConstraint)
 {
     return std::make_shared<TrajectoryConstraint>(E, f, isInequalityConstraint);
 }
 
-std::shared_ptr<ControlConstraint> NewControlConstraint(const Eigen::MatrixXd& E, const Eigen::VectorXd& f, bool isInequalityConstraint = true)
+std::shared_ptr<ControlConstraint> NewControlConstraint1(const Eigen::MatrixXd& E, const Eigen::VectorXd& f)
+{
+    return std::make_shared<ControlConstraint>(E, f);
+}
+
+std::shared_ptr<ControlConstraint> NewControlConstraint2(const Eigen::MatrixXd& E, const Eigen::VectorXd& f, bool isInequalityConstraint = true)
 {
     return std::make_shared<ControlConstraint>(E, f, isInequalityConstraint);
 }
@@ -70,8 +80,10 @@ BOOST_PYTHON_MODULE(_mpcontroller)
     using namespace boost::python;
 
     def("NewPreviewSystem", &NewPreviewSystem);
-    def("NewTrajectoryConstraint", &NewTrajectoryConstraint);
-    def("NewControlConstraint", &NewControlConstraint);
+    def("NewTrajectoryConstraint", &NewTrajectoryConstraint1);
+    def("NewTrajectoryConstraint", &NewTrajectoryConstraint2);
+    def("NewControlConstraint", &NewControlConstraint1);
+    def("NewControlConstraint", &NewControlConstraint2);
     def("NewTrajectoryBoundConstraint", &NewTrajectoryBoundConstraint);
     def("NewControlBoundConstraint", &NewControlBoundConstraint);
 
@@ -174,10 +186,14 @@ BOOST_PYTHON_MODULE(_mpcontroller)
         .def("b", &EqIneqConstraint::b, return_internal_reference<>());
 
     // Delete constructor to enforce call of New<Name_of_constraint> function that return a shared_ptr.
-    class_<TrajectoryConstraint, boost::noncopyable, bases<EqIneqConstraint> >("TrajectoryConstraint", no_init);
-    class_<ControlConstraint, boost::noncopyable, bases<EqIneqConstraint> >("ControlConstraint", no_init);
-    class_<TrajectoryBoundConstraint, boost::noncopyable, bases<EqIneqConstraint> >("TrajectoryBoundConstraint", no_init);
+    class_<TrajectoryConstraint, boost::noncopyable, bases<EqIneqConstraint> >("TrajectoryConstraint", no_init)
+        .def("trajectory", &TrajectoryConstraint::trajectory);
+    class_<ControlConstraint, boost::noncopyable, bases<EqIneqConstraint> >("ControlConstraint", no_init)
+        .def("control", &ControlConstraint::control);
+    class_<TrajectoryBoundConstraint, boost::noncopyable, bases<EqIneqConstraint> >("TrajectoryBoundConstraint", no_init)
+        .def("trajectoryBound", &TrajectoryBoundConstraint::trajectoryBound);
     class_<ControlBoundConstraint, boost::noncopyable, bases<Constraint> >("ControlBoundConstraint", no_init)
+        .def("controlBound", &ControlBoundConstraint::controlBound)
         .def("lower", &ControlBoundConstraint::lower, return_internal_reference<>())
         .def("upper", &ControlBoundConstraint::upper, return_internal_reference<>());
 
@@ -234,9 +250,33 @@ BOOST_PYTHON_MODULE(_mpcontroller)
         .def("resetConstraints", &MPCTypeFull::resetConstraints);
 
     //MPCTypeLast
-    class_<MPCTypeLast, boost::noncopyable, bases<MPCTypeFull> >("MPCTypeLast",
+    struct MPCTypeLastWrap : MPCTypeLast, wrapper<MPCTypeLast> {
+        using MPCTypeLast::MPCTypeLast;
+
+        void eigenWeights(const Eigen::VectorXd& wx, const Eigen::VectorXd& wu)
+        {
+            if (override weights = this->get_override("weights"))
+                weights(wx, wu);
+            else
+                MPCTypeLast::weights(wx, wu);
+        }
+
+        void doubleWeight(double wx, double wu)
+        {
+            this->MPCTypeLast::weights(wx, wu);
+        }
+
+        void default_eigenWeights(const Eigen::VectorXd& wx, const Eigen::VectorXd& wu)
+        {
+            this->MPCTypeLast::weights(wx, wu);
+        }
+    };
+
+    class_<MPCTypeLastWrap, boost::noncopyable, bases<MPCTypeFull> >("MPCTypeLast",
         init<optional<SolverFlag> >())
-        .def(init<const std::shared_ptr<PreviewSystem>&, optional<SolverFlag> >());
+        .def(init<const std::shared_ptr<PreviewSystem>&, optional<SolverFlag> >())
+        .def("weights", &MPCTypeLastWrap::eigenWeights, &MPCTypeLastWrap::default_eigenWeights)
+        .def("weights", &MPCTypeLastWrap::doubleWeight);
 
     //cpu_times
     using namespace boost::timer;
