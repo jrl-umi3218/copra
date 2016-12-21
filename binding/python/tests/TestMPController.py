@@ -199,7 +199,6 @@ class TestMPC(unittest.TestCase):
         controller.addConstraint(contBdConstr)
 
         del trajConstr
-        del contConstr
 
         controller.weights(self.wx, self.wu)
 
@@ -208,7 +207,8 @@ class TestMPC(unittest.TestCase):
         del trajBdConstr
         del contBdConstr
 
-        self.assertTrue(controller.solve())
+        self.assertFalse(controller.solve())
+        self.assertTrue(controller.solve()) # Has kept the contConstr
 
     def test_preview_systeme_still_exist(self):
         ps = mpc.NewPreviewSystem()

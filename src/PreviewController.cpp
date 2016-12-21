@@ -212,6 +212,7 @@ void MPCTypeFull::addConstraint(const std::shared_ptr<Constraint>& constr)
 void MPCTypeFull::resetConstraints() noexcept
 {
     constraints_.clear();
+    securedConstraints_.clear();
     clearConstraintMatrices();
 }
 
@@ -223,6 +224,7 @@ void MPCTypeFull::addConstraintByType(std::shared_ptr<Constraint> constr)
 {
     constraints_.nrConstr += constr->nrConstr();
     constraints_.wpConstr.emplace_back(constr, constr->name());
+    securedConstraints_.emplace_back(constr);
     switch (constr->constraintType()) {
     case ConstraintFlag::EqualityConstraint: {
         constraints_.nrEqConstr += constr->nrConstr();
@@ -329,25 +331,24 @@ void MPCTypeFull::checkAndSecureConstraints()
 {
     bool needNrUpdate = false;
 
-    auto checkConstr = [&needNrUpdate](auto& wpc, auto& sc, bool isCheckAllConstr = false) {
+    auto checkConstr = [&needNrUpdate](auto& wpc, bool useWarn = false) {
         for (auto itr = wpc.begin(); itr != wpc.end();) {
             if ((*itr).first.expired()) {
-                CONSTRAINT_DELETION_WARN(isCheckAllConstr, "%s%s%s", "Dangling pointer to constraint.\nA '", (*itr).second.c_str(),
+                CONSTRAINT_DELETION_WARN(useWarn, "%s%s%s", "Dangling pointer to constraint.\nA '", (*itr).second.c_str(),
                     "' has been destroyed.\nThe constraint has been removed from the controller");
+                (void)useWarn;
                 needNrUpdate = true;
                 itr = wpc.erase(itr);
             } else {
-                if (isCheckAllConstr)
-                    sc.emplace_back((*itr).first.lock());
                 ++itr;
             }
         }
     };
 
-    checkConstr(constraints_.wpConstr, securedConstraints_, true);
-    checkConstr(constraints_.wpEqConstr, securedConstraints_);
-    checkConstr(constraints_.wpIneqConstr, securedConstraints_);
-    checkConstr(constraints_.wpBoundConstr, securedConstraints_);
+    checkConstr(constraints_.wpConstr, true);
+    checkConstr(constraints_.wpEqConstr);
+    checkConstr(constraints_.wpIneqConstr);
+    checkConstr(constraints_.wpBoundConstr);
 
     if (needNrUpdate) {
         constraints_.updateNr();
