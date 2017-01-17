@@ -88,17 +88,17 @@ BOOST_PYTHON_MODULE(_mpcontroller)
     def("NewControlBoundConstraint", &NewControlBoundConstraint, "Create a new instance of a ControlBoundConstraint shared_ptr");
 
     enum_<SolverFlag>("SolverFlag", "Flags to qp solver")
-        .value("DEFAULT", SolverFlag::DEFAULT, "Default flag (QuadProgDense)")
+        .value("DEFAULT", SolverFlag::DEFAULT)
 #ifdef LSSOL_SOLVER_FOUND
-        .value("LSSOL", SolverFlag::LSSOL, "LSSOL flag")
+        .value("LSSOL", SolverFlag::LSSOL)
 #endif
 #ifdef GUROBI_SOLVER_FOUND
-        .value("GUROBIDense", SolverFlag::GUROBIDense, "Dense version of Gurobi flag")
+        .value("GUROBIDense", SolverFlag::GUROBIDense)
 #endif
 #ifdef QLD_SOLVER_FOUND
-        .value("QLD", SolverFlag::QLD, "QLD flag")
+        .value("QLD", SolverFlag::QLD)
 #endif
-        .value("QuadProgDense", SolverFlag::QuadProgDense, "Dense version of QuadProg flag");
+        .value("QuadProgDense", SolverFlag::QuadProgDense);
 
     // Access Solvers from python
     def("pythonSolverFactory", &pythonSolverFactory, return_value_policy<manage_new_object>(), "Return a solver corresponding to the giden flag");
@@ -111,7 +111,7 @@ BOOST_PYTHON_MODULE(_mpcontroller)
         const Eigen::VectorXd&, const Eigen::VectorXd&, const Eigen::VectorXd&, int)
         = &PreviewSystem::system;
 
-    class_<PreviewSystem>("PreviewSystem", no_init, "The PreviewSystem is a read-write structure that holds all the information of the system.")
+    class_<PreviewSystem>("PreviewSystem", "The PreviewSystem is a read-write structure that holds all the information of the system.", no_init)
         .def("system", sys1)
         .def("system", sys2)
         .def_readwrite("isUpdated", &PreviewSystem::isUpdated)
@@ -131,10 +131,10 @@ BOOST_PYTHON_MODULE(_mpcontroller)
 
     //Constraint
     enum_<ConstraintFlag>("ConstraintFlag", "Flag to constraint type")
-        .value("Constraint", ConstraintFlag::Constraint, "Global constraint flag")
-        .value("EqualityConstraint", ConstraintFlag::EqualityConstraint, "Flag to equality constraint")
-        .value("InequalityConstraint", ConstraintFlag::InequalityConstraint, "Flag to inequality constraint")
-        .value("BoundConstraint", ConstraintFlag::BoundConstraint, "flag to bound constraint");
+        .value("Constraint", ConstraintFlag::Constraint)
+        .value("EqualityConstraint", ConstraintFlag::EqualityConstraint)
+        .value("InequalityConstraint", ConstraintFlag::InequalityConstraint)
+        .value("BoundConstraint", ConstraintFlag::BoundConstraint);
 
     struct ConstraintWrap : Constraint, wrapper<Constraint> {
         using Constraint::Constraint;
@@ -186,13 +186,13 @@ BOOST_PYTHON_MODULE(_mpcontroller)
         .def("b", &EqIneqConstraint::b, return_internal_reference<>());
 
     // Delete constructor to enforce call of New<Name_of_constraint> function that return a shared_ptr.
-    class_<TrajectoryConstraint, boost::noncopyable, bases<EqIneqConstraint> >("TrajectoryConstraint", no_init, "Trajectory constraint. The object if instansiable through a NewTrajectoryConstraint function")
+    class_<TrajectoryConstraint, boost::noncopyable, bases<EqIneqConstraint> >("TrajectoryConstraint", "Trajectory constraint. The object if instansiable through a NewTrajectoryConstraint function", no_init)
         .def("trajectory", &TrajectoryConstraint::trajectory);
-    class_<ControlConstraint, boost::noncopyable, bases<EqIneqConstraint> >("ControlConstraint", no_init, "Control constraint. The object if instansiable through a NewControlConstraint function")
+    class_<ControlConstraint, boost::noncopyable, bases<EqIneqConstraint> >("ControlConstraint", "Control constraint. The object if instansiable through a NewControlConstraint function", no_init)
         .def("control", &ControlConstraint::control);
-    class_<TrajectoryBoundConstraint, boost::noncopyable, bases<EqIneqConstraint> >("TrajectoryBoundConstraint", no_init, "Trajectory Bound constraint. The object if instansiable through a NewTrajectoryBoundConstraint function")
+    class_<TrajectoryBoundConstraint, boost::noncopyable, bases<EqIneqConstraint> >("TrajectoryBoundConstraint", "Trajectory Bound constraint. The object if instansiable through a NewTrajectoryBoundConstraint function", no_init)
         .def("trajectoryBound", &TrajectoryBoundConstraint::trajectoryBound);
-    class_<ControlBoundConstraint, boost::noncopyable, bases<Constraint> >("ControlBoundConstraint", no_init, "Control Bound constraint. The object if instansiable through a NewControlBoundConstraint function")
+    class_<ControlBoundConstraint, boost::noncopyable, bases<Constraint> >("ControlBoundConstraint", "Control Bound constraint. The object if instansiable through a NewControlBoundConstraint function", no_init)
         .def("controlBound", &ControlBoundConstraint::controlBound)
         .def("lower", &ControlBoundConstraint::lower, return_internal_reference<>())
         .def("upper", &ControlBoundConstraint::upper, return_internal_reference<>());
@@ -235,7 +235,7 @@ BOOST_PYTHON_MODULE(_mpcontroller)
 
     // The default copy-ctor is implicitely deleted due to ctor overloading
     class_<MPCTypeFullWrap, boost::noncopyable>("MPCTypeFull",
-        init<optional<SolverFlag> >(), "MPC. This class runs the mpc with the desired QP and fills the PreviewSystem it is attach to")
+        "MPC. This class runs the mpc with the desired QP and fills the PreviewSystem it is attach to", init<optional<SolverFlag> >())
         .def(init<const std::shared_ptr<PreviewSystem>&, optional<SolverFlag> >())
         .def("selectQPSolver", &MPCTypeFull::selectQPSolver)
         .def("initializeController", &MPCTypeFull::initializeController, &MPCTypeFullWrap::default_initializeController)
@@ -273,7 +273,7 @@ BOOST_PYTHON_MODULE(_mpcontroller)
     };
 
     class_<MPCTypeLastWrap, boost::noncopyable, bases<MPCTypeFull> >("MPCTypeLast",
-        init<optional<SolverFlag> >(), "Faster version of the FullType but neglect parts before final time")
+        "Faster version of the FullType but neglect parts before final time", init<optional<SolverFlag> >())
         .def(init<const std::shared_ptr<PreviewSystem>&, optional<SolverFlag> >())
         .def("weights", &MPCTypeLastWrap::eigenWeights, &MPCTypeLastWrap::default_eigenWeights)
         .def("weights", &MPCTypeLastWrap::doubleWeight);

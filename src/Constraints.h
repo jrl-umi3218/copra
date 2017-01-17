@@ -136,17 +136,16 @@ protected:
 /**
  * Trajectory constraint.
  * Depending on the parameter 'isInequalityConstraint' during the construction
- * it can be an Equality constraints \f$Ex = f\f$
- * or an Inequality constraints \f$Ex\leq f\f$.
+ * it can be an Equality constraints (\f$Ex = f\f$ or \f$EX = f\f$)
+ * or an Inequality constraints (\f$Ex\leq f\f$ or \f$EX\leq f\f$) with \f$X=[x_1^T ... x_{nrStep}^T]^T\f$.
  */
 class TrajectoryConstraint final : public EqIneqConstraint {
 public:
     /**
      * Constructor of the trajectory constraint.
-     * Create a constraint of type \f$Ex\leq f\f$ or \f$Ex = f\f$.
+     * Create a constraint of type \f$Ex\leq f\f$ or \f$Ex = f\f$ or \f$EX\leq f\f$ or \f$EX = f\f$ with \f$X=[x_1^T ... x_{nrStep}^T]^T\f$.
      * As \f$U\f$ is the optimization variable, \f$Ex\leq f\f$ or \f$Ex = f\f$
      * is transformed to be \f$AU\leq b\f$ or \f$AU = b\f$.
-     * @warning \f$E\f$ and \f$f\f$ size must be the size of one iteration.
      * @param E The matrix side of the constraint
      * @param f The vector side of the constraint
      * @param isInequalityConstraint Whether the constraint is an Inequality (true) or an Equality (false)
@@ -193,17 +192,16 @@ private:
 /**
  * Control constraint.
  * Depending on the parameter 'isInequalityConstraint' during the construction
- * it can be an Equality constraints \f$Eu = f\f$
- * or an Inequality constraints \f$Eu\leq f\f$.
+ * it can be an Equality constraints (\f$Eu = f\f$ or \f$EU = f\f$)
+ * or an Inequality constraints (\f$Eu\leq f\f$ or \f$EU\leq f\f$) with \f$U=[u_1^T ... u_{nrStep}^T]^T\f$
  */
 class ControlConstraint final : public EqIneqConstraint {
 public:
     /**
      * Constructor of the control constraint.
-     * Create a constraint of type \f$Eu\leq f\f$ or \f$Eu = f\f$.
+     * Create a constraint of type \f$Eu\leq f\f$ or \f$Eu = f\f$ or \f$EU = f\f$ or \f$EU\leq f\f$ with \f$U=[u_1^T ... u_{nrStep}^T]^T\f$.
      * As \f$U\f$ is the optimization variable, \f$Eu\leq f\f$ or \f$Eu = f\f$
      * is transformed to be \f$AU\leq b\f$ or \f$AU = b\f$.
-     * @warning \f$E\f$ and \f$f\f$ size must be the size of one iteration.
      * @param E The matrix side of the constraint
      * @param f The vector side of the constraint
      * @param isInequalityConstraint Whether the constraint is an Inequality (true) or an Equality (false).
@@ -257,10 +255,10 @@ class TrajectoryBoundConstraint final : public EqIneqConstraint {
 public:
     /**
      * Constructor of the trajectory Bound constraint.
-     * Create a constraint of type \f$\underline{x}\leq x\leq\overline{x}\f$.
+     * Create a constraint of type \f$\underline{x}\leq x\leq\overline{x}\f$ or \f$\underline{X}\leq X\leq\overline{X}\f$ with \f$X=[x_1^T ... x_{nrStep}^T]^T\f$
      * As \f$U\f$ is the optimization variable,
-     * it is transformed to be \f$AU\leq b\f$.
-     * @warning \f$\underline{x}\f$ and \f$\overline{x}\f$ size must be the size of one iteration.
+     * \f$\underline{x}\leq x\leq\overline{x}\f$ is transformed to be \f$AU\leq b\f$.
+     * @warning \f$\underline{X}\leq X\leq\overline{X}\f$ with \f$X=[x_1^T ... x_{nrStep}^T]^T\f$ is not yet implemented!
      * @param lower The lower bound \f$\underline{x}\f$ of the constraint
      * @param upper The upper bound \f$\overline{x}\f$ of the constraint
      * @throw Throw an std::runtime_error if lower and upper are not of the same dimension
@@ -311,10 +309,9 @@ class ControlBoundConstraint final : public Constraint {
 public:
     /**
      * Constructor of the trajectory Bound constraint.
-     * Create a constraint of type \f$\underline{u}\leq u\leq\overline{u}\f$.
+     * Create a constraint of type \f$\underline{u}\leq u\leq\overline{u}\f$ or \f$\underline{U}\leq U\leq\overline{U}\f$ with \f$U=[u_1^T ... u_{nrStep}^T]^T\f$
      * As \f$U\f$ is the optimization variable,
-     * it is transformed to be \f$\underline{U}\leq U\leq\overline{U}\f$.
-     * @warning \f$\underline{u}\f$ and \f$\overline{u}\f$ size must be the size of one iteration.
+     * \f$\underline{u}\leq u\leq\overline{u}\f$ is transformed to be \f$\underline{U}\leq U\leq\overline{U}\f$.
      * @param lower The lower bound \f$\underline{u}\f$ of the constraint
      * @param upper The upper bound \f$\overline{u}\f$ of the constraint
      * @throw Throw an std::runtime_error if lower and upper are not of the same dimension

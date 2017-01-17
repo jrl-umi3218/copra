@@ -219,11 +219,16 @@ void TrajectoryBoundConstraint::trajectoryBound(const Eigen::VectorXd& lower, co
 
 void TrajectoryBoundConstraint::initializeConstraint(const PreviewSystem& ps)
 {
-    if (lower_.rows() != ps.xDim && lower_.rows() != ps.fullXDim)
+    if (lower_.rows() == ps.xDim && upper_.rows() == ps.xDim) {
+        nrConstr_ = static_cast<int>((lowerLines_.size() + upperLines_.size())) * ps.nrStep;
+    } else if (lower_.rows() == ps.fullXDim && upper_.rows() == ps.fullXDim) {
+        nrConstr_ = static_cast<int>((lowerLines_.size() + upperLines_.size()));
+        fullSizeEntry_ = true;
+    } else {
         throw std::runtime_error("The lower and upper limit should be of dimension (" + std::to_string(ps.xDim) + "-by-1) or ("
             + std::to_string(ps.fullXDim) + "-by-1) but are of size (" + std::to_string(lower_.rows()) + "-by-1).");
+    }
 
-    nrConstr_ = static_cast<int>((lowerLines_.size() + upperLines_.size())) * ps.nrStep;
     A_.resize(nrConstr_, ps.fullUDim);
     b_.resize(nrConstr_);
 }
@@ -238,6 +243,8 @@ void TrajectoryBoundConstraint::update(const PreviewSystem& ps)
             b_(nrLines) = lower_(line) - delta(line + ps.xDim * step);
             ++nrLines;
         }
+        if (fullSizeEntry_)
+            break;
     }
 
     for (auto step = 0; step < ps.nrStep; ++step) {
@@ -246,6 +253,8 @@ void TrajectoryBoundConstraint::update(const PreviewSystem& ps)
             b_(nrLines) = upper_(line) - delta(line + ps.xDim * step);
             ++nrLines;
         }
+        if (fullSizeEntry_)
+            break;
     }
 }
 
