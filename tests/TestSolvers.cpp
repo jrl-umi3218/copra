@@ -1,28 +1,39 @@
-// This file is part of ModelPreviewController.
+// This file is part of mpc.
 
-// ModelPreviewController is free software: you can redistribute it and/or
+// mpc is free software: you can redistribute it and/or
 // modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// ModelPreviewController is distributed in the hope that it will be useful,
+// mpc is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with ModelPreviewController.  If not, see
+// along with mpc.  If not, see
 // <http://www.gnu.org/licenses/>.
 
 #define BOOST_TEST_MODULE TestSolvers
-#include <Eigen/Core>
-#include <boost/test/unit_test.hpp>
+
+// stl
 #include <iostream>
 #include <numeric>
 
-#include "QLDSolver.h"
+// boost
+#include <boost/test/unit_test.hpp>
+
+// eigen
+#include <Eigen/Core>
+
+// mpc
 #include "QuadProgSolver.h"
+
+// optional mpc
+#ifdef QLD_SOLVER_FOUND
+#include "QLDSolver.h"
+#endif
 #ifdef LSSOL_SOLVER_FOUND
 #include "LSSOLSolver.h"
 #endif
