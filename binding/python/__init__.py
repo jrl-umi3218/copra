@@ -1,14 +1,14 @@
-from _mpcontroller import SolverFlag
-from _mpcontroller import PreviewSystem
-from _mpcontroller import TrajectoryConstraint
-from _mpcontroller import ControlConstraint
-from _mpcontroller import MPCTypeFull
-from _mpcontroller import MPCTypeLast
-from _mpcontroller import NewPreviewSystem
-from _mpcontroller import NewTrajectoryConstraint
-from _mpcontroller import NewControlConstraint
-from _mpcontroller import NewTrajectoryBoundConstraint
-from _mpcontroller import NewControlBoundConstraint
+from _mpc import SolverFlag
+from _mpc import PreviewSystem
+from _mpc import TrajectoryConstraint
+from _mpc import ControlConstraint
+from _mpc import MPCTypeFull
+from _mpc import MPCTypeLast
+from _mpc import NewPreviewSystem
+from _mpc import NewTrajectoryConstraint
+from _mpc import NewControlConstraint
+from _mpc import NewTrajectoryBoundConstraint
+from _mpc import NewControlBoundConstraint
 
 __all__ = ["SolverFlag",
            "PreviewSystem",
