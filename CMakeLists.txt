@@ -4,7 +4,7 @@ include(cmake/base.cmake)
 include(cmake/eigen.cmake)
 include(cmake/boost.cmake)
 
-set(PROJECT_NAME modelpreviewcontrol)
+set(PROJECT_NAME mpc)
 set(PROJECT_DESCRIPTION "This a generic model preview control")
 set(PROJECT_URL "https://github.com/vsamy/preview_controller")
 
@@ -33,6 +33,9 @@ endif()
 
 project(${PROJECT_NAME} CXX)
 SETUP_PROJECT()
+
+# Include the automatically generated configuration files.
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/include/${HEADER_DIR})
 
 set(BOOST_REQUIRED 1.48)
 set(BOOST_COMPONENTS system timer)

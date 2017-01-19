@@ -1,23 +1,28 @@
 #To complete
 set(SOURCES SolverInterface.cpp QuadProgSolver.cpp 
     PreviewController.cpp PreviewSystem.cpp Constraints.cpp)
-set(HEADERS SolverInterface.h QuadProgSolver.h 
-    PreviewController.h PreviewSystem.h Constraints.h
-    solverUtils.h debugUtils.h)
+set(HEADERS 
+    ../include/SolverInterface.h 
+    ../include/QuadProgSolver.h 
+    ../include/PreviewController.h 
+    ../include/PreviewSystem.h 
+    ../include/Constraints.h
+    ../include/solverUtils.h 
+    ../include/debugUtils.h)
 
 if(${EIGEN_LSSOL_FOUND})
     list(APPEND SOURCES LSSOLSolver.cpp)
-    list(APPEND HEADERS LSSOLSolver.h)
+    list(APPEND HEADERS ../include/LSSOLSolver.h)
 endif()
 
 if(${EIGEN_GUROBI_FOUND})
     list(APPEND SOURCES GUROBISolver.cpp)
-    list(APPEND HEADERS GUROBISolver.h)
+    list(APPEND HEADERS ../include/GUROBISolver.h)
 endif()
 
 if(${EIGEN_QLD_FOUND})
     list(APPEND SOURCES QLDSolver.cpp)
-    list(APPEND HEADERS QLDSolver.h)
+    list(APPEND HEADERS ../include/QLDSolver.h)
 endif()
 
 include_directories(${Boost_INCLUDE_DIRS})
@@ -40,4 +45,7 @@ endif()
 
 set(INSTALL_PATH include/${PROJECT_NAME})
 install(FILES ${HEADERS} DESTINATION ${INSTALL_PATH})
-install(TARGETS ${PROJECT_NAME} DESTINATION "lib")
+install(TARGETS ${PROJECT_NAME}
+  RUNTIME DESTINATION bin
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib)
