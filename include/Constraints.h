@@ -1,25 +1,31 @@
-// This file is part of ModelPreviewController.
+// This file is part of mpc.
 
-// ModelPreviewController is free software: you can redistribute it and/or
+// mpc is free software: you can redistribute it and/or
 // modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// ModelPreviewController is distributed in the hope that it will be useful,
+// mpc is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with ModelPreviewController.  If not, see
+// along with mpc.  If not, see
 // <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include <Eigen/Core>
+// stl
 #include <string>
 #include <vector>
+
+// eigen
+#include <Eigen/Core>
+
+// mpc
+#include "config.hh"
 
 namespace mpc {
 
@@ -40,7 +46,7 @@ enum class ConstraintFlag {
  * Abstract base class that represents Constraints.
  * Any derived class of this one can be added to the PreviewController @see MPCTypeFull::addConstraint.
  */
-class Constraint {
+class MPC_DLLAPI Constraint {
 public:
     /**
      * Constructor of a constraint.
@@ -100,7 +106,7 @@ protected:
  * Even if Equality and Inequality constraints are different,
  * their matrices are written the same way.
  */
-class EqIneqConstraint : public Constraint {
+class MPC_DLLAPI EqIneqConstraint : public Constraint {
 public:
     /**
      * Constructor of a constraint.
@@ -139,7 +145,7 @@ protected:
  * it can be an Equality constraints (\f$Ex = f\f$ or \f$EX = f\f$)
  * or an Inequality constraints (\f$Ex\leq f\f$ or \f$EX\leq f\f$) with \f$X=[x_1^T ... x_{nrStep}^T]^T\f$.
  */
-class TrajectoryConstraint final : public EqIneqConstraint {
+class MPC_DLLAPI TrajectoryConstraint final : public EqIneqConstraint {
 public:
     /**
      * Constructor of the trajectory constraint.
@@ -195,7 +201,7 @@ private:
  * it can be an Equality constraints (\f$Eu = f\f$ or \f$EU = f\f$)
  * or an Inequality constraints (\f$Eu\leq f\f$ or \f$EU\leq f\f$) with \f$U=[u_1^T ... u_{nrStep}^T]^T\f$
  */
-class ControlConstraint final : public EqIneqConstraint {
+class MPC_DLLAPI ControlConstraint final : public EqIneqConstraint {
 public:
     /**
      * Constructor of the control constraint.
@@ -251,7 +257,7 @@ private:
  * @warning This constraint is defined in the QP as an Inequality constraint. 
  * It might be faster to transform yourself this constraint into an inequality constraint.
  */
-class TrajectoryBoundConstraint final : public EqIneqConstraint {
+class MPC_DLLAPI TrajectoryBoundConstraint final : public EqIneqConstraint {
 public:
     /**
      * Constructor of the trajectory Bound constraint.
@@ -305,7 +311,7 @@ private:
  * It bounds the optimization \f$\underline{u}\leq u \leq\overline{u}\f$
  * @todo Gives the possiblity to set directly \f$\underline{U}\f$ and \f$\overline{U}\f$. 
  */
-class ControlBoundConstraint final : public Constraint {
+class MPC_DLLAPI ControlBoundConstraint final : public Constraint {
 public:
     /**
      * Constructor of the trajectory Bound constraint.

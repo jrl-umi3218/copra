@@ -1,24 +1,33 @@
-// This file is part of ModelPreviewController.
+// This file is part of mpc.
 
-// ModelPreviewController is free software: you can redistribute it and/or
+// mpc is free software: you can redistribute it and/or
 // modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// ModelPreviewController is distributed in the hope that it will be useful,
+// mpc is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with ModelPreviewController.  If not, see
+// along with mpc.  If not, see
 // <http://www.gnu.org/licenses/>.
-
 #pragma once
 
-#include "QLDSolver.h"
+// stl
+#include <memory>
+#include <utility>
+
+// mpc
+#include "config.hh"
 #include "QuadProgSolver.h"
+
+// optional mpc
+#ifdef QLD_SOLVER_FOUND
+#include "QLDSolver.h"
+#endif
 #include "SolverInterface.h"
 #ifdef LSSOL_SOLVER_FOUND
 #include "LSSOLSolver.h"
@@ -27,8 +36,6 @@
 #include "GUROBISolver.h"
 #endif
 
-#include <memory>
-#include <utility>
 
 namespace mpc {
 
@@ -55,7 +62,7 @@ enum class SolverFlag {
  * @param flag Flag of the solver.
  * @return An unique pointer to the desired solver.
  */
-std::unique_ptr<SolverInterface> solverFactory(SolverFlag flag)
+std::unique_ptr<SolverInterface> MPC_DLLAPI solverFactory(SolverFlag flag)
 {
     switch (flag) {
 #ifdef LSSOL_SOLVER_FOUND

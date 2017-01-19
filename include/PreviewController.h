@@ -1,28 +1,36 @@
-// This file is part of ModelPreviewController.
+// This file is part of mpc.
 
-// ModelPreviewController is free software: you can redistribute it and/or
+// mpc is free software: you can redistribute it and/or
 // modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// ModelPreviewController is distributed in the hope that it will be useful,
+// mpc is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with ModelPreviewController.  If not, see
+// along with mpc.  If not, see
 // <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "solverUtils.h"
-#include <Eigen/Core>
-#include <boost/timer/timer.hpp>
+// stl
 #include <memory>
 #include <string>
 #include <vector>
+
+// boost
+#include <boost/timer/timer.hpp>
+
+// eigen
+#include <Eigen/Core>
+
+// mpc
+#include "config.hh"
+#include "solverUtils.h"
 
 namespace mpc {
 
@@ -41,7 +49,7 @@ enum class ConstraintFlag;
  * where \f$U\f$ is the optimization vector.
  * @warning This class waits for a discretized system ! Continuous systems are not yet implemented.
  */
-class MPCTypeFull {
+class MPC_DLLAPI MPCTypeFull {
 public:
     /**
      * Initialize problem variables to default and get the desired solver
@@ -198,7 +206,7 @@ protected:
  * @warning This class waits for a discretized system ! Continuous systems are
  * not yet implemented.
  */
-class MPCTypeLast : public MPCTypeFull {
+class MPC_DLLAPI MPCTypeLast : public MPCTypeFull {
 public:
     using MPCTypeFull::weights;
     /**
