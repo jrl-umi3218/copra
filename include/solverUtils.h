@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with mpc.  If not, see
 // <http://www.gnu.org/licenses/>.
+
 #pragma once
 
 // stl
@@ -21,8 +22,8 @@
 #include <utility>
 
 // mpc
-#include "config.hh"
 #include "QuadProgSolver.h"
+#include "config.hh"
 
 // optional mpc
 #ifdef QLD_SOLVER_FOUND
@@ -35,7 +36,6 @@
 #ifdef GUROBI_SOLVER_FOUND
 #include "GUROBISolver.h"
 #endif
-
 
 namespace mpc {
 
@@ -62,28 +62,7 @@ enum class SolverFlag {
  * @param flag Flag of the solver.
  * @return An unique pointer to the desired solver.
  */
-std::unique_ptr<SolverInterface> MPC_DLLAPI solverFactory(SolverFlag flag)
-{
-    switch (flag) {
-#ifdef LSSOL_SOLVER_FOUND
-    case SolverFlag::LSSOL:
-        return std::make_unique<LSSOLSolver>();
-#endif
-#ifdef GUROBI_SOLVER_FOUND
-    case SolverFlag::GUROBIDense:
-        return std::make_unique<GUROBISolver>();
-#endif
-#ifdef QLD_SOLVER_FOUND
-    case SolverFlag::QLD:
-        return std::make_unique<QLDSolver>();
-#endif
-    // case SolverFlag::QuadProgSparse:
-    //    return std::make_unique<QuadProgSparseSolver>();
-    case SolverFlag::QuadProgDense:
-    default:
-        return std::make_unique<QuadProgDenseSolver>();
-    }
-}
+std::unique_ptr<SolverInterface> MPC_DLLAPI solverFactory(SolverFlag flag);
 
 /**
  * Helper function to get a desired solver.
@@ -91,25 +70,6 @@ std::unique_ptr<SolverInterface> MPC_DLLAPI solverFactory(SolverFlag flag)
  * @param flag Flag of the solver.
  * @return The desired solver.
  */
-SolverInterface* pythonSolverFactory(SolverFlag flag)
-{
-    switch (flag) {
-#ifdef LSSOL_SOLVER_FOUND
-    case SolverFlag::LSSOL:
-        return new LSSOLSolver;
-#endif
-#ifdef GUROBI_SOLVER_FOUND
-    case SolverFlag::GUROBIDense:
-        return new GUROBISolver;
-#endif
-#ifdef QLD_SOLVER_FOUND
-    case SolverFlag::QLD:
-        return new QLDSolver;
-#endif
-    case SolverFlag::QuadProgDense:
-    default:
-        return new QuadProgDenseSolver;
-    }
-}
+SolverInterface* pythonSolverFactory(SolverFlag flag);
 
 } // namespace pc

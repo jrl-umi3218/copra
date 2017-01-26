@@ -1,5 +1,5 @@
 #To complete
-set(SOURCES SolverInterface.cpp QuadProgSolver.cpp 
+set(SOURCES SolverInterface.cpp QuadProgSolver.cpp  solverUtils.cpp
     previewController.cpp PreviewSystem.cpp Constraints.cpp)
 set(HEADERS 
     ../include/SolverInterface.h 
