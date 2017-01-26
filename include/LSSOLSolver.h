@@ -25,8 +25,8 @@
 #include <eigen-lssol/LSSOL.h>
 
 // mpc
-#include "config.hh"
 #include "SolverInterface.h"
+#include "config.hh"
 
 namespace mpc {
 

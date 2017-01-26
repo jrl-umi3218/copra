@@ -188,7 +188,7 @@ protected:
 protected:
     std::shared_ptr<PreviewSystem> ps_;
     std::unique_ptr<SolverInterface> sol_;
-    std::vector<std::shared_ptr<Constraint>> securedConstraints_;
+    std::vector<std::shared_ptr<Constraint> > securedConstraints_;
     Constraints constraints_;
 
     Eigen::MatrixXd Q_, Aineq_, Aeq_;

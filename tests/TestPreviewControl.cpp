@@ -32,8 +32,8 @@
 
 // mpc
 #include "Constraints.h"
-#include "previewController.h"
 #include "PreviewSystem.h"
+#include "previewController.h"
 #include "solverUtils.h"
 
 // The final point of the trajectory should be [val, 0] where val can be any value inferior to 0;

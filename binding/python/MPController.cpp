@@ -16,8 +16,8 @@
 // <http://www.gnu.org/licenses/>.
 
 #include "Constraints.h"
-#include "previewController.h"
 #include "PreviewSystem.h"
+#include "previewController.h"
 #include "solverUtils.h"
 #include <boost/python.hpp>
 #include <boost/timer/timer.hpp>
