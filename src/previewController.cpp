@@ -16,7 +16,7 @@
 // <http://www.gnu.org/licenses/>.
 
 // header
-#include "PreviewController.h"
+#include "previewController.h"
 
 // stl
 #include <algorithm>

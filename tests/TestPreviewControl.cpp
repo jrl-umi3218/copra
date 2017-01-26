@@ -32,7 +32,7 @@
 
 // mpc
 #include "Constraints.h"
-#include "PreviewController.h"
+#include "previewController.h"
 #include "PreviewSystem.h"
 #include "solverUtils.h"
 
