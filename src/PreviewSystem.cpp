@@ -60,6 +60,8 @@ void PreviewSystem::system(const Eigen::MatrixXd& state, const Eigen::MatrixXd& 
     Phi.setZero();
     Psi.setZero();
     xi.setZero();
+
+    isInitialized = true;
 }
 
 } // namespace mpc

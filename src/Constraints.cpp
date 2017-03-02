@@ -81,7 +81,7 @@ void TrajectoryConstraint::initializeConstraint(const PreviewSystem& ps)
         fullSizeEntry_ = true;
         nrConstr_ = static_cast<int>(E_.rows());
     } else {
-        throw std::runtime_error("E has a bad dimension. It should be an (nrConstr-by-" + std::to_string(ps.xDim) + ") or (nrConstr-by-"
+        throw std::runtime_error("E has the dimension of the PreviewSystem (nrConstr-by-" + std::to_string(ps.xDim) + ") or (nrConstr-by-"
             + std::to_string(ps.fullXDim) + ") matrix and you gave an (nrConstr-by-" + std::to_string(E_.cols()) + ") matrix");
     }
 
@@ -150,7 +150,7 @@ void ControlConstraint::initializeConstraint(const PreviewSystem& ps)
         A_ = std::move(E_);
         b_ = std::move(f_);
     } else {
-        throw std::runtime_error("E has a bad dimension. It should be an (nrConstr-by-" + std::to_string(ps.uDim) + ") or (nrConstr-by-"
+        throw std::runtime_error("E has the dimension of the PreviewSystem (nrConstr-by-" + std::to_string(ps.uDim) + ") or (nrConstr-by-"
             + std::to_string(ps.fullUDim) + ") matrix but you gave an (nrConstr-by-" + std::to_string(E_.cols()) + ") matrix.");
     }
 }
@@ -228,8 +228,8 @@ void TrajectoryBoundConstraint::initializeConstraint(const PreviewSystem& ps)
         nrConstr_ = static_cast<int>((lowerLines_.size() + upperLines_.size()));
         fullSizeEntry_ = true;
     } else {
-        throw std::runtime_error("The lower and upper limit should be of dimension (" + std::to_string(ps.xDim) + "-by-1) or ("
-            + std::to_string(ps.fullXDim) + "-by-1) but are of size (" + std::to_string(lower_.rows()) + "-by-1).");
+        throw std::runtime_error("The lower and upper limit should be of the dimension of the PreviewSystem (" + std::to_string(ps.xDim)
+            + "-by-1) or (" + std::to_string(ps.fullXDim) + "-by-1) but are of size (" + std::to_string(lower_.rows()) + "-by-1).");
     }
 
     A_.resize(nrConstr_, ps.fullUDim);
@@ -306,8 +306,8 @@ void ControlBoundConstraint::initializeConstraint(const PreviewSystem& ps)
         lb_ = std::move(lower_);
         ub_ = std::move(upper_);
     } else {
-        throw std::runtime_error("The lower and upper limit should be of dimension (" + std::to_string(ps.uDim) + "-by-1) or ("
-            + std::to_string(ps.fullUDim) + "-by-1) but are of size (" + std::to_string(lower_.rows()) + "-by-1).");
+        throw std::runtime_error("The lower and upper limit should be of the dimension of the PreviewSystem (" + std::to_string(ps.uDim)
+            + "-by-1) or (" + std::to_string(ps.fullUDim) + "-by-1) but are of size (" + std::to_string(lower_.rows()) + "-by-1).");
     }
 }
 

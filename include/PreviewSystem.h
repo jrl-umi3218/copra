@@ -59,12 +59,13 @@ struct MPC_DLLAPI PreviewSystem {
         const Eigen::VectorXd& bias, const Eigen::VectorXd& xInit,
         const Eigen::VectorXd& xTraj, int numberOfSteps);
 
-    bool isUpdated; /**< State whether or not the preview system has been updated. This is done when calling the solve function of a mpc. Calling @see system or setting this to false will force a new update*/
-    int nrStep; /**< The number of iteration to perform. */
-    int xDim; /**< The dimension of the state vector */
-    int uDim; /**< The dimension of the control vector */
-    int fullXDim; /**< The full dimension of the state vector (xDim*nbStep) */
-    int fullUDim; /**< The full dimension of the control vector (uDim*nbStep) */
+    bool isInitialized = false; /**< State whether or not the struct has been initialized (the method \see system has been called at least one time) */
+    bool isUpdated = false; /**< State whether or not the preview system has been updated. This is done when calling the solve function of a mpc. Calling \see system or setting this to false will force a new update*/
+    int nrStep = 0; /**< The number of iteration to perform. */
+    int xDim = 0; /**< The dimension of the state vector */
+    int uDim = 0; /**< The dimension of the control vector */
+    int fullXDim = 0; /**< The full dimension of the state vector (xDim*nbStep) */
+    int fullUDim = 0; /**< The full dimension of the control vector (uDim*nbStep) */
     Eigen::VectorXd x0; /**< The initial state */
     Eigen::VectorXd xd; /**< The desired trajectory or desired final point */
     Eigen::MatrixXd A; /**< The state matrix */

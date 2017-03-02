@@ -521,7 +521,7 @@ BOOST_FIXTURE_TEST_CASE(OneDofSystemTypeFullForEqSystem, EqSystem)
     BOOST_MESSAGE(ss.str());
 }
 
-BOOST_FIXTURE_TEST_CASE(weightsErrorHandler, IneqSystem)
+BOOST_FIXTURE_TEST_CASE(WeightsErrorHandler, IneqSystem)
 {
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, xd, nbStep);
