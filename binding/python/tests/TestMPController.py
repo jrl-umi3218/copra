@@ -1,5 +1,5 @@
 import unittest
-import mpcontroller as mpc
+import mpc
 from minieigen import *
 from sys import float_info
 
