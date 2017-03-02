@@ -143,7 +143,7 @@ protected:
      * Add constraints into constraints_ @see Constraints
      * @param constr The constraint to add
      */
-    void addConstraintByType(std::shared_ptr<Constraint> constr);
+    void addConstraintByType(const std::shared_ptr<Constraint>& constr);
 
     /**
      * Resize Aeq, beq, Aineq, bineq, ub, lb to default.
@@ -165,9 +165,10 @@ protected:
 
     /**
      * Check if the constraints still exist.
-     * Output into std::cerr if something wrong happened.
+     * In Debug mode: Output into std::cerr if a constraint has been deleted.
+     * In Release mode: No output.
      */
-    void checkAndSecureConstraints();
+    void checkDeleteConstraints();
 
 protected:
     struct Constraints {
@@ -175,20 +176,17 @@ protected:
         void clear();
         void updateNr();
 
-        int nrConstr;
         int nrEqConstr;
         int nrIneqConstr;
-        int nrBoundConstr;
-        std::vector<std::pair<std::weak_ptr<Constraint>, std::string> > wpConstr;
-        std::vector<std::pair<std::weak_ptr<EqIneqConstraint>, std::string> > wpEqConstr;
-        std::vector<std::pair<std::weak_ptr<EqIneqConstraint>, std::string> > wpIneqConstr;
-        std::vector<std::pair<std::weak_ptr<ControlBoundConstraint>, std::string> > wpBoundConstr;
+        std::vector<std::shared_ptr<Constraint> > spConstr;
+        std::vector<std::shared_ptr<EqIneqConstraint> > spEqConstr;
+        std::vector<std::shared_ptr<EqIneqConstraint> > spIneqConstr;
+        std::vector<std::shared_ptr<ControlBoundConstraint> > spBoundConstr;
     };
 
 protected:
     std::shared_ptr<PreviewSystem> ps_;
     std::unique_ptr<SolverInterface> sol_;
-    std::vector<std::shared_ptr<Constraint> > securedConstraints_;
     Constraints constraints_;
 
     Eigen::MatrixXd Q_, Aineq_, Aeq_;

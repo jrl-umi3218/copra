@@ -31,46 +31,37 @@
 namespace mpc {
 
 MPCTypeFull::Constraints::Constraints()
-    : nrConstr(0)
-    , nrEqConstr(0)
+    : nrEqConstr(0)
     , nrIneqConstr(0)
-    , nrBoundConstr(0)
-    , wpConstr()
-    , wpEqConstr()
-    , wpIneqConstr()
-    , wpBoundConstr()
+    , spConstr()
+    , spEqConstr()
+    , spIneqConstr()
+    , spBoundConstr()
 {
 }
 
 void MPCTypeFull::Constraints::updateNr()
 {
-    nrConstr = 0;
     nrEqConstr = 0;
     nrIneqConstr = 0;
-    nrBoundConstr = 0;
 
-    auto countConstr = [this](auto& wpc, int& nreq) {
-        for (auto& wp : wpc) {
-            nrConstr += wp.first.lock()->nrConstr();
-            nreq += wp.first.lock()->nrConstr();
-        }
+    auto countConstr = [](auto& spc, int& nreq) {
+        for (auto& sp : spc)
+            nreq += sp->nrConstr();
     };
 
-    countConstr(wpEqConstr, nrEqConstr);
-    countConstr(wpIneqConstr, nrIneqConstr);
-    countConstr(wpBoundConstr, nrBoundConstr);
+    countConstr(spEqConstr, nrEqConstr);
+    countConstr(spIneqConstr, nrIneqConstr);
 }
 
 void MPCTypeFull::Constraints::clear()
 {
-    nrConstr = 0;
     nrEqConstr = 0;
     nrIneqConstr = 0;
-    nrBoundConstr = 0;
-    wpConstr.clear();
-    wpEqConstr.clear();
-    wpIneqConstr.clear();
-    wpBoundConstr.clear();
+    spConstr.clear();
+    spEqConstr.clear();
+    spIneqConstr.clear();
+    spBoundConstr.clear();
 }
 
 /*************************************************************************************************
@@ -80,7 +71,6 @@ void MPCTypeFull::Constraints::clear()
 MPCTypeFull::MPCTypeFull(SolverFlag sFlag)
     : ps_(nullptr)
     , sol_(solverFactory(sFlag))
-    , securedConstraints_()
     , constraints_()
     , Q_()
     , Aineq_()
@@ -143,14 +133,13 @@ void MPCTypeFull::initializeController(const std::shared_ptr<PreviewSystem>& ps)
 bool MPCTypeFull::solve()
 {
     solveAndBuildTime_.start();
-    checkAndSecureConstraints();
     updateSystem();
     makeQPForm();
     sol_->SI_problem(ps_->fullUDim, constraints_.nrEqConstr, constraints_.nrIneqConstr);
     solveTime_.start();
     bool success = sol_->SI_solve(Q_, c_, Aeq_, beq_, Aineq_, bineq_, lb_, ub_);
     solveTime_.stop();
-    securedConstraints_.clear(); // Release the constraints
+    checkDeleteConstraints();
     solveAndBuildTime_.stop();
     if (!success)
         sol_->SI_inform();
@@ -216,7 +205,6 @@ void MPCTypeFull::addConstraint(const std::shared_ptr<Constraint>& constr)
 void MPCTypeFull::resetConstraints() noexcept
 {
     constraints_.clear();
-    securedConstraints_.clear();
     clearConstraintMatrices();
 }
 
@@ -224,39 +212,30 @@ void MPCTypeFull::resetConstraints() noexcept
  *  Protected methods
  */
 
-void MPCTypeFull::addConstraintByType(std::shared_ptr<Constraint> constr)
+void MPCTypeFull::addConstraintByType(const std::shared_ptr<Constraint>& constr)
 {
-    constraints_.nrConstr += constr->nrConstr();
-    constraints_.wpConstr.emplace_back(constr, constr->name());
-    securedConstraints_.emplace_back(constr);
     switch (constr->constraintType()) {
     case ConstraintFlag::EqualityConstraint: {
         constraints_.nrEqConstr += constr->nrConstr();
         // DownCasting to std::shared_ptr<EqIneqConstraint>
         // This is a safe operation since we know that the object is a derived class of a EqIneqConstraint
-        constraints_.wpEqConstr.emplace_back(std::static_pointer_cast<EqIneqConstraint>(constr), constr->name());
-        Aeq_.resize(constraints_.nrEqConstr, ps_->fullUDim);
-        beq_.resize(constraints_.nrEqConstr);
+        constraints_.spEqConstr.emplace_back(std::static_pointer_cast<EqIneqConstraint>(constr));
     } break;
     case ConstraintFlag::InequalityConstraint: {
         constraints_.nrIneqConstr += constr->nrConstr();
         // DownCasting to std::shared_ptr<EqIneqConstraint>
         // This is a safe operation since we know that the object is a derived class of a EqIneqConstraint
-        constraints_.wpIneqConstr.emplace_back(std::static_pointer_cast<EqIneqConstraint>(constr), constr->name());
-        Aineq_.resize(constraints_.nrIneqConstr, ps_->fullUDim);
-        bineq_.resize(constraints_.nrIneqConstr);
+        constraints_.spIneqConstr.emplace_back(std::static_pointer_cast<EqIneqConstraint>(constr));
     } break;
     case ConstraintFlag::BoundConstraint: {
-        constraints_.nrBoundConstr += constr->nrConstr();
         // DownCasting to std::shared_ptr<ControlBoundConstraint>
         // This is a safe operation since we know that the object is a ControlBoundConstraint
-        constraints_.wpBoundConstr.emplace_back(std::static_pointer_cast<ControlBoundConstraint>(constr), constr->name());
-        lb_.resize(constraints_.nrBoundConstr);
-        ub_.resize(constraints_.nrBoundConstr);
+        constraints_.spBoundConstr.emplace_back(std::static_pointer_cast<ControlBoundConstraint>(constr));
     } break;
     default:
-        break;
+        return;
     }
+    constraints_.spConstr.emplace_back(constr);
 }
 
 void MPCTypeFull::clearConstraintMatrices()
@@ -294,7 +273,17 @@ void MPCTypeFull::updateSystem()
         ps_->isUpdated = true;
     }
 
-    for (auto& sp : securedConstraints_)
+    constraints_.updateNr();
+    Aeq_.resize(constraints_.nrEqConstr, ps_->fullUDim);
+    beq_.resize(constraints_.nrEqConstr);
+    Aineq_.resize(constraints_.nrIneqConstr, ps_->fullUDim);
+    bineq_.resize(constraints_.nrIneqConstr);
+    lb_.resize(ps_->fullUDim);
+    ub_.resize(ps_->fullUDim);
+    lb_.setConstant(-std::numeric_limits<double>::max());
+    ub_.setConstant(std::numeric_limits<double>::max());
+
+    for (auto& sp : constraints_.spConstr)
         sp->update(*ps_);
 }
 
@@ -305,8 +294,7 @@ void MPCTypeFull::makeQPForm()
 
     int nrLines = 0;
     // Get Equality constraints
-    for (auto& wpc : constraints_.wpEqConstr) {
-        auto cstr = wpc.first.lock();
+    for (auto& cstr : constraints_.spEqConstr) {
         Aeq_.block(nrLines, 0, cstr->nrConstr(), ps_->fullUDim) = cstr->A();
         beq_.segment(nrLines, cstr->nrConstr()) = cstr->b();
         nrLines += cstr->nrConstr();
@@ -314,8 +302,7 @@ void MPCTypeFull::makeQPForm()
 
     // Get Inequality constraints
     nrLines = 0;
-    for (auto& wpc : constraints_.wpIneqConstr) {
-        auto cstr = wpc.first.lock();
+    for (auto& cstr : constraints_.spIneqConstr) {
         Aineq_.block(nrLines, 0, cstr->nrConstr(), ps_->fullUDim) = cstr->A();
         bineq_.segment(nrLines, cstr->nrConstr()) = cstr->b();
         nrLines += cstr->nrConstr();
@@ -323,46 +310,32 @@ void MPCTypeFull::makeQPForm()
 
     // Get Bound constraints
     nrLines = 0;
-    for (auto& wpc : constraints_.wpBoundConstr) {
-        auto cstr = wpc.first.lock();
+    for (auto& cstr : constraints_.spBoundConstr) {
         lb_.segment(nrLines, cstr->nrConstr()) = cstr->lower();
         ub_.segment(nrLines, cstr->nrConstr()) = cstr->upper();
         nrLines += cstr->nrConstr();
     }
 }
 
-void MPCTypeFull::checkAndSecureConstraints()
+void MPCTypeFull::checkDeleteConstraints()
 {
-    bool needNrUpdate = false;
-
-    auto checkConstr = [&needNrUpdate](auto& wpc, bool useWarn = false) {
-        for (auto itr = wpc.begin(); itr != wpc.end();) {
-            if ((*itr).first.expired()) {
-                CONSTRAINT_DELETION_WARN(useWarn, "%s%s%s", "Dangling pointer to constraint.\nA '", (*itr).second.c_str(),
+    auto checkConstr = [](auto& spc, bool useWarn = false) {
+        for (auto it = spc.begin(); it != spc.end();) {
+            if ((*it).use_count() <= 2) {
+                CONSTRAINT_DELETION_WARN(useWarn, "%s%s%s", "A '", (*it)->name().c_str(),
                     "' has been destroyed.\nThe constraint has been removed from the controller");
                 (void)useWarn;
-                needNrUpdate = true;
-                itr = wpc.erase(itr);
+                it = spc.erase(it);
             } else {
-                ++itr;
+                ++it;
             }
         }
     };
 
-    checkConstr(constraints_.wpConstr, true);
-    checkConstr(constraints_.wpEqConstr);
-    checkConstr(constraints_.wpIneqConstr);
-    checkConstr(constraints_.wpBoundConstr);
-
-    if (needNrUpdate) {
-        constraints_.updateNr();
-        Aeq_.resize(constraints_.nrEqConstr, ps_->fullUDim);
-        beq_.resize(constraints_.nrEqConstr);
-        Aineq_.resize(constraints_.nrIneqConstr, ps_->fullUDim);
-        bineq_.resize(constraints_.nrIneqConstr);
-        lb_.resize(constraints_.nrBoundConstr);
-        ub_.resize(constraints_.nrBoundConstr);
-    }
+    checkConstr(constraints_.spConstr, true);
+    checkConstr(constraints_.spEqConstr);
+    checkConstr(constraints_.spIneqConstr);
+    checkConstr(constraints_.spBoundConstr);
 }
 
 /*************************************************************************************************
@@ -391,8 +364,8 @@ void MPCTypeLast::initializeController(const std::shared_ptr<PreviewSystem>& ps)
     bineq_.resize(0);
     beq_.resize(0);
     lb_.resize(ps_->fullUDim);
-    lb_.setConstant(-std::numeric_limits<double>::max());
     ub_.resize(ps_->fullUDim);
+    lb_.setConstant(-std::numeric_limits<double>::max());
     ub_.setConstant(std::numeric_limits<double>::max());
     Wx_.resize(ps_->xDim);
     Wu_.resize(ps_->fullUDim);
@@ -432,8 +405,7 @@ void MPCTypeLast::makeQPForm()
 
     int nrLines = 0;
     // Get Equality constraints
-    for (auto& wpc : constraints_.wpEqConstr) {
-        auto cstr = wpc.first.lock();
+    for (auto& cstr : constraints_.spEqConstr) {
         Aeq_.block(nrLines, 0, cstr->nrConstr(), ps_->fullUDim) = cstr->A();
         beq_.segment(nrLines, cstr->nrConstr()) = cstr->b();
         nrLines += cstr->nrConstr();
@@ -441,8 +413,7 @@ void MPCTypeLast::makeQPForm()
 
     // Get Inequality constraints
     nrLines = 0;
-    for (auto& wpc : constraints_.wpIneqConstr) {
-        auto cstr = wpc.first.lock();
+    for (auto& cstr : constraints_.spIneqConstr) {
         Aineq_.block(nrLines, 0, cstr->nrConstr(), ps_->fullUDim) = cstr->A();
         bineq_.segment(nrLines, cstr->nrConstr()) = cstr->b();
         nrLines += cstr->nrConstr();
@@ -450,8 +421,7 @@ void MPCTypeLast::makeQPForm()
 
     // Get Bound constraints
     nrLines = 0;
-    for (auto& wpc : constraints_.wpBoundConstr) {
-        auto cstr = wpc.first.lock();
+    for (auto& cstr : constraints_.spBoundConstr) {
         lb_.segment(nrLines, cstr->nrConstr()) = cstr->lower();
         ub_.segment(nrLines, cstr->nrConstr()) = cstr->upper();
         nrLines += cstr->nrConstr();
