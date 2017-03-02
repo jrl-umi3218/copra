@@ -323,7 +323,7 @@ void MPCTypeFull::checkDeleteConstraints()
         for (auto it = spc.begin(); it != spc.end();) {
             if ((*it).use_count() <= 2) {
                 CONSTRAINT_DELETION_WARN(useWarn, "%s%s%s", "A '", (*it)->name().c_str(),
-                    "' has been destroyed.\nThe constraint has been removed from the controller");
+                    "' has been destroyed.\nThe constraint has been removed from the controller\n");
                 (void)useWarn;
                 it = spc.erase(it);
             } else {

@@ -59,7 +59,6 @@ struct MPC_DLLAPI PreviewSystem {
         const Eigen::VectorXd& bias, const Eigen::VectorXd& xInit,
         const Eigen::VectorXd& xTraj, int numberOfSteps);
 
-    bool isInitialized = false; /**< State whether or not the struct has been initialized (the method \see system has been called at least one time) */
     bool isUpdated = false; /**< State whether or not the preview system has been updated. This is done when calling the solve function of a mpc. Calling \see system or setting this to false will force a new update*/
     int nrStep = 0; /**< The number of iteration to perform. */
     int xDim = 0; /**< The dimension of the state vector */

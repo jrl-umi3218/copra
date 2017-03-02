@@ -5,7 +5,6 @@ from sys import float_info
 
 
 class TestMPC(unittest.TestCase):
-
     def setUp(self):
         self.timestep = 0.005
         self.mass = 5
@@ -165,21 +164,25 @@ class TestMPC(unittest.TestCase):
 
     @unittest.expectedFailure
     def test_fail_construct_trajectory(self):
-        ps = mpc.TrajectoryConstraint()
+        constr = mpc.TrajectoryConstraint()
 
     @unittest.expectedFailure
     def test_fail_construct_control(self):
-        ps = mpc.ControlConstraint()
+        print "here"
+        constr = mpc.ControlConstraint()
 
     @unittest.expectedFailure
     def test_fail_construct_control(self):
-        ps = mpc.TrajectoryBoundConstraint()
+        constr = mpc.TrajectoryBoundConstraint()
 
     @unittest.expectedFailure
     def test_fail_construct_control(self):
-        ps = mpc.ControlBoundConstraint()
+        constr = mpc.ControlBoundConstraint()
 
-    def test_constraint_dangling_pointer(self):
+    def test_constraint_deletion(self):
+        print "Testing 'test_constraint_deletion'."
+        print "In order to see the outputs, the mpc must be installed under Debug mode."
+
         ps = mpc.NewPreviewSystem()
         ps.system(self.A, self.B, self.c, self.x0, self.xd, self.nbStep)
 
@@ -208,7 +211,8 @@ class TestMPC(unittest.TestCase):
         del contBdConstr
 
         self.assertFalse(controller.solve())
-        self.assertTrue(controller.solve()) # Has kept the contConstr
+        self.assertTrue(controller.solve()) # Has kept the contConstr only
+        print 
 
     def test_preview_systeme_still_exist(self):
         ps = mpc.NewPreviewSystem()
