@@ -26,7 +26,9 @@ To compile you need the following tools:
 To have more qp solver:
  * [eigen-qld](https://github.com/jrl-umi3218/eigen-qld.git)
  * [GUROBI](http://www.gurobi.com/) >= 4.0
- * [eigen-gurobi](https://github.com/jrl-umi3218/eigen-gurobi)
+ * [eigen-gurobi](https://github.com/vsamy/eigen-gurobi)
+
+Also compatible with the LSSOL QP Solver. Unfortunately this not under public license.
 
 #### Building
 
