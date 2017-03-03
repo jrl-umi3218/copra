@@ -12,7 +12,6 @@ FINDPYTHON()
 include_directories("${PROJECT_SOURCE_DIR}/src")
 include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${PYTHON_INCLUDE_DIRS})
-#include_directories(${GUROBI_INCLUDE_DIRS})
 
 add_library(_mpc SHARED MPController.cpp)
 target_link_libraries(_mpc ${Boost_LIBRARIES} ${PROJECT_NAME})
