@@ -26,16 +26,7 @@
 #include "config.hh"
 
 // optional mpc
-#ifdef QLD_SOLVER_FOUND
-#include "QLDSolver.h"
-#endif
-#include "SolverInterface.h"
-#ifdef LSSOL_SOLVER_FOUND
-#include "LSSOLSolver.h"
-#endif
-#ifdef GUROBI_SOLVER_FOUND
-#include "GUROBISolver.h"
-#endif
+#include "solverConfig.h"
 
 namespace mpc {
 
@@ -44,13 +35,13 @@ namespace mpc {
  */
 enum class SolverFlag {
     DEFAULT, /**< Default solver (QuadProgDense solver) */
-#ifdef LSSOL_SOLVER_FOUND
+#ifdef EIGEN_LSSOL_FOUND
     LSSOL, /**< Standford LSSOL solver */
 #endif
-#ifdef GUROBI_SOLVER_FOUND
+#ifdef EIGEN_GUROBI_FOUND
     GUROBIDense, /**< Gurobi quadratic dense solver */
 #endif
-#ifdef QLD_SOLVER_FOUND
+#ifdef EIGEN_QLD_FOUND
     QLD, /**< Scilab QLD solver */
 #endif
     QuadProgDense, /**< DenseMatrix version of QuadProg solver */

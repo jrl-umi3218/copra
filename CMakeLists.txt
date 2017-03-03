@@ -34,8 +34,7 @@ endif()
 project(${PROJECT_NAME} CXX)
 SETUP_PROJECT()
 
-# Include the automatically generated configuration files.
-include_directories(${CMAKE_CURRENT_BINARY_DIR}/include/${HEADER_DIR})
+
 
 set(BOOST_REQUIRED 1.48)
 set(BOOST_COMPONENTS system timer)
@@ -49,6 +48,14 @@ ADD_OPTIONAL_DEPENDENCY("eigen-lssol")
 ADD_OPTIONAL_DEPENDENCY("eigen-gurobi")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -std=c++14 -pedantic")
+
+# Header for define and include found c++ QP solver
+configure_file(cmake/solverConfig.cmake.in include/${HEADER_DIR}/solverConfig.h)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/include/${HEADER_DIR}/solverConfig.h
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${HEADER_DIR})
+
+# Include the automatically generated configuration files.
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/include/${HEADER_DIR})
 
 add_subdirectory(src)
 add_subdirectory(tests)

@@ -31,15 +31,7 @@
 #include "QuadProgSolver.h"
 
 // optional mpc
-#ifdef QLD_SOLVER_FOUND
-#include "QLDSolver.h"
-#endif
-#ifdef LSSOL_SOLVER_FOUND
-#include "LSSOLSolver.h"
-#endif
-#ifdef GUROBI_SOLVER_FOUND
-#include "GUROBISolver.h"
-#endif
+#include "solverConfig.h"
 
 // Test base on scilab qld example:
 // https://help.scilab.org/doc/5.5.2/en_US/qld.html
@@ -82,7 +74,7 @@ BOOST_FIXTURE_TEST_CASE(QuadProgTest, Problem)
     BOOST_REQUIRE_EQUAL(qpQuadProg.SI_fail(), 0);
 }
 
-#ifdef QLD_SOLVER_FOUND
+#ifdef EIGEN_QLD_FOUND
 BOOST_FIXTURE_TEST_CASE(QLDOnQuadProgTest, Problem)
 {
     mpc::QLDSolver qpQLD;
@@ -101,7 +93,7 @@ BOOST_FIXTURE_TEST_CASE(QLDOnQuadProgTest, Problem)
 }
 #endif
 
-#ifdef LSSOL_SOLVER_FOUND
+#ifdef EIGEN_LSSOL_FOUND
 BOOST_FIXTURE_TEST_CASE(LSSOLOnQuadProgTest, Problem)
 {
     mpc::QuadProgDenseSolver qpQuadProg;
@@ -119,7 +111,7 @@ BOOST_FIXTURE_TEST_CASE(LSSOLOnQuadProgTest, Problem)
 }
 #endif
 
-#ifdef GUROBI_SOLVER_FOUND
+#ifdef EIGEN_GUROBI_FOUND
 BOOST_FIXTURE_TEST_CASE(GUROBIOnQuadProgTest, Problem)
 {
     mpc::QuadProgDenseSolver qpQuadProg;

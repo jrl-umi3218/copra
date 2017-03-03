@@ -34,7 +34,8 @@ T* get_pointer(std::shared_ptr<T> p)
 {
     return p.get();
 }
-}
+
+} // namespace boost
 
 namespace mpc {
 
@@ -89,13 +90,13 @@ BOOST_PYTHON_MODULE(_mpc)
 
     enum_<SolverFlag>("SolverFlag", "Flags to qp solver")
         .value("DEFAULT", SolverFlag::DEFAULT)
-#ifdef LSSOL_SOLVER_FOUND
+#ifdef EIGEN_LSSOL_FOUND
         .value("LSSOL", SolverFlag::LSSOL)
 #endif
-#ifdef GUROBI_SOLVER_FOUND
+#ifdef EIGEN_GUROBI_FOUND
         .value("GUROBIDense", SolverFlag::GUROBIDense)
 #endif
-#ifdef QLD_SOLVER_FOUND
+#ifdef EIGEN_QLD_FOUND
         .value("QLD", SolverFlag::QLD)
 #endif
         .value("QuadProgDense", SolverFlag::QuadProgDense);

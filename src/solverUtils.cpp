@@ -22,15 +22,15 @@ namespace mpc {
 std::unique_ptr<SolverInterface> MPC_DLLAPI solverFactory(SolverFlag flag)
 {
     switch (flag) {
-#ifdef LSSOL_SOLVER_FOUND
+#ifdef EIGEN_LSSOL_FOUND
     case SolverFlag::LSSOL:
         return std::make_unique<LSSOLSolver>();
 #endif
-#ifdef GUROBI_SOLVER_FOUND
+#ifdef EIGEN_GUROBI_FOUND
     case SolverFlag::GUROBIDense:
         return std::make_unique<GUROBISolver>();
 #endif
-#ifdef QLD_SOLVER_FOUND
+#ifdef EIGEN_QLD_FOUND
     case SolverFlag::QLD:
         return std::make_unique<QLDSolver>();
 #endif
@@ -45,15 +45,15 @@ std::unique_ptr<SolverInterface> MPC_DLLAPI solverFactory(SolverFlag flag)
 SolverInterface* pythonSolverFactory(SolverFlag flag)
 {
     switch (flag) {
-#ifdef LSSOL_SOLVER_FOUND
+#ifdef EIGEN_LSSOL_FOUND
     case SolverFlag::LSSOL:
         return new LSSOLSolver;
 #endif
-#ifdef GUROBI_SOLVER_FOUND
+#ifdef EIGEN_GUROBI_FOUND
     case SolverFlag::GUROBIDense:
         return new GUROBISolver;
 #endif
-#ifdef QLD_SOLVER_FOUND
+#ifdef EIGEN_QLD_FOUND
     case SolverFlag::QLD:
         return new QLDSolver;
 #endif
