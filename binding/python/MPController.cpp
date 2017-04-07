@@ -188,13 +188,13 @@ BOOST_PYTHON_MODULE(_mpc)
 
     // Delete constructor to enforce call of New<Name_of_constraint> function that return a shared_ptr.
     class_<TrajectoryConstraint, boost::noncopyable, bases<EqIneqConstraint> >("TrajectoryConstraint", "Trajectory constraint. The object if instansiable through a NewTrajectoryConstraint function", no_init)
-        .def("trajectory", &TrajectoryConstraint::trajectory);
+        .def("trajectory", &TrajectoryConstraint::reset);
     class_<ControlConstraint, boost::noncopyable, bases<EqIneqConstraint> >("ControlConstraint", "Control constraint. The object if instansiable through a NewControlConstraint function", no_init)
-        .def("control", &ControlConstraint::control);
+        .def("control", &ControlConstraint::reset);
     class_<TrajectoryBoundConstraint, boost::noncopyable, bases<EqIneqConstraint> >("TrajectoryBoundConstraint", "Trajectory Bound constraint. The object if instansiable through a NewTrajectoryBoundConstraint function", no_init)
-        .def("trajectoryBound", &TrajectoryBoundConstraint::trajectoryBound);
+        .def("trajectoryBound", &TrajectoryBoundConstraint::reset);
     class_<ControlBoundConstraint, boost::noncopyable, bases<Constraint> >("ControlBoundConstraint", "Control Bound constraint. The object if instansiable through a NewControlBoundConstraint function", no_init)
-        .def("controlBound", &ControlBoundConstraint::controlBound)
+        .def("controlBound", &ControlBoundConstraint::reset)
         .def("lower", &ControlBoundConstraint::lower, return_internal_reference<>())
         .def("upper", &ControlBoundConstraint::upper, return_internal_reference<>());
 

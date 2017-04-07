@@ -167,7 +167,7 @@ public:
      * @param f The vector side of the constraint
      * @throw Throw an std::runtime_error if E or f is badly dimension
      */
-    void trajectory(const Eigen::MatrixXd& E, const Eigen::VectorXd& f);
+    void reset(const Eigen::MatrixXd& E, const Eigen::VectorXd& f);
 
     /**
      * Initialize the constraint by resizing its inner matrices and vectors
@@ -223,7 +223,7 @@ public:
      * @param f The vector side of the constraint
      * @throw Throw an std::runtime_error if E or f is badly dimension
      */
-    void control(const Eigen::MatrixXd& E, const Eigen::VectorXd& f);
+    void reset(const Eigen::MatrixXd& E, const Eigen::VectorXd& f);
 
     /**
      * Initialize the constraint by resizing its inner matrices and vectors
@@ -336,7 +336,7 @@ public:
      * @param upper The upper bound \f$\overline{x}\f$ of the constraint
      * @throw Throw an std::runtime_error if lower or upper is badly dimension
      */
-    void trajectoryBound(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper);
+    void reset(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper);
 
     /**
      * Initialize the constraint by resizing its inner matrices and vectors
@@ -389,7 +389,7 @@ public:
      * @param upper The upper bound \f$\overline{u}\f$ of the constraint
      * @throw Throw an std::runtime_error if lower or upper is badly dimension
      */
-    void controlBound(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper);
+    void reset(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper);
 
     /**
      * Initialize the constraint by resizing its inner matrices and vectors

@@ -551,8 +551,8 @@ BOOST_FIXTURE_TEST_CASE(TrajectoryConstrErrorHandler, IneqSystem)
 
     BOOST_REQUIRE_THROW(mpc::TrajectoryConstraint(Eigen::MatrixXd::Identity(5, 5), Eigen::VectorXd::Ones(2)), std::runtime_error);
     auto trajConstr = std::make_shared<mpc::TrajectoryConstraint>(Eigen::MatrixXd::Identity(5, 5), Eigen::VectorXd::Ones(5));
-    BOOST_REQUIRE_THROW(trajConstr->trajectory(Eigen::MatrixXd::Identity(5, 5), f), std::runtime_error);
-    BOOST_REQUIRE_THROW(trajConstr->trajectory(E, Eigen::VectorXd::Ones(2)), std::runtime_error);
+    BOOST_REQUIRE_THROW(trajConstr->reset(Eigen::MatrixXd::Identity(5, 5), f), std::runtime_error);
+    BOOST_REQUIRE_THROW(trajConstr->reset(E, Eigen::VectorXd::Ones(2)), std::runtime_error);
     BOOST_REQUIRE_THROW(controller.addConstraint(trajConstr), std::runtime_error);
 }
 
@@ -564,8 +564,8 @@ BOOST_FIXTURE_TEST_CASE(ControlConstrErrorHandler, IneqSystem)
 
     BOOST_REQUIRE_THROW(mpc::ControlConstraint(Eigen::MatrixXd::Identity(5, 5), Eigen::VectorXd::Ones(2)), std::runtime_error);
     auto contConstr = std::make_shared<mpc::ControlConstraint>(Eigen::MatrixXd::Identity(5, 5), Eigen::VectorXd::Ones(5));
-    BOOST_REQUIRE_THROW(contConstr->control(Eigen::MatrixXd::Identity(5, 5), h), std::runtime_error);
-    BOOST_REQUIRE_THROW(contConstr->control(G, Eigen::VectorXd::Ones(2)), std::runtime_error);
+    BOOST_REQUIRE_THROW(contConstr->reset(Eigen::MatrixXd::Identity(5, 5), h), std::runtime_error);
+    BOOST_REQUIRE_THROW(contConstr->reset(G, Eigen::VectorXd::Ones(2)), std::runtime_error);
     BOOST_REQUIRE_THROW(controller.addConstraint(contConstr), std::runtime_error);
 }
 
@@ -577,8 +577,8 @@ BOOST_FIXTURE_TEST_CASE(TrajectoryBoundConstrErrorHandler, BoundedSystem)
 
     BOOST_REQUIRE_THROW(mpc::TrajectoryBoundConstraint(Eigen::VectorXd::Ones(3), Eigen::VectorXd::Ones(2)), std::runtime_error);
     auto tbConstr = std::make_shared<mpc::TrajectoryBoundConstraint>(Eigen::VectorXd::Ones(3), Eigen::VectorXd::Ones(3));
-    BOOST_REQUIRE_THROW(tbConstr->trajectoryBound(Eigen::VectorXd::Ones(3), xUpper), std::runtime_error);
-    BOOST_REQUIRE_THROW(tbConstr->trajectoryBound(xLower, Eigen::VectorXd::Ones(3)), std::runtime_error);
+    BOOST_REQUIRE_THROW(tbConstr->reset(Eigen::VectorXd::Ones(3), xUpper), std::runtime_error);
+    BOOST_REQUIRE_THROW(tbConstr->reset(xLower, Eigen::VectorXd::Ones(3)), std::runtime_error);
     BOOST_REQUIRE_THROW(controller.addConstraint(tbConstr), std::runtime_error);
 }
 
@@ -590,7 +590,7 @@ BOOST_FIXTURE_TEST_CASE(ControlBoundConstrErrorHandler, BoundedSystem)
 
     BOOST_REQUIRE_THROW(mpc::ControlBoundConstraint(Eigen::VectorXd::Ones(3), Eigen::VectorXd::Ones(2)), std::runtime_error);
     auto cbConstr = std::make_shared<mpc::ControlBoundConstraint>(Eigen::VectorXd::Ones(3), Eigen::VectorXd::Ones(3));
-    BOOST_REQUIRE_THROW(cbConstr->controlBound(Eigen::VectorXd::Ones(3), uUpper), std::runtime_error);
-    BOOST_REQUIRE_THROW(cbConstr->controlBound(uLower, Eigen::VectorXd::Ones(3)), std::runtime_error);
+    BOOST_REQUIRE_THROW(cbConstr->reset(Eigen::VectorXd::Ones(3), uUpper), std::runtime_error);
+    BOOST_REQUIRE_THROW(cbConstr->reset(uLower, Eigen::VectorXd::Ones(3)), std::runtime_error);
     BOOST_REQUIRE_THROW(controller.addConstraint(cbConstr), std::runtime_error);
 }
