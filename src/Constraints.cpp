@@ -60,7 +60,7 @@ TrajectoryConstraint::TrajectoryConstraint(const Eigen::MatrixXd& E, const Eigen
             + std::to_string(E.rows()) + " rows and f has " + std::to_string(f.rows()) + " rows.");
 }
 
-void TrajectoryConstraint::trajectory(const Eigen::MatrixXd& E, const Eigen::VectorXd& f)
+void TrajectoryConstraint::reset(const Eigen::MatrixXd& E, const Eigen::VectorXd& f)
 {
     if (E_.rows() != E.rows() || E_.cols() != E.cols())
         throw std::runtime_error("Bad dimension for E. It should be an (" + std::to_string(E_.rows()) + "-by-" + std::to_string(E_.cols())
@@ -125,7 +125,7 @@ ControlConstraint::ControlConstraint(const Eigen::MatrixXd& E, const Eigen::Vect
             + std::to_string(E.rows()) + " rows and f has " + std::to_string(f.rows()) + " rows.");
 }
 
-void ControlConstraint::control(const Eigen::MatrixXd& E, const Eigen::VectorXd& f)
+void ControlConstraint::reset(const Eigen::MatrixXd& E, const Eigen::VectorXd& f)
 {
     if (E_.rows() != E.rows() || E_.cols() != E.cols())
         throw std::runtime_error("Bad dimension for E. It should be an (" + std::to_string(E_.rows()) + "-by-" + std::to_string(E_.cols())
@@ -175,6 +175,78 @@ ConstraintFlag ControlConstraint::constraintType()
 }
 
 /*************************************************************************************************
+ *                                      Mixed Constraint                                         *
+ *************************************************************************************************/
+
+MixedConstraint::MixedConstraint(const Eigen::MatrixXd& E, const Eigen::MatrixXd& G, const Eigen::VectorXd& f, bool isInequalityConstraint)
+    : EqIneqConstraint("Control", isInequalityConstraint)
+    , E_(E)
+    , G_(G)
+    , f_(f)
+{
+    /*
+    if (E_.rows() != f.rows())
+        throw std::runtime_error("E and f should have same number of rows. E has "
+            + std::to_string(E.rows()) + " rows and f has " + std::to_string(f.rows()) + " rows.");
+    */
+}
+
+void MixedConstraint::reset(const Eigen::MatrixXd& /*E*/, const Eigen::MatrixXd& /*E*/, const Eigen::VectorXd& /*E*/)
+{
+    /*
+    if (E_.rows() != E.rows() || E_.cols() != E.cols())
+        throw std::runtime_error("Bad dimension for E. It should be an (" + std::to_string(E_.rows()) + "-by-" + std::to_string(E_.cols())
+            + ") matrix but you gave an (" + std::to_string(E.rows()) + "-by-" + std::to_string(E.cols()) + ") matrix");
+    if (f_.rows() != f.rows())
+        throw std::runtime_error("Bad dimension for f. It should be an (" + std::to_string(f_.rows()) + "-by-1 column vector"
+            + ") but you gave an (" + std::to_string(f.rows()) + "-by-1) vector");
+    E_ = E;
+    f_ = f;
+    */
+}
+
+void MixedConstraint::initializeConstraint(const PreviewSystem& /*E*/)
+{
+    /*
+    if (E_.cols() == ps.uDim) {
+        nrConstr_ = static_cast<int>(E_.rows()) * ps.nrStep;
+        A_.resize(nrConstr_, ps.fullUDim);
+        b_.resize(nrConstr_);
+        A_.setZero();
+    } else if (E_.cols() == ps.fullUDim) {
+        fullSizeEntry_ = true;
+        nrConstr_ = static_cast<int>(E_.rows());
+        A_ = std::move(E_);
+        b_ = std::move(f_);
+    } else {
+        throw std::runtime_error("E has the dimension of the PreviewSystem (nrConstr-by-" + std::to_string(ps.uDim) + ") or (nrConstr-by-"
+            + std::to_string(ps.fullUDim) + ") matrix but you gave an (nrConstr-by-" + std::to_string(E_.cols()) + ") matrix.");
+    }
+    */
+}
+
+void MixedConstraint::update(const PreviewSystem& /*E*/)
+{
+    /*
+    if (!fullSizeEntry_) {
+        auto nrLines = static_cast<int>(E_.rows());
+        for (int i = 0; i < ps.nrStep; ++i) {
+            A_.block(i * nrLines, i * ps.uDim, nrLines, ps.uDim) = E_;
+            b_.segment(i * nrLines, nrLines) = f_;
+        }
+    }
+    */
+}
+
+ConstraintFlag MixedConstraint::constraintType()
+{
+    if (isIneq_)
+        return ConstraintFlag::InequalityConstraint;
+    else
+        return ConstraintFlag::EqualityConstraint;
+}
+
+/*************************************************************************************************
  *                               Trajectory Bound Constraint                                     *
  *************************************************************************************************/
 
@@ -197,7 +269,7 @@ TrajectoryBoundConstraint::TrajectoryBoundConstraint(const Eigen::VectorXd& lowe
     }
 }
 
-void TrajectoryBoundConstraint::trajectoryBound(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper)
+void TrajectoryBoundConstraint::reset(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper)
 {
     if (lower_.rows() != lower.rows())
         throw std::runtime_error("Bad dimension for lower. It should be an (" + std::to_string(lower_.rows())
@@ -282,7 +354,7 @@ ControlBoundConstraint::ControlBoundConstraint(const Eigen::VectorXd& lower, con
             + std::to_string(lower.rows()) + " rows and upper has " + std::to_string(upper.rows()) + " rows.");
 }
 
-void ControlBoundConstraint::controlBound(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper)
+void ControlBoundConstraint::reset(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper)
 {
     if (lower_.rows() != lower.rows())
         throw std::runtime_error("Bad dimension for lower. It should be an (" + std::to_string(lower_.rows())

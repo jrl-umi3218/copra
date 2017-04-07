@@ -251,7 +251,64 @@ private:
 };
 
 /**
- * Trajectory Bound constraint.
+ * \brief Mixed constraint class.
+ * Depending on the parameter 'isInequalityConstraint' during the construction
+ * it can be an Equality constraints (\f$Ex + Gu = f\f$ or \f$EX + GU = f\f$)\n
+ * or an Inequality constraints (\f$Ex + Gu\leq f\f$ or \f$EX + GU\leq f\f$)\n
+ * with \f$X=[x_1^T ... x_{nrStep}^T]^T\f$ and \f$U=[u_1^T ... u_{nrStep}^T]^T\f$
+ */
+class MPC_DLLAPI MixedConstraint final : public EqIneqConstraint {
+public:
+    /**
+     * \brief Constructor of the control constraint.
+     * Create a constraint of type \f$Ex + Gu\leq f\f$ or \f$Ex + Gu = f\f$ or \f$EX + GU = f\f$ or \f$EX + GU\leq f\f$\n
+     * with \f$X=[x_1^T ... x_{nrStep}^T]^T\f$ and \f$U=[u_1^T ... u_{nrStep}^T]^T\f$.\n
+     * As \f$U\f$ is the optimization variable, \f$Ex + Gu\leq f\f$ or \f$Ex + Gu = f\f$
+     * is transformed to be \f$AU\leq b\f$ or \f$AU = b\f$.
+     * \note Please use \see ControlConstraint and \see TrajectoryConstraint for non-mixed constraint (they are sligthly faster)
+     * \param E The matrix applied to the trajectory part of the constraint
+     * \param G The matrix applied to the control part of the constraint
+     * \param f The vector side of the constraint
+     * \param isInequalityConstraint Whether the constraint is an Inequality (true) or an Equality (false).
+     * \throw Throw an std::runtime_error if E, G and f have not the same number of rows
+     */
+    MixedConstraint(const Eigen::MatrixXd& E, const Eigen::MatrixXd& G, const Eigen::VectorXd& f, bool isInequalityConstraint = true);
+
+    /**
+     * \brief Allow to modify the constraint. 
+     * Thus, there is no need of recreating a new constraint if several mpc are runned one after the other.
+     * \warning The dimension of E and f should not change!
+     * \param E The matrix applied to the trajectory part of the constraint
+     * \param G The matrix applied to the control part of the constraint
+     * \param f The vector side of the constraint
+     * \throw Throw an std::runtime_error if E or f is badly dimension
+     */
+    void reset(const Eigen::MatrixXd& E, const Eigen::MatrixXd& G, const Eigen::VectorXd& f);
+
+    /**
+     * \brief Initialize the constraint.
+     * This is done by resizing its inner matrices and vectors and setting the number of constraints.
+     * \param ps A preview system.
+     */
+    void initializeConstraint(const PreviewSystem& ps) override;
+
+    /**
+     * Compute \f$A\f$ and \f$b\f$ from \f$E\f$, \f$G\f$, \f$f\f$ and the preview system.
+     * \param ps A preview system.
+     */
+    void update(const PreviewSystem& ps) override;
+
+    /**
+     * Get the type of the constraint
+     * \return \see ConstraintFlag::InequalityConstraint if constructor's isInequalityConstraint is true
+     * \return \see ConstraintFlag::EqualityConstraint if constructor's isInequalityConstraint is false
+     */
+    ConstraintFlag constraintType() override;
+
+private:
+    Eigen::MatrixXd E_, G_;
+    Eigen::VectorXd f_;
+};
  * Even if it is a bound constraint, the optimization vector is \f$U\f$ 
  * so this constraint has to be transformed to an Inequality constraint.
  * @warning This constraint is defined in the QP as an Inequality constraint. 
