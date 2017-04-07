@@ -58,7 +58,7 @@ struct BoundedSystem {
         // System
         A << 1, T, 0, 1;
         B << 0.5 * T * T / mass, T / mass;
-        c << 0, -9.81 * T;
+        c << (-9.81 / 2.) * T * T, -9.81 * T;
         x0 << 0, -5;
         xd << 0, 0;
         wx << 10, 10000;
@@ -101,7 +101,7 @@ struct IneqSystem {
     {
         A << 1, T, 0, 1;
         B << 0.5 * T * T / mass, T / mass;
-        c << 0, -9.81 * T;
+        c << (-9.81 / 2.) * T * T, -9.81 * T;
         G << 1;
         h << 200; // The force can't be superior to 200
         E << 0, 1;
@@ -139,7 +139,7 @@ struct EqSystem {
         // System
         A << 1, T, 0, 1;
         B << 0.5 * T * T / mass, T / mass;
-        c << 0, -9.81 * T;
+        c << (-9.81 / 2.) * T * T, -9.81 * T;
         x0 << 0, 0;
         xd << 0, 0;
         wx << 10, 10000;

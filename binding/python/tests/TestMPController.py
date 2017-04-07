@@ -13,7 +13,7 @@ class TestMPC(unittest.TestCase):
         self.A[0, 1] = self.timestep
         self.B = Vector2d(0.5 * self.timestep * self.timestep /
                           self.mass, self.timestep / self.mass)
-        self.c = Vector2d(0, -9.81 * self.timestep)
+        self.c = Vector2d((-9.81/2.) * self.timestep**2, -9.81 * self.timestep)
         self.x0 = Vector2d(0, -5)
         self.xd = Vector2d.Zero
         self.wu = VectorXd.Ones(1) * 1e-4
