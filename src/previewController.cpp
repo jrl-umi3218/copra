@@ -266,7 +266,7 @@ void MPCTypeFull::updateSystem()
             ps_->Phi.block(i * xDim, 0, xDim, xDim).noalias() = ps_->A * ps_->Phi.block((i - 1) * xDim, 0, xDim, xDim);
             for (auto j = 0; j < i; ++j)
                 ps_->Psi.block(i * xDim, j * uDim, xDim, uDim).noalias() = ps_->A * ps_->Psi.block((i - 1) * xDim, j * uDim, xDim, uDim);
-            ps_->Psi.block(i * xDim, i * uDim, xDim, uDim).noalias() = ps_->B;
+            ps_->Psi.block(i * xDim, i * uDim, xDim, uDim)= ps_->B;
             ps_->xi.segment(i * xDim, xDim).noalias() = ps_->A * ps_->xi.segment((i - 1) * xDim, xDim) + ps_->d;
         }
 
