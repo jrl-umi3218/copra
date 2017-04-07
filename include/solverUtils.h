@@ -50,16 +50,16 @@ enum class SolverFlag {
 
 /**
  * Helper function to get an unique pointer to a desired solver.
- * @param flag Flag of the solver.
- * @return An unique pointer to the desired solver.
+ * \param flag Flag of the solver.
+ * \return An unique pointer to the desired solver.
  */
 std::unique_ptr<SolverInterface> MPC_DLLAPI solverFactory(SolverFlag flag);
 
 /**
  * Helper function to get a desired solver.
  * This should only be used by python (unique_ptr are not yet bindable)
- * @param flag Flag of the solver.
- * @return The desired solver.
+ * \param flag Flag of the solver.
+ * \return The desired solver.
  */
 SolverInterface* pythonSolverFactory(SolverFlag flag);
 

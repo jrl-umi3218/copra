@@ -28,6 +28,9 @@ To have more qp solver:
  * [GUROBI](http://www.gurobi.com/) >= 4.0
  * [eigen-gurobi](https://github.com/vsamy/eigen-gurobi)
 
+To generate the documantation:
+ * [Doxygen](http://www.stack.nl/~dimitri/doxygen/)
+
 Also compatible with the LSSOL QP Solver. Unfortunately this not under public license.
 
 #### Building
@@ -43,7 +46,8 @@ gedit build_and_install_config
 Please defines in build_and_install_config where to install the library, the build type, the number of core, etc...
 Note that you leave the BOOST_ROOT empty if boost has been installed by default. 
 
-Where the main options are:
+##### TODO
+make doc
 
 #### Testing and performace test
 

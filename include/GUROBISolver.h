@@ -55,52 +55,52 @@ public:
 
     /**
 	 * Get the number of needed iteration if available
-	 * @return The number of iteration
+	 * \return The number of iteration
 	 */
     int SI_iter() const override;
 
     /**
      * Display or hide (default) the output of the solver.
      * There is no printing level. It shows everything or nothing.
-     * @param pl 0 (hide) or else (display)
+     * \param pl 0 (hide) or else (display)
      */
     void SI_printLevel(int pl) override;
 
     /**
      * Set the maximum error tolerance of the solution
-     * @param tol The error tolerance
+     * \param tol The error tolerance
      */
     void SI_feasibilityTolerance(double tol) override;
 
     /**
      * Get the warm start status of the solver
-     * @return True for warm start, False for cold start
+     * \return True for warm start, False for cold start
      */
     bool SI_warmStart() const override;
 
     /**
      * Set the warm start status of the solver
-     * @param w True for warm start, False for cold start
+     * \param w True for warm start, False for cold start
      */
     void SI_warmStart(bool w) override;
 
     /**
      * Get the solver's solution.
-     * @return The qp solver result.
+     * \return The qp solver result.
      */
     const Eigen::VectorXd& SI_result() const override;
 
     /**
      * Initialize the variables of the problem to solve.
-     * @see SolverInterface::SI_problem()
-     * @return The qp solver result.
+     * \see SolverInterface::SI_problem()
+     * \return The qp solver result.
      */
     void SI_problem(int nrVar, int nrEq, int nrInEq) override;
 
     /**
      * Solve the problem.
-     * @see SolverInterface::SI_solve()
-     * @return The qp solver result.
+     * \see SolverInterface::SI_solve()
+     * \return The qp solver result.
      */
     bool SI_solve(const Eigen::MatrixXd& Q, const Eigen::VectorXd& c,
         const Eigen::MatrixXd& Aeq, const Eigen::VectorXd& beq,

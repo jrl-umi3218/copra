@@ -47,42 +47,42 @@ enum class ConstraintFlag;
  * It solves:
  * \f$X_{k+1} = \Phi x_{0} + \Psi U + \Xi\f$,
  * where \f$U\f$ is the optimization vector.
- * @warning This class waits for a discretized system ! Continuous systems are not yet implemented.
+ * \warning This class waits for a discretized system ! Continuous systems are not yet implemented.
  */
 class MPC_DLLAPI MPCTypeFull {
 public:
     /**
      * Initialize problem variables to default and get the desired solver
      * You need to call initializeController before using the MPCTypeFull
-     * @param ps A preview system to amke a copy from.
-     * @param sFlag The flag corresponding to the desired solver.
+     * \param ps A preview system to amke a copy from.
+     * \param sFlag The flag corresponding to the desired solver.
      */
     MPCTypeFull(SolverFlag sFlag = SolverFlag::DEFAULT);
     /**
      * Initialize problem variables w.r.t. the PreviewSystem and get the desired
      * solver
-     * @param ps A preview system to amke a copy from.
-     * @param sFlag The flag corresponding to the desired solver.
+     * \param ps A preview system to amke a copy from.
+     * \param sFlag The flag corresponding to the desired solver.
      */
     MPCTypeFull(const std::shared_ptr<PreviewSystem>& ps,
         SolverFlag sFlag = SolverFlag::DEFAULT);
 
     /**
      * Select a solver. This function can be called at any time.
-     * @param flag The solver to use @see pc::SolverFlag.
+     * \param flag The solver to use \see pc::SolverFlag.
      */
     void selectQPSolver(SolverFlag flag);
 
     /**
      * Initialize the controller w.r.t. the preview system.
      * This function needs to be called each time the system dimension changes.
-     * @param ps The preview system
+     * \param ps The preview system
      */
     virtual void initializeController(const std::shared_ptr<PreviewSystem>& ps);
 
     /**
      * Solve the system.
-     * @return True if a solution has been found.
+     * \return True if a solution has been found.
      * Fill Phi, Psi, xi in PreviewSystem
      * Fill A, b in Constraints
      */
@@ -90,37 +90,37 @@ public:
 
     /**
      * Get the solver result.
-     * @return The control vector \f$U\f$.
+     * \return The control vector \f$U\f$.
      */
     const Eigen::VectorXd& control() const noexcept;
     /**
      * Get the preview trajectory.
-     * @return The trajectory vector \f$X\f$.
+     * \return The trajectory vector \f$X\f$.
      */
     Eigen::VectorXd trajectory() const noexcept;
     /**
      * The time needed to solve the qp problem.
-     * @return The elapsed time for solving.
+     * \return The elapsed time for solving.
      */
     boost::timer::cpu_times solveTime() const noexcept;
     /**
      * The time needed to build and solve the qp problem.
-     * @return The elapsed time for build and solving.
+     * \return The elapsed time for build and solving.
      */
     boost::timer::cpu_times solveAndBuildTime() const noexcept;
 
     /**
      * Set the weights of the system.
-     * @param wx Weight of the state.
-     * @param wu Weight of the control.
-     * @throw Throw a std::runtime_error is Wx or Wu are badly dimension.
+     * \param wx Weight of the state.
+     * \param wu Weight of the control.
+     * \throw Throw a std::runtime_error is Wx or Wu are badly dimension.
      */
     virtual void weights(const Eigen::VectorXd& Wx, const Eigen::VectorXd& Wu);
 
     /**
      * Set the weights of the system. All variables are set to the same weight.
-     * @param wx Weight of the state.
-     * @param wu Weight of the control.
+     * \param wx Weight of the state.
+     * \param wu Weight of the control.
      */
     void weights(double Wx, double Wu);
 
@@ -128,8 +128,8 @@ public:
      * Add a constraint to the system. The shared_ptr if not copied !
      * So, if it deleted before solving, the MPC will not use the constraint.
      * In case of a unwilling deletion, a warning is displayed in Debug mode.
-     * @param constr A constraint type @see TrajectoryConstrain. @see ControlConstrain.
-     * @see TrajectoryBoundConstraint @see ControlBoundConstraint
+     * \param constr A constraint type \see TrajectoryConstrain. \see ControlConstrain.
+     * \see TrajectoryBoundConstraint \see ControlBoundConstraint
      */
     void addConstraint(const std::shared_ptr<Constraint>& constr);
 
@@ -140,8 +140,8 @@ public:
 
 protected:
     /**
-     * Add constraints into constraints_ @see Constraints
-     * @param constr The constraint to add
+     * Add constraints into constraints_ \see Constraints
+     * \param constr The constraint to add
      */
     void addConstraintByType(const std::shared_ptr<Constraint>& constr);
 
@@ -152,7 +152,7 @@ protected:
 
     /**
      * Update the system and its constraints.
-     * @param ps The preview system
+     * \param ps The preview system
      * Fill Phi, Psi, xi in PreviewSystem
      * Fill A, b in Constraints
      */
@@ -201,28 +201,28 @@ protected:
  * part (the most in the future part).
  * Thus, this class has way faster results with the disadvantages of not
  * considering a minimization along all the trajectory.
- * @warning This class waits for a discretized system ! Continuous systems are
+ * \warning This class waits for a discretized system ! Continuous systems are
  * not yet implemented.
  */
 class MPC_DLLAPI MPCTypeLast : public MPCTypeFull {
 public:
     using MPCTypeFull::weights;
     /**
-     * See @see MPCTypeFull::MPCTypeFull
+     * See \see MPCTypeFull::MPCTypeFull
      */
     MPCTypeLast(SolverFlag sFlag = SolverFlag::DEFAULT);
     /**
-     * See @see MPCTypeFull::MPCTypeFull
+     * See \see MPCTypeFull::MPCTypeFull
      */
     MPCTypeLast(const std::shared_ptr<PreviewSystem>& ps, SolverFlag sFlag = SolverFlag::DEFAULT);
 
     /**
-     * See @see  MPCTypeFull::initializeController
+     * See \see  MPCTypeFull::initializeController
      */
     void initializeController(const std::shared_ptr<PreviewSystem>& ps) override;
 
     /**
-     * See @see MPCTypeFull::weights
+     * See \see MPCTypeFull::weights
      */
     void weights(const Eigen::VectorXd& Wx, const Eigen::VectorXd& Wu) override;
 
