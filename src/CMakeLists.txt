@@ -1,12 +1,19 @@
 #To complete
-set(SOURCES SolverInterface.cpp QuadProgSolver.cpp  solverUtils.cpp
-    previewController.cpp PreviewSystem.cpp Constraints.cpp)
+set(SOURCES
+    SolverInterface.cpp
+    QuadProgSolver.cpp
+    solverUtils.cpp
+    previewController.cpp
+    PreviewSystem.cpp
+    constraints.cpp
+    debugUtils.cpp)
+
 set(HEADERS 
     ../include/SolverInterface.h 
     ../include/QuadProgSolver.h 
     ../include/previewController.h 
     ../include/PreviewSystem.h 
-    ../include/Constraints.h
+    ../include/constraints.h
     ../include/solverUtils.h 
     ../include/debugUtils.h)
 
