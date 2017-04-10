@@ -154,7 +154,7 @@ public:
      * \param E The matrix side of the constraint
      * \param f The vector side of the constraint
      * \param isInequalityConstraint Whether the constraint is an Inequality (true) or an Equality (false)
-     * \throw Throw an std::runtime_error if E and f have not the same number of rows
+     * \throw Throw an std::domain_error if E and f have not the same number of rows
      */
     TrajectoryConstraint(const Eigen::MatrixXd& E, const Eigen::VectorXd& f, bool isInequalityConstraint = true);
 
@@ -164,7 +164,7 @@ public:
      * \warning The dimension of E and f should not change!
      * \param E The matrix side of the constraint
      * \param f The vector side of the constraint
-     * \throw Throw an std::runtime_error if E or f is badly dimension
+     * \throw Throw an std::domain_error if E or f is badly dimension
      */
     void reset(const Eigen::MatrixXd& E, const Eigen::VectorXd& f);
 
@@ -172,7 +172,7 @@ public:
      * \brief Initialize the constraint.
      * This is done by resizing its inner matrices and vectors and setting the number of constraints.
      * \param ps A preview system.
-     * \throw Throw an std::runtime_error if E or f is not of the dimension of the preview system.
+     * \throw Throw an std::domain_error if E or f is not of the dimension of the preview system.
      */
     void initializeConstraint(const PreviewSystem& ps) override;
 
@@ -210,7 +210,7 @@ public:
      * \param E The matrix side of the constraint
      * \param f The vector side of the constraint
      * \param isInequalityConstraint Whether the constraint is an Inequality (true) or an Equality (false).
-     * \throw Throw an std::runtime_error if E and f have not the same number of rows
+     * \throw Throw an std::domain_error if E and f have not the same number of rows
      */
     ControlConstraint(const Eigen::MatrixXd& E, const Eigen::VectorXd& f, bool isInequalityConstraint = true);
 
@@ -221,7 +221,7 @@ public:
      * \warning The dimension of E and f should not change!
      * \param E The matrix side of the constraint
      * \param f The vector side of the constraint
-     * \throw Throw an std::runtime_error if E or f is badly dimension
+     * \throw Throw an std::domain_error if E or f is badly dimension
      */
     void reset(const Eigen::MatrixXd& E, const Eigen::VectorXd& f);
 
@@ -270,18 +270,18 @@ public:
      * \param G The matrix applied to the control part of the constraint
      * \param f The vector side of the constraint
      * \param isInequalityConstraint Whether the constraint is an Inequality (true) or an Equality (false).
-     * \throw Throw an std::runtime_error if E, G and f have not the same number of rows
+     * \throw Throw an std::domain_error if E, G and f have not the same number of rows
      */
     MixedConstraint(const Eigen::MatrixXd& E, const Eigen::MatrixXd& G, const Eigen::VectorXd& f, bool isInequalityConstraint = true);
 
     /**
      * \brief Allow to modify the constraint. 
      * Thus, there is no need of recreating a new constraint if several mpc are runned one after the other.
-     * \warning The dimension of E and f should not change!
+     * \warning The dimension of E, G and f should not change!
      * \param E The matrix applied to the trajectory part of the constraint
      * \param G The matrix applied to the control part of the constraint
      * \param f The vector side of the constraint
-     * \throw Throw an std::runtime_error if E or f is badly dimension
+     * \throw Throw an std::domain_error if E or f is badly dimension
      */
     void reset(const Eigen::MatrixXd& E, const Eigen::MatrixXd& G, const Eigen::VectorXd& f);
 
@@ -327,7 +327,7 @@ public:
      * \f$\underline{x}\leq x\leq\overline{x}\f$ is transformed to be \f$AU\leq b\f$.
      * \param lower The lower bound \f$\underline{x}\f$ of the constraint
      * \param upper The upper bound \f$\overline{x}\f$ of the constraint
-     * \throw Throw an std::runtime_error if lower and upper are not of the same dimension
+     * \throw Throw an std::domain_error if lower and upper are not of the same dimension
      */
     TrajectoryBoundConstraint(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper);
 
@@ -337,7 +337,7 @@ public:
      * \warning The dimension of lower and upper should not change!
      * \param lower The lower bound \f$\underline{x}\f$ of the constraint
      * \param upper The upper bound \f$\overline{x}\f$ of the constraint
-     * \throw Throw an std::runtime_error if lower or upper is badly dimension
+     * \throw Throw an std::domain_error if lower or upper is badly dimension
      */
     void reset(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper);
 
@@ -345,7 +345,7 @@ public:
      * \brief Initialize the constraint.
      * This is done by resizing its inner matrices and vectors and setting the number of constraints.
      * \param ps A preview system.
-     * \throw Throw an std::runtime_error if lower or upper is badly dimension
+     * \throw Throw an std::domain_error if lower or upper is badly dimension
      */
     void initializeConstraint(const PreviewSystem& ps) override;
 
@@ -380,7 +380,7 @@ public:
      * \f$\underline{u}\leq u\leq\overline{u}\f$ is transformed to be \f$\underline{U}\leq U\leq\overline{U}\f$.
      * \param lower The lower bound \f$\underline{u}\f$ of the constraint
      * \param upper The upper bound \f$\overline{u}\f$ of the constraint
-     * \throw Throw an std::runtime_error if lower and upper are not of the same dimension
+     * \throw Throw an std::domain_error if lower and upper are not of the same dimension
      */
     ControlBoundConstraint(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper);
 
@@ -390,7 +390,7 @@ public:
      * \warning The dimension of lower and upper should not change!
      * \param lower The lower bound \f$\underline{u}\f$ of the constraint
      * \param upper The upper bound \f$\overline{u}\f$ of the constraint
-     * \throw Throw an std::runtime_error if lower or upper is badly dimension
+     * \throw Throw an std::domain_error if lower or upper is badly dimension
      */
     void reset(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper);
 
@@ -398,7 +398,7 @@ public:
      * \brief Initialize the constraint.
      * This is by resizing its inner matrices and vectors and setting the number of constraints.
      * \param ps A preview system.
-     * \throw Throw an std::runtime_error if lower or upper is badly dimension
+     * \throw Throw an std::domain_error if lower or upper is badly dimension
      */
     void initializeConstraint(const PreviewSystem& ps) override;
 
