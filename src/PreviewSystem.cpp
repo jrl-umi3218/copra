@@ -34,7 +34,7 @@ void PreviewSystem::system(const Eigen::MatrixXd& state, const Eigen::MatrixXd& 
     const Eigen::VectorXd& xTraj, int numberOfSteps)
 {
     checkRows("xInit", "state", xInit, state);
-    checkSquaredMat("state", state);
+    checkSquareMat("state", state);
     checkRows("xInit", "control", xInit, control);
     checkRows("xInit", "bias", xInit, bias);
     if (numberOfSteps <= 0) // This should desappear later

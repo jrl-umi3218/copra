@@ -45,7 +45,7 @@ void checkRows(const char* mat1Name, const char* mat2Name, const Eigen::MatrixXd
     }
 }
 
-void checkSquaredMat(const char* matName, const Eigen::MatrixXd& mat)
+void checkSquareMat(const char* matName, const Eigen::MatrixXd& mat)
 {
     if (mat.rows() != mat.cols()) {
         std::ostringstream os;
