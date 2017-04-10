@@ -57,7 +57,7 @@ std::unique_ptr<SolverInterface> MPC_DLLAPI solverFactory(SolverFlag flag);
 
 /**
  * Helper function to get a desired solver.
- * This should only be used by python (unique_ptr are not yet bindable)
+ * This should only be used by python (unique_ptr are not bindable)
  * \param flag Flag of the solver.
  * \return The desired solver.
  */

@@ -44,10 +44,11 @@ enum class ConstraintFlag;
 /**
  * The controller itself.
  * This class gives all the needed composants for performing a model preview control.
- * It solves:
- * \f$X_{k+1} = \Phi x_{0} + \Psi U + \Xi\f$,
- * where \f$U\f$ is the optimization vector.
- * \warning This class waits for a discretized system ! Continuous systems are not yet implemented.
+ * It solves:\n
+ * \f$X = \Phi x_{0} + \Psi U + \Xi\f$, where \f$U\f$ is the optimization vector.
+ * \note \f$X = [x_1^T x_2^T ... x_N^T]^T\f$ and \f$U = [u_0^T u_1^T ... u_{N-1}^T]^T\f$
+ * where \f$N\f$ is the dimension of the system (the number of steps).
+ * \warning This class waits for a discretized system ! Continuous systems are not implemented.
  */
 class MPC_DLLAPI MPCTypeFull {
 public:
@@ -74,7 +75,7 @@ public:
     void selectQPSolver(SolverFlag flag);
 
     /**
-     * Initialize the controller w.r.t. the preview system.
+     * Initialize the controller with regard to the preview system.
      * This function needs to be called each time the system dimension changes.
      * \param ps The preview system
      */
@@ -202,28 +203,16 @@ protected:
  * Thus, this class has way faster results with the disadvantages of not
  * considering a minimization along all the trajectory.
  * \warning This class waits for a discretized system ! Continuous systems are
- * not yet implemented.
+ * not implemented.
  */
 class MPC_DLLAPI MPCTypeLast : public MPCTypeFull {
 public:
     using MPCTypeFull::weights;
-    /**
-     * See \see MPCTypeFull::MPCTypeFull
-     */
     MPCTypeLast(SolverFlag sFlag = SolverFlag::DEFAULT);
-    /**
-     * See \see MPCTypeFull::MPCTypeFull
-     */
     MPCTypeLast(const std::shared_ptr<PreviewSystem>& ps, SolverFlag sFlag = SolverFlag::DEFAULT);
 
-    /**
-     * See \see  MPCTypeFull::initializeController
-     */
     void initializeController(const std::shared_ptr<PreviewSystem>& ps) override;
 
-    /**
-     * See \see MPCTypeFull::weights
-     */
     void weights(const Eigen::VectorXd& Wx, const Eigen::VectorXd& Wu) override;
 
 protected:
