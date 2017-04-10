@@ -42,6 +42,10 @@ set(Eigen_REQUIRED "eigen3 >= 3.2.7") # This eigen version allows move semantics
 SEARCH_FOR_BOOST()
 SEARCH_FOR_EIGEN()
 
+if(${_Eigen_VERSION} VERSION_LESS 3.3)
+  add_definitions(-DEIGEN_3_2_FOUND) # Will add Eigen::Index as in 3.3
+endif()
+
 ADD_REQUIRED_DEPENDENCY("eigen-quadprog")
 ADD_OPTIONAL_DEPENDENCY("eigen-qld")
 ADD_OPTIONAL_DEPENDENCY("eigen-lssol")

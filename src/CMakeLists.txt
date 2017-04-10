@@ -1,21 +1,22 @@
 #To complete
 set(SOURCES
-    SolverInterface.cpp
-    QuadProgSolver.cpp
-    solverUtils.cpp
-    previewController.cpp
     PreviewSystem.cpp
+    QuadProgSolver.cpp
+    SolverInterface.cpp
     constraints.cpp
-    debugUtils.cpp)
+    debugUtils.cpp
+    previewController.cpp
+    solverUtils.cpp)
 
 set(HEADERS 
-    ../include/SolverInterface.h 
-    ../include/QuadProgSolver.h 
-    ../include/previewController.h 
     ../include/PreviewSystem.h 
+    ../include/QuadProgSolver.h 
+    ../include/SolverInterface.h 
     ../include/constraints.h
+    ../include/debugUtils.h
+    ../include/previewController.h 
     ../include/solverUtils.h 
-    ../include/debugUtils.h)
+    ../include/typedefs.h)
 
 if(${EIGEN_LSSOL_FOUND})
     list(APPEND SOURCES LSSOLSolver.cpp)
