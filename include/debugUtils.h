@@ -20,6 +20,12 @@
 // stl
 #include <iostream>
 
+// Eigen
+#include <Eigen/Core>
+
+// mpc
+#include "PreviewSystem.h"
+
 #ifndef _DEBUG
 #define CONSTRAINT_DELETION_WARN(warn, format, ...)
 #else
@@ -28,3 +34,16 @@
         fprintf(stderr, format, __VA_ARGS__);       \
     }
 #endif
+
+namespace mpc {
+
+void checkMat(const char* isMatName, const Eigen::MatrixXd& isMat, const Eigen::MatrixXd& shouldBeMat);
+void checkRows(const char* mat1Name, const char* mat2Name, const Eigen::MatrixXd& mat1, const Eigen::MatrixXd& mat2);
+void checkSquaredMat(const char* matName, const Eigen::MatrixXd& mat);
+void checkRowsOnDim(const char* mat1Name, const Eigen::MatrixXd& mat1, Eigen::Index dim);
+void checkRowsOnPSXDim(const char* matName, const Eigen::MatrixXd& mat, const PreviewSystem* ps);
+void checkRowsOnPSUDim(const char* matName, const Eigen::MatrixXd& mat, const PreviewSystem* ps);
+void checkColsOnPSXDim(const char* matName, const Eigen::MatrixXd& mat, const PreviewSystem* ps);
+void checkColsOnPSUDim(const char* matName, const Eigen::MatrixXd& mat, const PreviewSystem* ps);
+void checkColsOnPSXUDim(const char* mat1Name, const char* mat2Name, const Eigen::MatrixXd& mat1, const Eigen::MatrixXd& mat2, const PreviewSystem* ps);
+}

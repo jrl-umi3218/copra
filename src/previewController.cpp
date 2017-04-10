@@ -24,7 +24,7 @@
 #include <numeric>
 
 // mpc
-#include "Constraints.h"
+#include "constraints.h"
 #include "PreviewSystem.h"
 #include "debugUtils.h"
 
@@ -169,25 +169,20 @@ boost::timer::cpu_times MPCTypeFull::solveAndBuildTime() const noexcept
 
 void MPCTypeFull::weights(const Eigen::VectorXd& Wx, const Eigen::VectorXd& Wu)
 {
+    checkRowsOnPSXDim("Wx", Wx, ps_.get());
+    checkRowsOnPSUDim("Wu", Wu, ps_.get());
+
     if (Wx.rows() == ps_->xDim)
         for (auto i = 0; i < ps_->nrStep; ++i)
             Wx_.segment(i * ps_->xDim, ps_->xDim) = Wx;
-    else if (Wx.rows() == ps_->fullXDim)
-        Wx_ = Wx;
     else
-        throw std::runtime_error("Wx should be a vector of size (" + std::to_string(ps_->xDim)
-            + "-by-1) or (" + std::to_string(ps_->fullXDim)
-            + "-by-1) but you gave a vector of size (" + std::to_string(Wx.rows()) + "-by-1).");
+        Wx_ = Wx;
 
     if (Wu.rows() == ps_->uDim)
         for (auto i = 0; i < ps_->nrStep; ++i)
             Wu_.segment(i * ps_->uDim, ps_->uDim) = Wu;
-    else if (Wu.rows() == ps_->fullUDim)
-        Wu_ = Wu;
     else
-        throw std::runtime_error("Wu should be a vector of size (" + std::to_string(ps_->uDim)
-            + "-by-1) or (" + std::to_string(ps_->fullUDim)
-            + "-by-1) but you gave a vector of size (" + std::to_string(Wu.rows()) + "-by-1).");
+        Wu_ = Wu;
 }
 
 void MPCTypeFull::weights(double Wx, double Wu)
@@ -375,21 +370,15 @@ void MPCTypeLast::initializeController(const std::shared_ptr<PreviewSystem>& ps)
 
 void MPCTypeLast::weights(const Eigen::VectorXd& Wx, const Eigen::VectorXd& Wu)
 {
-    if (Wx.rows() == ps_->xDim)
-        Wx_ = Wx;
-    else
-        throw std::runtime_error("Wx should be a vector of size (" + std::to_string(ps_->xDim)
-            + "-by-1) but you gave a vector of size (" + std::to_string(Wx.rows()) + "-by-1).");
+    checkRowsOnDim("Wx", Wx, ps_->xDim);
+    checkRowsOnPSUDim("Wu", Wu, ps_.get());
 
+    Wx_ = Wx;
     if (Wu.rows() == ps_->uDim)
         for (auto i = 0; i < ps_->nrStep; ++i)
             Wu_.segment(i * ps_->uDim, ps_->uDim) = Wu;
-    else if (Wu.rows() == ps_->fullUDim)
-        Wu_ = Wu;
     else
-        throw std::runtime_error("Wu should be a vector of size (" + std::to_string(ps_->uDim)
-            + "-by-1) or (" + std::to_string(ps_->fullUDim)
-            + "-by-1) but you gave a vector of size (" + std::to_string(Wu.rows()) + "-by-1).");
+        Wu_ = Wu;
 }
 
 /*

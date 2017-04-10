@@ -15,7 +15,7 @@
 // along with mpc.  If not, see
 // <http://www.gnu.org/licenses/>.
 
-#include "Constraints.h"
+#include "constraints.h"
 #include "PreviewSystem.h"
 #include "previewController.h"
 #include "solverUtils.h"

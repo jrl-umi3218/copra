@@ -18,6 +18,9 @@
 // header
 #include "PreviewSystem.h"
 
+//mpc
+#include "debugUtils.h"
+
 namespace mpc {
 
 void PreviewSystem::system(const Eigen::MatrixXd& state, const Eigen::MatrixXd& control,
@@ -30,11 +33,12 @@ void PreviewSystem::system(const Eigen::MatrixXd& state, const Eigen::MatrixXd& 
     const Eigen::VectorXd& bias, const Eigen::VectorXd& xInit,
     const Eigen::VectorXd& xTraj, int numberOfSteps)
 {
-    assert(state.rows() == control.rows());
-    assert(state.rows() == bias.rows());
-    assert(state.rows() == xInit.rows());
-    assert(state.rows() == xTraj.rows());
-    assert(state.cols() == xInit.rows());
+    checkRows("xInit", "state", xInit, state);
+    checkSquaredMat("state", state);
+    checkRows("xInit", "control", xInit, control);
+    checkRows("xInit", "bias", xInit, bias);
+    if (numberOfSteps <= 0) // This should desappear later
+        throw std::domain_error("The number of step sould be a positive number! ");
 
     isUpdated = false;
     nrStep = numberOfSteps;
@@ -43,7 +47,7 @@ void PreviewSystem::system(const Eigen::MatrixXd& state, const Eigen::MatrixXd& 
     fullXDim = xDim * nrStep;
     fullUDim = uDim * nrStep;
 
-    assert(xTraj.rows() == xDim || xTraj.rows() == fullXDim);
+    checkRowsOnPSXDim("xTraj", xTraj, this);
 
     x0 = xInit;
     xd.resize(fullXDim);

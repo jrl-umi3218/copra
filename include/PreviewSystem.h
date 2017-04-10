@@ -43,6 +43,7 @@ struct MPC_DLLAPI PreviewSystem {
      * \param xTraj The desired trajectory or final point.
      * \param numberOfSteps The number of step to perform.
      * \param sFlag The solver to use.
+     * \throw std::domain_error if the dimension of the matrices mismatch.
      */
     void system(const Eigen::MatrixXd& state, const Eigen::MatrixXd& control,
         const Eigen::VectorXd& xInit, const Eigen::VectorXd& xTraj,
@@ -56,6 +57,7 @@ struct MPC_DLLAPI PreviewSystem {
      * \param xTraj The desired trajectory or final point.
      * \param numberOfSteps The number of step to perform.
      * \param sFlag The solver to use.
+     * \throw std::domain_error if the dimension of the matrices mismatch.
      */
     void system(const Eigen::MatrixXd& state, const Eigen::MatrixXd& control,
         const Eigen::VectorXd& bias, const Eigen::VectorXd& xInit,

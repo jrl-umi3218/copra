@@ -114,7 +114,7 @@ public:
      * Set the weights of the system.
      * \param wx Weight of the state.
      * \param wu Weight of the control.
-     * \throw Throw a std::runtime_error is Wx or Wu are badly dimension.
+     * \throw Throw a std::domain_error is Wx or Wu are badly dimension.
      */
     virtual void weights(const Eigen::VectorXd& Wx, const Eigen::VectorXd& Wu);
 
