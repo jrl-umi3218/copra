@@ -99,6 +99,7 @@ protected:
     std::string name_;
     int nrConstr_;
     bool fullSizeEntry_;
+    bool hasBeenInitialized_;
 };
 
 /**
@@ -159,16 +160,6 @@ public:
     TrajectoryConstraint(const Eigen::MatrixXd& E, const Eigen::VectorXd& f, bool isInequalityConstraint = true);
 
     /**
-     * \brief Allow to modify the constraint. 
-     * Thus, there is no need of recreating a new constraint if several mpc are runned one after the other.
-     * \warning The dimension of E and f should not change!
-     * \param E The matrix side of the constraint
-     * \param f The vector side of the constraint
-     * \throw Throw an std::domain_error if E or f is badly dimension
-     */
-    void reset(const Eigen::MatrixXd& E, const Eigen::VectorXd& f);
-
-    /**
      * \brief Initialize the constraint.
      * This is done by resizing its inner matrices and vectors and setting the number of constraints.
      * \param ps A preview system.
@@ -213,17 +204,6 @@ public:
      * \throw Throw an std::domain_error if G and f have not the same number of rows
      */
     ControlConstraint(const Eigen::MatrixXd& G, const Eigen::VectorXd& f, bool isInequalityConstraint = true);
-
-    /**
-     * \brief Allow to modify the constraint. 
-     * Thus, there is no need of recreating a new constraint 
-     * if several mpc are runned one after the other.
-     * \warning The dimension of E and f should not change!
-     * \param G The matrix side of the constraint
-     * \param f The vector side of the constraint
-     * \throw Throw an std::domain_error if G or f is badly dimension
-     */
-    void reset(const Eigen::MatrixXd& G, const Eigen::VectorXd& f);
 
     /**
      * \brief Initialize the constraint.
@@ -275,17 +255,6 @@ public:
     MixedConstraint(const Eigen::MatrixXd& E, const Eigen::MatrixXd& G, const Eigen::VectorXd& f, bool isInequalityConstraint = true);
 
     /**
-     * \brief Allow to modify the constraint. 
-     * Thus, there is no need of recreating a new constraint if several mpc are runned one after the other.
-     * \warning The dimension of E, G and f should not change!
-     * \param E The matrix applied to the trajectory part of the constraint
-     * \param G The matrix applied to the control part of the constraint
-     * \param f The vector side of the constraint
-     * \throw Throw an std::domain_error if E or f is badly dimension
-     */
-    void reset(const Eigen::MatrixXd& E, const Eigen::MatrixXd& G, const Eigen::VectorXd& f);
-
-    /**
      * \brief Initialize the constraint.
      * This is done by resizing its inner matrices and vectors and setting the number of constraints.
      * \param ps A preview system.
@@ -332,16 +301,6 @@ public:
     TrajectoryBoundConstraint(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper);
 
     /**
-     * \brief Allow to modify the constraint. 
-     * Thus, there is no need of recreating a new constraint if several mpc are runned one after the other.
-     * \warning The dimension of lower and upper should not change!
-     * \param lower The lower bound \f$\underline{x}\f$ of the constraint
-     * \param upper The upper bound \f$\overline{x}\f$ of the constraint
-     * \throw Throw an std::domain_error if lower or upper is badly dimension
-     */
-    void reset(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper);
-
-    /**
      * \brief Initialize the constraint.
      * This is done by resizing its inner matrices and vectors and setting the number of constraints.
      * \param ps A preview system.
@@ -383,16 +342,6 @@ public:
      * \throw Throw an std::domain_error if lower and upper are not of the same dimension
      */
     ControlBoundConstraint(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper);
-
-    /**
-     * \brief Allow to modify the constraint. 
-     * Thus, there is no need of recreating a new constraint if several mpc are runned one after the other.
-     * \warning The dimension of lower and upper should not change!
-     * \param lower The lower bound \f$\underline{u}\f$ of the constraint
-     * \param upper The upper bound \f$\overline{u}\f$ of the constraint
-     * \throw Throw an std::domain_error if lower or upper is badly dimension
-     */
-    void reset(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper);
 
     /**
      * \brief Initialize the constraint.

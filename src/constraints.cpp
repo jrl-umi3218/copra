@@ -35,6 +35,7 @@ Constraint::Constraint(const std::string& name)
     : name_(name)
     , nrConstr_(0)
     , fullSizeEntry_(false)
+    , hasBeenInitialized_(false)
 {
 }
 
@@ -61,17 +62,6 @@ TrajectoryConstraint::TrajectoryConstraint(const Eigen::MatrixXd& E, const Eigen
 {
     if (E.rows() != f.rows())
         DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("E", "f", E, f));
-}
-
-void TrajectoryConstraint::reset(const Eigen::MatrixXd& E, const Eigen::VectorXd& f)
-{
-    if (E.rows() != E_.rows() || E.cols() != E_.cols())
-        DOMAIN_ERROR_EXCEPTION(throwMsgOnMat("E", E, E_));
-    if (f.rows() != f_.rows())
-        DOMAIN_ERROR_EXCEPTION(throwMsgOnMat("f", f, f_));
-
-    E_ = E;
-    f_ = f;
 }
 
 void TrajectoryConstraint::initializeConstraint(const PreviewSystem& ps)
@@ -125,19 +115,11 @@ ControlConstraint::ControlConstraint(const Eigen::MatrixXd& G, const Eigen::Vect
         DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("G", "f", G, f));
 }
 
-void ControlConstraint::reset(const Eigen::MatrixXd& G, const Eigen::VectorXd& f)
-{
-    if (G.rows() != G_.rows() || G.cols() != G_.cols())
-        DOMAIN_ERROR_EXCEPTION(throwMsgOnMat("G", G, G_));
-    if (f.rows() != f_.rows())
-        DOMAIN_ERROR_EXCEPTION(throwMsgOnMat("f", f, f_));
-
-    G_ = G;
-    f_ = f;
-}
-
 void ControlConstraint::initializeConstraint(const PreviewSystem& ps)
 {
+    if (hasBeenInitialized_)
+        RUNTIME_ERROR_EXCEPTION("You have initialized a ControlConstraint twice. As move semantics are used, you can't do so.");
+
     if (G_.cols() == ps.uDim) {
         nrConstr_ = static_cast<int>(G_.rows()) * ps.nrUStep;
         A_.resize(nrConstr_, ps.fullUDim);
@@ -151,6 +133,8 @@ void ControlConstraint::initializeConstraint(const PreviewSystem& ps)
     } else {
         DOMAIN_ERROR_EXCEPTION(throwMsgOnColsOnPSUDim("G", G_, &ps));
     }
+
+    hasBeenInitialized_ = true;
 }
 
 void ControlConstraint::update(const PreviewSystem& ps)
@@ -186,20 +170,6 @@ MixedConstraint::MixedConstraint(const Eigen::MatrixXd& E, const Eigen::MatrixXd
         DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("E", "f", E, f));
     if (G.rows() != f.rows())
         DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("G", "f", G, f));
-}
-
-void MixedConstraint::reset(const Eigen::MatrixXd& E, const Eigen::MatrixXd& G, const Eigen::VectorXd& f)
-{
-    if (E.rows() != E_.rows() || E.cols() != E_.cols())
-        DOMAIN_ERROR_EXCEPTION(throwMsgOnMat("E", E, E_));
-    if (E.rows() != E_.rows() || E.cols() != E_.cols())
-        DOMAIN_ERROR_EXCEPTION(throwMsgOnMat("G", G, G_));
-    if (f.rows() != f_.rows())
-        DOMAIN_ERROR_EXCEPTION(throwMsgOnMat("f", f, f_));
-
-    E_ = E;
-    G_ = G;
-    f_ = f;
 }
 
 void MixedConstraint::initializeConstraint(const PreviewSystem& ps)
@@ -258,27 +228,6 @@ TrajectoryBoundConstraint::TrajectoryBoundConstraint(const Eigen::VectorXd& lowe
 {
     if (lower.rows() != upper.rows())
         DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("lower", "upper", lower, upper));
-
-    for (auto line = 0; line < lower_.rows(); ++line) {
-        if (lower_(line) != -std::numeric_limits<double>::infinity())
-            lowerLines_.push_back(line);
-        if (upper_(line) != std::numeric_limits<double>::infinity())
-            upperLines_.push_back(line);
-    }
-}
-
-void TrajectoryBoundConstraint::reset(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper)
-{
-    if (lower.rows() != lower_.rows())
-        DOMAIN_ERROR_EXCEPTION(throwMsgOnMat("lower", lower, lower_));
-    if (upper.rows() != upper_.rows())
-        DOMAIN_ERROR_EXCEPTION(throwMsgOnMat("upper", upper, upper_));
-
-    lower_ = lower;
-    upper_ = upper;
-
-    lowerLines_.clear();
-    upperLines_.clear();
 
     for (auto line = 0; line < lower_.rows(); ++line) {
         if (lower_(line) != -std::numeric_limits<double>::infinity())
@@ -348,19 +297,11 @@ ControlBoundConstraint::ControlBoundConstraint(const Eigen::VectorXd& lower, con
         DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("lower", "upper", lower, upper));
 }
 
-void ControlBoundConstraint::reset(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper)
-{
-    if (lower.rows() != lower_.rows())
-        DOMAIN_ERROR_EXCEPTION(throwMsgOnMat("lower", lower, lower_));
-    if (upper.rows() != upper_.rows())
-        DOMAIN_ERROR_EXCEPTION(throwMsgOnMat("upper", upper, upper_));
-
-    lower_ = lower;
-    upper_ = upper;
-}
-
 void ControlBoundConstraint::initializeConstraint(const PreviewSystem& ps)
 {
+    if (hasBeenInitialized_)
+        RUNTIME_ERROR_EXCEPTION("You have initialized a ControlBoundConstraint twice. As move semantics are used, you can't do so.");
+
     if (lower_.rows() == ps.uDim) {
         nrConstr_ = ps.fullUDim;
         lb_.resize(nrConstr_);
@@ -373,6 +314,8 @@ void ControlBoundConstraint::initializeConstraint(const PreviewSystem& ps)
     } else {
         DOMAIN_ERROR_EXCEPTION(throwMsgOnColsOnPSUDim("lower", lower_, &ps));
     }
+
+    hasBeenInitialized_ = true;
 }
 
 void ControlBoundConstraint::update(const PreviewSystem& ps)

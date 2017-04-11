@@ -47,6 +47,7 @@ template <class E> //see http://stackoverflow.com/questions/37181621/easy-way-of
 #define EXCEPTION(TYPE, MESSAGE) \
     fancy_throw<TYPE>(MESSAGE, __FILE__, __func__, __LINE__)
 #define DOMAIN_ERROR_EXCEPTION(MESSAGE) EXCEPTION(std::domain_error, MESSAGE)
+#define RUNTIME_ERROR_EXCEPTION(MESSAGE) EXCEPTION(std::runtime_error, MESSAGE)
 
 namespace mpc {
 
