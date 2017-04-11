@@ -24,8 +24,8 @@
 #include <numeric>
 
 // mpc
-#include "constraints.h"
 #include "PreviewSystem.h"
+#include "constraints.h"
 #include "debugUtils.h"
 
 namespace mpc {
@@ -173,13 +173,13 @@ void MPCTypeFull::weights(const Eigen::VectorXd& Wx, const Eigen::VectorXd& Wu)
     checkRowsOnPSUDim("Wu", Wu, ps_.get());
 
     if (Wx.rows() == ps_->xDim)
-        for (auto i = 0; i < ps_->nrStep; ++i)
+        for (auto i = 0; i < ps_->nrXStep; ++i)
             Wx_.segment(i * ps_->xDim, ps_->xDim) = Wx;
     else
         Wx_ = Wx;
 
     if (Wu.rows() == ps_->uDim)
-        for (auto i = 0; i < ps_->nrStep; ++i)
+        for (auto i = 0; i < ps_->nrUStep; ++i)
             Wu_.segment(i * ps_->uDim, ps_->uDim) = Wu;
     else
         Wu_ = Wu;
@@ -253,15 +253,16 @@ void MPCTypeFull::updateSystem()
         auto xDim = ps_->xDim;
         auto uDim = ps_->uDim;
 
-        ps_->Phi.block(0, 0, xDim, xDim) = ps_->A;
-        ps_->Psi.block(0, 0, xDim, uDim) = ps_->B;
-        ps_->xi.segment(0, xDim) = ps_->d;
+        ps_->Phi.block(xDim, 0, xDim, xDim) = ps_->A;
+        ps_->Psi.block(xDim, 0, xDim, uDim) = ps_->B;
+        ps_->xi.segment(xDim, xDim) = ps_->d;
 
-        for (auto i = 1; i < ps_->nrStep; ++i) {
+        for (auto i = 2; i < ps_->nrXStep; ++i) {
             ps_->Phi.block(i * xDim, 0, xDim, xDim).noalias() = ps_->A * ps_->Phi.block((i - 1) * xDim, 0, xDim, xDim);
-            for (auto j = 0; j < i; ++j)
-                ps_->Psi.block(i * xDim, j * uDim, xDim, uDim).noalias() = ps_->A * ps_->Psi.block((i - 1) * xDim, j * uDim, xDim, uDim);
-            ps_->Psi.block(i * xDim, i * uDim, xDim, uDim)= ps_->B;
+            ps_->Psi.block(i * xDim, 0, xDim, uDim).noalias() = ps_->A * ps_->Psi.block((i - 1) * xDim, 0, xDim, uDim);
+            for (auto j = 1; j < i; ++j)
+                ps_->Psi.block(i * xDim, j * uDim, xDim, uDim) = ps_->Psi.block((i - 1) * xDim, (j - 1) * uDim, xDim, uDim);
+
             ps_->xi.segment(i * xDim, xDim).noalias() = ps_->A * ps_->xi.segment((i - 1) * xDim, xDim) + ps_->d;
         }
 
@@ -284,6 +285,7 @@ void MPCTypeFull::updateSystem()
 
 void MPCTypeFull::makeQPForm()
 {
+    //REDO
     Q_.noalias() = ps_->Psi.transpose() * Eigen::MatrixXd(Wx_.asDiagonal()) * ps_->Psi + Eigen::MatrixXd(Wu_.asDiagonal());
     c_.noalias() = ps_->Psi.transpose() * Eigen::MatrixXd(Wx_.asDiagonal()) * (ps_->Phi * ps_->x0 - ps_->xd + ps_->xi);
 
@@ -375,7 +377,7 @@ void MPCTypeLast::weights(const Eigen::VectorXd& Wx, const Eigen::VectorXd& Wu)
 
     Wx_ = Wx;
     if (Wu.rows() == ps_->uDim)
-        for (auto i = 0; i < ps_->nrStep; ++i)
+        for (auto i = 0; i < ps_->nrUStep; ++i)
             Wu_.segment(i * ps_->uDim, ps_->uDim) = Wu;
     else
         Wu_ = Wu;

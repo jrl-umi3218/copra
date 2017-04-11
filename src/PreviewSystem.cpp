@@ -41,11 +41,12 @@ void PreviewSystem::system(const Eigen::MatrixXd& state, const Eigen::MatrixXd& 
         throw std::domain_error("The number of step sould be a positive number! ");
 
     isUpdated = false;
-    nrStep = numberOfSteps;
+    nrUStep = numberOfSteps;
+    nrXStep = numberOfSteps + 1;
     xDim = static_cast<int>(state.cols());
     uDim = static_cast<int>(control.cols());
-    fullXDim = xDim * nrStep;
-    fullUDim = uDim * nrStep;
+    fullXDim = xDim * nrXStep;
+    fullUDim = uDim * nrUStep;
 
     checkRowsOnPSXDim("xTraj", xTraj, this);
 
@@ -62,6 +63,7 @@ void PreviewSystem::system(const Eigen::MatrixXd& state, const Eigen::MatrixXd& 
     for (auto i = 0; i < fullXDim; i += xTrajLen)
         xd.segment(i, xTrajLen) = xTraj;
     Phi.setZero();
+    Phi.block(0, 0, xDim, xDim) = Eigen::MatrixXd::Identity(xDim, xDim);
     Psi.setZero();
     xi.setZero();
 }

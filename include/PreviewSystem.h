@@ -31,8 +31,9 @@ namespace mpc {
  * \f$x_{k+1} = Ax_{k} + Bu_{k} + d\f$.
  * After performing a recursion, this system can be represented in as:
  * \f$X = \Phi x_{0} + \Psi U + \Xi\f$.
- * \note \f$X = [x_1^T x_2^T ... x_N^T]^T\f$ and \f$U = [u_0^T u_1^T ... u_{N-1}^T]^T\f$
- * where \f$N\f$ is the dimension of the system (the number of steps).
+ * \note \f$X = [x_0^T x_1^T ... x_N^T]^T\f$ and \f$U = [u_0^T u_1^T ... u_{N-1}^T]^T\f$
+ * where \f$N\f$ is the dimension of the system (the number of steps).\n
+ * So, \f$X\f$ dimension is \f$N+1\f$ and \f$U\f$ dimension is \f$N\f%.
  */
 struct MPC_DLLAPI PreviewSystem {
     /**
@@ -64,7 +65,8 @@ struct MPC_DLLAPI PreviewSystem {
         const Eigen::VectorXd& xTraj, int numberOfSteps);
 
     bool isUpdated = false; /**< State whether or not the preview system has been updated. This is done when calling the solve function of a mpc. Calling \see system or setting this to false will force a new update*/
-    int nrStep = 0; /**< The number of iteration to perform (it is the dimension of the system \f$N\f$. */
+    int nrUStep = 0; /**< The number of iteration to perform for U (it is the dimension of \f$U\f$, \f$N\f$). */
+    int nrXStep = 0; /**< The number of iteration to perform for X (it is the dimension of \f$X\f$, \f$N+1\f$). */
     int xDim = 0; /**< The dimension of the state vector */
     int uDim = 0; /**< The dimension of the control vector */
     int fullXDim = 0; /**< The full dimension of the state vector (xDim*nbStep) */

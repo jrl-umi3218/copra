@@ -314,7 +314,7 @@ class TestMPC(unittest.TestCase):
         controllerL.weights(2.3, 2.6)
         controllerF.weights(self.wx, self.wu)
         controllerL.weights(self.wx, self.wu)
-        wx = VectorXd([1, 2, 3, 4])
+        wx = VectorXd([1, 2, 3, 4, 5, 6])
         wu = VectorXd([3, 4])
         controllerF.weights(wx, wu)
         wx = VectorXd([1, 2])

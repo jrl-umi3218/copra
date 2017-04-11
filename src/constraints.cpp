@@ -66,7 +66,7 @@ void TrajectoryConstraint::reset(const Eigen::MatrixXd& E, const Eigen::VectorXd
 {
     checkMat("E", E, E_);
     checkMat("f", f, f_);
-    
+
     E_ = E;
     f_ = f;
 }
@@ -75,7 +75,7 @@ void TrajectoryConstraint::initializeConstraint(const PreviewSystem& ps)
 {
     checkColsOnPSXDim("E", E_, &ps);
     if (E_.cols() == ps.xDim) {
-        nrConstr_ = static_cast<int>(E_.rows()) * ps.nrStep;
+        nrConstr_ = static_cast<int>(E_.rows()) * ps.nrXStep;
 
     } else {
         fullSizeEntry_ = true;
@@ -93,7 +93,7 @@ void TrajectoryConstraint::update(const PreviewSystem& ps)
         b_.noalias() = f_ - E_ * (ps.Phi * ps.x0 + ps.xi);
     } else {
         auto nrLines = static_cast<int>(E_.rows());
-        for (int i = 0; i < ps.nrStep; ++i) {
+        for (int i = 0; i < ps.nrXStep; ++i) {
             A_.block(i * nrLines, 0, nrLines, ps.fullUDim).noalias() = E_ * ps.Psi.block(i * ps.xDim, 0, ps.xDim, ps.fullUDim);
             b_.segment(i * nrLines, nrLines).noalias() = f_ - E_ * (ps.Phi.block(i * ps.xDim, 0, ps.xDim, ps.xDim) * ps.x0 + ps.xi.segment(i * ps.xDim, ps.xDim));
         }
@@ -124,7 +124,7 @@ void ControlConstraint::reset(const Eigen::MatrixXd& E, const Eigen::VectorXd& f
 {
     checkMat("E", E, E_);
     checkMat("f", f, f_);
-    
+
     E_ = E;
     f_ = f;
 }
@@ -133,7 +133,7 @@ void ControlConstraint::initializeConstraint(const PreviewSystem& ps)
 {
     checkColsOnPSUDim("E", E_, &ps);
     if (E_.cols() == ps.uDim) {
-        nrConstr_ = static_cast<int>(E_.rows()) * ps.nrStep;
+        nrConstr_ = static_cast<int>(E_.rows()) * ps.nrUStep;
         A_.resize(nrConstr_, ps.fullUDim);
         b_.resize(nrConstr_);
         A_.setZero();
@@ -149,7 +149,7 @@ void ControlConstraint::update(const PreviewSystem& ps)
 {
     if (!fullSizeEntry_) {
         auto nrLines = static_cast<int>(E_.rows());
-        for (int i = 0; i < ps.nrStep; ++i) {
+        for (int i = 0; i < ps.nrUStep; ++i) {
             A_.block(i * nrLines, i * ps.uDim, nrLines, ps.uDim) = E_;
             b_.segment(i * nrLines, nrLines) = f_;
         }
@@ -193,7 +193,7 @@ void MixedConstraint::initializeConstraint(const PreviewSystem& ps)
 {
     checkColsOnPSXUDim("E", "G", E_, G_, &ps);
     if (E_.cols() == ps.xDim) {
-        nrConstr_ = static_cast<int>(E_.rows()) * ps.nrStep;
+        nrConstr_ = static_cast<int>(E_.rows()) * ps.nrXStep;
         A_.resize(nrConstr_, ps.fullUDim);
         b_.resize(nrConstr_);
         A_.setZero();
@@ -210,7 +210,7 @@ void MixedConstraint::update(const PreviewSystem& /*E*/)
     /*
     if (!fullSizeEntry_) {
         auto nrLines = static_cast<int>(E_.rows());
-        for (int i = 0; i < ps.nrStep; ++i) {
+        for (int i = 0; i < ps.nrXStep; ++i) {
             A_.block(i * nrLines, i * ps.uDim, nrLines, ps.uDim) = E_;
             b_.segment(i * nrLines, nrLines) = f_;
         }
@@ -270,7 +270,7 @@ void TrajectoryBoundConstraint::initializeConstraint(const PreviewSystem& ps)
 {
     checkRowsOnPSXDim("lower", lower_, &ps);
     if (lower_.rows() == ps.xDim) {
-        nrConstr_ = static_cast<int>((lowerLines_.size() + upperLines_.size())) * ps.nrStep;
+        nrConstr_ = static_cast<int>((lowerLines_.size() + upperLines_.size())) * ps.nrXStep;
     } else {
         nrConstr_ = static_cast<int>((lowerLines_.size() + upperLines_.size()));
         fullSizeEntry_ = true;
@@ -284,7 +284,7 @@ void TrajectoryBoundConstraint::update(const PreviewSystem& ps)
 {
     int nrLines = 0;
     Eigen::VectorXd delta = ps.Phi * ps.x0 + ps.xi;
-    for (auto step = 0; step < ps.nrStep; ++step) {
+    for (auto step = 0; step < ps.nrXStep; ++step) {
         for (auto line : lowerLines_) {
             A_.row(nrLines) = ps.Psi.row(line + ps.xDim * step);
             b_(nrLines) = lower_(line) - delta(line + ps.xDim * step);
@@ -294,7 +294,7 @@ void TrajectoryBoundConstraint::update(const PreviewSystem& ps)
             break;
     }
 
-    for (auto step = 0; step < ps.nrStep; ++step) {
+    for (auto step = 0; step < ps.nrXStep; ++step) {
         for (auto line : upperLines_) {
             A_.row(nrLines) = ps.Psi.row(line + ps.xDim * step);
             b_(nrLines) = upper_(line) - delta(line + ps.xDim * step);
@@ -350,7 +350,7 @@ void ControlBoundConstraint::initializeConstraint(const PreviewSystem& ps)
 void ControlBoundConstraint::update(const PreviewSystem& ps)
 {
     if (!fullSizeEntry_) {
-        for (int i = 0; i < ps.nrStep; ++i) {
+        for (int i = 0; i < ps.nrUStep; ++i) {
             ub_.segment(i * ps.uDim, ps.uDim) = upper_;
             lb_.segment(i * ps.uDim, ps.uDim) = lower_;
         }

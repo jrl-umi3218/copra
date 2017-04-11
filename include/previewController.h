@@ -46,7 +46,7 @@ enum class ConstraintFlag;
  * This class gives all the needed composants for performing a model preview control.
  * It solves:\n
  * \f$X = \Phi x_{0} + \Psi U + \Xi\f$, where \f$U\f$ is the optimization vector.
- * \note \f$X = [x_1^T x_2^T ... x_N^T]^T\f$ and \f$U = [u_0^T u_1^T ... u_{N-1}^T]^T\f$
+ * \note \f$X = [x_0^T x_1^T ... x_N^T]^T\f$ and \f$U = [u_0^T u_1^T ... u_{N-1}^T]^T\f$
  * where \f$N\f$ is the dimension of the system (the number of steps).
  * \warning This class waits for a discretized system ! Continuous systems are not implemented.
  */
