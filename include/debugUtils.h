@@ -52,14 +52,6 @@ template <class E> //see http://stackoverflow.com/questions/37181621/easy-way-of
 namespace mpc {
 
 /**
- * \brief Check that a matrix has the same dimension of another one.
- * \param isMatName Name of the matrix to check
- * \param isMat Matrix to check
- * \param shouldBeMat Matrix to be compared with
- * \return The throwing message
- */
-std::string throwMsgOnMat(const char* isMatName, const Eigen::MatrixXd& isMat, const Eigen::MatrixXd& shouldBeMat);
-/**
  * \brief Check that two matrices have the same number of rows.
  * \param mat1Name Name of the first matrix to check
  * \param mat2Name Name of the second matrix to check

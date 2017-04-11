@@ -174,12 +174,12 @@ MixedConstraint::MixedConstraint(const Eigen::MatrixXd& E, const Eigen::MatrixXd
 
 void MixedConstraint::initializeConstraint(const PreviewSystem& ps)
 {
-    if (E_.cols() == ps.xDim) {
+    if (E_.cols() == ps.xDim && G_.cols() == ps.uDim) {
         nrConstr_ = static_cast<int>(E_.rows()) * ps.nrUStep;
         A_.resize(nrConstr_, ps.fullUDim);
         b_.resize(nrConstr_);
         A_.setZero();
-    } else if (E_.cols() == ps.fullXDim) {
+    } else if (E_.cols() == ps.fullXDim && G_.cols() == ps.fullUDim) {
         fullSizeEntry_ = true;
         nrConstr_ = static_cast<int>(E_.rows());
         A_.noalias() = E_ * ps.Psi + G_;

@@ -23,15 +23,6 @@
 
 namespace mpc {
 
-std::string throwMsgOnMat(const char* isMatName, const Eigen::MatrixXd& isMat, const Eigen::MatrixXd& shouldBeMat)
-{
-    std::ostringstream os;
-    os << "Bad dimension for " << isMatName
-       << ". It should be an (" << std::to_string(shouldBeMat.rows()) << "-by-" << std::to_string(shouldBeMat.cols())
-       << ") matrix but you gave an (" << std::to_string(isMat.rows()) << "-by-" << std::to_string(isMat.cols()) << ") matrix";
-    return os.str();
-}
-
 std::string throwMsgOnRows(const char* mat1Name, const char* mat2Name, const Eigen::MatrixXd& mat1, const Eigen::MatrixXd& mat2)
 {
     std::ostringstream os;
