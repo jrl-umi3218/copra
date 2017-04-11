@@ -250,25 +250,7 @@ void MPCTypeFull::clearConstraintMatrices()
 
 void MPCTypeFull::updateSystem()
 {
-    if (!ps_->isUpdated) {
-        auto xDim = ps_->xDim;
-        auto uDim = ps_->uDim;
-
-        ps_->Phi.block(xDim, 0, xDim, xDim) = ps_->A;
-        ps_->Psi.block(xDim, 0, xDim, uDim) = ps_->B;
-        ps_->xi.segment(xDim, xDim) = ps_->d;
-
-        for (auto i = 2; i < ps_->nrXStep; ++i) {
-            ps_->Phi.block(i * xDim, 0, xDim, xDim).noalias() = ps_->A * ps_->Phi.block((i - 1) * xDim, 0, xDim, xDim);
-            ps_->Psi.block(i * xDim, 0, xDim, uDim).noalias() = ps_->A * ps_->Psi.block((i - 1) * xDim, 0, xDim, uDim);
-            for (auto j = 1; j < i; ++j)
-                ps_->Psi.block(i * xDim, j * uDim, xDim, uDim) = ps_->Psi.block((i - 1) * xDim, (j - 1) * uDim, xDim, uDim);
-
-            ps_->xi.segment(i * xDim, xDim).noalias() = ps_->A * ps_->xi.segment((i - 1) * xDim, xDim) + ps_->d;
-        }
-
-        ps_->isUpdated = true;
-    }
+    ps_->updateSystem();
 
     constraints_.updateNr();
     Aeq_.resize(constraints_.nrEqConstr, ps_->fullUDim);

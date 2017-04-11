@@ -225,7 +225,6 @@ void MixedConstraint::update(const PreviewSystem& ps)
         auto nrLines = static_cast<int>(E_.rows());
         auto uDim = ps.uDim;
         auto xDim = ps.xDim;
-        // check G.rows() == E.rows() == f.rows()
         A_.block(0, 0, nrLines, uDim) = G_;
         b_.head(nrLines) = f_ - E_ * ps.x0;
         for (int i = 1; i < ps.nrUStep; ++i) {

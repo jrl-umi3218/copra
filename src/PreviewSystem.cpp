@@ -73,4 +73,24 @@ void PreviewSystem::system(const Eigen::MatrixXd& state, const Eigen::MatrixXd& 
     xi.setZero();
 }
 
+void PreviewSystem::updateSystem() noexcept
+{
+    if (!isUpdated) {
+        Phi.block(xDim, 0, xDim, xDim) = A;
+        Psi.block(xDim, 0, xDim, uDim) = B;
+        xi.segment(xDim, xDim) = d;
+
+        for (auto i = 2; i < nrXStep; ++i) {
+            Phi.block(i * xDim, 0, xDim, xDim).noalias() = A * Phi.block((i - 1) * xDim, 0, xDim, xDim);
+            Psi.block(i * xDim, 0, xDim, uDim).noalias() = A * Psi.block((i - 1) * xDim, 0, xDim, uDim);
+            for (auto j = 1; j < i; ++j)
+                Psi.block(i * xDim, j * uDim, xDim, uDim) = Psi.block((i - 1) * xDim, (j - 1) * uDim, xDim, uDim);
+
+            xi.segment(i * xDim, xDim).noalias() = A * xi.segment((i - 1) * xDim, xDim) + d;
+        }
+
+        isUpdated = true;
+    }
+}
+
 } // namespace mpc

@@ -64,6 +64,12 @@ struct MPC_DLLAPI PreviewSystem {
         const Eigen::VectorXd& bias, const Eigen::VectorXd& xInit,
         const Eigen::VectorXd& xTraj, int numberOfSteps);
 
+    /**
+     * \brief Update the system.
+     * Fill Phi, Psi, xi in PreviewSystem
+     */
+    void updateSystem() noexcept;
+
     bool isUpdated = false; /**< State whether or not the preview system has been updated. This is done when calling the solve function of a mpc. Calling \see system or setting this to false will force a new update*/
     int nrUStep = 0; /**< The number of iteration to perform for U (it is the dimension of \f$U\f$, \f$N\f$). */
     int nrXStep = 0; /**< The number of iteration to perform for X (it is the dimension of \f$X\f$, \f$N+1\f$). */

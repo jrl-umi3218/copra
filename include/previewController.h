@@ -154,7 +154,6 @@ protected:
     /**
      * Update the system and its constraints.
      * \param ps The preview system
-     * Fill Phi, Psi, xi in PreviewSystem
      * Fill A, b in Constraints
      */
     void updateSystem();
