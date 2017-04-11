@@ -169,20 +169,21 @@ boost::timer::cpu_times MPCTypeFull::solveAndBuildTime() const noexcept
 
 void MPCTypeFull::weights(const Eigen::VectorXd& Wx, const Eigen::VectorXd& Wu)
 {
-    checkRowsOnPSXDim("Wx", Wx, ps_.get());
-    checkRowsOnPSUDim("Wu", Wu, ps_.get());
-
     if (Wx.rows() == ps_->xDim)
         for (auto i = 0; i < ps_->nrXStep; ++i)
             Wx_.segment(i * ps_->xDim, ps_->xDim) = Wx;
-    else
+    else if (Wx.rows() == ps_->fullXDim)
         Wx_ = Wx;
+    else
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsOnPSXDim("Wx", Wx, ps_.get()));
 
     if (Wu.rows() == ps_->uDim)
         for (auto i = 0; i < ps_->nrUStep; ++i)
             Wu_.segment(i * ps_->uDim, ps_->uDim) = Wu;
-    else
+    else if (Wu.rows() == ps_->fullUDim)
         Wu_ = Wu;
+    else
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsOnPSUDim("Wu", Wu, ps_.get()));
 }
 
 void MPCTypeFull::weights(double Wx, double Wu)
@@ -372,15 +373,18 @@ void MPCTypeLast::initializeController(const std::shared_ptr<PreviewSystem>& ps)
 
 void MPCTypeLast::weights(const Eigen::VectorXd& Wx, const Eigen::VectorXd& Wu)
 {
-    checkRowsOnDim("Wx", Wx, ps_->xDim);
-    checkRowsOnPSUDim("Wu", Wu, ps_.get());
-
-    Wx_ = Wx;
+    if (Wx.rows() == ps_->xDim)
+        Wx_ = Wx;
+    else
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsOnDim("Wu", Wu, ps_->xDim));
+        
     if (Wu.rows() == ps_->uDim)
         for (auto i = 0; i < ps_->nrUStep; ++i)
             Wu_.segment(i * ps_->uDim, ps_->uDim) = Wu;
-    else
+    else if (Wu.rows() == ps_->fullUDim)
         Wu_ = Wu;
+    else
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsOnPSUDim("Wu", Wu, ps_.get()));
 }
 
 /*

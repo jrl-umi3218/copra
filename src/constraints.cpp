@@ -59,13 +59,16 @@ TrajectoryConstraint::TrajectoryConstraint(const Eigen::MatrixXd& E, const Eigen
     , E_(E)
     , f_(f)
 {
-    checkRows("E", "f", E, f);
+    if (E.rows() != f.rows())
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("E", "f", E, f));
 }
 
 void TrajectoryConstraint::reset(const Eigen::MatrixXd& E, const Eigen::VectorXd& f)
 {
-    checkMat("E", E, E_);
-    checkMat("f", f, f_);
+    if (E.rows() != E_.rows() || E.cols() != E_.cols())
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnMat("E", E, E_));
+    if (f.rows() != f_.rows())
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnMat("f", f, f_));
 
     E_ = E;
     f_ = f;
@@ -73,13 +76,14 @@ void TrajectoryConstraint::reset(const Eigen::MatrixXd& E, const Eigen::VectorXd
 
 void TrajectoryConstraint::initializeConstraint(const PreviewSystem& ps)
 {
-    checkColsOnPSXDim("E", E_, &ps);
     if (E_.cols() == ps.xDim) {
         nrConstr_ = static_cast<int>(E_.rows()) * ps.nrXStep;
 
-    } else {
+    } else if (E_.cols() == ps.fullXDim) {
         fullSizeEntry_ = true;
         nrConstr_ = static_cast<int>(E_.rows());
+    } else {
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnColsOnPSXDim("E", E_, &ps));
     }
 
     A_.resize(nrConstr_, ps.fullUDim);
@@ -112,45 +116,49 @@ ConstraintFlag TrajectoryConstraint::constraintType()
  *                                    Control Constraint                                         *
  *************************************************************************************************/
 
-ControlConstraint::ControlConstraint(const Eigen::MatrixXd& E, const Eigen::VectorXd& f, bool isInequalityConstraint)
+ControlConstraint::ControlConstraint(const Eigen::MatrixXd& G, const Eigen::VectorXd& f, bool isInequalityConstraint)
     : EqIneqConstraint("Control", isInequalityConstraint)
-    , E_(E)
+    , G_(G)
     , f_(f)
 {
-    checkRows("E", "f", E, f);
+    if (G.rows() != f.rows())
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("G", "f", G, f));
 }
 
-void ControlConstraint::reset(const Eigen::MatrixXd& E, const Eigen::VectorXd& f)
+void ControlConstraint::reset(const Eigen::MatrixXd& G, const Eigen::VectorXd& f)
 {
-    checkMat("E", E, E_);
-    checkMat("f", f, f_);
+    if (G.rows() != G_.rows() || G.cols() != G_.cols())
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnMat("G", G, G_));
+    if (f.rows() != f_.rows())
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnMat("f", f, f_));
 
-    E_ = E;
+    G_ = G;
     f_ = f;
 }
 
 void ControlConstraint::initializeConstraint(const PreviewSystem& ps)
 {
-    checkColsOnPSUDim("E", E_, &ps);
-    if (E_.cols() == ps.uDim) {
-        nrConstr_ = static_cast<int>(E_.rows()) * ps.nrUStep;
+    if (G_.cols() == ps.uDim) {
+        nrConstr_ = static_cast<int>(G_.rows()) * ps.nrUStep;
         A_.resize(nrConstr_, ps.fullUDim);
         b_.resize(nrConstr_);
         A_.setZero();
-    } else {
+    } else if (G_.cols() == ps.fullUDim) {
         fullSizeEntry_ = true;
-        nrConstr_ = static_cast<int>(E_.rows());
-        A_ = std::move(E_);
+        nrConstr_ = static_cast<int>(G_.rows());
+        A_ = std::move(G_);
         b_ = std::move(f_);
+    } else {
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnColsOnPSUDim("G", G_, &ps));
     }
 }
 
 void ControlConstraint::update(const PreviewSystem& ps)
 {
     if (!fullSizeEntry_) {
-        auto nrLines = static_cast<int>(E_.rows());
+        auto nrLines = static_cast<int>(G_.rows());
         for (int i = 0; i < ps.nrUStep; ++i) {
-            A_.block(i * nrLines, i * ps.uDim, nrLines, ps.uDim) = E_;
+            A_.block(i * nrLines, i * ps.uDim, nrLines, ps.uDim) = G_;
             b_.segment(i * nrLines, nrLines) = f_;
         }
     }
@@ -174,15 +182,20 @@ MixedConstraint::MixedConstraint(const Eigen::MatrixXd& E, const Eigen::MatrixXd
     , G_(G)
     , f_(f)
 {
-    checkRows("E", "f", E, f);
-    checkRows("G", "f", G, f);
+    if (E.rows() != f.rows())
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("E", "f", E, f));
+    if (G.rows() != f.rows())
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("G", "f", G, f));
 }
 
 void MixedConstraint::reset(const Eigen::MatrixXd& E, const Eigen::MatrixXd& G, const Eigen::VectorXd& f)
 {
-    checkMat("E", E, E_);
-    checkMat("G", G, G_);
-    checkMat("f", f, f_);
+    if (E.rows() != E_.rows() || E.cols() != E_.cols())
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnMat("E", E, E_));
+    if (E.rows() != E_.rows() || E.cols() != E_.cols())
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnMat("G", G, G_));
+    if (f.rows() != f_.rows())
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnMat("f", f, f_));
 
     E_ = E;
     G_ = G;
@@ -191,17 +204,18 @@ void MixedConstraint::reset(const Eigen::MatrixXd& E, const Eigen::MatrixXd& G, 
 
 void MixedConstraint::initializeConstraint(const PreviewSystem& ps)
 {
-    checkColsOnPSXUDim("E", "G", E_, G_, &ps);
     if (E_.cols() == ps.xDim) {
         nrConstr_ = static_cast<int>(E_.rows()) * ps.nrXStep;
         A_.resize(nrConstr_, ps.fullUDim);
         b_.resize(nrConstr_);
         A_.setZero();
-    } else {
+    } else if (E_.cols() == ps.fullXDim) {
         fullSizeEntry_ = true;
         nrConstr_ = static_cast<int>(E_.rows());
         A_ = std::move(E_);
         b_ = std::move(f_);
+    } else {
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnColsOnPSXUDim("E", "G", E_, G_, &ps));
     }
 }
 
@@ -237,7 +251,8 @@ TrajectoryBoundConstraint::TrajectoryBoundConstraint(const Eigen::VectorXd& lowe
     , lowerLines_()
     , upperLines_()
 {
-    checkRows("lower", "upper", lower, upper);
+    if (lower.rows() != upper.rows())
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("lower", "upper", lower, upper));
 
     for (auto line = 0; line < lower_.rows(); ++line) {
         if (lower_(line) != -std::numeric_limits<double>::infinity())
@@ -249,8 +264,10 @@ TrajectoryBoundConstraint::TrajectoryBoundConstraint(const Eigen::VectorXd& lowe
 
 void TrajectoryBoundConstraint::reset(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper)
 {
-    checkMat("lower", lower, lower_);
-    checkMat("upper", upper, upper_);
+    if (lower.rows() != lower_.rows())
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnMat("lower", lower, lower_));
+    if (upper.rows() != upper_.rows())
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnMat("upper", upper, upper_));
 
     lower_ = lower;
     upper_ = upper;
@@ -268,12 +285,13 @@ void TrajectoryBoundConstraint::reset(const Eigen::VectorXd& lower, const Eigen:
 
 void TrajectoryBoundConstraint::initializeConstraint(const PreviewSystem& ps)
 {
-    checkRowsOnPSXDim("lower", lower_, &ps);
     if (lower_.rows() == ps.xDim) {
         nrConstr_ = static_cast<int>((lowerLines_.size() + upperLines_.size())) * ps.nrXStep;
-    } else {
+    } else if (lower_.rows() == ps.fullXDim) {
         nrConstr_ = static_cast<int>((lowerLines_.size() + upperLines_.size()));
         fullSizeEntry_ = true;
+    } else {
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnColsOnPSXDim("lower", lower_, &ps));
     }
 
     A_.resize(nrConstr_, ps.fullUDim);
@@ -321,29 +339,34 @@ ControlBoundConstraint::ControlBoundConstraint(const Eigen::VectorXd& lower, con
     , lb_()
     , ub_()
 {
-    checkRows("lower", "upper", lower, upper);
+    if (lower.rows() != upper.rows())
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("lower", "upper", lower, upper));
 }
 
 void ControlBoundConstraint::reset(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper)
 {
-    checkMat("lower", lower, lower_);
-    checkMat("upper", upper, upper_);
+    if (lower.rows() != lower_.rows())
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnMat("lower", lower, lower_));
+    if (upper.rows() != upper_.rows())
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnMat("upper", upper, upper_));
+
     lower_ = lower;
     upper_ = upper;
 }
 
 void ControlBoundConstraint::initializeConstraint(const PreviewSystem& ps)
 {
-    checkRowsOnPSUDim("lower", lower_, &ps);
     if (lower_.rows() == ps.uDim) {
         nrConstr_ = ps.fullUDim;
         lb_.resize(nrConstr_);
         ub_.resize(nrConstr_);
-    } else {
+    } else if (lower_.rows() == ps.fullUDim) {
         fullSizeEntry_ = true;
         nrConstr_ = static_cast<int>(lower_.rows());
         lb_ = std::move(lower_);
         ub_ = std::move(upper_);
+    } else {
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnColsOnPSUDim("lower", lower_, &ps));
     }
 }
 

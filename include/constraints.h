@@ -204,26 +204,26 @@ class MPC_DLLAPI ControlConstraint final : public EqIneqConstraint {
 public:
     /**
      * \brief Constructor of the control constraint.
-     * Create a constraint of type \f$Eu\leq f\f$ or \f$Eu = f\f$ or \f$EU = f\f$ or \f$EU\leq f\f$ with \f$U=[u_0^T ... u_{N-1}^T]^T\f$.\n
-     * As \f$U\f$ is the optimization variable, \f$Eu\leq f\f$ or \f$Eu = f\f$
+     * Create a constraint of type \f$Gu\leq f\f$ or \f$Gu = f\f$ or \f$GU = f\f$ or \f$GU\leq f\f$ with \f$U=[u_0^T ... u_{N-1}^T]^T\f$.\n
+     * As \f$U\f$ is the optimization variable, \f$Gu\leq f\f$ or \f$Gu = f\f$
      * is transformed to be \f$AU\leq b\f$ or \f$AU = b\f$.
-     * \param E The matrix side of the constraint
+     * \param G The matrix side of the constraint
      * \param f The vector side of the constraint
      * \param isInequalityConstraint Whether the constraint is an Inequality (true) or an Equality (false).
-     * \throw Throw an std::domain_error if E and f have not the same number of rows
+     * \throw Throw an std::domain_error if G and f have not the same number of rows
      */
-    ControlConstraint(const Eigen::MatrixXd& E, const Eigen::VectorXd& f, bool isInequalityConstraint = true);
+    ControlConstraint(const Eigen::MatrixXd& G, const Eigen::VectorXd& f, bool isInequalityConstraint = true);
 
     /**
      * \brief Allow to modify the constraint. 
      * Thus, there is no need of recreating a new constraint 
      * if several mpc are runned one after the other.
      * \warning The dimension of E and f should not change!
-     * \param E The matrix side of the constraint
+     * \param G The matrix side of the constraint
      * \param f The vector side of the constraint
-     * \throw Throw an std::domain_error if E or f is badly dimension
+     * \throw Throw an std::domain_error if G or f is badly dimension
      */
-    void reset(const Eigen::MatrixXd& E, const Eigen::VectorXd& f);
+    void reset(const Eigen::MatrixXd& G, const Eigen::VectorXd& f);
 
     /**
      * \brief Initialize the constraint.
@@ -246,7 +246,7 @@ public:
     ConstraintFlag constraintType() override;
 
 private:
-    Eigen::MatrixXd E_;
+    Eigen::MatrixXd G_;
     Eigen::VectorXd f_;
 };
 

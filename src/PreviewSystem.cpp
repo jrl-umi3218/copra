@@ -33,12 +33,16 @@ void PreviewSystem::system(const Eigen::MatrixXd& state, const Eigen::MatrixXd& 
     const Eigen::VectorXd& bias, const Eigen::VectorXd& xInit,
     const Eigen::VectorXd& xTraj, int numberOfSteps)
 {
-    checkRows("xInit", "state", xInit, state);
-    checkSquareMat("state", state);
-    checkRows("xInit", "control", xInit, control);
-    checkRows("xInit", "bias", xInit, bias);
+    if (xInit.rows() != state.rows())
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("xInit", "state", xInit, state));
+    if (state.rows() != state.cols())
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnSquareMat("state", state));
+    if (xInit.rows() != control.rows())
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("xInit", "control", xInit, control));
+    if (xInit.rows() != bias.rows())
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("xInit", "state", xInit, bias));
     if (numberOfSteps <= 0) // This should desappear later
-        throw std::domain_error("The number of step sould be a positive number! ");
+        DOMAIN_ERROR_EXCEPTION("The number of step sould be a positive number! ");
 
     isUpdated = false;
     nrUStep = numberOfSteps;
@@ -48,7 +52,8 @@ void PreviewSystem::system(const Eigen::MatrixXd& state, const Eigen::MatrixXd& 
     fullXDim = xDim * nrXStep;
     fullUDim = uDim * nrUStep;
 
-    checkRowsOnPSXDim("xTraj", xTraj, this);
+    if (xTraj.rows() != xDim && xTraj.rows() != fullXDim)
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsOnPSXDim("xTraj", xTraj, this));
 
     x0 = xInit;
     xd.resize(fullXDim);
