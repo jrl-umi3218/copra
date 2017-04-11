@@ -205,31 +205,37 @@ void MixedConstraint::reset(const Eigen::MatrixXd& E, const Eigen::MatrixXd& G, 
 void MixedConstraint::initializeConstraint(const PreviewSystem& ps)
 {
     if (E_.cols() == ps.xDim) {
-        nrConstr_ = static_cast<int>(E_.rows()) * ps.nrXStep;
+        nrConstr_ = static_cast<int>(E_.rows()) * ps.nrUStep;
         A_.resize(nrConstr_, ps.fullUDim);
         b_.resize(nrConstr_);
         A_.setZero();
     } else if (E_.cols() == ps.fullXDim) {
         fullSizeEntry_ = true;
         nrConstr_ = static_cast<int>(E_.rows());
-        A_ = std::move(E_);
-        b_ = std::move(f_);
+        A_.noalias() = E_ * ps.Psi + G_;
+        b_.noalias() = f_ - ps.Phi * ps.x0 - ps.xi;
     } else {
         DOMAIN_ERROR_EXCEPTION(throwMsgOnColsOnPSXUDim("E", "G", E_, G_, &ps));
     }
 }
 
-void MixedConstraint::update(const PreviewSystem& /*E*/)
+void MixedConstraint::update(const PreviewSystem& ps)
 {
-    /*
     if (!fullSizeEntry_) {
         auto nrLines = static_cast<int>(E_.rows());
-        for (int i = 0; i < ps.nrXStep; ++i) {
-            A_.block(i * nrLines, i * ps.uDim, nrLines, ps.uDim) = E_;
-            b_.segment(i * nrLines, nrLines) = f_;
+        auto uDim = ps.uDim;
+        auto xDim = ps.xDim;
+        // check G.rows() == E.rows() == f.rows()
+        A_.block(0, 0, nrLines, uDim) = G_;
+        b_.head(nrLines) = f_ - E_ * ps.x0;
+        for (int i = 1; i < ps.nrUStep; ++i) {
+            A_.block(i * nrLines, 0, nrLines, uDim) = E_ * ps.Psi.block(i * xDim, 0, xDim, uDim);
+            for (int j = 1; j <= i; ++j)
+                A_.block(i * nrLines, j * uDim, nrLines, uDim) = A_.block((i - 1) * nrLines, (j - 1) * uDim, nrLines, uDim);
+
+            b_.segment(i * nrLines, nrLines) = f_ - E_ * (ps.Phi.block(i * xDim, 0, xDim, xDim) * ps.x0 + ps.xi.segment(i * xDim, xDim));
         }
     }
-    */
 }
 
 ConstraintFlag MixedConstraint::constraintType()
