@@ -20,7 +20,6 @@
 
 // mpc
 #include "PreviewSystem.h"
-#include "debugUtils.h"
 
 // stl
 #include <sstream>
@@ -31,8 +30,8 @@ namespace mpc {
  *                                         Constraint                                            *
  *************************************************************************************************/
 
-Constraint::Constraint(const std::string& name)
-    : name_(name)
+Constraint::Constraint(std::string&& name)
+    : name_(std::move(name))
     , nrConstr_(0)
     , fullSizeEntry_(false)
     , hasBeenInitialized_(false)
@@ -54,15 +53,6 @@ EqIneqConstraint::EqIneqConstraint(const std::string& constrQualifier, bool isIn
 /*************************************************************************************************
  *                                  Trajectory Constraint                                        *
  *************************************************************************************************/
-
-TrajectoryConstraint::TrajectoryConstraint(const Eigen::MatrixXd& E, const Eigen::VectorXd& f, bool isInequalityConstraint)
-    : EqIneqConstraint("Trajectory", isInequalityConstraint)
-    , E_(E)
-    , f_(f)
-{
-    if (E.rows() != f.rows())
-        DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("E", "f", E, f));
-}
 
 void TrajectoryConstraint::initializeConstraint(const PreviewSystem& ps)
 {
@@ -105,15 +95,6 @@ ConstraintFlag TrajectoryConstraint::constraintType()
 /*************************************************************************************************
  *                                    Control Constraint                                         *
  *************************************************************************************************/
-
-ControlConstraint::ControlConstraint(const Eigen::MatrixXd& G, const Eigen::VectorXd& f, bool isInequalityConstraint)
-    : EqIneqConstraint("Control", isInequalityConstraint)
-    , G_(G)
-    , f_(f)
-{
-    if (G.rows() != f.rows())
-        DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("G", "f", G, f));
-}
 
 void ControlConstraint::initializeConstraint(const PreviewSystem& ps)
 {
@@ -159,18 +140,6 @@ ConstraintFlag ControlConstraint::constraintType()
 /*************************************************************************************************
  *                                      Mixed Constraint                                         *
  *************************************************************************************************/
-
-MixedConstraint::MixedConstraint(const Eigen::MatrixXd& E, const Eigen::MatrixXd& G, const Eigen::VectorXd& f, bool isInequalityConstraint)
-    : EqIneqConstraint("Control", isInequalityConstraint)
-    , E_(E)
-    , G_(G)
-    , f_(f)
-{
-    if (E.rows() != f.rows())
-        DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("E", "f", E, f));
-    if (G.rows() != f.rows())
-        DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("G", "f", G, f));
-}
 
 void MixedConstraint::initializeConstraint(const PreviewSystem& ps)
 {
@@ -218,24 +187,6 @@ ConstraintFlag MixedConstraint::constraintType()
 /*************************************************************************************************
  *                               Trajectory Bound Constraint                                     *
  *************************************************************************************************/
-
-TrajectoryBoundConstraint::TrajectoryBoundConstraint(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper)
-    : EqIneqConstraint("Trajectory bound", true)
-    , lower_(lower)
-    , upper_(upper)
-    , lowerLines_()
-    , upperLines_()
-{
-    if (lower.rows() != upper.rows())
-        DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("lower", "upper", lower, upper));
-
-    for (auto line = 0; line < lower_.rows(); ++line) {
-        if (lower_(line) != -std::numeric_limits<double>::infinity())
-            lowerLines_.push_back(line);
-        if (upper_(line) != std::numeric_limits<double>::infinity())
-            upperLines_.push_back(line);
-    }
-}
 
 void TrajectoryBoundConstraint::initializeConstraint(const PreviewSystem& ps)
 {
@@ -285,17 +236,6 @@ ConstraintFlag TrajectoryBoundConstraint::constraintType()
 /*************************************************************************************************
  *                                 Control Bound Constraint                                      *
  *************************************************************************************************/
-
-ControlBoundConstraint::ControlBoundConstraint(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper)
-    : Constraint("Control bound constraint")
-    , lower_(lower)
-    , upper_(upper)
-    , lb_()
-    , ub_()
-{
-    if (lower.rows() != upper.rows())
-        DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("lower", "upper", lower, upper));
-}
 
 void ControlBoundConstraint::initializeConstraint(const PreviewSystem& ps)
 {

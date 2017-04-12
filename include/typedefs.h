@@ -21,7 +21,15 @@
 namespace Eigen {
 
 #ifdef EIGEN_3_2_FOUND
-    using Index = Eigen::Matrix<int, 1, 1>::Index;
+using Index = Eigen::Matrix<int, 1, 1>::Index;
 #endif
+} // namespace Eigen
 
-}
+namespace mpc {
+
+template <typename T1, typename T2>
+struct IsNotIntegral {
+    static const bool value = !(std::is_integral<std::decay_t<T1> >::value || std::is_integral<std::decay_t<T2> >::value);
+};
+
+} // namespace mpc

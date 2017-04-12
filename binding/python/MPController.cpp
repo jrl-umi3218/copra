@@ -157,7 +157,7 @@ BOOST_PYTHON_MODULE(_mpc)
         }
     };
 
-    class_<ConstraintWrap, boost::noncopyable>("Constraint", init<const std::string&>())
+    class_<ConstraintWrap, boost::noncopyable>("Constraint", no_init) // Disable the constructor because of move semantics. No need anyway.
         .def("initializeConstraint", pure_virtual(&Constraint::initializeConstraint))
         .def("update", pure_virtual(&Constraint::update))
         .def("constraintType", pure_virtual(&Constraint::constraintType))
@@ -212,24 +212,15 @@ BOOST_PYTHON_MODULE(_mpc)
             this->MPCTypeFull::initializeController(ps);
         }
 
-        void eigenWeights(const Eigen::VectorXd& wx, const Eigen::VectorXd& wu)
-        {
-            if (override weights = this->get_override("weights"))
-                weights(wx, wu);
-            else
-                MPCTypeFull::weights(wx, wu);
-        }
-
-        void doubleWeight(double wx, double wu)
-        {
-            this->MPCTypeFull::weights(wx, wu);
-        }
-
         void default_eigenWeights(const Eigen::VectorXd& wx, const Eigen::VectorXd& wu)
         {
             this->MPCTypeFull::weights(wx, wu);
         }
     };
+
+    void (MPCTypeFull::*eigenWeights)(const Eigen::VectorXd&, const Eigen::VectorXd&) = &MPCTypeFull::weights;
+    void (MPCTypeFull::*doubleWeight)(double, double) = &MPCTypeFull::weights;
+
 
     // The default copy-ctor is implicitely deleted due to ctor overloading
     class_<MPCTypeFullWrap, boost::noncopyable>("MPCTypeFull",
@@ -240,8 +231,8 @@ BOOST_PYTHON_MODULE(_mpc)
         .def("solve", &MPCTypeFull::solve)
         .def("solveTime", &MPCTypeFull::solveTime)
         .def("solveAndBuildTime", &MPCTypeFull::solveAndBuildTime)
-        .def("weights", &MPCTypeFullWrap::eigenWeights, &MPCTypeFullWrap::default_eigenWeights)
-        .def("weights", &MPCTypeFullWrap::doubleWeight)
+        .def("weights", eigenWeights)
+        .def("weights", doubleWeight)
         .def("control", &MPCTypeFull::control, return_internal_reference<>())
         .def("trajectory", &MPCTypeFull::trajectory)
         .def("addConstraint", &MPCTypeFull::addConstraint)
@@ -250,31 +241,11 @@ BOOST_PYTHON_MODULE(_mpc)
     //MPCTypeLast
     struct MPCTypeLastWrap : MPCTypeLast, wrapper<MPCTypeLast> {
         using MPCTypeLast::MPCTypeLast;
-
-        void eigenWeights(const Eigen::VectorXd& wx, const Eigen::VectorXd& wu)
-        {
-            if (override weights = this->get_override("weights"))
-                weights(wx, wu);
-            else
-                MPCTypeLast::weights(wx, wu);
-        }
-
-        void doubleWeight(double wx, double wu)
-        {
-            this->MPCTypeLast::weights(wx, wu);
-        }
-
-        void default_eigenWeights(const Eigen::VectorXd& wx, const Eigen::VectorXd& wu)
-        {
-            this->MPCTypeLast::weights(wx, wu);
-        }
     };
 
     class_<MPCTypeLastWrap, boost::noncopyable, bases<MPCTypeFull> >("MPCTypeLast",
         "Faster version of the FullType but neglect parts before final time", init<optional<SolverFlag> >())
-        .def(init<const std::shared_ptr<PreviewSystem>&, optional<SolverFlag> >())
-        .def("weights", &MPCTypeLastWrap::eigenWeights, &MPCTypeLastWrap::default_eigenWeights)
-        .def("weights", &MPCTypeLastWrap::doubleWeight);
+        .def(init<const std::shared_ptr<PreviewSystem>&, optional<SolverFlag> >());
 
     //cpu_times
     using namespace boost::timer;

@@ -26,7 +26,6 @@
 // mpc
 #include "PreviewSystem.h"
 #include "constraints.h"
-#include "debugUtils.h"
 
 namespace mpc {
 
@@ -167,25 +166,6 @@ boost::timer::cpu_times MPCTypeFull::solveAndBuildTime() const noexcept
     return solveAndBuildTime_.elapsed();
 }
 
-void MPCTypeFull::weights(const Eigen::VectorXd& Wx, const Eigen::VectorXd& Wu)
-{
-    if (Wx.rows() == ps_->xDim)
-        for (auto i = 0; i < ps_->nrXStep; ++i)
-            Wx_.segment(i * ps_->xDim, ps_->xDim) = Wx;
-    else if (Wx.rows() == ps_->fullXDim)
-        Wx_ = Wx;
-    else
-        DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsOnPSXDim("Wx", Wx, ps_.get()));
-
-    if (Wu.rows() == ps_->uDim)
-        for (auto i = 0; i < ps_->nrUStep; ++i)
-            Wu_.segment(i * ps_->uDim, ps_->uDim) = Wu;
-    else if (Wu.rows() == ps_->fullUDim)
-        Wu_ = Wu;
-    else
-        DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsOnPSUDim("Wu", Wu, ps_.get()));
-}
-
 void MPCTypeFull::weights(double Wx, double Wu)
 {
     Wx_.setConstant(Wx);
@@ -268,9 +248,9 @@ void MPCTypeFull::updateSystem()
 
 void MPCTypeFull::makeQPForm()
 {
-    //REDO
-    Q_.noalias() = ps_->Psi.transpose() * Eigen::MatrixXd(Wx_.asDiagonal()) * ps_->Psi + Eigen::MatrixXd(Wu_.asDiagonal());
-    c_.noalias() = ps_->Psi.transpose() * Eigen::MatrixXd(Wx_.asDiagonal()) * (ps_->Phi * ps_->x0 - ps_->xd + ps_->xi);
+    Q_ = Wu_.asDiagonal();
+    Q_.noalias() += ps_->Psi.transpose() * Wx_.asDiagonal() * ps_->Psi;
+    c_.noalias() = ps_->Psi.transpose() * Wx_.asDiagonal() * (ps_->Phi * ps_->x0 - ps_->xd + ps_->xi);
 
     int nrLines = 0;
     // Get Equality constraints
@@ -353,22 +333,6 @@ void MPCTypeLast::initializeController(const std::shared_ptr<PreviewSystem>& ps)
     Wu_.setOnes();
 }
 
-void MPCTypeLast::weights(const Eigen::VectorXd& Wx, const Eigen::VectorXd& Wu)
-{
-    if (Wx.rows() == ps_->xDim)
-        Wx_ = Wx;
-    else
-        DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsOnDim("Wu", Wu, ps_->xDim));
-        
-    if (Wu.rows() == ps_->uDim)
-        for (auto i = 0; i < ps_->nrUStep; ++i)
-            Wu_.segment(i * ps_->uDim, ps_->uDim) = Wu;
-    else if (Wu.rows() == ps_->fullUDim)
-        Wu_ = Wu;
-    else
-        DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsOnPSUDim("Wu", Wu, ps_.get()));
-}
-
 /*
  *  Protected methods
  */
@@ -377,8 +341,9 @@ void MPCTypeLast::makeQPForm()
 {
     auto xDim = ps_->xDim;
     const Eigen::MatrixXd& psi = ps_->Psi.bottomRows(xDim);
-    Q_.noalias() = psi.transpose() * Eigen::MatrixXd(Wx_.asDiagonal()) * psi + Eigen::MatrixXd(Wu_.asDiagonal());
-    c_.noalias() = psi.transpose() * Eigen::MatrixXd(Wx_.asDiagonal()) * (ps_->Phi.bottomRows(xDim) * ps_->x0 - ps_->xd.tail(xDim) + ps_->xi.tail(xDim));
+    Q_ = Wu_.asDiagonal();
+    Q_.noalias() += psi.transpose() * Wx_.asDiagonal() * psi;
+    c_.noalias() = psi.transpose() * Wx_.asDiagonal() * (ps_->Phi.bottomRows(xDim) * ps_->x0 - ps_->xd.tail(xDim) + ps_->xi.tail(xDim));
 
     int nrLines = 0;
     // Get Equality constraints

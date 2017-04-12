@@ -30,6 +30,8 @@
 
 // mpc
 #include "config.hh"
+#include "debugUtils.h"
+#include "typedefs.h"
 #include "solverUtils.h"
 
 namespace mpc {
@@ -112,11 +114,31 @@ public:
 
     /**
      * Set the weights of the system.
+     * Perform a move semantic if a fullsize vector is given as rvalue (this is faster).
      * \param wx Weight of the state.
      * \param wu Weight of the control.
      * \throw Throw a std::domain_error is Wx or Wu are badly dimension.
      */
-    virtual void weights(const Eigen::VectorXd& Wx, const Eigen::VectorXd& Wu);
+    template <typename TVec1, typename TVec2,
+        typename = std::enable_if_t<IsNotIntegral<TVec1, TVec2>::value> >
+    void weights(TVec1&& Wx, TVec2&& Wu)
+    {
+        if (Wx.rows() == Wx_.rows())
+            Wx_ = std::forward<TVec1>(Wx);
+        else if (Wx.rows() == ps_->xDim)
+            for (auto i = 0; i < ps_->nrXStep; ++i)
+                Wx_.segment(i * ps_->xDim, ps_->xDim) = Wx;
+        else
+            DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsOnPSXDim("Wx", Wx, ps_.get()));
+
+        if (Wu.rows() == ps_->fullUDim)
+            Wu_ = std::forward<TVec2>(Wu);
+        else if (Wu.rows() == ps_->uDim)
+            for (auto i = 0; i < ps_->nrUStep; ++i)
+                Wu_.segment(i * ps_->uDim, ps_->uDim) = Wu;
+        else
+            DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsOnPSUDim("Wu", Wu, ps_.get()));
+    }
 
     /**
      * Set the weights of the system. All variables are set to the same weight.
@@ -206,13 +228,10 @@ protected:
  */
 class MPC_DLLAPI MPCTypeLast : public MPCTypeFull {
 public:
-    using MPCTypeFull::weights;
     MPCTypeLast(SolverFlag sFlag = SolverFlag::DEFAULT);
     MPCTypeLast(const std::shared_ptr<PreviewSystem>& ps, SolverFlag sFlag = SolverFlag::DEFAULT);
 
     void initializeController(const std::shared_ptr<PreviewSystem>& ps) override;
-
-    void weights(const Eigen::VectorXd& Wx, const Eigen::VectorXd& Wu) override;
 
 protected:
     void makeQPForm() override;

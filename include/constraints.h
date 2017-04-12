@@ -26,6 +26,8 @@
 
 // mpc
 #include "config.hh"
+#include "debugUtils.h"
+#include "typedefs.h"
 
 namespace mpc {
 
@@ -52,7 +54,7 @@ public:
      * Constructor of a constraint.
      * \param name Name of the constraint
      */
-    Constraint(const std::string& name);
+    Constraint(std::string&& name);
 
     /**
      * Declare virtual desturctor
@@ -152,12 +154,22 @@ public:
      * Create a constraint of type \f$Ex\leq f\f$ or \f$Ex = f\f$ or \f$EX\leq f\f$ or \f$EX = f\f$ with \f$X=[x_1^T ... x_N^T]^T\f$.\n
      * As \f$U\f$ is the optimization variable, \f$Ex\leq f\f$ or \f$Ex = f\f$
      * is transformed to be \f$AU\leq b\f$ or \f$AU = b\f$.
+     * Perform a move semantic if an rvalue is given (this is faster).
      * \param E The matrix side of the constraint
      * \param f The vector side of the constraint
      * \param isInequalityConstraint Whether the constraint is an Inequality (true) or an Equality (false)
      * \throw Throw an std::domain_error if E and f have not the same number of rows
      */
-    TrajectoryConstraint(const Eigen::MatrixXd& E, const Eigen::VectorXd& f, bool isInequalityConstraint = true);
+    template <typename TMat, typename TVec,
+        typename = std::enable_if_t<IsNotIntegral<TMat, TVec>::value> >
+    TrajectoryConstraint(TMat&& E, TVec&& f, bool isInequalityConstraint = true)
+        : EqIneqConstraint("Trajectory", isInequalityConstraint)
+        , E_(std::forward<TMat>(E))
+        , f_(std::forward<TVec>(f))
+    {
+        if (E_.rows() != f_.rows())
+            DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("E", "f", E_, f_));
+    }
 
     /**
      * \brief Initialize the constraint.
@@ -198,12 +210,22 @@ public:
      * Create a constraint of type \f$Gu\leq f\f$ or \f$Gu = f\f$ or \f$GU = f\f$ or \f$GU\leq f\f$ with \f$U=[u_0^T ... u_{N-1}^T]^T\f$.\n
      * As \f$U\f$ is the optimization variable, \f$Gu\leq f\f$ or \f$Gu = f\f$
      * is transformed to be \f$AU\leq b\f$ or \f$AU = b\f$.
+     * Perform a move semantic if an rvalue is given (this is faster).
      * \param G The matrix side of the constraint
      * \param f The vector side of the constraint
      * \param isInequalityConstraint Whether the constraint is an Inequality (true) or an Equality (false).
      * \throw Throw an std::domain_error if G and f have not the same number of rows
      */
-    ControlConstraint(const Eigen::MatrixXd& G, const Eigen::VectorXd& f, bool isInequalityConstraint = true);
+    template <typename TMat, typename TVec,
+        typename = std::enable_if_t<IsNotIntegral<TMat, TVec>::value> >
+    ControlConstraint(TMat&& G, TVec&& f, bool isInequalityConstraint = true)
+        : EqIneqConstraint("Control", isInequalityConstraint)
+        , G_(std::forward<TMat>(G))
+        , f_(std::forward<TVec>(f))
+    {
+        if (G_.rows() != f_.rows())
+            DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("G", "f", G_, f_));
+    }
 
     /**
      * \brief Initialize the constraint.
@@ -245,6 +267,7 @@ public:
      * with \f$X=[x_1^T ... x_N^T]^T\f$ and \f$U=[u_0^T ... u_{N-1}^T]^T\f$.\n
      * As \f$U\f$ is the optimization variable, \f$Ex + Gu\leq f\f$ or \f$Ex + Gu = f\f$
      * is transformed to be \f$AU\leq b\f$ or \f$AU = b\f$.
+     * Perform a move semantic if an rvalue is given (this is faster).
      * \note Please use \see ControlConstraint and \see TrajectoryConstraint for non-mixed constraint (they are sligthly faster)
      * \param E The matrix applied to the trajectory part of the constraint
      * \param G The matrix applied to the control part of the constraint
@@ -252,7 +275,19 @@ public:
      * \param isInequalityConstraint Whether the constraint is an Inequality (true) or an Equality (false).
      * \throw Throw an std::domain_error if E, G and f have not the same number of rows
      */
-    MixedConstraint(const Eigen::MatrixXd& E, const Eigen::MatrixXd& G, const Eigen::VectorXd& f, bool isInequalityConstraint = true);
+    template <typename TMat, typename TVec,
+        typename = std::enable_if_t<IsNotIntegral<TMat, TVec>::value> >
+    MixedConstraint(TMat&& E, TMat&& G, TVec&& f, bool isInequalityConstraint = true)
+        : EqIneqConstraint("Control", isInequalityConstraint)
+        , E_(std::forward<TMat>(E))
+        , G_(std::forward<TMat>(G))
+        , f_(std::forward<TVec>(f))
+    {
+        if (E_.rows() != f_.rows())
+            DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("E", "f", E_, f_));
+        if (G_.rows() != f_.rows())
+            DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("G", "f", G_, f_));
+    }
 
     /**
      * \brief Initialize the constraint.
@@ -294,11 +329,30 @@ public:
      * with \f$X=[x_1^T ... x_N^T]^T\f$.\n
      * As \f$U\f$ is the optimization variable,
      * \f$\underline{x}\leq x\leq\overline{x}\f$ is transformed to be \f$AU\leq b\f$.
+     * Perform a move semantic if an rvalue is given (this is faster).
      * \param lower The lower bound \f$\underline{x}\f$ of the constraint
      * \param upper The upper bound \f$\overline{x}\f$ of the constraint
      * \throw Throw an std::domain_error if lower and upper are not of the same dimension
      */
-    TrajectoryBoundConstraint(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper);
+    template <typename TVec1, typename TVec2,
+        typename = std::enable_if_t<IsNotIntegral<TVec1, TVec2>::value> >
+    TrajectoryBoundConstraint(TVec1&& lower, TVec2&& upper)
+        : EqIneqConstraint("Trajectory bound", true)
+        , lower_(std::forward<TVec1>(lower))
+        , upper_(std::forward<TVec2>(upper))
+        , lowerLines_()
+        , upperLines_()
+    {
+        if (lower_.rows() != upper_.rows())
+            DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("lower", "upper", lower_, upper_));
+
+        for (auto line = 0; line < lower_.rows(); ++line) {
+            if (lower_(line) != -std::numeric_limits<double>::infinity())
+                lowerLines_.push_back(line);
+            if (upper_(line) != std::numeric_limits<double>::infinity())
+                upperLines_.push_back(line);
+        }
+    }
 
     /**
      * \brief Initialize the constraint.
@@ -337,11 +391,23 @@ public:
      * with \f$U=[u_0^T ... u_{N-1}^T]^T\f$.\n
      * As \f$U\f$ is the optimization variable,
      * \f$\underline{u}\leq u\leq\overline{u}\f$ is transformed to be \f$\underline{U}\leq U\leq\overline{U}\f$.
+     * Perform a move semantic if an rvalue is given (this is faster).
      * \param lower The lower bound \f$\underline{u}\f$ of the constraint
      * \param upper The upper bound \f$\overline{u}\f$ of the constraint
      * \throw Throw an std::domain_error if lower and upper are not of the same dimension
      */
-    ControlBoundConstraint(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper);
+    template <typename TVec1, typename TVec2,
+        typename = std::enable_if_t<IsNotIntegral<TVec1, TVec2>::value> >
+    ControlBoundConstraint(TVec1&& lower, TVec2&& upper)
+        : Constraint("Control bound constraint")
+        , lower_(std::forward<TVec1>(lower))
+        , upper_(std::forward<TVec2>(upper))
+        , lb_()
+        , ub_()
+    {
+        if (lower_.rows() != upper_.rows())
+            DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("lower", "upper", lower_, upper_));
+    }
 
     /**
      * \brief Initialize the constraint.
