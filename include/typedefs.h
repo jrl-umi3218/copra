@@ -27,9 +27,22 @@ using Index = Eigen::Matrix<int, 1, 1>::Index;
 
 namespace mpc {
 
-template <typename T1, typename T2>
-struct IsNotIntegral {
-    static const bool value = !(std::is_integral<std::decay_t<T1> >::value || std::is_integral<std::decay_t<T2> >::value);
+template <typename T1, typename T2 = std::true_type, typename T3 = std::true_type>
+struct is_all_integral : is_all_integral<typename std::is_integral<std::decay_t<T1> >::type, T2, T3> {
+};
+
+template <typename T2, typename T3>
+struct is_all_integral<std::false_type, T2, T3> {
+    static const bool value = false;
+};
+
+template <typename T2, typename T3>
+struct is_all_integral<std::true_type, T2, T3> : is_all_integral<typename std::is_integral<std::decay_t<T2> >::type, T3, std::true_type> {
+};
+
+template <>
+struct is_all_integral<std::true_type, std::true_type, std::true_type> {
+    static const bool value = true;
 };
 
 } // namespace mpc
