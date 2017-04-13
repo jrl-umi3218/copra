@@ -61,6 +61,16 @@ namespace mpc {
  */
 std::string throwMsgOnRows(const char* mat1Name, const char* mat2Name, const Eigen::MatrixXd& mat1, const Eigen::MatrixXd& mat2);
 /**
+ * \brief Check that two matrices have the same number of rows.
+ * This is the same as \see throwMsgOnRows with a longer message.
+ * \param mat1Name Name of the first matrix to check
+ * \param mat2Name Name of the second matrix to check
+ * \param mat1 The first matrix to check
+ * \param mat2 The second matrix to check
+ * \return The throwing message
+ */
+std::string throwMsgOnRowsForConstr(const char* mat1Name, const char* mat2Name, const Eigen::MatrixXd& mat1, const Eigen::MatrixXd& mat2);
+/**
  * \brief Check that a matrix is square.
  * \param matName Name of the matrix to check
  * \param mat Matrix to check

@@ -153,6 +153,11 @@ BOOST_PYTHON_MODULE(_mpc)
     struct ConstraintWrap : Constraint, wrapper<Constraint> {
         using Constraint::Constraint;
 
+        void autoSpan()
+        {
+            this->get_override("autoSpan")();
+        }
+
         void initializeConstraint(const PreviewSystem& ps)
         {
             this->get_override("initializeConstraint")(ps);
@@ -163,7 +168,7 @@ BOOST_PYTHON_MODULE(_mpc)
             this->get_override("update")(ps);
         }
 
-        ConstraintFlag constraintType()
+        ConstraintFlag constraintType() const noexcept
         {
             return this->get_override("constraintType")();
         }
@@ -179,6 +184,11 @@ BOOST_PYTHON_MODULE(_mpc)
     struct EqIneqConstraintWrap : EqIneqConstraint, wrapper<EqIneqConstraint> {
         using EqIneqConstraint::EqIneqConstraint;
 
+        void autoSpan()
+        {
+            this->get_override("autoSpan")();
+        }
+
         void initializeConstraint(const PreviewSystem& ps)
         {
             this->get_override("initializeConstraint")(ps);
@@ -189,7 +199,7 @@ BOOST_PYTHON_MODULE(_mpc)
             this->get_override("update")(ps);
         }
 
-        ConstraintFlag constraintType()
+        ConstraintFlag constraintType() const noexcept
         {
             return this->get_override("constraintType")();
         }

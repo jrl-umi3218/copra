@@ -62,6 +62,14 @@ public:
     virtual ~Constraint() = default;
 
     /**
+     * \brief Generate the full size matrices
+     * This allows one to give a constraint constant matrix/vector for one step
+     * and another constraint matrix/vector with the full horizon.
+     * It will expand the first matrix/vector to fit the full horizon.
+     */
+    virtual void autoSpan() = 0;
+
+    /**
      * Initialization of the constraint.
      * \param ps An unique pointer to a PreviewSystem.
      */
@@ -77,7 +85,7 @@ public:
      * Get the type of the constraint
      * \return The type of the constraint \see ConstraintFlag
      */
-    virtual ConstraintFlag constraintType() = 0;
+    virtual ConstraintFlag constraintType() const noexcept = 0;
 
     /**
      * Function that return the name of the constraint.
@@ -96,6 +104,10 @@ public:
     {
         return nrConstr_;
     }
+
+protected:
+    void spanMatrix(Eigen::MatrixXd& mat, Eigen::Index max_dim);
+    void spanVector(Eigen::VectorXd& vec, Eigen::Index max_dim);
 
 protected:
     std::string name_;
@@ -121,7 +133,7 @@ public:
      * Get the 'A' matrix of the Equality/Inequality (\f$Ax\leq b\f$, \f$Ax = b\f$)
      * \return The 'A' matrix of the constraint
      */
-    const Eigen::MatrixXd& A()
+    const Eigen::MatrixXd& A() const noexcept
     {
         return A_;
     }
@@ -130,7 +142,7 @@ public:
      * Get the 'b' vector of the Equality/Inequality (\f$Ax\leq b\f$, \f$Ax = b\f$)
      * \return The 'b' vector of the constraint
      */
-    const Eigen::VectorXd& b()
+    const Eigen::VectorXd& b() const noexcept
     {
         return b_;
     }
@@ -167,9 +179,14 @@ public:
         , E_(std::forward<TMat>(E))
         , f_(std::forward<TVec>(f))
     {
-        if (E_.rows() != f_.rows())
-            DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("E", "f", E_, f_));
     }
+
+    /**
+     * \brief Generate the full size matrices
+     * If you have create the constraint with matrix \f$E_k\f$ and vector \f$h\f$
+     * or \f$E\f$ and \f$h_k\f$ you need to call this function to redimension the matrxix/vector.
+     */
+    void autoSpan() override;
 
     /**
      * \brief Initialize the constraint.
@@ -190,7 +207,7 @@ public:
      * \return \see ConstraintFlag::InequalityConstraint if constructor's isInequalityConstraint is true
      * \return \see ConstraintFlag::EqualityConstraint if constructor's isInequalityConstraint is false
      */
-    ConstraintFlag constraintType() override;
+    ConstraintFlag constraintType() const noexcept override;
 
 private:
     Eigen::MatrixXd E_;
@@ -223,9 +240,14 @@ public:
         , G_(std::forward<TMat>(G))
         , f_(std::forward<TVec>(f))
     {
-        if (G_.rows() != f_.rows())
-            DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("G", "f", G_, f_));
     }
+
+    /**
+     * \brief Generate the full size matrices
+     * If you have create the constraint with matrix \f$G_k\f$ and vector \f$h\f$
+     * or \f$G\f$ and \f$h_k\f$ you need to call this function to redimension the matrxix/vector.
+     */
+    void autoSpan() override;
 
     /**
      * \brief Initialize the constraint.
@@ -245,7 +267,7 @@ public:
      * \return \see ConstraintFlag::InequalityConstraint if constructor's isInequalityConstraint is true
      * \return \see ConstraintFlag::EqualityConstraint if constructor's isInequalityConstraint is false
      */
-    ConstraintFlag constraintType() override;
+    ConstraintFlag constraintType() const noexcept override;
 
 private:
     Eigen::MatrixXd G_;
@@ -283,11 +305,14 @@ public:
         , G_(std::forward<TMat2>(G))
         , f_(std::forward<TVec>(f))
     {
-        if (E_.rows() != f_.rows())
-            DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("E", "f", E_, f_));
-        if (G_.rows() != f_.rows())
-            DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("G", "f", G_, f_));
     }
+
+    /**
+     * \brief Generate the full size matrices
+     * If you have create the constraint with matrix \f$E_k\f$ \f$G_k\f$ and vector \f$h\f$
+     * or \f$E_k\f$, \f$G\f$ and \f$h_k\f$, etc... you need to call this function to redimension the matrxix/vector.
+     */
+    void autoSpan() override;
 
     /**
      * \brief Initialize the constraint.
@@ -307,7 +332,7 @@ public:
      * \return \see ConstraintFlag::InequalityConstraint if constructor's isInequalityConstraint is true
      * \return \see ConstraintFlag::EqualityConstraint if constructor's isInequalityConstraint is false
      */
-    ConstraintFlag constraintType() override;
+    ConstraintFlag constraintType() const noexcept override;
 
 private:
     Eigen::MatrixXd E_, G_;
@@ -343,16 +368,22 @@ public:
         , lowerLines_()
         , upperLines_()
     {
-        if (lower_.rows() != upper_.rows())
-            DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("lower", "upper", lower_, upper_));
-
         for (auto line = 0; line < lower_.rows(); ++line) {
             if (lower_(line) != -std::numeric_limits<double>::infinity())
                 lowerLines_.push_back(line);
+        }
+        for (auto line = 0; line < upper_.rows(); ++line) {
             if (upper_(line) != std::numeric_limits<double>::infinity())
                 upperLines_.push_back(line);
         }
     }
+
+    /**
+     * \brief Generate the full size matrices
+     * If you have create the constraint with vector \f$\underline{x}\f$ and vector \f$\overline{X}\f$
+     * or \f$\underline{X}\f$ and \f$\overline{x}\f$ you need to call this function to redimension the vectors.
+     */
+    void autoSpan() override;
 
     /**
      * \brief Initialize the constraint.
@@ -372,7 +403,7 @@ public:
      * Get the type of the constraint
      * \return \see ConstraintFlag::InequalityConstraint
      */
-    ConstraintFlag constraintType() override;
+    ConstraintFlag constraintType() const noexcept override;
 
 private:
     Eigen::VectorXd lower_, upper_;
@@ -405,9 +436,14 @@ public:
         , lb_()
         , ub_()
     {
-        if (lower_.rows() != upper_.rows())
-            DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("lower", "upper", lower_, upper_));
     }
+
+    /**
+     * \brief Generate the full size matrices
+     * If you have create the constraint with vector \f$\underline{u}\f$ and vector \f$\overline{U}\f$
+     * or \f$\underline{U}\f$ and \f$\overline{u}\f$ you need to call this function to redimension the vectors.
+     */
+    void autoSpan() override;
 
     /**
      * \brief Initialize the constraint.
@@ -427,7 +463,7 @@ public:
      * Get the type of the constraint
      * \return \see ConstraintFlag::BoundConstraint
      */
-    ConstraintFlag constraintType() override;
+    ConstraintFlag constraintType() const noexcept override;
 
     const Eigen::VectorXd& lower()
     {

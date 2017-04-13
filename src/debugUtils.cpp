@@ -32,6 +32,13 @@ std::string throwMsgOnRows(const char* mat1Name, const char* mat2Name, const Eig
     return os.str();
 }
 
+std::string throwMsgOnRowsForConstr(const char* mat1Name, const char* mat2Name, const Eigen::MatrixXd& mat1, const Eigen::MatrixXd& mat2)
+{
+    std::ostringstream os(throwMsgOnRows(mat1Name, mat2Name, mat1, mat2));
+    os << "Maybe you have forgottent to call autoSpanMatrix method?\n";
+    return os.str();
+}
+
 std::string throwMsgOnSquareMat(const char* matName, const Eigen::MatrixXd& mat)
 {
     std::ostringstream os;

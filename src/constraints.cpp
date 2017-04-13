@@ -38,6 +38,33 @@ Constraint::Constraint(std::string&& name)
 {
 }
 
+void Constraint::spanMatrix(Eigen::MatrixXd& mat, Eigen::Index max_dim)
+{
+    auto matRows = mat.rows();
+    if (max_dim == matRows)
+        return;
+
+    auto matCols = mat.cols();
+    auto tmp = mat;
+    auto nrStep = max_dim / matRows;
+    mat = Eigen::MatrixXd::Zero(max_dim, matCols * nrStep);
+    for (auto i = 0; i < nrStep; ++i)
+        mat.block(i * matRows, i * matCols, matRows, matCols) = tmp;
+}
+
+void Constraint::spanVector(Eigen::VectorXd& vec, Eigen::Index max_dim)
+{
+    auto vecRows = vec.rows();
+    if (max_dim == vecRows)
+        return;
+
+    auto nrStep = max_dim / vecRows;
+    auto tmp = vec;
+    vec.conservativeResize(max_dim);
+    for (auto i = 1; i < nrStep; ++i)
+        vec.segment(i * vecRows, vecRows) = tmp;
+}
+
 /*************************************************************************************************
  *                           Equality or Inequality Constraint                                   *
  *************************************************************************************************/
@@ -54,8 +81,18 @@ EqIneqConstraint::EqIneqConstraint(const std::string& constrQualifier, bool isIn
  *                                  Trajectory Constraint                                        *
  *************************************************************************************************/
 
+void TrajectoryConstraint::autoSpan()
+{
+    auto max_dim = std::max(E_.rows(), f_.rows());
+    spanMatrix(E_, max_dim);
+    spanVector(f_, max_dim);
+}
+
 void TrajectoryConstraint::initializeConstraint(const PreviewSystem& ps)
 {
+    if (E_.rows() != f_.rows())
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsForConstr("E", "f", E_, f_));
+
     if (E_.cols() == ps.xDim) {
         nrConstr_ = static_cast<int>(E_.rows()) * ps.nrXStep;
 
@@ -84,7 +121,7 @@ void TrajectoryConstraint::update(const PreviewSystem& ps)
     }
 }
 
-ConstraintFlag TrajectoryConstraint::constraintType()
+ConstraintFlag TrajectoryConstraint::constraintType() const noexcept
 {
     if (isIneq_)
         return ConstraintFlag::InequalityConstraint;
@@ -96,10 +133,20 @@ ConstraintFlag TrajectoryConstraint::constraintType()
  *                                    Control Constraint                                         *
  *************************************************************************************************/
 
+void ControlConstraint::autoSpan()
+{
+    auto max_dim = std::max(G_.rows(), f_.rows());
+    spanMatrix(G_, max_dim);
+    spanVector(f_, max_dim);
+}
+
 void ControlConstraint::initializeConstraint(const PreviewSystem& ps)
 {
     if (hasBeenInitialized_)
         RUNTIME_ERROR_EXCEPTION("You have initialized a ControlConstraint twice. As move semantics are used, you can't do so.");
+
+    if (G_.rows() != f_.rows())
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsForConstr("G", "f", G_, f_));
 
     if (G_.cols() == ps.uDim) {
         nrConstr_ = static_cast<int>(G_.rows()) * ps.nrUStep;
@@ -129,7 +176,7 @@ void ControlConstraint::update(const PreviewSystem& ps)
     }
 }
 
-ConstraintFlag ControlConstraint::constraintType()
+ConstraintFlag ControlConstraint::constraintType() const noexcept
 {
     if (isIneq_)
         return ConstraintFlag::InequalityConstraint;
@@ -141,8 +188,21 @@ ConstraintFlag ControlConstraint::constraintType()
  *                                      Mixed Constraint                                         *
  *************************************************************************************************/
 
+void MixedConstraint::autoSpan()
+{
+    auto max_dim = std::max(f_.rows(), std::max(E_.rows(), G_.rows()));
+    spanMatrix(E_, max_dim);
+    spanMatrix(G_, max_dim);
+    spanVector(f_, max_dim);
+}
+
 void MixedConstraint::initializeConstraint(const PreviewSystem& ps)
 {
+    if (E_.rows() != f_.rows())
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsForConstr("E", "f", E_, f_));
+    if (G_.rows() != f_.rows())
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsForConstr("G", "f", G_, f_));
+
     if (E_.cols() == ps.xDim && G_.cols() == ps.uDim) {
         nrConstr_ = static_cast<int>(E_.rows()) * ps.nrUStep;
         A_.resize(nrConstr_, ps.fullUDim);
@@ -176,7 +236,7 @@ void MixedConstraint::update(const PreviewSystem& ps)
     }
 }
 
-ConstraintFlag MixedConstraint::constraintType()
+ConstraintFlag MixedConstraint::constraintType() const noexcept
 {
     if (isIneq_)
         return ConstraintFlag::InequalityConstraint;
@@ -188,8 +248,32 @@ ConstraintFlag MixedConstraint::constraintType()
  *                               Trajectory Bound Constraint                                     *
  *************************************************************************************************/
 
+void TrajectoryBoundConstraint::autoSpan()
+{
+    auto max_dim = std::max(lower_.rows(), upper_.rows());
+    spanVector(lower_, max_dim);
+    spanVector(upper_, max_dim);
+    if (lower_.rows() != max_dim) {
+        lowerLines_.clear();
+        for (auto line = 0; line < lower_.rows(); ++line) {
+            if (lower_(line) != -std::numeric_limits<double>::infinity())
+                lowerLines_.push_back(line);
+        }
+    }
+    if (upper_.rows() != max_dim) {
+        upperLines_.clear();
+        for (auto line = 0; line < upper_.rows(); ++line) {
+            if (upper_(line) != std::numeric_limits<double>::infinity())
+                upperLines_.push_back(line);
+        }
+    }
+}
+
 void TrajectoryBoundConstraint::initializeConstraint(const PreviewSystem& ps)
 {
+    if (lower_.rows() != upper_.rows())
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsForConstr("lower", "upper", lower_, upper_));
+
     if (lower_.rows() == ps.xDim) {
         nrConstr_ = static_cast<int>((lowerLines_.size() + upperLines_.size())) * ps.nrXStep;
     } else if (lower_.rows() == ps.fullXDim) {
@@ -228,7 +312,7 @@ void TrajectoryBoundConstraint::update(const PreviewSystem& ps)
     }
 }
 
-ConstraintFlag TrajectoryBoundConstraint::constraintType()
+ConstraintFlag TrajectoryBoundConstraint::constraintType() const noexcept
 {
     return ConstraintFlag::InequalityConstraint;
 }
@@ -237,10 +321,20 @@ ConstraintFlag TrajectoryBoundConstraint::constraintType()
  *                                 Control Bound Constraint                                      *
  *************************************************************************************************/
 
+void ControlBoundConstraint::autoSpan()
+{
+    auto max_dim = std::max(lower_.rows(), upper_.rows());
+    spanVector(lower_, max_dim);
+    spanVector(upper_, max_dim);
+}
+
 void ControlBoundConstraint::initializeConstraint(const PreviewSystem& ps)
 {
     if (hasBeenInitialized_)
         RUNTIME_ERROR_EXCEPTION("You have initialized a ControlBoundConstraint twice. As move semantics are used, you can't do so.");
+
+    if (lower_.rows() != upper_.rows())
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsForConstr("lower", "upper", lower_, upper_));
 
     if (lower_.rows() == ps.uDim) {
         nrConstr_ = ps.fullUDim;
@@ -268,7 +362,7 @@ void ControlBoundConstraint::update(const PreviewSystem& ps)
     }
 }
 
-ConstraintFlag ControlBoundConstraint::constraintType()
+ConstraintFlag ControlBoundConstraint::constraintType() const noexcept
 {
     return ConstraintFlag::BoundConstraint;
 }
