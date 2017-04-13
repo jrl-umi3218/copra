@@ -24,21 +24,21 @@ std::unique_ptr<SolverInterface> MPC_DLLAPI solverFactory(SolverFlag flag)
     switch (flag) {
 #ifdef EIGEN_LSSOL_FOUND
     case SolverFlag::LSSOL:
-        return std::make_unique<LSSOLSolver>();
+        return std::unique_ptr<LSSOLSolver>();
 #endif
 #ifdef EIGEN_GUROBI_FOUND
     case SolverFlag::GUROBIDense:
-        return std::make_unique<GUROBISolver>();
+        return std::unique_ptr<GUROBISolver>();
 #endif
 #ifdef EIGEN_QLD_FOUND
     case SolverFlag::QLD:
-        return std::make_unique<QLDSolver>();
+        return std::unique_ptr<QLDSolver>();
 #endif
     // case SolverFlag::QuadProgSparse:
     //    return std::make_unique<QuadProgSparseSolver>();
     case SolverFlag::QuadProgDense:
     default:
-        return std::make_unique<QuadProgDenseSolver>();
+        return std::unique_ptr<QuadProgDenseSolver>();
     }
 }
 
