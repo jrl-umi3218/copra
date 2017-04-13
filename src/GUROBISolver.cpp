@@ -28,7 +28,7 @@ namespace mpc {
  */
 
 GUROBISolver::GUROBISolver()
-    : solver_(std::make_unique<Eigen::GurobiDense>())
+    : solver_(new Eigen::GurobiDense())
 {
     solver_->displayOutput(false);
     solver_->feasibilityTolerance(1e-8);

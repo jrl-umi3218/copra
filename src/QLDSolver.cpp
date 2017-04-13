@@ -28,7 +28,7 @@ namespace mpc {
  */
 
 QLDSolver::QLDSolver()
-    : solver_(std::make_unique<Eigen::QLD>())
+    : solver_(new Eigen::QLD())
     , eps_(1e-8)
 {
 }

@@ -28,7 +28,7 @@ namespace mpc {
  */
 
 QuadProgDenseSolver::QuadProgDenseSolver()
-    : solver_(std::make_unique<Eigen::QuadProgDense>())
+    : solver_(new Eigen::QuadProgDense())
 {
 }
 

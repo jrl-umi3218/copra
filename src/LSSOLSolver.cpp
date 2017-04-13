@@ -25,7 +25,7 @@ namespace mpc {
  */
 
 LSSOLSolver::LSSOLSolver()
-    : solver_(std::make_unique<Eigen::StdLSSOL>())
+    : solver_(new Eigen::StdLSSOL())
 {
 }
 
