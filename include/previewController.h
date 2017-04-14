@@ -31,8 +31,8 @@
 // mpc
 #include "config.hh"
 #include "debugUtils.h"
-#include "typedefs.h"
 #include "solverUtils.h"
+#include "typedefs.h"
 
 namespace mpc {
 
@@ -120,7 +120,7 @@ public:
      * \throw Throw a std::domain_error is Wx or Wu are badly dimension.
      */
     template <typename TVec1, typename TVec2,
-        typename = std::enable_if_t<!is_all_integral<TVec1, TVec2>::value> >
+        typename = std::enable_if_t<!is_all_arithmetic<TVec1, TVec2>::value> >
     void weights(TVec1&& Wx, TVec2&& Wu)
     {
         if (Wx.rows() == Wx_.rows())
@@ -145,7 +145,13 @@ public:
      * \param wx Weight of the state.
      * \param wu Weight of the control.
      */
-    void weights(double Wx, double Wu);
+    template <typename T1, typename T2,
+        typename = std::enable_if_t<is_all_arithmetic<T1, T2>::value> >
+    void weights(T1 Wx, T2 Wu)
+    {
+        Wx_.setConstant(Wx);
+        Wu_.setConstant(Wu);
+    }
 
     /**
      * Add a constraint to the system. The shared_ptr if not copied !

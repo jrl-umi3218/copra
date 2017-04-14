@@ -166,12 +166,6 @@ boost::timer::cpu_times MPCTypeFull::solveAndBuildTime() const noexcept
     return solveAndBuildTime_.elapsed();
 }
 
-void MPCTypeFull::weights(double Wx, double Wu)
-{
-    Wx_.setConstant(Wx);
-    Wu_.setConstant(Wu);
-}
-
 void MPCTypeFull::addConstraint(const std::shared_ptr<Constraint>& constr)
 {
     constr->initializeConstraint(*ps_);
