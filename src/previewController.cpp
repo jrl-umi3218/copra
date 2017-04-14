@@ -244,7 +244,7 @@ void MPCTypeFull::makeQPForm()
 {
     Q_ = Wu_.asDiagonal();
     Q_.noalias() += ps_->Psi.transpose() * Wx_.asDiagonal() * ps_->Psi;
-    c_.noalias() = ps_->Psi.transpose() * Wx_.asDiagonal() * (ps_->Phi * ps_->x0 - ps_->xd + ps_->xi);
+    c_.noalias() = 2 * ps_->Psi.transpose() * Wx_.asDiagonal() * (ps_->Phi * ps_->x0 - ps_->xd + ps_->xi);
 
     int nrLines = 0;
     // Get Equality constraints
@@ -337,7 +337,7 @@ void MPCTypeLast::makeQPForm()
     const Eigen::MatrixXd& psi = ps_->Psi.bottomRows(xDim);
     Q_ = Wu_.asDiagonal();
     Q_.noalias() += psi.transpose() * Wx_.asDiagonal() * psi;
-    c_.noalias() = psi.transpose() * Wx_.asDiagonal() * (ps_->Phi.bottomRows(xDim) * ps_->x0 - ps_->xd.tail(xDim) + ps_->xi.tail(xDim));
+    c_.noalias() = 2 * psi.transpose() * Wx_.asDiagonal() * (ps_->Phi.bottomRows(xDim) * ps_->x0 - ps_->xd.tail(xDim) + ps_->xi.tail(xDim));
 
     int nrLines = 0;
     // Get Equality constraints

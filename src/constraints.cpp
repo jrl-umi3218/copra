@@ -205,22 +205,25 @@ void MixedConstraint::initializeConstraint(const PreviewSystem& ps)
 
     if (E_.cols() == ps.xDim && G_.cols() == ps.uDim) {
         nrConstr_ = static_cast<int>(E_.rows()) * ps.nrUStep;
-        A_.resize(nrConstr_, ps.fullUDim);
-        b_.resize(nrConstr_);
-        A_.setZero();
     } else if (E_.cols() == ps.fullXDim && G_.cols() == ps.fullUDim) {
         fullSizeEntry_ = true;
+        std::cout << "i'm here" << std::endl;
         nrConstr_ = static_cast<int>(E_.rows());
-        A_.noalias() = E_ * ps.Psi + G_;
-        b_.noalias() = f_ - E_ * (ps.Phi * ps.x0 + ps.xi);
     } else {
         DOMAIN_ERROR_EXCEPTION(throwMsgOnColsOnPSXUDim("E", "G", E_, G_, &ps));
     }
+    
+    A_.resize(nrConstr_, ps.fullUDim);
+    b_.resize(nrConstr_);
+    A_.setZero();
 }
 
 void MixedConstraint::update(const PreviewSystem& ps)
 {
-    if (!fullSizeEntry_) {
+    if (fullSizeEntry_) {
+        A_.noalias() = E_ * ps.Psi + G_;
+        b_.noalias() = f_ - E_ * (ps.Phi * ps.x0 + ps.xi);
+    } else {
         auto nrLines = static_cast<int>(E_.rows());
         auto uDim = ps.uDim;
         auto xDim = ps.xDim;
