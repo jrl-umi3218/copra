@@ -212,7 +212,7 @@ void MixedConstraint::initializeConstraint(const PreviewSystem& ps)
         fullSizeEntry_ = true;
         nrConstr_ = static_cast<int>(E_.rows());
         A_.noalias() = E_ * ps.Psi + G_;
-        b_.noalias() = f_ - ps.Phi * ps.x0 - ps.xi;
+        b_.noalias() = f_ - E_ * (ps.Phi * ps.x0 + ps.xi);
     } else {
         DOMAIN_ERROR_EXCEPTION(throwMsgOnColsOnPSXUDim("E", "G", E_, G_, &ps));
     }
