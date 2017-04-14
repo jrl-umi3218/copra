@@ -207,7 +207,6 @@ void MixedConstraint::initializeConstraint(const PreviewSystem& ps)
         nrConstr_ = static_cast<int>(E_.rows()) * ps.nrUStep;
     } else if (E_.cols() == ps.fullXDim && G_.cols() == ps.fullUDim) {
         fullSizeEntry_ = true;
-        std::cout << "i'm here" << std::endl;
         nrConstr_ = static_cast<int>(E_.rows());
     } else {
         DOMAIN_ERROR_EXCEPTION(throwMsgOnColsOnPSXUDim("E", "G", E_, G_, &ps));
