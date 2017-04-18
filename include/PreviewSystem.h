@@ -37,6 +37,12 @@ namespace mpc {
  */
 struct MPC_DLLAPI PreviewSystem {
     /**
+     * Default constructor.
+     */
+    PreviewSystem() 
+    {}
+
+    /**
      * Constructor of the class.
      * \param state The state matrix of the system.
      * \param control The control matrix of the system.
@@ -46,12 +52,12 @@ struct MPC_DLLAPI PreviewSystem {
      * \param sFlag The solver to use.
      * \throw std::domain_error if the dimension of the matrices mismatch.
      */
-    void system(const Eigen::MatrixXd& state, const Eigen::MatrixXd& control,
-        const Eigen::VectorXd& xInit, const Eigen::VectorXd& xTraj,
-        int numberOfSteps);
+    PreviewSystem(const Eigen::MatrixXd& state, const Eigen::MatrixXd& control,
+        const Eigen::VectorXd& bias, const Eigen::VectorXd& xInit,
+        const Eigen::VectorXd& xTraj, int numberOfSteps);
 
     /**
-     * Constructor of the class.
+     * Create the system.
      * \param state The state matrix of the system.
      * \param control The control matrix of the system.
      * \param xInit The initial state.

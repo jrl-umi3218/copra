@@ -23,10 +23,11 @@
 
 namespace mpc {
 
-void PreviewSystem::system(const Eigen::MatrixXd& state, const Eigen::MatrixXd& control,
-    const Eigen::VectorXd& xInit, const Eigen::VectorXd& xTraj, int numberOfSteps)
+PreviewSystem::PreviewSystem(const Eigen::MatrixXd& state, const Eigen::MatrixXd& control,
+    const Eigen::VectorXd& bias, const Eigen::VectorXd& xInit, 
+    const Eigen::VectorXd& xTraj, int numberOfSteps)
 {
-    system(state, control, Eigen::VectorXd::Zero(state.rows()), xInit, xTraj, numberOfSteps);
+    system(state, control, bias, xInit, xTraj, numberOfSteps);
 }
 
 void PreviewSystem::system(const Eigen::MatrixXd& state, const Eigen::MatrixXd& control,
