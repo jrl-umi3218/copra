@@ -18,12 +18,10 @@
 #pragma once
 
 // stl
+#include <chrono>
 #include <memory>
 #include <string>
 #include <vector>
-
-// boost
-#include <boost/timer/timer.hpp>
 
 // eigen
 #include <Eigen/Core>
@@ -103,14 +101,14 @@ public:
     Eigen::VectorXd trajectory() const noexcept;
     /**
      * The time needed to solve the qp problem.
-     * \return The elapsed time for solving.
+     * \return The elapsed time (in s) for solving.
      */
-    boost::timer::cpu_times solveTime() const noexcept;
+    double solveTime() const noexcept;
     /**
      * The time needed to build and solve the qp problem.
-     * \return The elapsed time for build and solving.
+     * \return The elapsed time (in s) for build and solving.
      */
-    boost::timer::cpu_times solveAndBuildTime() const noexcept;
+    double solveAndBuildTime() const noexcept;
 
     /**
      * Set the weights of the system.
@@ -220,7 +218,7 @@ protected:
     Eigen::MatrixXd Q_, Aineq_, Aeq_;
     Eigen::VectorXd c_, bineq_, beq_, lb_, ub_, Wx_, Wu_;
 
-    boost::timer::cpu_timer solveTime_, solveAndBuildTime_;
+    std::chrono::duration<double> solveTime_, solveAndBuildTime_;
 };
 
 /**

@@ -1,4 +1,20 @@
-#To complete
+# This file is part of mpc.
+
+# mpc is free software: you can redistribute it and/or
+# modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# mpc is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with mpc.  If not, see
+# <http://www.gnu.org/licenses/>.
+
 set(SOURCES
     PreviewSystem.cpp
     QuadProgSolver.cpp
@@ -33,10 +49,8 @@ if(${EIGEN_QLD_FOUND})
     list(APPEND HEADERS ../include/QLDSolver.h)
 endif()
 
-include_directories(${Boost_INCLUDE_DIRS})
 add_library(${PROJECT_NAME} SHARED ${SOURCES} ${HEADERS})
 
-target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
 PKG_CONFIG_USE_DEPENDENCY(${PROJECT_NAME} eigen-quadprog)
 if(${EIGEN_QLD_FOUND})
     PKG_CONFIG_USE_DEPENDENCY(${PROJECT_NAME} eigen-qld)

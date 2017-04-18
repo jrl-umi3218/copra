@@ -1,3 +1,20 @@
+# This file is part of mpc.
+
+# mpc is free software: you can redistribute it and/or
+# modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# mpc is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with mpc.  If not, see
+# <http://www.gnu.org/licenses/>.
+
 # Version minimum
 cmake_minimum_required(VERSION 2.8)
 include(cmake/base.cmake)
@@ -39,7 +56,6 @@ SETUP_PROJECT()
 set(BOOST_REQUIRED 1.48)
 set(BOOST_COMPONENTS system timer)
 set(Eigen_REQUIRED "eigen3 >= 3.2.7") # This eigen version allows move semantics.
-SEARCH_FOR_BOOST()
 SEARCH_FOR_EIGEN()
 
 if(${_Eigen_VERSION} VERSION_LESS 3.3)

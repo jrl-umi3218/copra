@@ -131,18 +131,21 @@ void MPCTypeFull::initializeController(const std::shared_ptr<PreviewSystem>& ps)
 
 bool MPCTypeFull::solve()
 {
-    solveAndBuildTime_.start();
+    auto sabTime = std::chrono::high_resolution_clock::now();
+
     updateSystem();
     makeQPForm();
     sol_->SI_problem(ps_->fullUDim, constraints_.nrEqConstr, constraints_.nrIneqConstr);
-    solveTime_.start();
+
+    auto sTime = std::chrono::high_resolution_clock::now();
     bool success = sol_->SI_solve(Q_, c_, Aeq_, beq_, Aineq_, bineq_, lb_, ub_);
-    solveTime_.stop();
+    solveTime_ = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now() - sTime);
+
     checkDeleteConstraints();
-    solveAndBuildTime_.stop();
     if (!success)
         sol_->SI_inform();
 
+    solveAndBuildTime_ = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now() - sabTime);
     return success;
 }
 
@@ -156,14 +159,14 @@ Eigen::VectorXd MPCTypeFull::trajectory() const noexcept
     return ps_->Phi * ps_->x0 + ps_->Psi * control() + ps_->xi;
 }
 
-boost::timer::cpu_times MPCTypeFull::solveTime() const noexcept
+double MPCTypeFull::solveTime() const noexcept
 {
-    return solveTime_.elapsed();
+    return solveTime_.count();
 }
 
-boost::timer::cpu_times MPCTypeFull::solveAndBuildTime() const noexcept
+double MPCTypeFull::solveAndBuildTime() const noexcept
 {
-    return solveAndBuildTime_.elapsed();
+    return solveAndBuildTime_.count();
 }
 
 void MPCTypeFull::addConstraint(const std::shared_ptr<Constraint>& constr)
@@ -244,7 +247,7 @@ void MPCTypeFull::makeQPForm()
 {
     Q_ = Wu_.asDiagonal();
     Q_.noalias() += ps_->Psi.transpose() * Wx_.asDiagonal() * ps_->Psi;
-    c_.noalias() = 2 * ps_->Psi.transpose() * Wx_.asDiagonal() * (ps_->Phi * ps_->x0 - ps_->xd + ps_->xi);
+    c_.noalias() = ps_->Psi.transpose() * Wx_.asDiagonal() * (ps_->Phi * ps_->x0 - ps_->xd + ps_->xi);
 
     int nrLines = 0;
     // Get Equality constraints
@@ -337,7 +340,7 @@ void MPCTypeLast::makeQPForm()
     const Eigen::MatrixXd& psi = ps_->Psi.bottomRows(xDim);
     Q_ = Wu_.asDiagonal();
     Q_.noalias() += psi.transpose() * Wx_.asDiagonal() * psi;
-    c_.noalias() = 2 * psi.transpose() * Wx_.asDiagonal() * (ps_->Phi.bottomRows(xDim) * ps_->x0 - ps_->xd.tail(xDim) + ps_->xi.tail(xDim));
+    c_.noalias() = psi.transpose() * Wx_.asDiagonal() * (ps_->Phi.bottomRows(xDim) * ps_->x0 - ps_->xd.tail(xDim) + ps_->xi.tail(xDim));
 
     int nrLines = 0;
     // Get Equality constraints
