@@ -20,7 +20,6 @@
 #include "previewController.h"
 #include "solverUtils.h"
 #include <boost/python.hpp>
-#include <boost/timer/timer.hpp>
 #include <memory>
 #include <string>
 
@@ -39,50 +38,24 @@ T* get_pointer(std::shared_ptr<T> p)
 
 namespace mpc {
 
-std::shared_ptr<PreviewSystem> NewPreviewSystem()
+template <typename T, typename... Args>
+std::shared_ptr<T> createSharedPointer(Args... args)
 {
-    return std::make_shared<PreviewSystem>();
+    return std::make_shared<T>(args...);
 }
 
-std::shared_ptr<TrajectoryConstraint> NewTrajectoryConstraint1(const Eigen::MatrixXd& E, const Eigen::VectorXd& f)
-{
-    return std::make_shared<TrajectoryConstraint>(E, f);
-}
+auto NewPreviewSystem1 = &createSharedPointer<PreviewSystem>;
+auto NewPreviewSystem2 = &createSharedPointer<PreviewSystem, const Eigen::MatrixXd&, const Eigen::MatrixXd&, 
+    const Eigen::VectorXd&, const Eigen::VectorXd&, const Eigen::VectorXd&, int>;
+auto NewTrajectoryConstraint1 = &createSharedPointer<TrajectoryConstraint, const Eigen::MatrixXd&, const Eigen::VectorXd&>;
+auto NewTrajectoryConstraint2 = &createSharedPointer<TrajectoryConstraint, const Eigen::MatrixXd&, const Eigen::VectorXd&, bool>;
+auto NewControlConstraint1 = &createSharedPointer<ControlConstraint, const Eigen::MatrixXd&, const Eigen::VectorXd&>;
+auto NewControlConstraint2 = &createSharedPointer<ControlConstraint, const Eigen::MatrixXd&, const Eigen::VectorXd&, bool>;
+auto NewMixedConstraint1 = &createSharedPointer<MixedConstraint, const Eigen::MatrixXd&, const Eigen::MatrixXd&, const Eigen::VectorXd&>;
+auto NewMixedConstraint2 = &createSharedPointer<MixedConstraint, const Eigen::MatrixXd&, const Eigen::MatrixXd&, const Eigen::VectorXd&, bool>;
+auto NewTrajectoryBoundConstraint = &createSharedPointer<TrajectoryBoundConstraint, const Eigen::VectorXd&, const Eigen::VectorXd&>;
+auto NewControlBoundConstraint = &createSharedPointer<ControlBoundConstraint, const Eigen::VectorXd&, const Eigen::VectorXd&>;
 
-std::shared_ptr<TrajectoryConstraint> NewTrajectoryConstraint2(const Eigen::MatrixXd& E, const Eigen::VectorXd& f, bool isInequalityConstraint)
-{
-    return std::make_shared<TrajectoryConstraint>(E, f, isInequalityConstraint);
-}
-
-std::shared_ptr<ControlConstraint> NewControlConstraint1(const Eigen::MatrixXd& E, const Eigen::VectorXd& f)
-{
-    return std::make_shared<ControlConstraint>(E, f);
-}
-
-std::shared_ptr<ControlConstraint> NewControlConstraint2(const Eigen::MatrixXd& E, const Eigen::VectorXd& f, bool isInequalityConstraint = true)
-{
-    return std::make_shared<ControlConstraint>(E, f, isInequalityConstraint);
-}
-
-std::shared_ptr<MixedConstraint> NewMixedConstraint1(const Eigen::MatrixXd& E, const Eigen::MatrixXd& G, const Eigen::VectorXd& f)
-{
-    return std::make_shared<MixedConstraint>(E, G, f);
-}
-
-std::shared_ptr<MixedConstraint> NewMixedConstraint2(const Eigen::MatrixXd& E, const Eigen::MatrixXd& G, const Eigen::VectorXd& f, bool isInequalityConstraint = true)
-{
-    return std::make_shared<MixedConstraint>(E, G, f, isInequalityConstraint);
-}
-
-std::shared_ptr<TrajectoryBoundConstraint> NewTrajectoryBoundConstraint(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper)
-{
-    return std::make_shared<TrajectoryBoundConstraint>(lower, upper);
-}
-
-std::shared_ptr<ControlBoundConstraint> NewControlBoundConstraint(const Eigen::VectorXd& lower, const Eigen::VectorXd& upper)
-{
-    return std::make_shared<ControlBoundConstraint>(lower, upper);
-}
 } // namespace mpc
 
 BOOST_PYTHON_MODULE(_mpc)
@@ -90,15 +63,16 @@ BOOST_PYTHON_MODULE(_mpc)
     using namespace mpc;
     using namespace boost::python;
 
-    def("NewPreviewSystem", &NewPreviewSystem, "Create a new instance of a PrevieSystem shared_ptr");
-    def("NewTrajectoryConstraint", &NewTrajectoryConstraint1, "Create a new instance of a TrajectoryConstraint shared_ptr");
-    def("NewTrajectoryConstraint", &NewTrajectoryConstraint2, "Create a new instance of a TrajectoryConstraint shared_ptr");
-    def("NewControlConstraint", &NewControlConstraint1, "Create a new instance of a ControlConstraint shared_ptr");
-    def("NewControlConstraint", &NewControlConstraint2, "Create a new instance of a ControlConstraint shared_ptr");
-    def("NewMixedConstraint", &NewMixedConstraint1, "Create a new instance of a MixedConstraint shared_ptr");
-    def("NewMixedConstraint", &NewMixedConstraint2, "Create a new instance of a MixedConstraint shared_ptr");
-    def("NewTrajectoryBoundConstraint", &NewTrajectoryBoundConstraint, "Create a new instance of a TrajectoryBoundConstraint shared_ptr");
-    def("NewControlBoundConstraint", &NewControlBoundConstraint, "Create a new instance of a ControlBoundConstraint shared_ptr");
+    def("NewPreviewSystem", NewPreviewSystem1, "Create a new instance of a PrevieSystem shared_ptr with default constructor");
+    def("NewPreviewSystem", NewPreviewSystem2, "Create a new instance of a PrevieSystem shared_ptr");
+    def("NewTrajectoryConstraint", NewTrajectoryConstraint1, "Create a new instance of a TrajectoryConstraint shared_ptr");
+    def("NewTrajectoryConstraint", NewTrajectoryConstraint2, "Create a new instance of a TrajectoryConstraint shared_ptr");
+    def("NewControlConstraint", NewControlConstraint1, "Create a new instance of a ControlConstraint shared_ptr");
+    def("NewControlConstraint", NewControlConstraint2, "Create a new instance of a ControlConstraint shared_ptr");
+    def("NewMixedConstraint", NewMixedConstraint1, "Create a new instance of a MixedConstraint shared_ptr");
+    def("NewMixedConstraint", NewMixedConstraint2, "Create a new instance of a MixedConstraint shared_ptr");
+    def("NewTrajectoryBoundConstraint", NewTrajectoryBoundConstraint, "Create a new instance of a TrajectoryBoundConstraint shared_ptr");
+    def("NewControlBoundConstraint", NewControlBoundConstraint, "Create a new instance of a ControlBoundConstraint shared_ptr");
 
     enum_<SolverFlag>("SolverFlag", "Flags to qp solver")
         .value("DEFAULT", SolverFlag::DEFAULT)
@@ -117,16 +91,9 @@ BOOST_PYTHON_MODULE(_mpc)
     def("pythonSolverFactory", &pythonSolverFactory, return_value_policy<manage_new_object>(), "Return a solver corresponding to the giden flag");
 
     // Preview System
-    void (PreviewSystem::*sys1)(const Eigen::MatrixXd&, const Eigen::MatrixXd&,
-        const Eigen::VectorXd&, const Eigen::VectorXd&, int)
-        = &PreviewSystem::system;
-    void (PreviewSystem::*sys2)(const Eigen::MatrixXd&, const Eigen::MatrixXd&,
-        const Eigen::VectorXd&, const Eigen::VectorXd&, const Eigen::VectorXd&, int)
-        = &PreviewSystem::system;
-
     class_<PreviewSystem>("PreviewSystem", "The PreviewSystem is a read-write structure that holds all the information of the system.", no_init)
-        .def("system", sys1)
-        .def("system", sys2)
+        .def("system", &PreviewSystem::system)
+        .def("updateSystem", &PreviewSystem::updateSystem)
         .def_readwrite("isUpdated", &PreviewSystem::isUpdated)
         .def_readwrite("nrUStep", &PreviewSystem::nrUStep)
         .def_readwrite("nrXStep", &PreviewSystem::nrXStep)
@@ -270,21 +237,15 @@ BOOST_PYTHON_MODULE(_mpc)
         "Faster version of the FullType but neglect parts before final time", init<optional<SolverFlag> >())
         .def(init<const std::shared_ptr<PreviewSystem>&, optional<SolverFlag> >());
 
-    //cpu_times
-    using namespace boost::timer;
-    class_<cpu_times>("cpu_times", "Allow the use of boost measuring time")
-        .def_readwrite("wall", &cpu_times::wall)
-        .def_readwrite("user", &cpu_times::user)
-        .def_readwrite("system", &cpu_times::system)
-        .def("clear", &cpu_times::clear);
-
     register_ptr_to_python<std::shared_ptr<PreviewSystem> >();
     register_ptr_to_python<std::shared_ptr<TrajectoryConstraint> >();
     register_ptr_to_python<std::shared_ptr<ControlConstraint> >();
+    register_ptr_to_python<std::shared_ptr<MixedConstraint> >();
     register_ptr_to_python<std::shared_ptr<TrajectoryBoundConstraint> >();
     register_ptr_to_python<std::shared_ptr<ControlBoundConstraint> >();
     implicitly_convertible<std::shared_ptr<TrajectoryConstraint>, std::shared_ptr<Constraint> >();
     implicitly_convertible<std::shared_ptr<ControlConstraint>, std::shared_ptr<Constraint> >();
+    implicitly_convertible<std::shared_ptr<MixedConstraint>, std::shared_ptr<Constraint> >();
     implicitly_convertible<std::shared_ptr<TrajectoryBoundConstraint>, std::shared_ptr<Constraint> >();
     implicitly_convertible<std::shared_ptr<ControlBoundConstraint>, std::shared_ptr<Constraint> >();
 }

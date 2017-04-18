@@ -79,6 +79,42 @@ class TestMPC(unittest.TestCase):
         print controller.solveAndBuildTime().wall * 1e-6
         print
 
+    def test_mpcLast_mixed(self):
+        ps = mpc.NewPreviewSystem()
+        ps.system(self.A, self.B, self.c, self.x0, self.xd, self.nbStep)
+
+        controller = mpc.MPCTypeLast(ps)
+        mixedConstr = mpc.NewMixedConstraint(self.Eineq, self.Gineq, self.hineq)
+
+        controller.addConstraint(mixedConstr)
+
+        controller.weights(self.wx, self.wu)
+
+        self.assertTrue(controller.solve())
+        control = controller.control()
+        fullTraj = controller.trajectory()
+        fTLen = len(fullTraj) / 2
+        posTraj = [0.] * fTLen
+        velTraj = [0.] * fTLen
+        for i in xrange(fTLen):
+            posTraj[i] = fullTraj[2 * i]
+            velTraj[i] = fullTraj[2 * i + 1]
+
+        self.assertAlmostEqual(self.xd[1], velTraj[-1], places=3)
+        self.assertLessEqual(max(posTraj), self.x0[0])
+        for i in xrange(self.Eineq.rows()):
+            res = 0
+            for j in xrange(self.Eineq.cols()):
+                res += self.Eineq[i, j] * fullTraj[i * self.Eineq.cols() + j]
+            for j in xrange(self.Gineq.cols()):
+                res += self.Gineq[i, j] * control[i * self.Gineq.cols() + j]
+            self.assertLessEqual(res, self.hineq[0])
+
+        print "Test mpc last with inequalities"
+        print controller.solveTime().wall * 1e-6
+        print controller.solveAndBuildTime().wall * 1e-6
+        print
+
     def test_mpcLast_bound(self):
         ps = mpc.NewPreviewSystem()
         ps.system(self.A, self.B, self.c, self.x0, self.xd, self.nbStep)
@@ -249,60 +285,29 @@ class TestMPC(unittest.TestCase):
         controller = mpc.MPCTypeLast(ps)
         # Test trajectory constraint throws
         with self.assertRaises(RuntimeError):
-            mpc.NewTrajectoryConstraint(MatrixXd.Identity(5, 5), VectorXd.Ones(2))
+            constr = mpc.NewTrajectoryConstraint(MatrixXd.Identity(5, 5), VectorXd.Ones(2))
+            controller.addConstraint(constr)
         
-        trajConstr = mpc.NewTrajectoryConstraint(self.Eineq, self.fineq)
-        with self.assertRaises(RuntimeError):
-            trajConstr.trajectory(MatrixXd.Identity(5, 5), self.fineq)
-        with self.assertRaises(RuntimeError):
-            trajConstr.trajectory(self.Eineq, VectorXd.Ones(2))
-        
-        trajConstr = mpc.NewTrajectoryConstraint(MatrixXd.Identity(5, 5), VectorXd.Ones(5))
-        with self.assertRaises(RuntimeError):
-            controller.addConstraint(trajConstr)
-
         # Test control constraint throws
         with self.assertRaises(RuntimeError):
-            mpc.NewControlConstraint(MatrixXd.Identity(5, 5), VectorXd.Ones(2))
+            constr = mpc.NewControlConstraint(MatrixXd.Identity(5, 5), VectorXd.Ones(2))
+            controller.addConstraint(constr)
         
-        contConstr = mpc.NewControlConstraint(self.Gineq, self.hineq)
+        # Test mixed constraint throws
         with self.assertRaises(RuntimeError):
-            contConstr.control(MatrixXd.Identity(5, 5), self.hineq)
-        with self.assertRaises(RuntimeError):
-            contConstr.control(self.Gineq, VectorXd.Ones(2))
+            constr = mpc.NewMixedConstraint(MatrixXd.Identity(5, 5), MatrixXd.Identity(5, 5), VectorXd.Ones(2))
+            controller.addConstraint(constr)
         
-        contConstr = mpc.NewControlConstraint(MatrixXd.Identity(5, 5), VectorXd.Ones(5))
-        with self.assertRaises(RuntimeError):
-            controller.addConstraint(contConstr)
-
         # Test trajectory bound constraint throws
         with self.assertRaises(RuntimeError):
-            mpc.NewTrajectoryBoundConstraint(VectorXd.Ones(3), VectorXd.Ones(2))
+            constr = mpc.NewTrajectoryBoundConstraint(VectorXd.Ones(3), VectorXd.Ones(2))
+            controller.addConstraint(constr)
         
-        tbConstr = mpc.NewTrajectoryBoundConstraint(self.xLower, self.xUpper)
-        with self.assertRaises(RuntimeError):
-            tbConstr.trajectoryBound(VectorXd.Ones(3), self.xUpper)
-        with self.assertRaises(RuntimeError):
-            tbConstr.trajectoryBound(self.xLower, VectorXd.Ones(3))
-        
-        tbConstr = mpc.NewTrajectoryBoundConstraint(VectorXd.Ones(3), VectorXd.Ones(3))
-        with self.assertRaises(RuntimeError):
-            controller.addConstraint(tbConstr)
-
         # Test control bound constraint throws
         with self.assertRaises(RuntimeError):
-            mpc.NewControlBoundConstraint(VectorXd.Ones(3), VectorXd.Ones(2))
+            constr = mpc.NewControlBoundConstraint(VectorXd.Ones(3), VectorXd.Ones(2))
+            controller.addConstraint(constr)
         
-        cbConstr = mpc.NewControlBoundConstraint(self.uLower, self.uUpper)
-        with self.assertRaises(RuntimeError):
-            cbConstr.controlBound(VectorXd.Ones(3), self.uUpper)
-        with self.assertRaises(RuntimeError):
-            cbConstr.controlBound(self.uLower, VectorXd.Ones(3))
-        
-        cbConstr = mpc.NewControlBoundConstraint(VectorXd.Ones(3), VectorXd.Ones(3))
-        with self.assertRaises(RuntimeError):
-            controller.addConstraint(cbConstr)
-
     def test_weights(self):
         ps = mpc.NewPreviewSystem()
         ps.system(self.A, self.B, self.c, self.x0, self.xd, 2)

@@ -35,7 +35,7 @@ std::string throwMsgOnRows(const char* mat1Name, const char* mat2Name, const Eig
 std::string throwMsgOnRowsForConstr(const char* mat1Name, const char* mat2Name, const Eigen::MatrixXd& mat1, const Eigen::MatrixXd& mat2)
 {
     std::ostringstream os(throwMsgOnRows(mat1Name, mat2Name, mat1, mat2));
-    os << "Maybe you have forgottent to call autoSpanMatrix method?\n";
+    os << " Maybe you have forgottent to call autoSpanMatrix method?\n";
     return os.str();
 }
 
@@ -95,7 +95,7 @@ std::string throwMsgOnColsOnPSXUDim(const char* mat1Name, const char* mat2Name, 
        << std::to_string(ps->xDim) << " and " << std::to_string(ps->uDim) << " cols or "
        << std::to_string(ps->fullXDim) << " and " << std::to_string(ps->fullUDim) << " cols. But "
        << mat1Name << " has " << std::to_string(mat1.cols()) << " cols and "
-       << mat2Name << " has " << std::to_string(mat2.cols()) << "cols.";
+       << mat2Name << " has " << std::to_string(mat2.cols()) << " cols.";
     return os.str();
 }
 }

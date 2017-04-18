@@ -7,6 +7,7 @@ from _mpc import MPCTypeLast
 from _mpc import NewPreviewSystem
 from _mpc import NewTrajectoryConstraint
 from _mpc import NewControlConstraint
+from _mpc import NewMixedConstraint
 from _mpc import NewTrajectoryBoundConstraint
 from _mpc import NewControlBoundConstraint
 
@@ -19,5 +20,6 @@ __all__ = ["SolverFlag",
            "NewPreviewSystem",
            "NewTrajectoryConstraint",
            "NewControlConstraint",
+           "NewMixedConstraint",
            "NewTrajectoryBoundConstraint",
            "NewControlBoundConstraint"]
