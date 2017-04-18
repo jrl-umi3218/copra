@@ -22,6 +22,8 @@ readonly BUILD_TYPE="Release"
 readonly INSTALL_PREFIX="/usr/local"
 readonly BUILD_CORE=
 readonly BOOST_ROOT_DIR=
+readonly PYTHON_BINDINGS=true
+readonly BUILD_CXX_TESTS=false
 EOF
 }
 
@@ -38,7 +40,9 @@ build_and_install() {
 		cmake $PROGDIR/$path -G"CodeBlocks - Unix Makefiles"\
 			-DCMAKE_BUILD_TYPE=$BUILD_TYPE \
 			-DCMAKE_INSTALL_PREFIX=$INSTALL_PREFIX \
-			-DBOOST_ROOT=$BOOST_ROOT_DIR
+			-DBOOST_ROOT=$BOOST_ROOT_DIR \
+			-DPYTHON_BINDINGS=$PYTHON_BINDINGS \
+			-DBUILD_CXX_TESTS=$BUILD_CXX_TESTS
 
 		make -j$BUILD_CORE
 

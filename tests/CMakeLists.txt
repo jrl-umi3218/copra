@@ -17,7 +17,8 @@
 
 enable_testing()
 
-find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+set(BOOST_COMPONENTS system unit_test_framework)
+SEARCH_FOR_BOOST()
 
 add_definitions(-DBOOST_TEST_DYN_LINK)
 include_directories("${PROJECT_SOURCE_DIR}/src")

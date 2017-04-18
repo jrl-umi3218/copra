@@ -48,10 +48,16 @@ if(lower_case STREQUAL "debug")
     set(CMAKE_CXX_FLAGS_DEBUG "-D_DEBUG")
 endif()
 
+if(NOT DEFINED PYTHON_BINDINGS)
+    set(PYTHON_BINDINGS ON)
+endif()
+
+if(NOT DEFINED BUILD_CXX_TESTS)
+    set(BUILD_CXX_TESTS OFF)
+endif()
+
 project(${PROJECT_NAME} CXX)
 SETUP_PROJECT()
-
-
 
 set(BOOST_REQUIRED 1.48)
 set(BOOST_COMPONENTS system timer)
@@ -78,8 +84,13 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/include/${HEADER_DIR}/solverConfig.h
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/include/${HEADER_DIR})
 
 add_subdirectory(src)
-add_subdirectory(tests)
-add_subdirectory(binding/python)
+if(${BUILD_CXX_TESTS})
+    add_subdirectory(tests)
+endif()
+
+if(${PYTHON_BINDINGS})
+    add_subdirectory(binding/python)
+endif()
 
 # Add dependency towards the library in the pkg-config file.
 pkg_config_append_libs(${PROJECT_NAME})
