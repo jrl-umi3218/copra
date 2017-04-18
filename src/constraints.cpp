@@ -38,7 +38,7 @@ Constraint::Constraint(std::string&& name)
 {
 }
 
-void Constraint::spanMatrix(Eigen::MatrixXd& mat, Eigen::Index max_dim)
+void Constraint::spanMatrix(Eigen::MatrixXd& mat, Eigen::Index max_dim, int addCols)
 {
     auto matRows = mat.rows();
     if (max_dim == matRows)
@@ -47,7 +47,7 @@ void Constraint::spanMatrix(Eigen::MatrixXd& mat, Eigen::Index max_dim)
     auto matCols = mat.cols();
     auto tmp = mat;
     auto nrStep = max_dim / matRows;
-    mat = Eigen::MatrixXd::Zero(max_dim, matCols * nrStep);
+    mat = Eigen::MatrixXd::Zero(max_dim, matCols * (nrStep + addCols));
     for (auto i = 0; i < nrStep; ++i)
         mat.block(i * matRows, i * matCols, matRows, matCols) = tmp;
 }
@@ -191,7 +191,10 @@ ConstraintFlag ControlConstraint::constraintType() const noexcept
 void MixedConstraint::autoSpan()
 {
     auto max_dim = std::max(f_.rows(), std::max(E_.rows(), G_.rows()));
-    spanMatrix(E_, max_dim);
+    if (max_dim == E_.rows()) // This is tricky. Has X and U are not the same dimensions, we need to handle it.
+        spanMatrix(E_, max_dim);
+    else
+        spanMatrix(E_, max_dim, 1);
     spanMatrix(G_, max_dim);
     spanVector(f_, max_dim);
 }
@@ -211,7 +214,7 @@ void MixedConstraint::initializeConstraint(const PreviewSystem& ps)
     } else {
         DOMAIN_ERROR_EXCEPTION(throwMsgOnColsOnPSXUDim("E", "G", E_, G_, &ps));
     }
-    
+
     A_.resize(nrConstr_, ps.fullUDim);
     b_.resize(nrConstr_);
     A_.setZero();
