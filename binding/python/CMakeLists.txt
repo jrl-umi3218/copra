@@ -19,13 +19,12 @@ include(../../cmake/python.cmake)
 
 configure_file(__init__.py ${CMAKE_CURRENT_BINARY_DIR}/${HEADER_DIR}/__init__.py COPYONLY)
 
-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     set(CMAKE_CXX_FLAGS "-std=c++14") # g++ fails with -Werror on boost_python for whatever reason...
 endif()
 
 set(BOOST_COMPONENTS system python)
 SEARCH_FOR_BOOST()
-#find_package(Boost COMPONENTS python REQUIRED)
 FINDPYTHON()
 
 include_directories("${PROJECT_SOURCE_DIR}/src")
