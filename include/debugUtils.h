@@ -25,6 +25,7 @@
 
 // mpc
 #include "PreviewSystem.h"
+#include "typedefs.h"
 
 #ifndef _DEBUG
 #define CONSTRAINT_DELETION_WARN(warn, format, ...)
@@ -100,7 +101,7 @@ std::string throwMsgOnRowsOnPSXDim(const char* matName, const Eigen::MatrixXd& m
  * \param ps The preview system
  * \return The throwing message
  */
-std::string  throwMsgOnRowsOnPSUDim(const char* matName, const Eigen::MatrixXd& mat, const PreviewSystem* ps);
+std::string throwMsgOnRowsOnPSUDim(const char* matName, const Eigen::MatrixXd& mat, const PreviewSystem* ps);
 /**
  * \brief Check that a matrix has its number of columns equal to preview system xDim or fullXDim
  * \param matName Name of the matrix to check
