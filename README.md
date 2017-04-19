@@ -85,12 +85,14 @@ cd binding/python/tests
 python TestPreviewControl.py
 ```
 
-#### Documentation
+## Documentation
 
 You have access to the doxygen files.
+Those files are in `<install_path>/share/doc/mpc/doxygen-html/`.
+Open the `index.html` file in your web browser.
 Plus you can find detailed information [here](https://vsamy.github.io)
 
-#### Examples
+## Examples
 
-Please see [here](https://vsamy.github.io) for and example.
+Please see [here](https://vsamy.github.io) for an example.
 You can also check the tests folder.

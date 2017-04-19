@@ -64,10 +64,12 @@ main() {
 	fi
 
 	load_build_config
-	for module in 'eigen-quadprog' 'minieigen'
-	do
-		build_and_install $module
-	done
+
+	build_and_install eigen-quadprog
+	if $PYTHON_BINDINGS
+	then
+		build_and_install minieigen
+	fi
 	build_and_install ./
 }
 main
