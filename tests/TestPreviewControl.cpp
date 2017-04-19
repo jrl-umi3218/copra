@@ -39,10 +39,22 @@
 
 // The final point of the trajectory should be [val, 0] where val can be any value inferior to 0;
 // Test bound constraints
-struct BoundedSystem
-{
+struct BoundedSystem {
     BoundedSystem()
-        : T(0.005), mass(5), nbStep(300), A(2, 2), B(2, 1), c(2), uLower(1), uUpper(1), xLower(2), xUpper(2), x0(2), xd(2), wx(2), wu(1)
+        : T(0.005)
+        , mass(5)
+        , nbStep(300)
+        , A(2, 2)
+        , B(2, 1)
+        , c(2)
+        , uLower(1)
+        , uUpper(1)
+        , xLower(2)
+        , xUpper(2)
+        , x0(2)
+        , xd(2)
+        , wx(2)
+        , wu(1)
     {
         // System
         A << 1, T, 0, 1;
@@ -71,10 +83,22 @@ struct BoundedSystem
 
 // The final point of the trajectory should be [val, 0] where val can be any value inferior to 0 (same as previous one)
 // Test inequality constraints
-struct IneqSystem
-{
+struct IneqSystem {
     IneqSystem()
-        : T(0.005), mass(5), nbStep(300), A(2, 2), B(2, 1), G(1, 1), E(1, 2), c(2), h(1), f(1), x0(2), xd(2), wx(2), wu(1)
+        : T(0.005)
+        , mass(5)
+        , nbStep(300)
+        , A(2, 2)
+        , B(2, 1)
+        , G(1, 1)
+        , E(1, 2)
+        , c(2)
+        , h(1)
+        , f(1)
+        , x0(2)
+        , xd(2)
+        , wx(2)
+        , wu(1)
     {
         A << 1, T, 0, 1;
         B << 0.5 * T * T / mass, T / mass;
@@ -97,10 +121,21 @@ struct IneqSystem
 
 // The final point of the trajectory should be [val, 0] where val can be any value inferior to 0 (same as previous one)
 // Test mixed constraints
-struct MixedSystem
-{
+struct MixedSystem {
     MixedSystem()
-        : T(0.005), mass(5), nbStep(300), A(2, 2), B(2, 1), G(1, 1), E(1, 2), c(2), f(1), x0(2), xd(2), wx(2), wu(1)
+        : T(0.005)
+        , mass(5)
+        , nbStep(300)
+        , A(2, 2)
+        , B(2, 1)
+        , G(1, 1)
+        , E(1, 2)
+        , c(2)
+        , f(1)
+        , x0(2)
+        , xd(2)
+        , wx(2)
+        , wu(1)
     {
         A << 1, T, 0, 1;
         B << 0.5 * T * T / mass, T / mass;
@@ -123,10 +158,20 @@ struct MixedSystem
 // Search forces that let the system immobile (should be equal to gravity * tiemstep)
 // Test Equality constraints
 // xd becomes useless here
-struct EqSystem
-{
+struct EqSystem {
     EqSystem()
-        : T(0.005), mass(5), nbStep(300), A(2, 2), B(2, 1), E(2, 2), c(2), f(2), x0(2), xd(2), wx(2), wu(1)
+        : T(0.005)
+        , mass(5)
+        , nbStep(300)
+        , A(2, 2)
+        , B(2, 1)
+        , E(2, 2)
+        , c(2)
+        , f(2)
+        , x0(2)
+        , xd(2)
+        , wx(2)
+        , wu(1)
     {
         // System
         A << 1, T, 0, 1;
@@ -143,7 +188,7 @@ struct EqSystem
         f = x0;
     }
 
-    bool printErrorMessage(const std::domain_error &e)
+    bool printErrorMessage(const std::domain_error& e)
     {
         std::cout << e.what() << std::endl
                   << std::endl;
@@ -158,7 +203,7 @@ struct EqSystem
 
 BOOST_FIXTURE_TEST_CASE(MPC_TYPE_LAST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
 {
-    std::vector<std::pair<std::string, double>> solveTime;
+    std::vector<std::pair<std::string, double> > solveTime;
 
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, xd, nbStep);
@@ -171,7 +216,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_LAST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
 
     controller.weights(wx, wu);
 
-    auto pcCheck = [&](const std::string &solverName, mpc::SolverFlag sFlag) {
+    auto pcCheck = [&](const std::string& solverName, mpc::SolverFlag sFlag) {
         controller.selectQPSolver(sFlag);
 
         BOOST_REQUIRE(controller.solve());
@@ -181,8 +226,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_LAST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
         auto trajLen = fullTraj.rows() / 2;
         Eigen::VectorXd posTraj(trajLen);
         Eigen::VectorXd velTraj(trajLen);
-        for (auto i = 0; i < trajLen; ++i)
-        {
+        for (auto i = 0; i < trajLen; ++i) {
             posTraj(i) = fullTraj(2 * i);
             velTraj(i) = fullTraj(2 * i + 1);
         }
@@ -209,7 +253,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_LAST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
 #endif
 
     std::sort(solveTime.begin(), solveTime.end(),
-              [](const auto &lhs, const auto &rhs) { return lhs.second < rhs.second; });
+        [](const auto& lhs, const auto& rhs) { return lhs.second < rhs.second; });
     std::stringstream ss;
     ss << "Solving fasteness: ";
     for (auto sol : solveTime)
@@ -220,7 +264,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_LAST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
 
 BOOST_FIXTURE_TEST_CASE(MPC_TYPE_FULL_WITH_BOUND_CONSTRAINTS, BoundedSystem)
 {
-    std::vector<std::pair<std::string, double>> solveTime;
+    std::vector<std::pair<std::string, double> > solveTime;
 
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, xd, nbStep);
@@ -233,7 +277,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_FULL_WITH_BOUND_CONSTRAINTS, BoundedSystem)
 
     controller.weights(wx, wu);
 
-    auto pcCheck = [&](const std::string &solverName, mpc::SolverFlag sFlag) {
+    auto pcCheck = [&](const std::string& solverName, mpc::SolverFlag sFlag) {
         controller.selectQPSolver(sFlag);
 
         BOOST_REQUIRE(controller.solve());
@@ -243,8 +287,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_FULL_WITH_BOUND_CONSTRAINTS, BoundedSystem)
         auto trajLen = fullTraj.rows() / 2;
         Eigen::VectorXd posTraj(trajLen);
         Eigen::VectorXd velTraj(trajLen);
-        for (auto i = 0; i < trajLen; ++i)
-        {
+        for (auto i = 0; i < trajLen; ++i) {
             posTraj(i) = fullTraj(2 * i);
             velTraj(i) = fullTraj(2 * i + 1);
         }
@@ -271,7 +314,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_FULL_WITH_BOUND_CONSTRAINTS, BoundedSystem)
 #endif
 
     std::sort(solveTime.begin(), solveTime.end(),
-              [](const auto &lhs, const auto &rhs) { return lhs.second < rhs.second; });
+        [](const auto& lhs, const auto& rhs) { return lhs.second < rhs.second; });
     std::stringstream ss;
     ss << "Solving fasteness: ";
     for (auto sol : solveTime)
@@ -286,7 +329,7 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_BOUND_CONSTRAINT, Bou
     auto controller = mpc::MPCTypeLast(ps);
     int nbXStep = nbStep + 1;
 
-    auto checkSpan = [&](const Eigen::VectorXd &xLower, const Eigen::VectorXd &xUpper, const Eigen::VectorXd &uLower, const Eigen::VectorXd &uUpper) {
+    auto checkSpan = [&](const Eigen::VectorXd& xLower, const Eigen::VectorXd& xUpper, const Eigen::VectorXd& uLower, const Eigen::VectorXd& uUpper) {
         auto trajConstr = std::make_shared<mpc::TrajectoryBoundConstraint>(xLower, xUpper);
         trajConstr->autoSpan();
 
@@ -297,7 +340,7 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_BOUND_CONSTRAINT, Bou
         BOOST_REQUIRE_NO_THROW(controller.addConstraint(contConstr));
     };
 
-    auto spanVector = [&](const Eigen::VectorXd &v, int size) {
+    auto spanVector = [&](const Eigen::VectorXd& v, int size) {
         Eigen::VectorXd vout = Eigen::VectorXd::Zero(v.rows() * size);
         for (int i = 0; i < size; ++i)
             vout.segment(i * v.rows(), v.rows()) = v;
@@ -316,7 +359,7 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_BOUND_CONSTRAINT, Bou
 
 BOOST_FIXTURE_TEST_CASE(MPC_TYPE_LAST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
 {
-    std::vector<std::pair<std::string, double>> solveTime;
+    std::vector<std::pair<std::string, double> > solveTime;
 
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, xd, nbStep);
@@ -329,7 +372,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_LAST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
 
     controller.weights(wx, wu);
 
-    auto pcCheck = [&](const std::string &solverName, mpc::SolverFlag sFlag) {
+    auto pcCheck = [&](const std::string& solverName, mpc::SolverFlag sFlag) {
         controller.selectQPSolver(sFlag);
 
         BOOST_REQUIRE(controller.solve());
@@ -339,8 +382,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_LAST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
         auto trajLen = fullTraj.rows() / 2;
         Eigen::VectorXd posTraj(trajLen);
         Eigen::VectorXd velTraj(trajLen);
-        for (auto i = 0; i < trajLen; ++i)
-        {
+        for (auto i = 0; i < trajLen; ++i) {
             posTraj(i) = fullTraj(2 * i);
             velTraj(i) = fullTraj(2 * i + 1);
         }
@@ -367,7 +409,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_LAST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
 #endif
 
     std::sort(solveTime.begin(), solveTime.end(),
-              [](const auto &lhs, const auto &rhs) { return lhs.second < rhs.second; });
+        [](const auto& lhs, const auto& rhs) { return lhs.second < rhs.second; });
     std::stringstream ss;
     ss << "Solving fasteness: ";
     for (auto sol : solveTime)
@@ -378,7 +420,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_LAST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
 
 BOOST_FIXTURE_TEST_CASE(MPC_TYPE_FULL_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
 {
-    std::vector<std::pair<std::string, double>> solveTime;
+    std::vector<std::pair<std::string, double> > solveTime;
 
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, xd, nbStep);
@@ -391,7 +433,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_FULL_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
 
     controller.weights(wx, wu);
 
-    auto pcCheck = [&](const std::string &solverName, mpc::SolverFlag sFlag) {
+    auto pcCheck = [&](const std::string& solverName, mpc::SolverFlag sFlag) {
         controller.selectQPSolver(sFlag);
 
         BOOST_REQUIRE(controller.solve());
@@ -401,8 +443,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_FULL_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
         auto trajLen = fullTraj.rows() / 2;
         Eigen::VectorXd posTraj(trajLen);
         Eigen::VectorXd velTraj(trajLen);
-        for (auto i = 0; i < trajLen; ++i)
-        {
+        for (auto i = 0; i < trajLen; ++i) {
             posTraj(i) = fullTraj(2 * i);
             velTraj(i) = fullTraj(2 * i + 1);
         }
@@ -429,7 +470,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_FULL_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
 #endif
 
     std::sort(solveTime.begin(), solveTime.end(),
-              [](const auto &lhs, const auto &rhs) { return lhs.second < rhs.second; });
+        [](const auto& lhs, const auto& rhs) { return lhs.second < rhs.second; });
     std::stringstream ss;
     ss << "Solving fasteness: ";
     for (auto sol : solveTime)
@@ -444,7 +485,7 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_INEQUALITY_CONSTRAINT
     auto controller = mpc::MPCTypeLast(ps);
     int nbXStep = nbStep + 1;
 
-    auto checkSpan = [&](const Eigen::MatrixXd &E, const Eigen::VectorXd &f, const Eigen::MatrixXd &G, const Eigen::VectorXd &h) {
+    auto checkSpan = [&](const Eigen::MatrixXd& E, const Eigen::VectorXd& f, const Eigen::MatrixXd& G, const Eigen::VectorXd& h) {
         auto trajConstr = std::make_shared<mpc::TrajectoryConstraint>(E, f);
         trajConstr->autoSpan();
 
@@ -455,13 +496,13 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_INEQUALITY_CONSTRAINT
         BOOST_REQUIRE_NO_THROW(controller.addConstraint(contConstr));
     };
 
-    auto spanMatrix = [&](const Eigen::MatrixXd &m, int size) {
+    auto spanMatrix = [&](const Eigen::MatrixXd& m, int size) {
         Eigen::MatrixXd mout = Eigen::MatrixXd::Zero(m.rows() * size, m.cols() * size);
         for (int i = 0; i < size; ++i)
             mout.block(i * m.rows(), i * m.cols(), m.rows(), m.cols()) = m;
         return mout;
     };
-    auto spanVector = [&](const Eigen::VectorXd &v, int size) {
+    auto spanVector = [&](const Eigen::VectorXd& v, int size) {
         Eigen::VectorXd vout = Eigen::VectorXd::Zero(v.rows() * size);
         for (int i = 0; i < size; ++i)
             vout.segment(i * v.rows(), v.rows()) = v;
@@ -480,7 +521,7 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_INEQUALITY_CONSTRAINT
 
 BOOST_FIXTURE_TEST_CASE(MPC_TYPE_LAST_WITH_MIXED_CONSTRAINTS, MixedSystem)
 {
-    std::vector<std::pair<std::string, double>> solveTime;
+    std::vector<std::pair<std::string, double> > solveTime;
 
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, xd, nbStep);
@@ -491,7 +532,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_LAST_WITH_MIXED_CONSTRAINTS, MixedSystem)
 
     controller.weights(wx, wu);
 
-    auto pcCheck = [&](const std::string &solverName, mpc::SolverFlag sFlag) {
+    auto pcCheck = [&](const std::string& solverName, mpc::SolverFlag sFlag) {
         controller.selectQPSolver(sFlag);
 
         BOOST_REQUIRE(controller.solve());
@@ -501,8 +542,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_LAST_WITH_MIXED_CONSTRAINTS, MixedSystem)
         auto trajLen = fullTraj.rows() / 2;
         Eigen::VectorXd posTraj(trajLen);
         Eigen::VectorXd velTraj(trajLen);
-        for (auto i = 0; i < trajLen; ++i)
-        {
+        for (auto i = 0; i < trajLen; ++i) {
             posTraj(i) = fullTraj(2 * i);
             velTraj(i) = fullTraj(2 * i + 1);
         }
@@ -513,8 +553,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_LAST_WITH_MIXED_CONSTRAINTS, MixedSystem)
 
         // Check constrains
         BOOST_REQUIRE_LE(posTraj.maxCoeff(), x0(0));
-        for (int i = 0; i < nbStep; ++i)
-        {
+        for (int i = 0; i < nbStep; ++i) {
             auto res = E * fullTraj.segment(i * E.cols(), E.cols()) + G * control.segment(i * G.cols(), G.cols());
             if (!(res(0) <= f(0) + 1e-6))
                 BOOST_ERROR("Mixed constraint violated!");
@@ -533,7 +572,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_LAST_WITH_MIXED_CONSTRAINTS, MixedSystem)
 #endif
 
     std::sort(solveTime.begin(), solveTime.end(),
-              [](const auto &lhs, const auto &rhs) { return lhs.second < rhs.second; });
+        [](const auto& lhs, const auto& rhs) { return lhs.second < rhs.second; });
     std::stringstream ss;
     ss << "Solving fasteness: ";
     for (auto sol : solveTime)
@@ -544,7 +583,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_LAST_WITH_MIXED_CONSTRAINTS, MixedSystem)
 
 BOOST_FIXTURE_TEST_CASE(MPC_TYPE_FULL_WITH_MIXED_CONSTRAINTS, MixedSystem)
 {
-    std::vector<std::pair<std::string, double>> solveTime;
+    std::vector<std::pair<std::string, double> > solveTime;
 
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, xd, nbStep);
@@ -555,7 +594,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_FULL_WITH_MIXED_CONSTRAINTS, MixedSystem)
 
     controller.weights(wx, wu);
 
-    auto pcCheck = [&](const std::string &solverName, mpc::SolverFlag sFlag) {
+    auto pcCheck = [&](const std::string& solverName, mpc::SolverFlag sFlag) {
         controller.selectQPSolver(sFlag);
 
         BOOST_REQUIRE(controller.solve());
@@ -565,8 +604,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_FULL_WITH_MIXED_CONSTRAINTS, MixedSystem)
         auto trajLen = fullTraj.rows() / 2;
         Eigen::VectorXd posTraj(trajLen);
         Eigen::VectorXd velTraj(trajLen);
-        for (auto i = 0; i < trajLen; ++i)
-        {
+        for (auto i = 0; i < trajLen; ++i) {
             posTraj(i) = fullTraj(2 * i);
             velTraj(i) = fullTraj(2 * i + 1);
         }
@@ -577,8 +615,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_FULL_WITH_MIXED_CONSTRAINTS, MixedSystem)
 
         // Check constrains
         BOOST_REQUIRE_LE(posTraj.maxCoeff(), x0(0));
-        for (int i = 0; i < nbStep; ++i)
-        {
+        for (int i = 0; i < nbStep; ++i) {
             auto res = E * fullTraj.segment(i * E.cols(), E.cols()) + G * control.segment(i * G.cols(), G.cols());
             if (!(res(0) <= f(0) + 1e-6))
                 BOOST_ERROR("Mixed constraint violated!");
@@ -597,7 +634,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_FULL_WITH_MIXED_CONSTRAINTS, MixedSystem)
 #endif
 
     std::sort(solveTime.begin(), solveTime.end(),
-              [](const auto &lhs, const auto &rhs) { return lhs.second < rhs.second; });
+        [](const auto& lhs, const auto& rhs) { return lhs.second < rhs.second; });
     std::stringstream ss;
     ss << "Solving fasteness: ";
     for (auto sol : solveTime)
@@ -611,20 +648,20 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_CONSTRAINT, Mix
     ps->system(A, B, c, x0, xd, nbStep);
     auto controller = mpc::MPCTypeLast(ps);
 
-    auto checkSpan = [&](const Eigen::MatrixXd &E, const Eigen::MatrixXd &G, const Eigen::VectorXd &f) {
+    auto checkSpan = [&](const Eigen::MatrixXd& E, const Eigen::MatrixXd& G, const Eigen::VectorXd& f) {
         auto mixedConstr = std::make_shared<mpc::MixedConstraint>(E, G, f);
         mixedConstr->autoSpan();
 
         BOOST_REQUIRE_NO_THROW(controller.addConstraint(mixedConstr));
     };
 
-    auto spanMatrix = [&](const Eigen::MatrixXd &m, int size, int addCols = 0) {
+    auto spanMatrix = [&](const Eigen::MatrixXd& m, int size, int addCols = 0) {
         Eigen::MatrixXd mout = Eigen::MatrixXd::Zero(m.rows() * size, m.cols() * (size + addCols));
         for (int i = 0; i < size; ++i)
             mout.block(i * m.rows(), i * m.cols(), m.rows(), m.cols()) = m;
         return mout;
     };
-    auto spanVector = [&](const Eigen::VectorXd &v, int size) {
+    auto spanVector = [&](const Eigen::VectorXd& v, int size) {
         Eigen::VectorXd vout = Eigen::VectorXd::Zero(v.rows() * size);
         for (int i = 0; i < size; ++i)
             vout.segment(i * v.rows(), v.rows()) = v;
@@ -649,7 +686,7 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_CONSTRAINT, Mix
 
 BOOST_FIXTURE_TEST_CASE(MPC_TYPE_LAST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
 {
-    std::vector<std::pair<std::string, double>> solveTime;
+    std::vector<std::pair<std::string, double> > solveTime;
 
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, xd, nbStep);
@@ -660,7 +697,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_LAST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
 
     controller.weights(wx, wu);
 
-    auto pcCheck = [&](const std::string &solverName, mpc::SolverFlag sFlag) {
+    auto pcCheck = [&](const std::string& solverName, mpc::SolverFlag sFlag) {
         controller.selectQPSolver(sFlag);
 
         BOOST_REQUIRE(controller.solve());
@@ -670,8 +707,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_LAST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
         auto trajLen = fullTraj.rows() / 2;
         Eigen::VectorXd posTraj(trajLen);
         Eigen::VectorXd velTraj(trajLen);
-        for (auto i = 0; i < trajLen; ++i)
-        {
+        for (auto i = 0; i < trajLen; ++i) {
             posTraj(i) = fullTraj(2 * i);
             velTraj(i) = fullTraj(2 * i + 1);
         }
@@ -697,7 +733,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_LAST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
 #endif
 
     std::sort(solveTime.begin(), solveTime.end(),
-              [](const auto &lhs, const auto &rhs) { return lhs.second < rhs.second; });
+        [](const auto& lhs, const auto& rhs) { return lhs.second < rhs.second; });
     std::stringstream ss;
     ss << "Solving fasteness: ";
     for (auto sol : solveTime)
@@ -708,7 +744,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_LAST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
 
 BOOST_FIXTURE_TEST_CASE(MPC_TYPE_FULL_WITH_EQUALITY_CONSTRAINTS, EqSystem)
 {
-    std::vector<std::pair<std::string, double>> solveTime;
+    std::vector<std::pair<std::string, double> > solveTime;
 
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, xd, nbStep);
@@ -719,7 +755,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_FULL_WITH_EQUALITY_CONSTRAINTS, EqSystem)
 
     controller.weights(wx, wu);
 
-    auto pcCheck = [&](const std::string &solverName, mpc::SolverFlag sFlag) {
+    auto pcCheck = [&](const std::string& solverName, mpc::SolverFlag sFlag) {
         controller.selectQPSolver(sFlag);
 
         BOOST_REQUIRE(controller.solve());
@@ -729,8 +765,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_FULL_WITH_EQUALITY_CONSTRAINTS, EqSystem)
         auto trajLen = fullTraj.rows() / 2;
         Eigen::VectorXd posTraj(trajLen);
         Eigen::VectorXd velTraj(trajLen);
-        for (auto i = 0; i < trajLen; ++i)
-        {
+        for (auto i = 0; i < trajLen; ++i) {
             posTraj(i) = fullTraj(2 * i);
             velTraj(i) = fullTraj(2 * i + 1);
         }
@@ -756,7 +791,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_FULL_WITH_EQUALITY_CONSTRAINTS, EqSystem)
 #endif
 
     std::sort(solveTime.begin(), solveTime.end(),
-              [](const auto &lhs, const auto &rhs) { return lhs.second < rhs.second; });
+        [](const auto& lhs, const auto& rhs) { return lhs.second < rhs.second; });
     std::stringstream ss;
     ss << "Solving fasteness: ";
     for (auto sol : solveTime)
@@ -788,12 +823,9 @@ BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_WEIGTHS, IneqSystem)
     BOOST_REQUIRE_THROW(fullController.weights(wx, Eigen::VectorXd::Ones(5)), std::domain_error);
     BOOST_REQUIRE_THROW(lastController.weights(Eigen::VectorXd::Ones(5), wu), std::domain_error);
     BOOST_REQUIRE_THROW(lastController.weights(wx, Eigen::VectorXd::Ones(5)), std::domain_error);
-    try
-    {
+    try {
         lastController.weights(wx, Eigen::VectorXd::Ones(5));
-    }
-    catch (const std::domain_error &e)
-    {
+    } catch (const std::domain_error& e) {
         std::cerr << "Test error message output" << std::endl;
         std::cerr << e.what() << std::endl
                   << std::endl;
