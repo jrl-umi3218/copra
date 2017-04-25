@@ -53,8 +53,7 @@ struct MPC_DLLAPI PreviewSystem {
      * \throw std::domain_error if the dimension of the matrices mismatch.
      */
     PreviewSystem(const Eigen::MatrixXd& state, const Eigen::MatrixXd& control,
-        const Eigen::VectorXd& bias, const Eigen::VectorXd& xInit,
-        const Eigen::VectorXd& xTraj, int numberOfSteps);
+        const Eigen::VectorXd& bias, const Eigen::VectorXd& xInit, int numberOfSteps);
 
     /**
      * Create the system.
@@ -67,8 +66,7 @@ struct MPC_DLLAPI PreviewSystem {
      * \throw std::domain_error if the dimension of the matrices mismatch.
      */
     void system(const Eigen::MatrixXd& state, const Eigen::MatrixXd& control,
-        const Eigen::VectorXd& bias, const Eigen::VectorXd& xInit,
-        const Eigen::VectorXd& xTraj, int numberOfSteps);
+        const Eigen::VectorXd& bias, const Eigen::VectorXd& xInit, int numberOfSteps);
 
     /**
      * \brief Update the system.
@@ -84,7 +82,6 @@ struct MPC_DLLAPI PreviewSystem {
     int fullXDim = 0; /**< The full dimension of the state vector (xDim*nbStep) */
     int fullUDim = 0; /**< The full dimension of the control vector (uDim*nbStep) */
     Eigen::VectorXd x0; /**< The initial state */
-    Eigen::VectorXd xd; /**< The desired trajectory or desired final point */
     Eigen::MatrixXd A; /**< The state matrix */
     Eigen::MatrixXd B; /**< The control matrix */
     Eigen::VectorXd d; /**< The bias vector */

@@ -24,15 +24,13 @@
 namespace mpc {
 
 PreviewSystem::PreviewSystem(const Eigen::MatrixXd& state, const Eigen::MatrixXd& control,
-    const Eigen::VectorXd& bias, const Eigen::VectorXd& xInit, 
-    const Eigen::VectorXd& xTraj, int numberOfSteps)
+    const Eigen::VectorXd& bias, const Eigen::VectorXd& xInit, int numberOfSteps)
 {
-    system(state, control, bias, xInit, xTraj, numberOfSteps);
+    system(state, control, bias, xInit, numberOfSteps);
 }
 
 void PreviewSystem::system(const Eigen::MatrixXd& state, const Eigen::MatrixXd& control,
-    const Eigen::VectorXd& bias, const Eigen::VectorXd& xInit,
-    const Eigen::VectorXd& xTraj, int numberOfSteps)
+    const Eigen::VectorXd& bias, const Eigen::VectorXd& xInit, int numberOfSteps)
 {
     if (xInit.rows() != state.rows())
         DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("xInit", "state", xInit, state));
@@ -53,11 +51,7 @@ void PreviewSystem::system(const Eigen::MatrixXd& state, const Eigen::MatrixXd& 
     fullXDim = xDim * nrXStep;
     fullUDim = uDim * nrUStep;
 
-    if (xTraj.rows() != xDim && xTraj.rows() != fullXDim)
-        DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsOnPSXDim("xTraj", xTraj, this));
-
     x0 = xInit;
-    xd.resize(fullXDim);
     A = state;
     B = control;
     d = bias;
@@ -65,9 +59,6 @@ void PreviewSystem::system(const Eigen::MatrixXd& state, const Eigen::MatrixXd& 
     Psi.resize(fullXDim, fullUDim);
     xi.resize(fullXDim);
 
-    auto xTrajLen = static_cast<int>(xTraj.rows());
-    for (auto i = 0; i < fullXDim; i += xTrajLen)
-        xd.segment(i, xTrajLen) = xTraj;
     Phi.setZero();
     Phi.block(0, 0, xDim, xDim) = Eigen::MatrixXd::Identity(xDim, xDim);
     Psi.setZero();

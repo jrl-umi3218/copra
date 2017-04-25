@@ -31,9 +31,10 @@
 #include <Eigen/Core>
 
 // mpc
+#include "MPC.h"
 #include "PreviewSystem.h"
 #include "constraints.h"
-#include "previewController.h"
+#include "costFunctions.h"
 #include "solverConfig.h"
 #include "solverUtils.h"
 
@@ -201,20 +202,24 @@ struct EqSystem {
     Eigen::VectorXd c, f, x0, xd, wx, wu, uLower, uUpper;
 };
 
-BOOST_FIXTURE_TEST_CASE(MPC_TYPE_LAST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
+BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
 {
     std::vector<std::pair<std::string, double> > solveTime;
 
     auto ps = std::make_shared<mpc::PreviewSystem>();
-    ps->system(A, B, c, x0, xd, nbStep);
-    auto controller = mpc::MPCTypeLast(ps);
+    ps->system(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
+    auto xCost = std::make_shared<mpc::TargetCost>(Eigen::MatrixXd::Identity(2, 2), xd);
+    auto uCost = std::make_shared<mpc::ControlCost>(Eigen::MatrixXd::Identity(1, 1), Eigen::VectorXd::Zero(1));
     auto trajConstr = std::make_shared<mpc::TrajectoryBoundConstraint>(xLower, xUpper);
     auto contConstr = std::make_shared<mpc::ControlBoundConstraint>(uLower, uUpper);
+    xCost->weights(wx);
+    uCost->weights(wu);
 
+    controller.addCost(xCost);
+    controller.addCost(uCost);
     controller.addConstraint(trajConstr);
     controller.addConstraint(contConstr);
-
-    controller.weights(wx, wu);
 
     auto pcCheck = [&](const std::string& solverName, mpc::SolverFlag sFlag) {
         controller.selectQPSolver(sFlag);
@@ -262,20 +267,24 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_LAST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
     BOOST_MESSAGE(ss.str());
 }
 
-BOOST_FIXTURE_TEST_CASE(MPC_TYPE_FULL_WITH_BOUND_CONSTRAINTS, BoundedSystem)
+BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
 {
     std::vector<std::pair<std::string, double> > solveTime;
 
     auto ps = std::make_shared<mpc::PreviewSystem>();
-    ps->system(A, B, c, x0, xd, nbStep);
-    auto controller = mpc::MPCTypeFull(ps);
+    ps->system(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
+    auto xCost = std::make_shared<mpc::TrajectoryCost>(Eigen::MatrixXd::Identity(2, 2), xd);
+    auto uCost = std::make_shared<mpc::ControlCost>(Eigen::MatrixXd::Identity(1, 1), Eigen::VectorXd::Zero(1));
     auto trajConstr = std::make_shared<mpc::TrajectoryBoundConstraint>(xLower, xUpper);
     auto contConstr = std::make_shared<mpc::ControlBoundConstraint>(uLower, uUpper);
+    xCost->weights(wx);
+    uCost->weights(wu);
 
+    controller.addCost(xCost);
+    controller.addCost(uCost);
     controller.addConstraint(trajConstr);
     controller.addConstraint(contConstr);
-
-    controller.weights(wx, wu);
 
     auto pcCheck = [&](const std::string& solverName, mpc::SolverFlag sFlag) {
         controller.selectQPSolver(sFlag);
@@ -325,8 +334,8 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_FULL_WITH_BOUND_CONSTRAINTS, BoundedSystem)
 BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_BOUND_CONSTRAINT, BoundedSystem)
 {
     auto ps = std::make_shared<mpc::PreviewSystem>();
-    ps->system(A, B, c, x0, xd, nbStep);
-    auto controller = mpc::MPCTypeLast(ps);
+    ps->system(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
     int nbXStep = nbStep + 1;
 
     auto checkSpan = [&](const Eigen::VectorXd& xLower, const Eigen::VectorXd& xUpper, const Eigen::VectorXd& uLower, const Eigen::VectorXd& uUpper) {
@@ -357,20 +366,24 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_BOUND_CONSTRAINT, Bou
     checkSpan(fullxLower, fullxUpper, fulluLower, fulluUpper);
 }
 
-BOOST_FIXTURE_TEST_CASE(MPC_TYPE_LAST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
+BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
 {
     std::vector<std::pair<std::string, double> > solveTime;
 
     auto ps = std::make_shared<mpc::PreviewSystem>();
-    ps->system(A, B, c, x0, xd, nbStep);
-    auto controller = mpc::MPCTypeLast(ps);
+    ps->system(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
+    auto xCost = std::make_shared<mpc::TargetCost>(Eigen::MatrixXd::Identity(2, 2), xd);
+    auto uCost = std::make_shared<mpc::ControlCost>(Eigen::MatrixXd::Identity(1, 1), Eigen::VectorXd::Zero(1));
     auto trajConstr = std::make_shared<mpc::TrajectoryConstraint>(E, f);
     auto contConstr = std::make_shared<mpc::ControlConstraint>(G, h);
+    xCost->weights(wx);
+    uCost->weights(wu);
 
+    controller.addCost(xCost);
+    controller.addCost(uCost);
     controller.addConstraint(trajConstr);
     controller.addConstraint(contConstr);
-
-    controller.weights(wx, wu);
 
     auto pcCheck = [&](const std::string& solverName, mpc::SolverFlag sFlag) {
         controller.selectQPSolver(sFlag);
@@ -418,20 +431,24 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_LAST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
     BOOST_MESSAGE(ss.str());
 }
 
-BOOST_FIXTURE_TEST_CASE(MPC_TYPE_FULL_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
+BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
 {
     std::vector<std::pair<std::string, double> > solveTime;
 
     auto ps = std::make_shared<mpc::PreviewSystem>();
-    ps->system(A, B, c, x0, xd, nbStep);
-    auto controller = mpc::MPCTypeFull(ps);
+    ps->system(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
+    auto xCost = std::make_shared<mpc::TrajectoryCost>(Eigen::MatrixXd::Identity(2, 2), xd);
+    auto uCost = std::make_shared<mpc::ControlCost>(Eigen::MatrixXd::Identity(1, 1), Eigen::VectorXd::Zero(1));
     auto trajConstr = std::make_shared<mpc::TrajectoryConstraint>(E, f);
     auto contConstr = std::make_shared<mpc::ControlConstraint>(G, h);
+    xCost->weights(wx);
+    uCost->weights(wu);
 
+    controller.addCost(xCost);
+    controller.addCost(uCost);
     controller.addConstraint(trajConstr);
     controller.addConstraint(contConstr);
-
-    controller.weights(wx, wu);
 
     auto pcCheck = [&](const std::string& solverName, mpc::SolverFlag sFlag) {
         controller.selectQPSolver(sFlag);
@@ -481,8 +498,8 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_FULL_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
 BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_INEQUALITY_CONSTRAINT, IneqSystem)
 {
     auto ps = std::make_shared<mpc::PreviewSystem>();
-    ps->system(A, B, c, x0, xd, nbStep);
-    auto controller = mpc::MPCTypeLast(ps);
+    ps->system(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
     int nbXStep = nbStep + 1;
 
     auto checkSpan = [&](const Eigen::MatrixXd& E, const Eigen::VectorXd& f, const Eigen::MatrixXd& G, const Eigen::VectorXd& h) {
@@ -519,18 +536,22 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_INEQUALITY_CONSTRAINT
     checkSpan(fullE, fullf, fullG, fullh);
 }
 
-BOOST_FIXTURE_TEST_CASE(MPC_TYPE_LAST_WITH_MIXED_CONSTRAINTS, MixedSystem)
+BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
 {
     std::vector<std::pair<std::string, double> > solveTime;
 
     auto ps = std::make_shared<mpc::PreviewSystem>();
-    ps->system(A, B, c, x0, xd, nbStep);
-    auto controller = mpc::MPCTypeLast(ps);
+    ps->system(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
+    auto xCost = std::make_shared<mpc::TargetCost>(Eigen::MatrixXd::Identity(2, 2), xd);
+    auto uCost = std::make_shared<mpc::ControlCost>(Eigen::MatrixXd::Identity(1, 1), Eigen::VectorXd::Zero(1));
     auto mixedConstr = std::make_shared<mpc::MixedConstraint>(E, G, f);
+    xCost->weights(wx);
+    uCost->weights(wu);
 
+    controller.addCost(xCost);
+    controller.addCost(uCost);
     controller.addConstraint(mixedConstr);
-
-    controller.weights(wx, wu);
 
     auto pcCheck = [&](const std::string& solverName, mpc::SolverFlag sFlag) {
         controller.selectQPSolver(sFlag);
@@ -581,18 +602,22 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_LAST_WITH_MIXED_CONSTRAINTS, MixedSystem)
     BOOST_MESSAGE(ss.str());
 }
 
-BOOST_FIXTURE_TEST_CASE(MPC_TYPE_FULL_WITH_MIXED_CONSTRAINTS, MixedSystem)
+BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
 {
     std::vector<std::pair<std::string, double> > solveTime;
 
     auto ps = std::make_shared<mpc::PreviewSystem>();
-    ps->system(A, B, c, x0, xd, nbStep);
-    auto controller = mpc::MPCTypeFull(ps);
+    ps->system(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
+    auto xCost = std::make_shared<mpc::TrajectoryCost>(Eigen::MatrixXd::Identity(2, 2), xd);
+    auto uCost = std::make_shared<mpc::ControlCost>(Eigen::MatrixXd::Identity(1, 1), Eigen::VectorXd::Zero(1));
     auto mixedConstr = std::make_shared<mpc::MixedConstraint>(E, G, f);
+    xCost->weights(wx);
+    uCost->weights(wu);
 
+    controller.addCost(xCost);
+    controller.addCost(uCost);
     controller.addConstraint(mixedConstr);
-
-    controller.weights(wx, wu);
 
     auto pcCheck = [&](const std::string& solverName, mpc::SolverFlag sFlag) {
         controller.selectQPSolver(sFlag);
@@ -645,8 +670,8 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_FULL_WITH_MIXED_CONSTRAINTS, MixedSystem)
 BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_CONSTRAINT, MixedSystem)
 {
     auto ps = std::make_shared<mpc::PreviewSystem>();
-    ps->system(A, B, c, x0, xd, nbStep);
-    auto controller = mpc::MPCTypeLast(ps);
+    ps->system(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
 
     auto checkSpan = [&](const Eigen::MatrixXd& E, const Eigen::MatrixXd& G, const Eigen::VectorXd& f) {
         auto mixedConstr = std::make_shared<mpc::MixedConstraint>(E, G, f);
@@ -684,18 +709,22 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_CONSTRAINT, Mix
     checkSpan(fullE, fullG, fullf);
 }
 
-BOOST_FIXTURE_TEST_CASE(MPC_TYPE_LAST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
+BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
 {
     std::vector<std::pair<std::string, double> > solveTime;
 
     auto ps = std::make_shared<mpc::PreviewSystem>();
-    ps->system(A, B, c, x0, xd, nbStep);
-    auto controller = mpc::MPCTypeLast(ps);
+    ps->system(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
+    auto xCost = std::make_shared<mpc::TargetCost>(Eigen::MatrixXd::Identity(2, 2), xd);
+    auto uCost = std::make_shared<mpc::ControlCost>(Eigen::MatrixXd::Identity(1, 1), Eigen::VectorXd::Zero(1));
     auto trajConstr = std::make_shared<mpc::TrajectoryConstraint>(E, f, false);
+    xCost->weights(wx);
+    uCost->weights(wu);
 
+    controller.addCost(xCost);
+    controller.addCost(uCost);
     controller.addConstraint(trajConstr);
-
-    controller.weights(wx, wu);
 
     auto pcCheck = [&](const std::string& solverName, mpc::SolverFlag sFlag) {
         controller.selectQPSolver(sFlag);
@@ -742,18 +771,22 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_LAST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
     BOOST_MESSAGE(ss.str());
 }
 
-BOOST_FIXTURE_TEST_CASE(MPC_TYPE_FULL_WITH_EQUALITY_CONSTRAINTS, EqSystem)
+BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
 {
     std::vector<std::pair<std::string, double> > solveTime;
 
     auto ps = std::make_shared<mpc::PreviewSystem>();
-    ps->system(A, B, c, x0, xd, nbStep);
-    auto controller = mpc::MPCTypeFull(ps);
+    ps->system(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
+    auto xCost = std::make_shared<mpc::TrajectoryCost>(Eigen::MatrixXd::Identity(2, 2), xd);
+    auto uCost = std::make_shared<mpc::ControlCost>(Eigen::MatrixXd::Identity(1, 1), Eigen::VectorXd::Zero(1));
     auto trajConstr = std::make_shared<mpc::TrajectoryConstraint>(E, f, false);
+    xCost->weights(wx);
+    uCost->weights(wu);
 
+    controller.addCost(xCost);
+    controller.addCost(uCost);
     controller.addConstraint(trajConstr);
-
-    controller.weights(wx, wu);
 
     auto pcCheck = [&](const std::string& solverName, mpc::SolverFlag sFlag) {
         controller.selectQPSolver(sFlag);
@@ -802,18 +835,18 @@ BOOST_FIXTURE_TEST_CASE(MPC_TYPE_FULL_WITH_EQUALITY_CONSTRAINTS, EqSystem)
 BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_PREVIEW_SYSTEM, IneqSystem)
 {
     auto ps = std::make_shared<mpc::PreviewSystem>();
-    BOOST_REQUIRE_THROW(ps->system(Eigen::MatrixXd::Ones(5, 2), B, c, x0, xd, nbStep), std::domain_error);
-    BOOST_REQUIRE_THROW(ps->system(Eigen::MatrixXd::Ones(2, 5), B, c, x0, xd, nbStep), std::domain_error);
-    BOOST_REQUIRE_THROW(ps->system(A, Eigen::MatrixXd::Ones(5, 1), c, x0, xd, nbStep), std::domain_error);
-    BOOST_REQUIRE_THROW(ps->system(A, B, Eigen::VectorXd::Ones(5), x0, xd, nbStep), std::domain_error);
-    BOOST_REQUIRE_THROW(ps->system(A, B, c, x0, xd, -1), std::domain_error);
-    BOOST_REQUIRE_THROW(ps->system(A, B, c, x0, Eigen::VectorXd::Ones(5), 10), std::domain_error);
+    BOOST_REQUIRE_THROW(ps->system(Eigen::MatrixXd::Ones(5, 2), B, c, x0, nbStep), std::domain_error);
+    BOOST_REQUIRE_THROW(ps->system(Eigen::MatrixXd::Ones(2, 5), B, c, x0, nbStep), std::domain_error);
+    BOOST_REQUIRE_THROW(ps->system(A, Eigen::MatrixXd::Ones(5, 1), c, x0, nbStep), std::domain_error);
+    BOOST_REQUIRE_THROW(ps->system(A, B, Eigen::VectorXd::Ones(5), x0, nbStep), std::domain_error);
+    BOOST_REQUIRE_THROW(ps->system(A, B, c, x0, -1), std::domain_error);
 }
 
+/*
 BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_WEIGTHS, IneqSystem)
 {
     auto ps = std::make_shared<mpc::PreviewSystem>();
-    ps->system(A, B, c, x0, xd, nbStep);
+    ps->system(A, B, c, x0, nbStep);
     auto fullController = mpc::MPCTypeFull(ps);
     auto lastController = mpc::MPCTypeLast(ps);
 
@@ -831,12 +864,13 @@ BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_WEIGTHS, IneqSystem)
                   << std::endl;
     }
 }
+*/
 
 BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_TRAJECTORY_CONSTRAINT, IneqSystem)
 {
     auto ps = std::make_shared<mpc::PreviewSystem>();
-    ps->system(A, B, c, x0, xd, nbStep);
-    auto controller = mpc::MPCTypeFull(ps);
+    ps->system(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
 
     auto badConstr = std::make_shared<mpc::TrajectoryConstraint>(Eigen::MatrixXd::Identity(5, 5), Eigen::VectorXd::Ones(2));
     BOOST_REQUIRE_THROW(controller.addConstraint(badConstr), std::domain_error);
@@ -847,8 +881,8 @@ BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_TRAJECTORY_CONSTRAINT, IneqSystem)
 BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_CONTROL_CONSTRAINT, IneqSystem)
 {
     auto ps = std::make_shared<mpc::PreviewSystem>();
-    ps->system(A, B, c, x0, xd, nbStep);
-    auto controller = mpc::MPCTypeFull(ps);
+    ps->system(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
 
     auto badConstr1 = std::make_shared<mpc::ControlConstraint>(Eigen::MatrixXd::Identity(5, 5), Eigen::VectorXd::Ones(2));
     BOOST_REQUIRE_THROW(controller.addConstraint(badConstr1), std::domain_error);
@@ -863,8 +897,8 @@ BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_CONTROL_CONSTRAINT, IneqSystem)
 BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_MIXED_CONSTRAINT, IneqSystem)
 {
     auto ps = std::make_shared<mpc::PreviewSystem>();
-    ps->system(A, B, c, x0, xd, nbStep);
-    auto controller = mpc::MPCTypeFull(ps);
+    ps->system(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
 
     auto badConstr1 = std::make_shared<mpc::MixedConstraint>(Eigen::MatrixXd::Identity(5, 5), Eigen::MatrixXd::Identity(2, 1), Eigen::VectorXd::Ones(2));
     BOOST_REQUIRE_THROW(controller.addConstraint(badConstr1), std::domain_error);
@@ -877,8 +911,8 @@ BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_MIXED_CONSTRAINT, IneqSystem)
 BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_TRAJECTORY_BOUND_CONSTRAINT, BoundedSystem)
 {
     auto ps = std::make_shared<mpc::PreviewSystem>();
-    ps->system(A, B, c, x0, xd, nbStep);
-    auto controller = mpc::MPCTypeFull(ps);
+    ps->system(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
 
     auto badConstr = std::make_shared<mpc::TrajectoryBoundConstraint>(Eigen::VectorXd::Ones(3), Eigen::VectorXd::Ones(2));
     BOOST_REQUIRE_THROW(controller.addConstraint(badConstr), std::domain_error);
@@ -889,8 +923,8 @@ BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_TRAJECTORY_BOUND_CONSTRAINT, BoundedSy
 BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_CONTROL_BOUND_CONSTRAINT, BoundedSystem)
 {
     auto ps = std::make_shared<mpc::PreviewSystem>();
-    ps->system(A, B, c, x0, xd, nbStep);
-    auto controller = mpc::MPCTypeFull(ps);
+    ps->system(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
 
     auto badConstr1 = std::make_shared<mpc::ControlBoundConstraint>(Eigen::VectorXd::Ones(3), Eigen::VectorXd::Ones(2));
     BOOST_REQUIRE_THROW(controller.addConstraint(badConstr1), std::domain_error);

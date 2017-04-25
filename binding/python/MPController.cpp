@@ -48,7 +48,7 @@ std::shared_ptr<T> createSharedPointer(Args... args)
 
 auto NewPreviewSystem1 = &createSharedPointer<PreviewSystem>;
 auto NewPreviewSystem2 = &createSharedPointer<PreviewSystem, const Eigen::MatrixXd&, const Eigen::MatrixXd&,
-    const Eigen::VectorXd&, const Eigen::VectorXd&, const Eigen::VectorXd&, int>;
+    const Eigen::VectorXd&, const Eigen::VectorXd&, int>;
 auto NewTrajectoryConstraint1 = &createSharedPointer<TrajectoryConstraint, const Eigen::MatrixXd&, const Eigen::VectorXd&>;
 auto NewTrajectoryConstraint2 = &createSharedPointer<TrajectoryConstraint, const Eigen::MatrixXd&, const Eigen::VectorXd&, bool>;
 auto NewControlConstraint1 = &createSharedPointer<ControlConstraint, const Eigen::MatrixXd&, const Eigen::VectorXd&>;
@@ -113,7 +113,6 @@ BOOST_PYTHON_MODULE(_mpc)
         .def_readwrite("fullXDim", &PreviewSystem::fullXDim)
         .def_readwrite("fullUDim", &PreviewSystem::fullUDim)
         .def_readwrite("x0", &PreviewSystem::x0)
-        .def_readwrite("xd", &PreviewSystem::xd)
         .def_readwrite("A", &PreviewSystem::A)
         .def_readwrite("B", &PreviewSystem::B)
         .def_readwrite("d", &PreviewSystem::d)

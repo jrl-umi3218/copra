@@ -41,4 +41,4 @@ macro(addTest testName)
 endmacro(addTest)
 
 addTest(TestSolvers)
-addTest(TestPreviewControl)
+addTest(TestMPC)
