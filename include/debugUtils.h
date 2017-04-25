@@ -53,81 +53,108 @@ template <class E> //see http://stackoverflow.com/questions/37181621/easy-way-of
 namespace mpc {
 
 /**
- * \brief Check that two matrices have the same number of rows.
- * \param mat1Name Name of the first matrix to check
- * \param mat2Name Name of the second matrix to check
- * \param mat1 The first matrix to check
- * \param mat2 The second matrix to check
+ * \brief Message error where two matrices have the same number of rows.
+ * \param mat1Name Name of the first checked matrix
+ * \param mat2Name Name of the second checked matrix
+ * \param mat1 The first checked matrix
+ * \param mat2 The second checked matrix
  * \return The throwing message
  */
 std::string throwMsgOnRows(const char* mat1Name, const char* mat2Name, const Eigen::MatrixXd& mat1, const Eigen::MatrixXd& mat2);
 /**
- * \brief Check that two matrices have the same number of rows.
+ * \brief Message error where two matrices have the same number of rows.
  * This is the same as \see throwMsgOnRows with a longer message.
- * \param mat1Name Name of the first matrix to check
- * \param mat2Name Name of the second matrix to check
- * \param mat1 The first matrix to check
- * \param mat2 The second matrix to check
+ * \param mat1Name Name of the first checked matrix
+ * \param mat2Name Name of the second checked matrix
+ * \param mat1 The first checked matrix
+ * \param mat2 The second checked matrix
  * \return The throwing message
  */
-std::string throwMsgOnRowsForConstr(const char* mat1Name, const char* mat2Name, const Eigen::MatrixXd& mat1, const Eigen::MatrixXd& mat2);
+std::string throwMsgOnRowsAskAutoSpan(const char* mat1Name, const char* mat2Name, const Eigen::MatrixXd& mat1, const Eigen::MatrixXd& mat2);
 /**
- * \brief Check that a matrix is square.
- * \param matName Name of the matrix to check
- * \param mat Matrix to check
+ * \brief Message error where a matrix is square.
+ * \param matName Name of the checked matrix
+ * \param mat checked matrix
  * \return The throwing message
  */
 std::string throwMsgOnSquareMat(const char* matName, const Eigen::MatrixXd& mat);
 /**
- * \brief Check that a matrix has a number of rows equal to dim
- * \param matName Name of the matrix to check
- * \param mat Matrix to check
+ * \brief Message error where a matrix has a number of rows equal to dim
+ * \param matName Name of the checked matrix
+ * \param mat checked matrix
  * \param dim Value to be equal to
  * \return The throwing message
  */
 std::string throwMsgOnRowsOnDim(const char* matName, const Eigen::MatrixXd& mat, Eigen::Index dim);
 /**
- * \brief Check that a matrix has its number of rows equal to preview system xDim or fullXDim
- * \param matName Name of the matrix to check
- * \param mat Matrix to check
+ * \brief Message error where a matrix has its number of rows equal to preview system xDim
+ * \param matName Name of the checked matrix
+ * \param mat checked matrix
+ * \param ps The preview system
+ * \return The throwing message
+ */
+std::string throwMsgOnRowsOnPSxDim(const char* matName, const Eigen::MatrixXd& mat, const PreviewSystem* ps);
+/**
+ * \brief Message error where a matrix has its number of rows equal to preview system xDim or fullXDim
+ * \param matName Name of the checked matrix
+ * \param mat checked matrix
  * \param ps The preview system
  * \return The throwing message
  */
 std::string throwMsgOnRowsOnPSXDim(const char* matName, const Eigen::MatrixXd& mat, const PreviewSystem* ps);
 /**
- * \brief Check that a matrix has its number of rows equal to preview system uDim or fullUDim
- * \param matName Name of the matrix to check
- * \param mat Matrix to check
+ * \brief Message error where a matrix has its number of rows equal to preview system uDim or fullUDim
+ * \param matName Name of the checked matrix
+ * \param mat checked matrix
  * \param ps The preview system
  * \return The throwing message
  */
 std::string throwMsgOnRowsOnPSUDim(const char* matName, const Eigen::MatrixXd& mat, const PreviewSystem* ps);
 /**
- * \brief Check that a matrix has its number of columns equal to preview system xDim or fullXDim
- * \param matName Name of the matrix to check
- * \param mat Matrix to check
+ * \brief Message error where a matrix has its number of columns equal to preview system xDim or fullXDim
+ * \param matName Name of the checked matrix
+ * \param mat checked matrix
  * \param ps The preview system
  * \return The throwing message
  */
 std::string throwMsgOnColsOnPSXDim(const char* matName, const Eigen::MatrixXd& mat, const PreviewSystem* ps);
 /**
- * \brief Check that a matrix has its number of columns equal to preview system uDim or fullUDim
- * \param matName Name of the matrix to check
- * \param mat Matrix to check
+ * \brief Message error where a matrix has its number of columns equal to preview system uDim or fullUDim
+ * \param matName Name of the checked matrix
+ * \param mat checked matrix
  * \param ps The preview system
  * \return The throwing message
  */
 std::string throwMsgOnColsOnPSUDim(const char* matName, const Eigen::MatrixXd& mat, const PreviewSystem* ps);
 /**
- * \brief Check that two matrices number of columns are equal to the preview system datas.
- * Check that the first matrix and the second matrix are either respectively equal to the preview system xDim and uDim
+ * \brief Message error where two matrices number of columns are equal to the preview system datas.
+ * Message error where the first matrix and the second matrix are respectively equal to the preview system xDim and uDim.
+ * \param mat1Name Name of the first checked matrix
+ * \param mat2Name Name of the second checked matrix
+ * \param mat1 The first checked matrix
+ * \param mat2 The second checked matrix
+ * \param ps The preview system
+ * \return The throwing message
+ */
+std::string throwMsgOnColsOnPSxuDim(const char* mat1Name, const char* mat2Name, const Eigen::MatrixXd& mat1, const Eigen::MatrixXd& mat2, const PreviewSystem* ps);
+/**
+ * \brief Message error where two matrices number of columns are equal to the preview system datas.
+ * Message error where the first matrix and the second matrix are either respectively equal to the preview system xDim and uDim
  * either respectively equal to the preview system fullXDim and fullUDim.
- * \param mat1Name Name of the first matrix to check
- * \param mat2Name Name of the second matrix to check
- * \param mat1 The first matrix to check
- * \param mat2 The second matrix to check
+ * \param mat1Name Name of the first checked matrix
+ * \param mat2Name Name of the second checked matrix
+ * \param mat1 The first checked matrix
+ * \param mat2 The second checked matrix
  * \param ps The preview system
  * \return The throwing message
  */
 std::string throwMsgOnColsOnPSXUDim(const char* mat1Name, const char* mat2Name, const Eigen::MatrixXd& mat1, const Eigen::MatrixXd& mat2, const PreviewSystem* ps);
+
+/**
+ * \brief Message error where a matrix can not be extended to fit the new dimension.
+ * \param mat The checked matrix
+ * \param new_dim The new dimension asked
+ * \return The throwing message
+ */
+std::string throwMsgOnBadNewDim(const Eigen::MatrixXd& mat, int new_dim);
 }
