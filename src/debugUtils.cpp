@@ -117,7 +117,7 @@ std::string throwMsgOnColsOnPSXUDim(const char* mat1Name, const char* mat2Name, 
     return os.str();
 }
 
-std::string throwMsgOnBadNewDim(const Eigen::MatrixXd& mat, int new_dim)
+std::string throwMsgOnBadNewDim(const Eigen::MatrixXd& mat, Eigen::Index new_dim)
 {
     std::ostringstream os;
     os << "Can not span the matrix to the desired new dimension. The  desired dimension ("

@@ -23,7 +23,7 @@ set(SOURCES
     SolverInterface.cpp
     constraints.cpp
     debugUtils.cpp
-    previewController.cpp
+    MPC.cpp
     solverUtils.cpp)
 
 set(HEADERS 
@@ -34,7 +34,7 @@ set(HEADERS
     ../include/SolverInterface.h 
     ../include/constraints.h
     ../include/debugUtils.h
-    ../include/previewController.h 
+    ../include/MPC.h 
     ../include/solverUtils.h 
     ../include/typedefs.h)
 

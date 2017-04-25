@@ -156,5 +156,5 @@ std::string throwMsgOnColsOnPSXUDim(const char* mat1Name, const char* mat2Name, 
  * \param new_dim The new dimension asked
  * \return The throwing message
  */
-std::string throwMsgOnBadNewDim(const Eigen::MatrixXd& mat, int new_dim);
+std::string throwMsgOnBadNewDim(const Eigen::MatrixXd& mat, Eigen::Index new_dim);
 }

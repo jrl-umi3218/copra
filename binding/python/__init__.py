@@ -1,25 +1,35 @@
-from _mpc import SolverFlag
-from _mpc import PreviewSystem
-from _mpc import TrajectoryConstraint
+from _mpc import AutoSpan
 from _mpc import ControlConstraint
-from _mpc import MPCTypeFull
-from _mpc import MPCTypeLast
-from _mpc import NewPreviewSystem
-from _mpc import NewTrajectoryConstraint
-from _mpc import NewControlConstraint
-from _mpc import NewMixedConstraint
-from _mpc import NewTrajectoryBoundConstraint
+from _mpc import MPC
 from _mpc import NewControlBoundConstraint
+from _mpc import NewControlConstraint
+from _mpc import NewControlCost
+from _mpc import NewMixedConstraint
+from _mpc import NewMixedTargetCost
+from _mpc import NewMixedTrajectoryCost
+from _mpc import NewPreviewSystem
+from _mpc import NewTargetCost
+from _mpc import NewTrajectoryBoundConstraint
+from _mpc import NewTrajectoryConstraint
+from _mpc import NewTrajectoryCost
+from _mpc import PreviewSystem
+from _mpc import SolverFlag
+from _mpc import TrajectoryConstraint
 
-__all__ = ["SolverFlag",
-           "PreviewSystem",
-           "TrajectoryConstraint",
+__all__ = ["AutoSpan",
            "ControlConstraint",
-           "MPCTypeFull",
-           "MPCTypeLast",
-           "NewPreviewSystem",
-           "NewTrajectoryConstraint",
+           "MPC",
+           "NewControlBoundConstraint",
            "NewControlConstraint",
+           "NewControlCost",
            "NewMixedConstraint",
+           "NewMixedTargetCost",
+           "NewMixedTrajectoryCost",
+           "NewPreviewSystem",
+           "NewTargetCost",
            "NewTrajectoryBoundConstraint",
-           "NewControlBoundConstraint"]
+           "NewTrajectoryConstraint",
+           "NewTrajectoryCost",
+           "PreviewSystem",
+           "SolverFlag",
+           "TrajectoryConstraint"]           

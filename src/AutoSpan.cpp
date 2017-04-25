@@ -18,9 +18,12 @@
 // header
 #include "AutoSpan.h"
 
+// mpc
+#include "debugUtils.h"
+
 namespace mpc {
 
-void AutoSpan::spanMatrix(Eigen::MatrixXd &mat, Eigen::Index new_dim, int addCols) const
+void AutoSpan::spanMatrix(Eigen::MatrixXd &mat, Eigen::Index new_dim, int addCols)
 {
     auto matRows = mat.rows();
     if (new_dim == matRows)
@@ -28,25 +31,25 @@ void AutoSpan::spanMatrix(Eigen::MatrixXd &mat, Eigen::Index new_dim, int addCol
 
     auto matCols = mat.cols();
     auto tmp = mat;
-    auto nrStep = max_dim / matRows;
-    if (nrStep * matRows != max_dim)
-        DOMAIN_ERROR_EXCEPTION(mat, new_dim);
+    auto nrStep = new_dim / matRows;
+    if (nrStep * matRows != new_dim)
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnBadNewDim(mat, new_dim));
 
     mat = Eigen::MatrixXd::Zero(new_dim, matCols * (nrStep + addCols));
     for (auto i = 0; i < nrStep; ++i)
         mat.block(i * matRows, i * matCols, matRows, matCols) = tmp;
 }
 
-void AutoSpan::spanVector(Eigen::VectorXd &vec, Eigen::Index new_dim) const
+void AutoSpan::spanVector(Eigen::VectorXd &vec, Eigen::Index new_dim)
 {
     auto vecRows = vec.rows();
-    if (max_dim == vecRows)
+    if (new_dim == vecRows)
         return;
 
     auto nrStep = new_dim / vecRows;
     auto tmp = vec;
-    if (nrStep * vecRows != max_dim)
-        DOMAIN_ERROR_EXCEPTION(vec, new_dim);
+    if (nrStep * vecRows != new_dim)
+        DOMAIN_ERROR_EXCEPTION(throwMsgOnBadNewDim(vec, new_dim));
 
     vec.conservativeResize(new_dim);
     for (auto i = 1; i < nrStep; ++i)

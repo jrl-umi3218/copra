@@ -16,7 +16,7 @@
 // <http://www.gnu.org/licenses/>.
 
 // header
-#include "previewController.h"
+#include "MPC.h"
 
 // stl
 #include <algorithm>
@@ -167,7 +167,7 @@ double MPC::solveAndBuildTime() const noexcept
 
 void MPC::addCost(const std::shared_ptr<CostFunction>& costFun)
 {
-    costFun->initializeCost(*ps);
+    costFun->initializeCost(*ps_);
     spCost_.emplace_back(costFun);
 }
 
@@ -230,7 +230,7 @@ void MPC::clearConstraintMatrices()
 void MPC::updateSystem()
 {
     // Update the system
-    if (!ps->isUpdated)
+    if (!ps_->isUpdated)
         ps_->updateSystem();
 
     // Update the constraints
@@ -249,7 +249,7 @@ void MPC::updateSystem()
 
     // Update the costs
     for (auto& sp : spCost_)
-        sp->update(*ps);
+        sp->update(*ps_);
 }
 
 void MPC::makeQPForm()

@@ -45,7 +45,7 @@ public:
      * \throw std::domain_error if new_dim is not a multiple of mat.rows()
      * \note Does nothing if mat.rows() == new_dim
      */ 
-    static void spanMatrix(Eigen::MatrixXd& mat, Eigen::Index new_dim, int addCols = 0) const;
+    static void spanMatrix(Eigen::MatrixXd& mat, Eigen::Index new_dim, int addCols = 0);
 
     /**
      * \brief Extend the dimension of a vector.
@@ -54,7 +54,7 @@ public:
      * \throw std::domain_error if new_dim is not a multiple of vec.rows()
      * \note Does nothing if mat.rows() == new_dim
      */ 
-    static void spanVector(Eigen::VectorXd& vec, Eigen::Index new_dim) const;
+    static void spanVector(Eigen::VectorXd& vec, Eigen::Index new_dim);
 };
 
 } // namespace mpc

@@ -35,11 +35,12 @@
 namespace mpc {
 
 // Forward declaration
-class Constraint;
-class EqIneqConstraint;
-class ControlBoundConstraint;
-struct PreviewSystem;
 enum class ConstraintFlag;
+struct PreviewSystem;
+class Constraint;
+class ControlBoundConstraint;
+class EqIneqConstraint;
+class CostFunction;
 
 /**
  * The controller itself.

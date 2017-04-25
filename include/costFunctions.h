@@ -17,10 +17,15 @@
 
 #pragma once
 
+// stl
+#include <memory>
+
 // Eigen
 #include <Eigen/Core>
 
 // mpc
+#include "config.hh"
+#include "debugUtils.h"
 #include "typedefs.h"
 
 namespace mpc {
@@ -31,8 +36,8 @@ public:
     virtual ~CostFunction() = default;
 
     virtual void autoSpan();
-    virtual void update(const std::shared_ptr<PreviewSystem>& ps) = 0;
-    virtual void initializeCost(const std::shared_ptr<PreviewSystem>& ps);
+    virtual void update(const PreviewSystem& ps) = 0;
+    virtual void initializeCost(const PreviewSystem& ps);
 
     /**
      * Set the weights of the system.
@@ -41,7 +46,7 @@ public:
      * \throw Throw a std::domain_error if weights is badly dimension.
      */
     template <typename TVec, typename = std::enable_if_t<!is_all_arithmetic<TVec>::value> >
-    void weights(TVec1&& weights)
+    void weights(TVec&& weights)
     {
         auto size = weights_.rows() / weights.rows();
         if (weights.rows() == weights_.rows())
@@ -89,7 +94,7 @@ class TrajectoryCost final : public CostFunction {
 public:
     template <typename TMat, typename TVec,
         typename = std::enable_if_t<!is_all_arithmetic<TMat, TVec>::value> >
-    TrajectoryCost(TMat&& M, TVec1&& p)
+    TrajectoryCost(TMat&& M, TVec&& p)
         : CostFunction("TrajectoryCost")
         , M_(std::forward<TMat>(M))
         , p_(std::forward<TVec>(p))
@@ -97,8 +102,9 @@ public:
         weights_ = Eigen::VectorXd::Ones(p_.rows());
     }
 
-    void update(const std::shared_ptr<PreviewSystem>& ps) override;
-    void initializeCost(const std::shared_ptr<PreviewSystem>& ps) override;
+    void autoSpan() override;
+    void update(const PreviewSystem& ps) override;
+    void initializeCost(const PreviewSystem& ps) override;
 
 private:
     Eigen::MatrixXd M_;
@@ -109,7 +115,7 @@ class TargetCost final : public CostFunction {
 public:
     template <typename TMat, typename TVec,
         typename = std::enable_if_t<!is_all_arithmetic<TMat, TVec>::value> >
-    TargetCost(TMat&& M, TVec1&& p)
+    TargetCost(TMat&& M, TVec&& p)
         : CostFunction("TargetCost")
         , M_(std::forward<TMat>(M))
         , p_(std::forward<TVec>(p))
@@ -117,13 +123,13 @@ public:
         weights_ = Eigen::VectorXd::Ones(p_.rows());
     }
 
-    void update(const std::shared_ptr<PreviewSystem>& ps) override;
-    void initializeCost(const std::shared_ptr<PreviewSystem>& ps) override;
+    void update(const PreviewSystem& ps) override;
+    void initializeCost(const PreviewSystem& ps) override;
 
 private:
     Eigen::MatrixXd M_;
     Eigen::VectorXd p_;
-}
+};
 
 class ControlCost final : public CostFunction {
 public:
@@ -131,25 +137,28 @@ public:
         typename = std::enable_if_t<!is_all_arithmetic<TMat, TVec>::value> >
     ControlCost(TMat&& N, TVec&& p)
         : CostFunction("ControlCost")
+        , fullSizeEntry_(false)
         , N_(std::forward<TMat>(N))
         , p_(std::forward<TVec>(p))
     {
         weights_ = Eigen::VectorXd::Ones(p_.rows());
     }
 
-    void update(const std::shared_ptr<PreviewSystem>& ps) override;
-    void initializeCost(const std::shared_ptr<PreviewSystem>& ps) override;
+    void autoSpan() override;
+    void update(const PreviewSystem& ps) override;
+    void initializeCost(const PreviewSystem& ps) override;
 
 private:
+    bool fullSizeEntry_;
     Eigen::MatrixXd N_;
-    Eigen::MatrixXd p_;
+    Eigen::VectorXd p_;
 };
 
 class MixedTrajectoryCost final : public CostFunction {
 public:
     template <typename TMat1, typename TMat2, typename TVec,
         typename = std::enable_if_t<!is_all_arithmetic<TMat1, TMat2, TVec>::value> >
-    MixedTrajectoryCost(TMat1&& M, TMat2&& N, TVec1&& p)
+    MixedTrajectoryCost(TMat1&& M, TMat2&& N, TVec&& p)
         : CostFunction("MixedCost")
         , M_(std::forward<TMat1>(M))
         , N_(std::forward<TMat2>(N))
@@ -158,19 +167,20 @@ public:
         weights_ = Eigen::VectorXd::Ones(p_.rows());
     }
 
-    void update(const std::shared_ptr<PreviewSystem>& ps) override;
-    void initializeCost(const std::shared_ptr<PreviewSystem>& ps) override;
+    void autoSpan() override;
+    void update(const PreviewSystem& ps) override;
+    void initializeCost(const PreviewSystem& ps) override;
 
 private:
     Eigen::MatrixXd M_, N_;
-    Eigen::MatrixXd p_;
+    Eigen::VectorXd p_;
 };
 
 class MixedTargetCost final : public CostFunction {
 public:
     template <typename TMat1, typename TMat2, typename TVec,
         typename = std::enable_if_t<!is_all_arithmetic<TMat1, TMat2, TVec>::value> >
-    MixedTargetCost(TMat1&& M, TMat2&& N, TVec1&& p)
+    MixedTargetCost(TMat1&& M, TMat2&& N, TVec&& p)
         : CostFunction("TargetMixedCost")
         , M_(std::forward<TMat1>(M))
         , N_(std::forward<TMat2>(N))
@@ -179,12 +189,12 @@ public:
         weights_ = Eigen::VectorXd::Ones(p_.rows());
     }
 
-    void update(const std::shared_ptr<PreviewSystem>& ps) override;
-    void initializeCost(const std::shared_ptr<PreviewSystem>& ps) override;
+    void update(const PreviewSystem& ps) override;
+    void initializeCost(const PreviewSystem& ps) override;
 
 private:
     Eigen::MatrixXd M_, N_;
-    Eigen::MatrixXd p_;
+    Eigen::VectorXd p_;
 };
 
 } // namespace mpc

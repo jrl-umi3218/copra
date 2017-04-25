@@ -165,8 +165,7 @@ ConstraintFlag ControlConstraint::constraintType() const noexcept
 void MixedConstraint::autoSpan()
 {
     auto max_dim = std::max(f_.rows(), std::max(E_.rows(), G_.rows()));
-    if (max_dim > E_.rows()) // This is tricky. Has X and U are not the same dimensions, we need to handle it.
-        AutoSpan::spanMatrix(E_, max_dim, 1);
+    AutoSpan::spanMatrix(E_, max_dim, 1); // This is tricky. Has X and U are not the same dimensions, we need to handle it.
     AutoSpan::spanMatrix(G_, max_dim);
     AutoSpan::spanVector(f_, max_dim);
 }
