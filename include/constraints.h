@@ -106,10 +106,6 @@ public:
     }
 
 protected:
-    void spanMatrix(Eigen::MatrixXd& mat, Eigen::Index max_dim, int addCols = 0);
-    void spanVector(Eigen::VectorXd& vec, Eigen::Index max_dim);
-
-protected:
     std::string name_;
     int nrConstr_;
     bool fullSizeEntry_;
