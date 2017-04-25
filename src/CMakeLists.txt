@@ -16,6 +16,8 @@
 # <http://www.gnu.org/licenses/>.
 
 set(SOURCES
+    AutoSpan.cpp
+    costFunctions.cpp
     PreviewSystem.cpp
     QuadProgSolver.cpp
     SolverInterface.cpp
@@ -25,6 +27,8 @@ set(SOURCES
     solverUtils.cpp)
 
 set(HEADERS 
+    ../include/AutoSpan.h
+    ../include/costFunctions.h
     ../include/PreviewSystem.h 
     ../include/QuadProgSolver.h 
     ../include/SolverInterface.h 

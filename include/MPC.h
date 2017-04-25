@@ -50,7 +50,7 @@ enum class ConstraintFlag;
  * where \f$N\f$ is the dimension of the system (the number of steps).
  * \warning This class waits for a discretized system ! Continuous systems are not implemented.
  */
-class MPC_DLLAPI MPCTypeFull {
+class MPC_DLLAPI MPC {
 public:
     /**
      * Initialize problem variables to default and get the desired solver
@@ -58,14 +58,14 @@ public:
      * \param ps A preview system to amke a copy from.
      * \param sFlag The flag corresponding to the desired solver.
      */
-    MPCTypeFull(SolverFlag sFlag = SolverFlag::DEFAULT);
+    MPC(SolverFlag sFlag = SolverFlag::DEFAULT);
     /**
      * Initialize problem variables w.r.t. the PreviewSystem and get the desired
      * solver
      * \param ps A preview system to amke a copy from.
      * \param sFlag The flag corresponding to the desired solver.
      */
-    MPCTypeFull(const std::shared_ptr<PreviewSystem>& ps,
+    MPC(const std::shared_ptr<PreviewSystem>& ps,
         SolverFlag sFlag = SolverFlag::DEFAULT);
 
     /**
@@ -111,51 +111,15 @@ public:
     double solveAndBuildTime() const noexcept;
 
     /**
-     * Set the weights of the system.
-     * Perform a move semantic if a fullsize vector is given as rvalue (this is faster).
-     * \param wx Weight of the state.
-     * \param wu Weight of the control.
-     * \throw Throw a std::domain_error is Wx or Wu are badly dimension.
+     * Add a cost function to the system.
+     * \param constr A cost type \see TrajectoryCost \see TargetCost
+     * \see ControlCost \see MixedTrajectoryCost \see MixedTargetCost
      */
-    template <typename TVec1, typename TVec2,
-        typename = std::enable_if_t<!is_all_arithmetic<TVec1, TVec2>::value> >
-    void weights(TVec1&& Wx, TVec2&& Wu)
-    {
-        if (Wx.rows() == Wx_.rows())
-            Wx_ = std::forward<TVec1>(Wx);
-        else if (Wx.rows() == ps_->xDim)
-            for (auto i = 0; i < ps_->nrXStep; ++i)
-                Wx_.segment(i * ps_->xDim, ps_->xDim) = Wx;
-        else
-            DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsOnPSXDim("Wx", Wx, ps_.get()));
-
-        if (Wu.rows() == ps_->fullUDim)
-            Wu_ = std::forward<TVec2>(Wu);
-        else if (Wu.rows() == ps_->uDim)
-            for (auto i = 0; i < ps_->nrUStep; ++i)
-                Wu_.segment(i * ps_->uDim, ps_->uDim) = Wu;
-        else
-            DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsOnPSUDim("Wu", Wu, ps_.get()));
-    }
+    void addCost(const std::shared_ptr<CostFunction>& costFun);
 
     /**
-     * Set the weights of the system. All variables are set to the same weight.
-     * \param wx Weight of the state.
-     * \param wu Weight of the control.
-     */
-    template <typename T1, typename T2,
-        typename = std::enable_if_t<is_all_arithmetic<T1, T2>::value> >
-    void weights(T1 Wx, T2 Wu)
-    {
-        Wx_.setConstant(Wx);
-        Wu_.setConstant(Wu);
-    }
-
-    /**
-     * Add a constraint to the system. The shared_ptr if not copied !
-     * So, if it deleted before solving, the MPC will not use the constraint.
-     * In case of a unwilling deletion, a warning is displayed in Debug mode.
-     * \param constr A constraint type \see TrajectoryConstrain. \see ControlConstrain.
+     * Add a constraint to the system.
+     * \param constr A constraint type \see TrajectoryConstrain \see ControlConstraint
      * \see TrajectoryBoundConstraint \see ControlBoundConstraint
      */
     void addConstraint(const std::shared_ptr<Constraint>& constr);
@@ -190,11 +154,11 @@ protected:
     virtual void makeQPForm();
 
     /**
-     * Check if the constraints still exist.
-     * In Debug mode: Output into std::cerr if a constraint has been deleted.
+     * Check if a cost or a constraint still exist.
+     * In Debug mode: Output into std::cerr if a cost or a constraint has been deleted.
      * In Release mode: No output.
      */
-    void checkDeleteConstraints();
+    void checkDeleteCostsAndConstraints();
 
 protected:
     struct Constraints {
@@ -213,32 +177,13 @@ protected:
 protected:
     std::shared_ptr<PreviewSystem> ps_;
     std::unique_ptr<SolverInterface> sol_;
+    std::vector<std::shared_ptr<CostFunction> > spCost_;
     Constraints constraints_;
 
     Eigen::MatrixXd Q_, Aineq_, Aeq_;
-    Eigen::VectorXd c_, bineq_, beq_, lb_, ub_, Wx_, Wu_;
+    Eigen::VectorXd c_, bineq_, beq_, lb_, ub_;
 
     std::chrono::duration<double> solveTime_, solveAndBuildTime_;
-};
-
-/**
- * This is a variant of MPCTypeFull controller
- * In spite of using the full generated preview matrices, it uses only the last
- * part (the most in the future part).
- * Thus, this class has way faster results with the disadvantages of not
- * considering a minimization along all the trajectory.
- * \warning This class waits for a discretized system ! Continuous systems are
- * not implemented.
- */
-class MPC_DLLAPI MPCTypeLast : public MPCTypeFull {
-public:
-    MPCTypeLast(SolverFlag sFlag = SolverFlag::DEFAULT);
-    MPCTypeLast(const std::shared_ptr<PreviewSystem>& ps, SolverFlag sFlag = SolverFlag::DEFAULT);
-
-    void initializeController(const std::shared_ptr<PreviewSystem>& ps) override;
-
-protected:
-    void makeQPForm() override;
 };
 
 } // namespace pc
