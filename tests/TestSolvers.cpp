@@ -33,36 +33,8 @@
 // optional mpc
 #include "solverConfig.h"
 
-// Test base on scilab qld example:
-// https://help.scilab.org/doc/5.5.2/en_US/qld.html
-struct Problem {
-    Problem()
-        : Q(6, 6)
-        , Aeq(3, 6)
-        , Aineq(2, 6)
-        , c(6)
-        , beq(3)
-        , bineq(2)
-        , XL(6)
-        , XU(6)
-        , nrvars(6)
-        , nreqs(3)
-        , nrineqs(2)
-    {
-        Q = Eigen::MatrixXd::Identity(6, 6);
-        c << 1, 2, 3, 4, 5, 6;
-        Aeq << 1, -1, 1, 0, 3, 1, -1, 0, -3, -4, 5, 6, 2, 5, 3, 0, 1, 0;
-        beq << 1, 2, 3;
-        Aineq << 0, 1, 0, 1, 2, -1, -1, 0, 2, 1, 1, 0;
-        bineq << -1, 2.5;
-        XL << -1000, -10000, 0, -1000, -1000, -1000;
-        XU << 10000, 100, 1.5, 100, 100, 1000;
-    }
-
-    Eigen::MatrixXd Q, Aeq, Aineq;
-    Eigen::VectorXd c, beq, bineq, XL, XU;
-    int nrvars, nreqs, nrineqs;
-};
+// Tests problems
+#include "systems.h"
 
 BOOST_FIXTURE_TEST_CASE(QuadProgTest, Problem)
 {

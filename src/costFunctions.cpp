@@ -64,7 +64,7 @@ void TrajectoryCost::initializeCost(const PreviewSystem& ps)
         AutoSpan::spanMatrix(M_, M_.rows() * ps.nrXStep); // Use autospan but this will change
         AutoSpan::spanVector(p_, p_.rows() * ps.nrXStep); // Use autospan but this will change
         AutoSpan::spanVector(weights_, weights_.rows() * ps.nrXStep); // Use autospan but this will change
-    } else if (M_.cols() == ps.fullXDim) {
+    } else if (M_.cols() != ps.fullXDim) {
         DOMAIN_ERROR_EXCEPTION(throwMsgOnColsOnPSXDim("M", M_, &ps));
     }
 }
@@ -95,6 +95,7 @@ void TargetCost::update(const PreviewSystem& ps)
     Eigen::MatrixXd tmp = M_ * ps.Psi.bottomRows(ps.xDim);
     Q_.noalias() = tmp.transpose() * weights_.asDiagonal() * tmp;
     c_.noalias() = (M_ * (ps.Phi.bottomRows(ps.xDim) * ps.x0 + ps.xi.bottomRows(ps.xDim)) + p_).transpose() * weights_.asDiagonal() * tmp;
+    std::cout << Q_.bottomRightCorner(10, 10) << std::endl;
 }
 
 /*************************************************************************************************
@@ -136,6 +137,7 @@ void ControlCost::update(const PreviewSystem& ps)
             c_.segment(i * ps.uDim, ps.uDim) = vec;
         }
     }
+    std::cout << Q_.bottomRightCorner(10, 10) << std::endl;
 }
 
 /*************************************************************************************************
@@ -194,9 +196,12 @@ void MixedTargetCost::initializeCost(const PreviewSystem& ps)
 
 void MixedTargetCost::update(const PreviewSystem& ps)
 {
-    Eigen::MatrixXd tmp = M_ * ps.Psi.bottomRows(ps.xDim) + N_;
+    Eigen::MatrixXd tmp = M_ * ps.Psi.bottomRows(ps.xDim);
+    for (int i = 0; i < ps.nrUStep; ++i)
+        tmp.block(0, i * ps.uDim, M_.rows(), ps.uDim) += N_;
     Q_.noalias() = tmp.transpose() * weights_.asDiagonal() * tmp;
     c_.noalias() = (M_ * (ps.Phi.bottomRows(ps.xDim) * ps.x0 + ps.xi.bottomRows(ps.xDim)) + p_).transpose() * weights_.asDiagonal() * tmp;
+    std::cout << Q_.bottomRightCorner(10, 10) << std::endl;
 }
 
 } // namespace mpc

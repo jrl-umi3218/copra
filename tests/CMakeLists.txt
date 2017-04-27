@@ -25,7 +25,7 @@ include_directories("${PROJECT_SOURCE_DIR}/src")
 include_directories(${Boost_INCLUDE_DIRS})
 
 macro(addTest testName)
-    add_executable(${testName} ${testName}.cpp)
+    add_executable(${testName} ${testName}.cpp systems.h tools.h)
     target_link_libraries(${testName} ${Boost_LIBRARIES} ${PROJECT_NAME})
     PKG_CONFIG_USE_DEPENDENCY(${testName} eigen-quadprog)
     if(${EIGEN_QLD_FOUND})

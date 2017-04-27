@@ -38,169 +38,9 @@
 #include "solverConfig.h"
 #include "solverUtils.h"
 
-// The final point of the trajectory should be [val, 0] where val can be any value inferior to 0;
-// Test bound constraints
-struct BoundedSystem {
-    BoundedSystem()
-        : T(0.005)
-        , mass(5)
-        , nbStep(300)
-        , A(2, 2)
-        , B(2, 1)
-        , c(2)
-        , uLower(1)
-        , uUpper(1)
-        , xLower(2)
-        , xUpper(2)
-        , x0(2)
-        , xd(2)
-        , wx(2)
-        , wu(1)
-    {
-        // System
-        A << 1, T, 0, 1;
-        B << 0.5 * T * T / mass, T / mass;
-        c << (-9.81 / 2.) * T * T, -9.81 * T;
-        x0 << 0, -5;
-        xd << 0, 0;
-        wx << 10, 10000;
-        wu << 1e-4;
-
-        // Control bound
-        uLower.setConstant(-std::numeric_limits<double>::infinity());
-        uUpper.setConstant(200); // The force can't be superior to 200
-
-        // Trajectory bound
-        xLower.setConstant(-std::numeric_limits<double>::infinity());
-        xUpper(0) = std::numeric_limits<double>::infinity();
-        xUpper(1) = 0; // The velocity can't be positive
-    }
-
-    double T, mass;
-    int nbStep;
-    Eigen::MatrixXd A, B;
-    Eigen::VectorXd c, uLower, uUpper, xLower, xUpper, x0, xd, wx, wu;
-};
-
-// The final point of the trajectory should be [val, 0] where val can be any value inferior to 0 (same as previous one)
-// Test inequality constraints
-struct IneqSystem {
-    IneqSystem()
-        : T(0.005)
-        , mass(5)
-        , nbStep(300)
-        , A(2, 2)
-        , B(2, 1)
-        , G(1, 1)
-        , E(1, 2)
-        , c(2)
-        , h(1)
-        , f(1)
-        , x0(2)
-        , xd(2)
-        , wx(2)
-        , wu(1)
-    {
-        A << 1, T, 0, 1;
-        B << 0.5 * T * T / mass, T / mass;
-        c << (-9.81 / 2.) * T * T, -9.81 * T;
-        G << 1;
-        h << 200; // The force can't be superior to 200
-        E << 0, 1;
-        f << 0; // The velocity can't be positive
-        x0 << 0, -5;
-        xd << 0, 0;
-        wx << 10, 10000;
-        wu << 1e-4;
-    }
-
-    double T, mass;
-    int nbStep;
-    Eigen::MatrixXd A, B, G, E;
-    Eigen::VectorXd c, h, f, x0, xd, wx, wu;
-};
-
-// The final point of the trajectory should be [val, 0] where val can be any value inferior to 0 (same as previous one)
-// Test mixed constraints
-struct MixedSystem {
-    MixedSystem()
-        : T(0.005)
-        , mass(5)
-        , nbStep(300)
-        , A(2, 2)
-        , B(2, 1)
-        , G(1, 1)
-        , E(1, 2)
-        , c(2)
-        , f(1)
-        , x0(2)
-        , xd(2)
-        , wx(2)
-        , wu(1)
-    {
-        A << 1, T, 0, 1;
-        B << 0.5 * T * T / mass, T / mass;
-        c << (-9.81 / 2.) * T * T, -9.81 * T;
-        G << 1;
-        E << 0, 1;
-        f << 200;
-        x0 << 0, -5;
-        xd << 0, 0;
-        wx << 10, 10000;
-        wu << 1e-4;
-    }
-
-    double T, mass;
-    int nbStep;
-    Eigen::MatrixXd A, B, G, E;
-    Eigen::VectorXd c, f, x0, xd, wx, wu;
-};
-
-// Search forces that let the system immobile (should be equal to gravity * tiemstep)
-// Test Equality constraints
-// xd becomes useless here
-struct EqSystem {
-    EqSystem()
-        : T(0.005)
-        , mass(5)
-        , nbStep(300)
-        , A(2, 2)
-        , B(2, 1)
-        , E(2, 2)
-        , c(2)
-        , f(2)
-        , x0(2)
-        , xd(2)
-        , wx(2)
-        , wu(1)
-    {
-        // System
-        A << 1, T, 0, 1;
-        B << 0.5 * T * T / mass, T / mass;
-        c << (-9.81 / 2.) * T * T, -9.81 * T;
-        x0 << 0, 0;
-        xd << 0, 0;
-        wx << 10, 10000;
-        wu << 1e-4;
-
-        // Trajectory equality constraint
-        E.setZero();
-        E(0, 0) = 1;
-        f = x0;
-    }
-
-    bool printErrorMessage(const std::domain_error& e)
-    {
-        std::cout << e.what() << std::endl
-                  << std::endl;
-        return true;
-    }
-
-    double T, mass;
-    int nbStep;
-    Eigen::MatrixXd A, B, E;
-    Eigen::VectorXd c, f, x0, xd, wx, wu, uLower, uUpper;
-};
+// Tests helpers
+#include "systems.h"
+#include "tools.h"
 
 BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
 {
@@ -209,8 +49,8 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = mpc::MPC(ps);
-    auto xCost = std::make_shared<mpc::TargetCost>(Eigen::MatrixXd::Identity(2, 2), xd);
-    auto uCost = std::make_shared<mpc::ControlCost>(Eigen::MatrixXd::Identity(1, 1), Eigen::VectorXd::Zero(1));
+    auto xCost = std::make_shared<mpc::TargetCost>(M, -xd);
+    auto uCost = std::make_shared<mpc::ControlCost>(N, -ud);
     auto trajConstr = std::make_shared<mpc::TrajectoryBoundConstraint>(xLower, xUpper);
     auto contConstr = std::make_shared<mpc::ControlBoundConstraint>(uLower, uUpper);
     xCost->weights(wx);
@@ -274,8 +114,8 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS, BoundedSyste
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = mpc::MPC(ps);
-    auto xCost = std::make_shared<mpc::TrajectoryCost>(Eigen::MatrixXd::Identity(2, 2), xd);
-    auto uCost = std::make_shared<mpc::ControlCost>(Eigen::MatrixXd::Identity(1, 1), Eigen::VectorXd::Zero(1));
+    auto xCost = std::make_shared<mpc::TrajectoryCost>(M, -xd);
+    auto uCost = std::make_shared<mpc::ControlCost>(N, -ud);
     auto trajConstr = std::make_shared<mpc::TrajectoryBoundConstraint>(xLower, xUpper);
     auto contConstr = std::make_shared<mpc::ControlBoundConstraint>(uLower, uUpper);
     xCost->weights(wx);
@@ -331,6 +171,82 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS, BoundedSyste
     BOOST_MESSAGE(ss.str());
 }
 
+BOOST_FIXTURE_TEST_CASE(MPC_MIXED_TARGET_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
+{
+    auto ps = std::make_shared<mpc::PreviewSystem>();
+    ps->system(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
+    auto xCost = std::make_shared<mpc::MixedTargetCost>(M, Eigen::MatrixXd::Zero(2, 1), -xd); // min(||X - Xt||^2)
+    auto uCost = std::make_shared<mpc::MixedTargetCost>(Eigen::MatrixXd::Zero(1, 2), N, -ud); // min(||U - Ut||^2)
+    auto trajConstr = std::make_shared<mpc::TrajectoryBoundConstraint>(xLower, xUpper);
+    auto contConstr = std::make_shared<mpc::ControlBoundConstraint>(uLower, uUpper);
+    xCost->weights(wx);
+    uCost->weights(wu);
+
+    controller.addCost(xCost);
+    controller.addCost(uCost);
+    controller.addConstraint(trajConstr);
+    controller.addConstraint(contConstr);
+
+    BOOST_REQUIRE(controller.solve());
+
+    Eigen::VectorXd fullTraj = controller.trajectory();
+    auto trajLen = fullTraj.rows() / 2;
+    Eigen::VectorXd posTraj(trajLen);
+    Eigen::VectorXd velTraj(trajLen);
+    for (auto i = 0; i < trajLen; ++i) {
+        posTraj(i) = fullTraj(2 * i);
+        velTraj(i) = fullTraj(2 * i + 1);
+    }
+    Eigen::VectorXd control = controller.control();
+
+    // Check result
+    BOOST_CHECK_SMALL(xd(1) - velTraj.tail(1)(0), 0.001);
+
+    // Check constrains
+    BOOST_REQUIRE_LE(posTraj.maxCoeff(), x0(0));
+    BOOST_REQUIRE_LE(velTraj.maxCoeff(), xUpper(1) + 1e-6);
+    BOOST_REQUIRE_LE(control.maxCoeff(), uUpper(0) + 1e-6); // QuadProg allows to exceeds the constrain of a small amount.
+}
+
+BOOST_FIXTURE_TEST_CASE(MPC_MIXED_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
+{
+    auto ps = std::make_shared<mpc::PreviewSystem>();
+    ps->system(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
+    auto xCost = std::make_shared<mpc::MixedTrajectoryCost>(M, Eigen::MatrixXd::Zero(2, 1), -xd); // min(||X - Xt||^2)
+    auto uCost = std::make_shared<mpc::MixedTrajectoryCost>(Eigen::MatrixXd::Zero(1, 2), N, -ud); // min(||U - Ut||^2)
+    auto trajConstr = std::make_shared<mpc::TrajectoryBoundConstraint>(xLower, xUpper);
+    auto contConstr = std::make_shared<mpc::ControlBoundConstraint>(uLower, uUpper);
+    xCost->weights(wx);
+    uCost->weights(wu);
+
+    controller.addCost(xCost);
+    controller.addCost(uCost);
+    controller.addConstraint(trajConstr);
+    controller.addConstraint(contConstr);
+
+    BOOST_REQUIRE(controller.solve());
+
+    Eigen::VectorXd fullTraj = controller.trajectory();
+    auto trajLen = fullTraj.rows() / 2;
+    Eigen::VectorXd posTraj(trajLen);
+    Eigen::VectorXd velTraj(trajLen);
+    for (auto i = 0; i < trajLen; ++i) {
+        posTraj(i) = fullTraj(2 * i);
+        velTraj(i) = fullTraj(2 * i + 1);
+    }
+    Eigen::VectorXd control = controller.control();
+
+    // Check result
+    BOOST_CHECK_SMALL(xd(1) - velTraj.tail(1)(0), 0.001);
+
+    // Check constrains
+    BOOST_REQUIRE_LE(posTraj.maxCoeff(), x0(0));
+    BOOST_REQUIRE_LE(velTraj.maxCoeff(), xUpper(1) + 1e-6);
+    BOOST_REQUIRE_LE(control.maxCoeff(), uUpper(0) + 1e-6); // QuadProg allows to exceeds the constrain of a small amount.
+}
+
 BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_BOUND_CONSTRAINT, BoundedSystem)
 {
     auto ps = std::make_shared<mpc::PreviewSystem>();
@@ -349,18 +265,12 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_BOUND_CONSTRAINT, Bou
         BOOST_REQUIRE_NO_THROW(controller.addConstraint(contConstr));
     };
 
-    auto spanVector = [&](const Eigen::VectorXd& v, int size) {
-        Eigen::VectorXd vout = Eigen::VectorXd::Zero(v.rows() * size);
-        for (int i = 0; i < size; ++i)
-            vout.segment(i * v.rows(), v.rows()) = v;
-        return vout;
-    };
-
     auto fullxLower = spanVector(xLower, nbXStep);
     auto fullxUpper = spanVector(xUpper, nbXStep);
     auto fulluLower = spanVector(uLower, nbStep);
     auto fulluUpper = spanVector(uUpper, nbStep);
 
+    checkSpan(xLower, xUpper, uLower, uUpper);
     checkSpan(fullxLower, xUpper, fulluLower, uUpper);
     checkSpan(xLower, fullxUpper, uLower, fulluUpper);
     checkSpan(fullxLower, fullxUpper, fulluLower, fulluUpper);
@@ -373,8 +283,8 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = mpc::MPC(ps);
-    auto xCost = std::make_shared<mpc::TargetCost>(Eigen::MatrixXd::Identity(2, 2), xd);
-    auto uCost = std::make_shared<mpc::ControlCost>(Eigen::MatrixXd::Identity(1, 1), Eigen::VectorXd::Zero(1));
+    auto xCost = std::make_shared<mpc::TargetCost>(M, -xd);
+    auto uCost = std::make_shared<mpc::ControlCost>(N, -ud);
     auto trajConstr = std::make_shared<mpc::TrajectoryConstraint>(E, f);
     auto contConstr = std::make_shared<mpc::ControlConstraint>(G, h);
     xCost->weights(wx);
@@ -438,8 +348,8 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSys
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = mpc::MPC(ps);
-    auto xCost = std::make_shared<mpc::TrajectoryCost>(Eigen::MatrixXd::Identity(2, 2), xd);
-    auto uCost = std::make_shared<mpc::ControlCost>(Eigen::MatrixXd::Identity(1, 1), Eigen::VectorXd::Zero(1));
+    auto xCost = std::make_shared<mpc::TrajectoryCost>(M, -xd);
+    auto uCost = std::make_shared<mpc::ControlCost>(N, -ud);
     auto trajConstr = std::make_shared<mpc::TrajectoryConstraint>(E, f);
     auto contConstr = std::make_shared<mpc::ControlConstraint>(G, h);
     xCost->weights(wx);
@@ -495,6 +405,82 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSys
     BOOST_MESSAGE(ss.str());
 }
 
+BOOST_FIXTURE_TEST_CASE(MPC_MIXED_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
+{
+    auto ps = std::make_shared<mpc::PreviewSystem>();
+    ps->system(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
+    auto xCost = std::make_shared<mpc::MixedTargetCost>(M, Eigen::MatrixXd::Zero(2, 1), -xd);
+    auto uCost = std::make_shared<mpc::MixedTargetCost>(Eigen::MatrixXd::Zero(1, 2), N, -ud);
+    auto trajConstr = std::make_shared<mpc::TrajectoryConstraint>(E, f);
+    auto contConstr = std::make_shared<mpc::ControlConstraint>(G, h);
+    xCost->weights(wx);
+    uCost->weights(wu);
+
+    controller.addCost(xCost);
+    controller.addCost(uCost);
+    controller.addConstraint(trajConstr);
+    controller.addConstraint(contConstr);
+
+    BOOST_REQUIRE(controller.solve());
+
+    Eigen::VectorXd fullTraj = controller.trajectory();
+    auto trajLen = fullTraj.rows() / 2;
+    Eigen::VectorXd posTraj(trajLen);
+    Eigen::VectorXd velTraj(trajLen);
+    for (auto i = 0; i < trajLen; ++i) {
+        posTraj(i) = fullTraj(2 * i);
+        velTraj(i) = fullTraj(2 * i + 1);
+    }
+    Eigen::VectorXd control = controller.control();
+
+    // Check result
+    BOOST_CHECK_SMALL(xd(1) - velTraj.tail(1)(0), 0.001);
+
+    // Check constrains
+    BOOST_REQUIRE_LE(posTraj.maxCoeff(), x0(0));
+    BOOST_REQUIRE_LE(velTraj.maxCoeff(), f(0) + 1e-6);
+    BOOST_REQUIRE_LE(control.maxCoeff(), h(0) + 1e-6); // QuadProg allows to exceeds the constrain of a small amount.
+}
+
+BOOST_FIXTURE_TEST_CASE(MPC_MIXED_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
+{
+    auto ps = std::make_shared<mpc::PreviewSystem>();
+    ps->system(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
+    auto xCost = std::make_shared<mpc::MixedTrajectoryCost>(M, Eigen::MatrixXd::Zero(2, 1), -xd);
+    auto uCost = std::make_shared<mpc::MixedTrajectoryCost>(Eigen::MatrixXd::Zero(1, 2), N, -ud);
+    auto trajConstr = std::make_shared<mpc::TrajectoryConstraint>(E, f);
+    auto contConstr = std::make_shared<mpc::ControlConstraint>(G, h);
+    xCost->weights(wx);
+    uCost->weights(wu);
+
+    controller.addCost(xCost);
+    controller.addCost(uCost);
+    controller.addConstraint(trajConstr);
+    controller.addConstraint(contConstr);
+
+    BOOST_REQUIRE(controller.solve());
+
+    Eigen::VectorXd fullTraj = controller.trajectory();
+    auto trajLen = fullTraj.rows() / 2;
+    Eigen::VectorXd posTraj(trajLen);
+    Eigen::VectorXd velTraj(trajLen);
+    for (auto i = 0; i < trajLen; ++i) {
+        posTraj(i) = fullTraj(2 * i);
+        velTraj(i) = fullTraj(2 * i + 1);
+    }
+    Eigen::VectorXd control = controller.control();
+
+    // Check result
+    BOOST_CHECK_SMALL(xd(1) - velTraj.tail(1)(0), 0.001);
+
+    // Check constrains
+    BOOST_REQUIRE_LE(posTraj.maxCoeff(), x0(0));
+    BOOST_REQUIRE_LE(velTraj.maxCoeff(), f(0) + 1e-6);
+    BOOST_REQUIRE_LE(control.maxCoeff(), h(0) + 1e-6); // QuadProg allows to exceeds the constrain of a small amount.
+}
+
 BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_INEQUALITY_CONSTRAINT, IneqSystem)
 {
     auto ps = std::make_shared<mpc::PreviewSystem>();
@@ -513,24 +499,12 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_INEQUALITY_CONSTRAINT
         BOOST_REQUIRE_NO_THROW(controller.addConstraint(contConstr));
     };
 
-    auto spanMatrix = [&](const Eigen::MatrixXd& m, int size) {
-        Eigen::MatrixXd mout = Eigen::MatrixXd::Zero(m.rows() * size, m.cols() * size);
-        for (int i = 0; i < size; ++i)
-            mout.block(i * m.rows(), i * m.cols(), m.rows(), m.cols()) = m;
-        return mout;
-    };
-    auto spanVector = [&](const Eigen::VectorXd& v, int size) {
-        Eigen::VectorXd vout = Eigen::VectorXd::Zero(v.rows() * size);
-        for (int i = 0; i < size; ++i)
-            vout.segment(i * v.rows(), v.rows()) = v;
-        return vout;
-    };
-
     auto fullE = spanMatrix(E, nbXStep);
     auto fullf = spanVector(f, nbXStep);
     auto fullG = spanMatrix(G, nbStep);
     auto fullh = spanVector(h, nbStep);
 
+    checkSpan(E, f, G, h);
     checkSpan(fullE, f, fullG, h);
     checkSpan(E, fullf, G, fullh);
     checkSpan(fullE, fullf, fullG, fullh);
@@ -543,8 +517,8 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = mpc::MPC(ps);
-    auto xCost = std::make_shared<mpc::TargetCost>(Eigen::MatrixXd::Identity(2, 2), xd);
-    auto uCost = std::make_shared<mpc::ControlCost>(Eigen::MatrixXd::Identity(1, 1), Eigen::VectorXd::Zero(1));
+    auto xCost = std::make_shared<mpc::TargetCost>(M, -xd);
+    auto uCost = std::make_shared<mpc::ControlCost>(N, -ud);
     auto mixedConstr = std::make_shared<mpc::MixedConstraint>(E, G, f);
     xCost->weights(wx);
     uCost->weights(wu);
@@ -609,8 +583,8 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = mpc::MPC(ps);
-    auto xCost = std::make_shared<mpc::TrajectoryCost>(Eigen::MatrixXd::Identity(2, 2), xd);
-    auto uCost = std::make_shared<mpc::ControlCost>(Eigen::MatrixXd::Identity(1, 1), Eigen::VectorXd::Zero(1));
+    auto xCost = std::make_shared<mpc::TrajectoryCost>(M, -xd);
+    auto uCost = std::make_shared<mpc::ControlCost>(N, -ud);
     auto mixedConstr = std::make_shared<mpc::MixedConstraint>(E, G, f);
     xCost->weights(wx);
     uCost->weights(wu);
@@ -667,6 +641,88 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
     BOOST_MESSAGE(ss.str());
 }
 
+BOOST_FIXTURE_TEST_CASE(MPC_MIXED_TARGET_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
+{
+    std::vector<std::pair<std::string, double> > solveTime;
+
+    auto ps = std::make_shared<mpc::PreviewSystem>();
+    ps->system(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
+    auto xCost = std::make_shared<mpc::MixedTargetCost>(M, Eigen::MatrixXd::Zero(2, 1), -xd);
+    auto uCost = std::make_shared<mpc::MixedTargetCost>(Eigen::MatrixXd::Zero(1, 2), N, -ud);
+    auto mixedConstr = std::make_shared<mpc::MixedConstraint>(E, G, f);
+    xCost->weights(wx);
+    uCost->weights(wu);
+
+    controller.addCost(xCost);
+    controller.addCost(uCost);
+    controller.addConstraint(mixedConstr);
+
+    BOOST_REQUIRE(controller.solve());
+
+    Eigen::VectorXd fullTraj = controller.trajectory();
+    auto trajLen = fullTraj.rows() / 2;
+    Eigen::VectorXd posTraj(trajLen);
+    Eigen::VectorXd velTraj(trajLen);
+    for (auto i = 0; i < trajLen; ++i) {
+        posTraj(i) = fullTraj(2 * i);
+        velTraj(i) = fullTraj(2 * i + 1);
+    }
+    Eigen::VectorXd control = controller.control();
+
+    // Check result
+    BOOST_CHECK_SMALL(xd(1) - velTraj.tail(1)(0), 0.001);
+
+    // Check constrains
+    BOOST_REQUIRE_LE(posTraj.maxCoeff(), x0(0));
+    for (int i = 0; i < nbStep; ++i) {
+        auto res = E * fullTraj.segment(i * E.cols(), E.cols()) + G * control.segment(i * G.cols(), G.cols());
+        if (!(res(0) <= f(0) + 1e-6))
+            BOOST_ERROR("Mixed constraint violated!");
+    }
+}
+
+BOOST_FIXTURE_TEST_CASE(MPC_MIXED_TRAJECTORY_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
+{
+    std::vector<std::pair<std::string, double> > solveTime;
+
+    auto ps = std::make_shared<mpc::PreviewSystem>();
+    ps->system(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
+    auto xCost = std::make_shared<mpc::MixedTrajectoryCost>(M, Eigen::MatrixXd::Zero(2, 1), -xd);
+    auto uCost = std::make_shared<mpc::MixedTrajectoryCost>(Eigen::MatrixXd::Zero(1, 2), N, -ud);
+    auto mixedConstr = std::make_shared<mpc::MixedConstraint>(E, G, f);
+    xCost->weights(wx);
+    uCost->weights(wu);
+
+    controller.addCost(xCost);
+    controller.addCost(uCost);
+    controller.addConstraint(mixedConstr);
+
+    BOOST_REQUIRE(controller.solve());
+
+    Eigen::VectorXd fullTraj = controller.trajectory();
+    auto trajLen = fullTraj.rows() / 2;
+    Eigen::VectorXd posTraj(trajLen);
+    Eigen::VectorXd velTraj(trajLen);
+    for (auto i = 0; i < trajLen; ++i) {
+        posTraj(i) = fullTraj(2 * i);
+        velTraj(i) = fullTraj(2 * i + 1);
+    }
+    Eigen::VectorXd control = controller.control();
+
+    // Check result
+    BOOST_CHECK_SMALL(xd(1) - velTraj.tail(1)(0), 0.001);
+
+    // Check constrains
+    BOOST_REQUIRE_LE(posTraj.maxCoeff(), x0(0));
+    for (int i = 0; i < nbStep; ++i) {
+        auto res = E * fullTraj.segment(i * E.cols(), E.cols()) + G * control.segment(i * G.cols(), G.cols());
+        if (!(res(0) <= f(0) + 1e-6))
+            BOOST_ERROR("Mixed constraint violated!");
+    }
+}
+
 BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_CONSTRAINT, MixedSystem)
 {
     auto ps = std::make_shared<mpc::PreviewSystem>();
@@ -680,23 +736,11 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_CONSTRAINT, Mix
         BOOST_REQUIRE_NO_THROW(controller.addConstraint(mixedConstr));
     };
 
-    auto spanMatrix = [&](const Eigen::MatrixXd& m, int size, int addCols = 0) {
-        Eigen::MatrixXd mout = Eigen::MatrixXd::Zero(m.rows() * size, m.cols() * (size + addCols));
-        for (int i = 0; i < size; ++i)
-            mout.block(i * m.rows(), i * m.cols(), m.rows(), m.cols()) = m;
-        return mout;
-    };
-    auto spanVector = [&](const Eigen::VectorXd& v, int size) {
-        Eigen::VectorXd vout = Eigen::VectorXd::Zero(v.rows() * size);
-        for (int i = 0; i < size; ++i)
-            vout.segment(i * v.rows(), v.rows()) = v;
-        return vout;
-    };
-
     auto fullE = spanMatrix(E, nbStep, 1);
     auto fullG = spanMatrix(G, nbStep);
     auto fullf = spanVector(f, nbStep);
 
+    checkSpan(E, G, f);
     checkSpan(fullE, G, f);
     checkSpan(fullE, fullG, f);
     checkSpan(fullE, G, fullf);
@@ -716,8 +760,8 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = mpc::MPC(ps);
-    auto xCost = std::make_shared<mpc::TargetCost>(Eigen::MatrixXd::Identity(2, 2), xd);
-    auto uCost = std::make_shared<mpc::ControlCost>(Eigen::MatrixXd::Identity(1, 1), Eigen::VectorXd::Zero(1));
+    auto xCost = std::make_shared<mpc::TargetCost>(M, -xd);
+    auto uCost = std::make_shared<mpc::ControlCost>(N, -ud);
     auto trajConstr = std::make_shared<mpc::TrajectoryConstraint>(E, f, false);
     xCost->weights(wx);
     uCost->weights(wu);
@@ -778,8 +822,8 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = mpc::MPC(ps);
-    auto xCost = std::make_shared<mpc::TrajectoryCost>(Eigen::MatrixXd::Identity(2, 2), xd);
-    auto uCost = std::make_shared<mpc::ControlCost>(Eigen::MatrixXd::Identity(1, 1), Eigen::VectorXd::Zero(1));
+    auto xCost = std::make_shared<mpc::TrajectoryCost>(M, -xd);
+    auto uCost = std::make_shared<mpc::ControlCost>(N, -ud);
     auto trajConstr = std::make_shared<mpc::TrajectoryConstraint>(E, f, false);
     xCost->weights(wx);
     uCost->weights(wu);
@@ -832,6 +876,173 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
     BOOST_MESSAGE(ss.str());
 }
 
+BOOST_FIXTURE_TEST_CASE(MPC_MIXED_TARGET_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
+{
+    auto ps = std::make_shared<mpc::PreviewSystem>();
+    ps->system(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
+    auto xCost = std::make_shared<mpc::MixedTargetCost>(M, Eigen::MatrixXd::Zero(2, 1), -xd);
+    auto uCost = std::make_shared<mpc::MixedTargetCost>(Eigen::MatrixXd::Zero(1, 2), N, -ud);
+    auto trajConstr = std::make_shared<mpc::TrajectoryConstraint>(E, f, false);
+    xCost->weights(wx);
+    uCost->weights(wu);
+
+    controller.addCost(xCost);
+    controller.addCost(uCost);
+    controller.addConstraint(trajConstr);
+
+    BOOST_REQUIRE(controller.solve());
+
+    Eigen::VectorXd fullTraj = controller.trajectory();
+    auto trajLen = fullTraj.rows() / 2;
+    Eigen::VectorXd posTraj(trajLen);
+    Eigen::VectorXd velTraj(trajLen);
+    for (auto i = 0; i < trajLen; ++i) {
+        posTraj(i) = fullTraj(2 * i);
+        velTraj(i) = fullTraj(2 * i + 1);
+    }
+    Eigen::VectorXd control = controller.control();
+
+    // Check result
+    BOOST_CHECK_SMALL(xd(1) - velTraj.tail(1)(0), 0.001);
+
+    // Check constrains
+    BOOST_REQUIRE_LE(posTraj.maxCoeff(), x0(0) + 1e-6);
+    BOOST_REQUIRE_LE(velTraj.maxCoeff(), f(0) + 1e-6);
+}
+
+BOOST_FIXTURE_TEST_CASE(MPC_MIXED_TRAJECTORY_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
+{
+    auto ps = std::make_shared<mpc::PreviewSystem>();
+    ps->system(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
+    auto xCost = std::make_shared<mpc::MixedTrajectoryCost>(M, Eigen::MatrixXd::Zero(2, 1), -xd);
+    auto uCost = std::make_shared<mpc::MixedTrajectoryCost>(Eigen::MatrixXd::Zero(1, 2), N, -ud);
+    auto trajConstr = std::make_shared<mpc::TrajectoryConstraint>(E, f, false);
+    xCost->weights(wx);
+    uCost->weights(wu);
+
+    controller.addCost(xCost);
+    controller.addCost(uCost);
+    controller.addConstraint(trajConstr);
+
+    BOOST_REQUIRE(controller.solve());
+
+    Eigen::VectorXd fullTraj = controller.trajectory();
+    auto trajLen = fullTraj.rows() / 2;
+    Eigen::VectorXd posTraj(trajLen);
+    Eigen::VectorXd velTraj(trajLen);
+    for (auto i = 0; i < trajLen; ++i) {
+        posTraj(i) = fullTraj(2 * i);
+        velTraj(i) = fullTraj(2 * i + 1);
+    }
+    Eigen::VectorXd control = controller.control();
+
+    // Check result
+    BOOST_CHECK_SMALL(xd(1) - velTraj.tail(1)(0), 0.001);
+
+    // Check constrains
+    BOOST_REQUIRE_LE(posTraj.maxCoeff(), x0(0) + 1e-6);
+    BOOST_REQUIRE_LE(velTraj.maxCoeff(), f(0) + 1e-6);
+}
+
+BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_TRAJECTORY_COST, IneqSystem)
+{
+    auto ps = std::make_shared<mpc::PreviewSystem>();
+    ps->system(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
+    int nbXStep = nbStep + 1;
+
+    auto checkSpan = [&](const Eigen::MatrixXd& M, const Eigen::VectorXd& p, const Eigen::VectorXd& weights) {
+        auto cost = std::make_shared<mpc::TrajectoryCost>(M, p);
+        cost->weights(weights);
+        cost->autoSpan();
+
+        BOOST_REQUIRE_NO_THROW(controller.addCost(cost));
+    };
+
+    auto fullM = spanMatrix(M, nbXStep);
+    auto fullxd = spanVector(xd, nbXStep);
+    auto fullwx = spanVector(wx, nbXStep);
+
+    checkSpan(M, -xd, wx);
+    checkSpan(fullM, -xd, wx);
+    checkSpan(fullM, -fullxd, wx);
+    checkSpan(fullM, -xd, fullwx);
+    checkSpan(M, -fullxd, wx);
+    checkSpan(fullM, -fullxd, wx);
+    checkSpan(M, -fullxd, fullwx);
+    checkSpan(M, -xd, fullwx);
+    checkSpan(fullM, -xd, fullwx);
+    checkSpan(M, -fullxd, fullwx);
+    checkSpan(fullM, -fullxd, fullwx);
+}
+
+BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_CONTROL_COST, IneqSystem)
+{
+    auto ps = std::make_shared<mpc::PreviewSystem>();
+    ps->system(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
+
+    auto checkSpan = [&](const Eigen::MatrixXd& M, const Eigen::VectorXd& p, const Eigen::VectorXd& weights) {
+        auto cost = std::make_shared<mpc::ControlCost>(M, p);
+        cost->weights(weights);
+        cost->autoSpan();
+
+        BOOST_REQUIRE_NO_THROW(controller.addCost(cost));
+    };
+
+    auto fullN = spanMatrix(N, nbStep);
+    auto fullud = spanVector(ud, nbStep);
+    auto fullwu = spanVector(wu, nbStep);
+
+    checkSpan(N, -ud, wu);
+    checkSpan(fullN, -ud, wu);
+    checkSpan(fullN, -fullud, wu);
+    checkSpan(fullN, -ud, fullwu);
+    checkSpan(N, -fullud, wu);
+    checkSpan(fullN, -fullud, wu);
+    checkSpan(N, -fullud, fullwu);
+    checkSpan(N, -ud, fullwu);
+    checkSpan(fullN, -ud, fullwu);
+    checkSpan(N, -fullud, fullwu);
+    checkSpan(fullN, -fullud, fullwu);
+}
+
+BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_TRAJECTORY_COST, IneqSystem)
+{
+    auto ps = std::make_shared<mpc::PreviewSystem>();
+    ps->system(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
+
+    auto checkSpan = [&](const Eigen::MatrixXd& M, const Eigen::MatrixXd& N, const Eigen::VectorXd& p, const Eigen::VectorXd& weights) {
+        auto cost = std::make_shared<mpc::MixedTrajectoryCost>(M, N, p);
+        cost->weights(weights);
+        cost->autoSpan();
+
+        BOOST_REQUIRE_NO_THROW(controller.addCost(cost));
+    };
+
+    auto MVec = std::vector<Eigen::MatrixXd>(2);
+    MVec.push_back(M);
+    MVec.push_back(spanMatrix(M, nbStep, 1));
+    auto nnVec = std::vector<Eigen::VectorXd>(2);
+    nnVec.push_back(Eigen::MatrixXd::Ones(2, 1));
+    nnVec.push_back(spanMatrix(Eigen::MatrixXd::Ones(2, 1), nbStep));
+    auto udVec = std::vector<Eigen::VectorXd>(2);
+    udVec.push_back(ud);
+    udVec.push_back(spanMatrix(ud, nbStep));
+    auto wuVec = std::vector<Eigen::VectorXd>(2);
+    wuVec.push_back(wu);
+    wuVec.push_back(spanMatrix(wu, nbStep));
+
+    for (auto& i : MVec)
+        for (auto& j : nnVec)
+            for (auto& k : udVec)
+                for (auto& l : wuVec)
+                    checkSpan(i, j, k, l);
+}
+
 BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_PREVIEW_SYSTEM, IneqSystem)
 {
     auto ps = std::make_shared<mpc::PreviewSystem>();
@@ -840,31 +1051,88 @@ BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_PREVIEW_SYSTEM, IneqSystem)
     BOOST_REQUIRE_THROW(ps->system(A, Eigen::MatrixXd::Ones(5, 1), c, x0, nbStep), std::domain_error);
     BOOST_REQUIRE_THROW(ps->system(A, B, Eigen::VectorXd::Ones(5), x0, nbStep), std::domain_error);
     BOOST_REQUIRE_THROW(ps->system(A, B, c, x0, -1), std::domain_error);
-}
 
-/*
-BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_WEIGTHS, IneqSystem)
-{
-    auto ps = std::make_shared<mpc::PreviewSystem>();
-    ps->system(A, B, c, x0, nbStep);
-    auto fullController = mpc::MPCTypeFull(ps);
-    auto lastController = mpc::MPCTypeLast(ps);
-
-    fullController.weights(1.1, 2.2);
-    lastController.weights(1.1, 2.2);
-    BOOST_REQUIRE_THROW(fullController.weights(Eigen::VectorXd::Ones(5), wu), std::domain_error);
-    BOOST_REQUIRE_THROW(fullController.weights(wx, Eigen::VectorXd::Ones(5)), std::domain_error);
-    BOOST_REQUIRE_THROW(lastController.weights(Eigen::VectorXd::Ones(5), wu), std::domain_error);
-    BOOST_REQUIRE_THROW(lastController.weights(wx, Eigen::VectorXd::Ones(5)), std::domain_error);
     try {
-        lastController.weights(wx, Eigen::VectorXd::Ones(5));
+        ps->system(A, B, c, x0, -1);
     } catch (const std::domain_error& e) {
         std::cerr << "Test error message output" << std::endl;
         std::cerr << e.what() << std::endl
                   << std::endl;
     }
 }
-*/
+
+BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_WEIGTHS, IneqSystem)
+{
+    auto ps = std::make_shared<mpc::PreviewSystem>();
+    ps->system(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
+    auto cost = std::make_shared<mpc::TrajectoryCost>(M, -xd);
+
+    BOOST_REQUIRE_NO_THROW(cost->weights(2));
+    BOOST_REQUIRE_THROW(cost->weights(Eigen::VectorXd::Ones(5)), std::domain_error);
+    BOOST_REQUIRE_NO_THROW(cost->weights(wx));
+    BOOST_REQUIRE_NO_THROW(controller.addCost(cost));
+    BOOST_REQUIRE_NO_THROW(cost->weights(Eigen::VectorXd::Ones(2)));
+}
+
+BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_TRAJECTORY_COST, IneqSystem)
+{
+    auto ps = std::make_shared<mpc::PreviewSystem>(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
+
+    auto badCost1 = std::make_shared<mpc::TrajectoryCost>(Eigen::MatrixXd::Identity(5, 5), Eigen::VectorXd::Ones(2));
+    BOOST_REQUIRE_THROW(controller.addCost(badCost1), std::domain_error);
+    auto badCost2 = std::make_shared<mpc::TrajectoryCost>(Eigen::MatrixXd::Identity(5, 5), Eigen::VectorXd::Ones(5));
+    BOOST_REQUIRE_THROW(controller.addCost(badCost2), std::domain_error);
+}
+
+BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_TARGET_COST, IneqSystem)
+{
+    auto ps = std::make_shared<mpc::PreviewSystem>(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
+
+    auto badCost1 = std::make_shared<mpc::TargetCost>(Eigen::MatrixXd::Identity(5, 5), Eigen::VectorXd::Ones(2));
+    BOOST_REQUIRE_THROW(controller.addCost(badCost1), std::domain_error);
+    auto badCost2 = std::make_shared<mpc::TargetCost>(Eigen::MatrixXd::Identity(5, 5), Eigen::VectorXd::Ones(5));
+    BOOST_REQUIRE_THROW(controller.addCost(badCost2), std::domain_error);
+}
+
+BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_CONTROL_COST, IneqSystem)
+{
+    auto ps = std::make_shared<mpc::PreviewSystem>(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
+
+    auto badCost1 = std::make_shared<mpc::ControlCost>(Eigen::MatrixXd::Identity(5, 5), Eigen::VectorXd::Ones(2));
+    BOOST_REQUIRE_THROW(controller.addCost(badCost1), std::domain_error);
+    auto badCost2 = std::make_shared<mpc::ControlCost>(Eigen::MatrixXd::Identity(5, 5), Eigen::VectorXd::Ones(5));
+    BOOST_REQUIRE_THROW(controller.addCost(badCost2), std::domain_error);
+}
+
+BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_MIXED_TARGET_COST, IneqSystem)
+{
+    auto ps = std::make_shared<mpc::PreviewSystem>(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
+
+    auto badCost1 = std::make_shared<mpc::MixedTargetCost>(Eigen::MatrixXd::Identity(5, 5), Eigen::MatrixXd::Identity(2, 1), Eigen::VectorXd::Ones(2));
+    BOOST_REQUIRE_THROW(controller.addCost(badCost1), std::domain_error);
+    auto badCost2 = std::make_shared<mpc::MixedTargetCost>(Eigen::MatrixXd::Identity(2, 1), Eigen::MatrixXd::Identity(5, 5), Eigen::VectorXd::Ones(2));
+    BOOST_REQUIRE_THROW(controller.addCost(badCost2), std::domain_error);
+    auto badCost3 = std::make_shared<mpc::MixedTargetCost>(Eigen::MatrixXd::Identity(5, 5), Eigen::MatrixXd::Identity(5, 5), Eigen::VectorXd::Ones(5));
+    BOOST_REQUIRE_THROW(controller.addCost(badCost3), std::domain_error);
+}
+
+BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_MIXED_TRAJECTORY_COST, IneqSystem)
+{
+    auto ps = std::make_shared<mpc::PreviewSystem>(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
+
+    auto badCost1 = std::make_shared<mpc::MixedTrajectoryCost>(Eigen::MatrixXd::Identity(5, 5), Eigen::MatrixXd::Identity(2, 1), Eigen::VectorXd::Ones(2));
+    BOOST_REQUIRE_THROW(controller.addCost(badCost1), std::domain_error);
+    auto badCost2 = std::make_shared<mpc::MixedTrajectoryCost>(Eigen::MatrixXd::Identity(2, 1), Eigen::MatrixXd::Identity(5, 5), Eigen::VectorXd::Ones(2));
+    BOOST_REQUIRE_THROW(controller.addCost(badCost2), std::domain_error);
+    auto badCost3 = std::make_shared<mpc::MixedTrajectoryCost>(Eigen::MatrixXd::Identity(5, 5), Eigen::MatrixXd::Identity(5, 5), Eigen::VectorXd::Ones(5));
+    BOOST_REQUIRE_THROW(controller.addCost(badCost3), std::domain_error);
+}
 
 BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_TRAJECTORY_CONSTRAINT, IneqSystem)
 {
