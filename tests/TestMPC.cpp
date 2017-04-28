@@ -171,13 +171,13 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS, BoundedSyste
     BOOST_MESSAGE(ss.str());
 }
 
-BOOST_FIXTURE_TEST_CASE(MPC_MIXED_TARGET_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
+BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
 {
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = mpc::MPC(ps);
-    auto xCost = std::make_shared<mpc::MixedTargetCost>(M, Eigen::MatrixXd::Zero(2, 1), -xd); // min(||X - Xt||^2)
-    auto uCost = std::make_shared<mpc::MixedTargetCost>(Eigen::MatrixXd::Zero(1, 2), N, -ud); // min(||U - Ut||^2)
+    auto xCost = std::make_shared<mpc::MixedCost>(M, Eigen::MatrixXd::Zero(2, 1), -xd); // min(||X - Xt||^2)
+    auto uCost = std::make_shared<mpc::MixedCost>(Eigen::MatrixXd::Zero(1, 2), N, -ud); // min(||U - Ut||^2)
     auto trajConstr = std::make_shared<mpc::TrajectoryBoundConstraint>(xLower, xUpper);
     auto contConstr = std::make_shared<mpc::ControlBoundConstraint>(uLower, uUpper);
     xCost->weights(wx);
@@ -201,45 +201,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_MIXED_TARGET_COST_WITH_BOUND_CONSTRAINTS, BoundedSys
     Eigen::VectorXd control = controller.control();
 
     // Check result
-    BOOST_CHECK_SMALL(xd(1) - velTraj.tail(1)(0), 0.001);
-
-    // Check constrains
-    BOOST_REQUIRE_LE(posTraj.maxCoeff(), x0(0));
-    BOOST_REQUIRE_LE(velTraj.maxCoeff(), xUpper(1) + 1e-6);
-    BOOST_REQUIRE_LE(control.maxCoeff(), uUpper(0) + 1e-6); // QuadProg allows to exceeds the constrain of a small amount.
-}
-
-BOOST_FIXTURE_TEST_CASE(MPC_MIXED_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
-{
-    auto ps = std::make_shared<mpc::PreviewSystem>();
-    ps->system(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
-    auto xCost = std::make_shared<mpc::MixedTrajectoryCost>(M, Eigen::MatrixXd::Zero(2, 1), -xd); // min(||X - Xt||^2)
-    auto uCost = std::make_shared<mpc::MixedTrajectoryCost>(Eigen::MatrixXd::Zero(1, 2), N, -ud); // min(||U - Ut||^2)
-    auto trajConstr = std::make_shared<mpc::TrajectoryBoundConstraint>(xLower, xUpper);
-    auto contConstr = std::make_shared<mpc::ControlBoundConstraint>(uLower, uUpper);
-    xCost->weights(wx);
-    uCost->weights(wu);
-
-    controller.addCost(xCost);
-    controller.addCost(uCost);
-    controller.addConstraint(trajConstr);
-    controller.addConstraint(contConstr);
-
-    BOOST_REQUIRE(controller.solve());
-
-    Eigen::VectorXd fullTraj = controller.trajectory();
-    auto trajLen = fullTraj.rows() / 2;
-    Eigen::VectorXd posTraj(trajLen);
-    Eigen::VectorXd velTraj(trajLen);
-    for (auto i = 0; i < trajLen; ++i) {
-        posTraj(i) = fullTraj(2 * i);
-        velTraj(i) = fullTraj(2 * i + 1);
-    }
-    Eigen::VectorXd control = controller.control();
-
-    // Check result
-    BOOST_CHECK_SMALL(xd(1) - velTraj.tail(1)(0), 0.001);
+    BOOST_CHECK_SMALL(xd(1) - velTraj.tail(3)(0), 0.001); // Check X_{N-1} for mixed cost because X_N is not evaluated.
 
     // Check constrains
     BOOST_REQUIRE_LE(posTraj.maxCoeff(), x0(0));
@@ -405,13 +367,13 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSys
     BOOST_MESSAGE(ss.str());
 }
 
-BOOST_FIXTURE_TEST_CASE(MPC_MIXED_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
+BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
 {
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = mpc::MPC(ps);
-    auto xCost = std::make_shared<mpc::MixedTargetCost>(M, Eigen::MatrixXd::Zero(2, 1), -xd);
-    auto uCost = std::make_shared<mpc::MixedTargetCost>(Eigen::MatrixXd::Zero(1, 2), N, -ud);
+    auto xCost = std::make_shared<mpc::MixedCost>(M, Eigen::MatrixXd::Zero(2, 1), -xd);
+    auto uCost = std::make_shared<mpc::MixedCost>(Eigen::MatrixXd::Zero(1, 2), N, -ud);
     auto trajConstr = std::make_shared<mpc::TrajectoryConstraint>(E, f);
     auto contConstr = std::make_shared<mpc::ControlConstraint>(G, h);
     xCost->weights(wx);
@@ -435,45 +397,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_MIXED_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS, IneqS
     Eigen::VectorXd control = controller.control();
 
     // Check result
-    BOOST_CHECK_SMALL(xd(1) - velTraj.tail(1)(0), 0.001);
-
-    // Check constrains
-    BOOST_REQUIRE_LE(posTraj.maxCoeff(), x0(0));
-    BOOST_REQUIRE_LE(velTraj.maxCoeff(), f(0) + 1e-6);
-    BOOST_REQUIRE_LE(control.maxCoeff(), h(0) + 1e-6); // QuadProg allows to exceeds the constrain of a small amount.
-}
-
-BOOST_FIXTURE_TEST_CASE(MPC_MIXED_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
-{
-    auto ps = std::make_shared<mpc::PreviewSystem>();
-    ps->system(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
-    auto xCost = std::make_shared<mpc::MixedTrajectoryCost>(M, Eigen::MatrixXd::Zero(2, 1), -xd);
-    auto uCost = std::make_shared<mpc::MixedTrajectoryCost>(Eigen::MatrixXd::Zero(1, 2), N, -ud);
-    auto trajConstr = std::make_shared<mpc::TrajectoryConstraint>(E, f);
-    auto contConstr = std::make_shared<mpc::ControlConstraint>(G, h);
-    xCost->weights(wx);
-    uCost->weights(wu);
-
-    controller.addCost(xCost);
-    controller.addCost(uCost);
-    controller.addConstraint(trajConstr);
-    controller.addConstraint(contConstr);
-
-    BOOST_REQUIRE(controller.solve());
-
-    Eigen::VectorXd fullTraj = controller.trajectory();
-    auto trajLen = fullTraj.rows() / 2;
-    Eigen::VectorXd posTraj(trajLen);
-    Eigen::VectorXd velTraj(trajLen);
-    for (auto i = 0; i < trajLen; ++i) {
-        posTraj(i) = fullTraj(2 * i);
-        velTraj(i) = fullTraj(2 * i + 1);
-    }
-    Eigen::VectorXd control = controller.control();
-
-    // Check result
-    BOOST_CHECK_SMALL(xd(1) - velTraj.tail(1)(0), 0.001);
+    BOOST_CHECK_SMALL(xd(1) - velTraj.tail(3)(0), 0.001); // Check X_{N-1} for mixed cost because X_N is not evaluated.
 
     // Check constrains
     BOOST_REQUIRE_LE(posTraj.maxCoeff(), x0(0));
@@ -641,15 +565,15 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
     BOOST_MESSAGE(ss.str());
 }
 
-BOOST_FIXTURE_TEST_CASE(MPC_MIXED_TARGET_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
+BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
 {
     std::vector<std::pair<std::string, double> > solveTime;
 
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = mpc::MPC(ps);
-    auto xCost = std::make_shared<mpc::MixedTargetCost>(M, Eigen::MatrixXd::Zero(2, 1), -xd);
-    auto uCost = std::make_shared<mpc::MixedTargetCost>(Eigen::MatrixXd::Zero(1, 2), N, -ud);
+    auto xCost = std::make_shared<mpc::MixedCost>(M, Eigen::MatrixXd::Zero(2, 1), -xd);
+    auto uCost = std::make_shared<mpc::MixedCost>(Eigen::MatrixXd::Zero(1, 2), N, -ud);
     auto mixedConstr = std::make_shared<mpc::MixedConstraint>(E, G, f);
     xCost->weights(wx);
     uCost->weights(wu);
@@ -671,48 +595,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_MIXED_TARGET_COST_WITH_MIXED_CONSTRAINTS, MixedSyste
     Eigen::VectorXd control = controller.control();
 
     // Check result
-    BOOST_CHECK_SMALL(xd(1) - velTraj.tail(1)(0), 0.001);
-
-    // Check constrains
-    BOOST_REQUIRE_LE(posTraj.maxCoeff(), x0(0));
-    for (int i = 0; i < nbStep; ++i) {
-        auto res = E * fullTraj.segment(i * E.cols(), E.cols()) + G * control.segment(i * G.cols(), G.cols());
-        if (!(res(0) <= f(0) + 1e-6))
-            BOOST_ERROR("Mixed constraint violated!");
-    }
-}
-
-BOOST_FIXTURE_TEST_CASE(MPC_MIXED_TRAJECTORY_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
-{
-    std::vector<std::pair<std::string, double> > solveTime;
-
-    auto ps = std::make_shared<mpc::PreviewSystem>();
-    ps->system(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
-    auto xCost = std::make_shared<mpc::MixedTrajectoryCost>(M, Eigen::MatrixXd::Zero(2, 1), -xd);
-    auto uCost = std::make_shared<mpc::MixedTrajectoryCost>(Eigen::MatrixXd::Zero(1, 2), N, -ud);
-    auto mixedConstr = std::make_shared<mpc::MixedConstraint>(E, G, f);
-    xCost->weights(wx);
-    uCost->weights(wu);
-
-    controller.addCost(xCost);
-    controller.addCost(uCost);
-    controller.addConstraint(mixedConstr);
-
-    BOOST_REQUIRE(controller.solve());
-
-    Eigen::VectorXd fullTraj = controller.trajectory();
-    auto trajLen = fullTraj.rows() / 2;
-    Eigen::VectorXd posTraj(trajLen);
-    Eigen::VectorXd velTraj(trajLen);
-    for (auto i = 0; i < trajLen; ++i) {
-        posTraj(i) = fullTraj(2 * i);
-        velTraj(i) = fullTraj(2 * i + 1);
-    }
-    Eigen::VectorXd control = controller.control();
-
-    // Check result
-    BOOST_CHECK_SMALL(xd(1) - velTraj.tail(1)(0), 0.001);
+    BOOST_CHECK_SMALL(xd(1) - velTraj.tail(3)(0), 0.001); // Check X_{N-1} for mixed cost because X_N is not evaluated.
 
     // Check constrains
     BOOST_REQUIRE_LE(posTraj.maxCoeff(), x0(0));
@@ -876,13 +759,13 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
     BOOST_MESSAGE(ss.str());
 }
 
-BOOST_FIXTURE_TEST_CASE(MPC_MIXED_TARGET_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
+BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
 {
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = mpc::MPC(ps);
-    auto xCost = std::make_shared<mpc::MixedTargetCost>(M, Eigen::MatrixXd::Zero(2, 1), -xd);
-    auto uCost = std::make_shared<mpc::MixedTargetCost>(Eigen::MatrixXd::Zero(1, 2), N, -ud);
+    auto xCost = std::make_shared<mpc::MixedCost>(M, Eigen::MatrixXd::Zero(2, 1), -xd);
+    auto uCost = std::make_shared<mpc::MixedCost>(Eigen::MatrixXd::Zero(1, 2), N, -ud);
     auto trajConstr = std::make_shared<mpc::TrajectoryConstraint>(E, f, false);
     xCost->weights(wx);
     uCost->weights(wu);
@@ -904,42 +787,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_MIXED_TARGET_COST_WITH_EQUALITY_CONSTRAINTS, EqSyste
     Eigen::VectorXd control = controller.control();
 
     // Check result
-    BOOST_CHECK_SMALL(xd(1) - velTraj.tail(1)(0), 0.001);
-
-    // Check constrains
-    BOOST_REQUIRE_LE(posTraj.maxCoeff(), x0(0) + 1e-6);
-    BOOST_REQUIRE_LE(velTraj.maxCoeff(), f(0) + 1e-6);
-}
-
-BOOST_FIXTURE_TEST_CASE(MPC_MIXED_TRAJECTORY_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
-{
-    auto ps = std::make_shared<mpc::PreviewSystem>();
-    ps->system(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
-    auto xCost = std::make_shared<mpc::MixedTrajectoryCost>(M, Eigen::MatrixXd::Zero(2, 1), -xd);
-    auto uCost = std::make_shared<mpc::MixedTrajectoryCost>(Eigen::MatrixXd::Zero(1, 2), N, -ud);
-    auto trajConstr = std::make_shared<mpc::TrajectoryConstraint>(E, f, false);
-    xCost->weights(wx);
-    uCost->weights(wu);
-
-    controller.addCost(xCost);
-    controller.addCost(uCost);
-    controller.addConstraint(trajConstr);
-
-    BOOST_REQUIRE(controller.solve());
-
-    Eigen::VectorXd fullTraj = controller.trajectory();
-    auto trajLen = fullTraj.rows() / 2;
-    Eigen::VectorXd posTraj(trajLen);
-    Eigen::VectorXd velTraj(trajLen);
-    for (auto i = 0; i < trajLen; ++i) {
-        posTraj(i) = fullTraj(2 * i);
-        velTraj(i) = fullTraj(2 * i + 1);
-    }
-    Eigen::VectorXd control = controller.control();
-
-    // Check result
-    BOOST_CHECK_SMALL(xd(1) - velTraj.tail(1)(0), 0.001);
+    BOOST_CHECK_SMALL(xd(1) - velTraj.tail(3)(0), 0.001); // Check X_{N-1} for mixed cost because X_N is not evaluated.
 
     // Check constrains
     BOOST_REQUIRE_LE(posTraj.maxCoeff(), x0(0) + 1e-6);
@@ -1009,37 +857,37 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_CONTROL_COST, IneqSys
     checkSpan(fullN, -fullud, fullwu);
 }
 
-BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_TRAJECTORY_COST, IneqSystem)
+BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_COST, IneqSystem)
 {
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = mpc::MPC(ps);
 
     auto checkSpan = [&](const Eigen::MatrixXd& M, const Eigen::MatrixXd& N, const Eigen::VectorXd& p, const Eigen::VectorXd& weights) {
-        auto cost = std::make_shared<mpc::MixedTrajectoryCost>(M, N, p);
+        auto cost = std::make_shared<mpc::MixedCost>(M, N, p);
         cost->weights(weights);
         cost->autoSpan();
-
+        
         BOOST_REQUIRE_NO_THROW(controller.addCost(cost));
     };
 
-    auto MVec = std::vector<Eigen::MatrixXd>(2);
+    auto MVec = std::vector<Eigen::MatrixXd>();
     MVec.push_back(M);
     MVec.push_back(spanMatrix(M, nbStep, 1));
-    auto nnVec = std::vector<Eigen::VectorXd>(2);
+    auto nnVec = std::vector<Eigen::MatrixXd>();
     nnVec.push_back(Eigen::MatrixXd::Ones(2, 1));
     nnVec.push_back(spanMatrix(Eigen::MatrixXd::Ones(2, 1), nbStep));
-    auto udVec = std::vector<Eigen::VectorXd>(2);
-    udVec.push_back(ud);
-    udVec.push_back(spanMatrix(ud, nbStep));
-    auto wuVec = std::vector<Eigen::VectorXd>(2);
-    wuVec.push_back(wu);
-    wuVec.push_back(spanMatrix(wu, nbStep));
+    auto xdVec = std::vector<Eigen::VectorXd>();
+    xdVec.push_back(xd);
+    xdVec.push_back(spanVector(xd, nbStep));
+    auto wxVec = std::vector<Eigen::VectorXd>();
+    wxVec.push_back(wx);
+    wxVec.push_back(spanVector(wx, nbStep));
 
     for (auto& i : MVec)
         for (auto& j : nnVec)
-            for (auto& k : udVec)
-                for (auto& l : wuVec)
+            for (auto& k : xdVec)
+                for (auto& l : wxVec)
                     checkSpan(i, j, k, l);
 }
 
@@ -1108,29 +956,16 @@ BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_CONTROL_COST, IneqSystem)
     BOOST_REQUIRE_THROW(controller.addCost(badCost2), std::domain_error);
 }
 
-BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_MIXED_TARGET_COST, IneqSystem)
+BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_MIXED_COST, IneqSystem)
 {
     auto ps = std::make_shared<mpc::PreviewSystem>(A, B, c, x0, nbStep);
     auto controller = mpc::MPC(ps);
 
-    auto badCost1 = std::make_shared<mpc::MixedTargetCost>(Eigen::MatrixXd::Identity(5, 5), Eigen::MatrixXd::Identity(2, 1), Eigen::VectorXd::Ones(2));
+    auto badCost1 = std::make_shared<mpc::MixedCost>(Eigen::MatrixXd::Identity(5, 5), Eigen::MatrixXd::Identity(2, 1), Eigen::VectorXd::Ones(2));
     BOOST_REQUIRE_THROW(controller.addCost(badCost1), std::domain_error);
-    auto badCost2 = std::make_shared<mpc::MixedTargetCost>(Eigen::MatrixXd::Identity(2, 1), Eigen::MatrixXd::Identity(5, 5), Eigen::VectorXd::Ones(2));
+    auto badCost2 = std::make_shared<mpc::MixedCost>(Eigen::MatrixXd::Identity(2, 1), Eigen::MatrixXd::Identity(5, 5), Eigen::VectorXd::Ones(2));
     BOOST_REQUIRE_THROW(controller.addCost(badCost2), std::domain_error);
-    auto badCost3 = std::make_shared<mpc::MixedTargetCost>(Eigen::MatrixXd::Identity(5, 5), Eigen::MatrixXd::Identity(5, 5), Eigen::VectorXd::Ones(5));
-    BOOST_REQUIRE_THROW(controller.addCost(badCost3), std::domain_error);
-}
-
-BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_MIXED_TRAJECTORY_COST, IneqSystem)
-{
-    auto ps = std::make_shared<mpc::PreviewSystem>(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
-
-    auto badCost1 = std::make_shared<mpc::MixedTrajectoryCost>(Eigen::MatrixXd::Identity(5, 5), Eigen::MatrixXd::Identity(2, 1), Eigen::VectorXd::Ones(2));
-    BOOST_REQUIRE_THROW(controller.addCost(badCost1), std::domain_error);
-    auto badCost2 = std::make_shared<mpc::MixedTrajectoryCost>(Eigen::MatrixXd::Identity(2, 1), Eigen::MatrixXd::Identity(5, 5), Eigen::VectorXd::Ones(2));
-    BOOST_REQUIRE_THROW(controller.addCost(badCost2), std::domain_error);
-    auto badCost3 = std::make_shared<mpc::MixedTrajectoryCost>(Eigen::MatrixXd::Identity(5, 5), Eigen::MatrixXd::Identity(5, 5), Eigen::VectorXd::Ones(5));
+    auto badCost3 = std::make_shared<mpc::MixedCost>(Eigen::MatrixXd::Identity(5, 5), Eigen::MatrixXd::Identity(5, 5), Eigen::VectorXd::Ones(5));
     BOOST_REQUIRE_THROW(controller.addCost(badCost3), std::domain_error);
 }
 

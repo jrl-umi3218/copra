@@ -29,7 +29,7 @@ Eigen::MatrixXd spanMatrix(const Eigen::MatrixXd& m, int size, int addCols = 0)
     return mout;
 }
 
-Eigen::MatrixXd spanVector(const Eigen::VectorXd& v, int size) {
+Eigen::VectorXd spanVector(const Eigen::VectorXd& v, int size) {
     Eigen::VectorXd vout = Eigen::VectorXd::Zero(v.rows() * size);
     for (int i = 0; i < size; ++i)
         vout.segment(i * v.rows(), v.rows()) = v;
