@@ -29,6 +29,7 @@ namespace mpc {
 
 CostFunction::CostFunction(std::string&& name)
     : name_(std::move(name))
+    , fullSizeEntry_(false)
 {
 }
 
@@ -61,19 +62,28 @@ void TrajectoryCost::initializeCost(const PreviewSystem& ps)
         DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsAskAutoSpan("M", "p", M_, p_));
 
     if (M_.cols() == ps.xDim) {
-        AutoSpan::spanMatrix(M_, M_.rows() * ps.nrXStep); // Use autospan but this will change
-        AutoSpan::spanVector(p_, p_.rows() * ps.nrXStep); // Use autospan but this will change
-        AutoSpan::spanVector(weights_, weights_.rows() * ps.nrXStep); // Use autospan but this will change
-    } else if (M_.cols() != ps.fullXDim) {
+        Q_.setZero();
+        c_.setZero();
+    } else if (M_.cols() == ps.fullXDim) {
+        fullSizeEntry_ = true;
+    } else {
         DOMAIN_ERROR_EXCEPTION(throwMsgOnColsOnPSXDim("M", M_, &ps));
     }
 }
 
 void TrajectoryCost::update(const PreviewSystem& ps)
 {
-    Eigen::MatrixXd tmp = M_ * ps.Psi;
-    Q_.noalias() = tmp.transpose() * weights_.asDiagonal() * tmp;
-    c_.noalias() = (M_ * (ps.Phi * ps.x0 + ps.xi) + p_).transpose() * weights_.asDiagonal() * tmp;
+    if (fullSizeEntry_) {
+        Eigen::MatrixXd tmp = M_ * ps.Psi;
+        Q_ = tmp.transpose() * weights_.asDiagonal() * tmp;
+        c_ = (M_ * (ps.Phi * ps.x0 + ps.xi) + p_).transpose() * weights_.asDiagonal() * tmp;
+    } else {
+        for (int i = 0; i < ps.nrXStep; ++i) { // Can be optimized. Lot of sums of zero here
+            Eigen::MatrixXd tmp = M_ * ps.Psi.block(i * ps.xDim, 0, ps.xDim, ps.fullUDim);
+            Q_.noalias() += tmp.transpose() * weights_.asDiagonal() * tmp;
+            c_.noalias() += (M_ * (ps.Phi.block(i * ps.xDim, 0, ps.xDim, ps.xDim) * ps.x0 + ps.xi.segment(i * ps.xDim, ps.xDim)) + p_).transpose() * weights_.asDiagonal() * tmp;
+        }
+    }
 }
 
 /*************************************************************************************************
@@ -160,20 +170,29 @@ void MixedCost::initializeCost(const PreviewSystem& ps)
         DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsAskAutoSpan("N", "p", N_, p_));
 
     if (M_.cols() == ps.xDim && N_.cols() == ps.uDim) {
-        AutoSpan::spanMatrix(M_, M_.rows() * ps.nrUStep, 1); // Use autospan but this will change
-        AutoSpan::spanMatrix(N_, N_.rows() * ps.nrUStep); // Use autospan but this will change
-        AutoSpan::spanVector(p_, p_.rows() * ps.nrUStep); // Use autospan but this will change
-        AutoSpan::spanVector(weights_, weights_.rows() * ps.nrUStep); // Use autospan but this will change
-    } else if (M_.cols() != ps.fullXDim || N_.cols() != ps.fullUDim) {
+        Q_.setZero();
+        c_.setZero();
+    } else if (M_.cols() == ps.fullXDim && N_.cols() == ps.fullUDim) {
+        fullSizeEntry_ = true;
+    } else {
         DOMAIN_ERROR_EXCEPTION(throwMsgOnColsOnPSXUDim("M", "N", M_, N_, &ps));
     }
 }
 
 void MixedCost::update(const PreviewSystem& ps)
 {
-    Eigen::MatrixXd tmp = M_ * ps.Psi + N_;
-    Q_.noalias() = tmp.transpose() * weights_.asDiagonal() * tmp;
-    c_.noalias() = (M_ * (ps.Phi * ps.x0 + ps.xi) + p_).transpose() * weights_.asDiagonal() * tmp;
+    if (fullSizeEntry_) {
+        Eigen::MatrixXd tmp = M_ * ps.Psi + N_;
+        Q_.noalias() = tmp.transpose() * weights_.asDiagonal() * tmp;
+        c_.noalias() = (M_ * (ps.Phi * ps.x0 + ps.xi) + p_).transpose() * weights_.asDiagonal() * tmp;
+    } else {
+        for (int i = 0; i < ps.nrUStep; ++i) { // Can be optimized. Lot of sums of zero here
+            Eigen::MatrixXd tmp = M_ * ps.Psi.block(i * ps.xDim, 0, ps.xDim, ps.fullUDim);
+            tmp.block(0, i * ps.uDim, M_.rows(), ps.uDim).noalias() += N_;
+            Q_.noalias() += tmp.transpose() * weights_.asDiagonal() * tmp;
+            c_.noalias() += (M_ * (ps.Phi.block(i * ps.xDim, 0, ps.xDim, ps.xDim) * ps.x0 + ps.xi.segment(i * ps.xDim, ps.xDim)) + p_).transpose() * weights_.asDiagonal() * tmp;
+        }
+    }
 }
 
 } // namespace mpc

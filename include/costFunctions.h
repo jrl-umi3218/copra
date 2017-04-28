@@ -86,6 +86,7 @@ public:
 
 protected:
     std::string name_;
+    bool fullSizeEntry_;
     Eigen::MatrixXd Q_;
     Eigen::VectorXd c_;
     Eigen::VectorXd weights_;
@@ -138,7 +139,6 @@ public:
         typename = std::enable_if_t<!is_all_arithmetic<TMat, TVec>::value> >
     ControlCost(TMat&& N, TVec&& p)
         : CostFunction("ControlCost")
-        , fullSizeEntry_(false)
         , N_(std::forward<TMat>(N))
         , p_(std::forward<TVec>(p))
     {
@@ -150,7 +150,6 @@ public:
     void initializeCost(const PreviewSystem& ps) override;
 
 private:
-    bool fullSizeEntry_;
     Eigen::MatrixXd N_;
     Eigen::VectorXd p_;
 };
