@@ -82,8 +82,7 @@ BOOST_PYTHON_MODULE(_mpc)
     def("NewTrajectoryCost", NewTrajectoryCost, "Create a new instance of a TrajectoryCost shared_ptr");
     def("NewTargetCost", NewTargetCost, "Create a new instance of a TargetCost shared_ptr");
     def("NewControlCost", NewControlCost, "Create a new instance of a ControlCost shared_ptr");
-    def("NewMixedTrajectoryCost", NewMixedTrajectoryCost, "Create a new instance of a MixedTrajectoryCost shared_ptr");
-    def("NewMixedTargetCost", NewMixedTargetCost, "Create a new instance of a MixedTargetCost shared_ptr");
+    def("NewMixedCost", MixedCost, "Create a new instance of a NewMixedCost shared_ptr");
 
     enum_<SolverFlag>("SolverFlag", "Flags to qp solver")
         .value("DEFAULT", SolverFlag::DEFAULT)
@@ -264,8 +263,7 @@ BOOST_PYTHON_MODULE(_mpc)
     class_<TrajectoryCost, boost::noncopyable, bases<CostFunction> >("TrajectoryCost", "Trajectory cost. The object is instansiable through a NewTrajectoryCost function", no_init);
     class_<TargetCost, boost::noncopyable, bases<CostFunction> >("TargetCost", "Target cost. The object is instansiable through a NewTargetCost function", no_init);
     class_<ControlCost, boost::noncopyable, bases<CostFunction> >("ControlCost", "Control cost. The object is instansiable through a NewControlCost function", no_init);
-    class_<MixedTrajectoryCost, boost::noncopyable, bases<CostFunction> >("MixedTrajectoryCost", "Mixed trajectory cost. The object is instansiable through a NewMixedTrajectoryCost function", no_init);
-    class_<MixedTargetCost, boost::noncopyable, bases<CostFunction> >("MixedTargetCost", "Mixed target cost. The object is instansiable through a NewMixedTargetCost function", no_init);
+    class_<MixedCost, boost::noncopyable, bases<CostFunction> >("MixedCost", "Mixed cost. The object is instansiable through a NewMixedCost function", no_init);
 
     //MPC
     class_<MPC, boost::noncopyable>("MPC",
@@ -287,8 +285,7 @@ BOOST_PYTHON_MODULE(_mpc)
     register_ptr_to_python<std::shared_ptr<ControlConstraint> >();
     register_ptr_to_python<std::shared_ptr<ControlCost> >();
     register_ptr_to_python<std::shared_ptr<MixedConstraint> >();
-    register_ptr_to_python<std::shared_ptr<MixedTargetCost> >();
-    register_ptr_to_python<std::shared_ptr<MixedTrajectoryCost> >();
+    register_ptr_to_python<std::shared_ptr<MixedCost> >();
     register_ptr_to_python<std::shared_ptr<PreviewSystem> >();
     register_ptr_to_python<std::shared_ptr<TargetCost> >();
     register_ptr_to_python<std::shared_ptr<TrajectoryBoundConstraint> >();
@@ -300,8 +297,7 @@ BOOST_PYTHON_MODULE(_mpc)
     implicitly_convertible<std::shared_ptr<ControlConstraint>, std::shared_ptr<Constraint> >();
     implicitly_convertible<std::shared_ptr<ControlCost>, std::shared_ptr<CostFunction> >();
     implicitly_convertible<std::shared_ptr<MixedConstraint>, std::shared_ptr<Constraint> >();
-    implicitly_convertible<std::shared_ptr<MixedTargetCost>, std::shared_ptr<CostFunction> >();
-    implicitly_convertible<std::shared_ptr<MixedTrajectoryCost>, std::shared_ptr<CostFunction> >();
+    implicitly_convertible<std::shared_ptr<MixedCost>, std::shared_ptr<CostFunction> >();
     implicitly_convertible<std::shared_ptr<TargetCost>, std::shared_ptr<CostFunction> >();
     implicitly_convertible<std::shared_ptr<TrajectoryBoundConstraint>, std::shared_ptr<Constraint> >();
     implicitly_convertible<std::shared_ptr<TrajectoryConstraint>, std::shared_ptr<Constraint> >();

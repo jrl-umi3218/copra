@@ -95,7 +95,6 @@ void TargetCost::update(const PreviewSystem& ps)
     Eigen::MatrixXd tmp = M_ * ps.Psi.bottomRows(ps.xDim);
     Q_.noalias() = tmp.transpose() * weights_.asDiagonal() * tmp;
     c_.noalias() = (M_ * (ps.Phi.bottomRows(ps.xDim) * ps.x0 + ps.xi.bottomRows(ps.xDim)) + p_).transpose() * weights_.asDiagonal() * tmp;
-    std::cout << Q_.bottomRightCorner(10, 10) << std::endl;
 }
 
 /*************************************************************************************************
@@ -137,14 +136,13 @@ void ControlCost::update(const PreviewSystem& ps)
             c_.segment(i * ps.uDim, ps.uDim) = vec;
         }
     }
-    std::cout << Q_.bottomRightCorner(10, 10) << std::endl;
 }
 
 /*************************************************************************************************
- *                               Mixed Trajectory Cost Function                                  *
+ *                                    Mixed Cost Function                                        *
  *************************************************************************************************/
 
-void MixedTrajectoryCost::autoSpan()
+void MixedCost::autoSpan()
 {
     auto max_dim = std::max(M_.rows(), std::max(N_.rows(), std::max(weights_.rows(), p_.rows())));
     AutoSpan::spanMatrix(M_, max_dim, 1); // This is tricky. Has X and U are not the same dimensions, we need to handle it.
@@ -153,7 +151,7 @@ void MixedTrajectoryCost::autoSpan()
     AutoSpan::spanVector(weights_, max_dim);
 }
 
-void MixedTrajectoryCost::initializeCost(const PreviewSystem& ps)
+void MixedCost::initializeCost(const PreviewSystem& ps)
 {
     CostFunction::initializeCost(ps);
     if (M_.rows() != p_.rows())
@@ -171,37 +169,11 @@ void MixedTrajectoryCost::initializeCost(const PreviewSystem& ps)
     }
 }
 
-void MixedTrajectoryCost::update(const PreviewSystem& ps)
+void MixedCost::update(const PreviewSystem& ps)
 {
     Eigen::MatrixXd tmp = M_ * ps.Psi + N_;
     Q_.noalias() = tmp.transpose() * weights_.asDiagonal() * tmp;
     c_.noalias() = (M_ * (ps.Phi * ps.x0 + ps.xi) + p_).transpose() * weights_.asDiagonal() * tmp;
-}
-
-/*************************************************************************************************
- *                                 Mixed Target Cost Function                                    *
- *************************************************************************************************/
-
-void MixedTargetCost::initializeCost(const PreviewSystem& ps)
-{
-    CostFunction::initializeCost(ps);
-    if (M_.rows() != p_.rows())
-        DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsAskAutoSpan("M", "p", M_, p_));
-    if (N_.rows() != p_.rows())
-        DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsAskAutoSpan("N", "p", N_, p_));
-
-    if (M_.cols() != ps.xDim || N_.cols() != ps.uDim)
-        DOMAIN_ERROR_EXCEPTION(throwMsgOnColsOnPSxuDim("M", "N", M_, N_, &ps));
-}
-
-void MixedTargetCost::update(const PreviewSystem& ps)
-{
-    Eigen::MatrixXd tmp = M_ * ps.Psi.bottomRows(ps.xDim);
-    for (int i = 0; i < ps.nrUStep; ++i)
-        tmp.block(0, i * ps.uDim, M_.rows(), ps.uDim) += N_;
-    Q_.noalias() = tmp.transpose() * weights_.asDiagonal() * tmp;
-    c_.noalias() = (M_ * (ps.Phi.bottomRows(ps.xDim) * ps.x0 + ps.xi.bottomRows(ps.xDim)) + p_).transpose() * weights_.asDiagonal() * tmp;
-    std::cout << Q_.bottomRightCorner(10, 10) << std::endl;
 }
 
 } // namespace mpc

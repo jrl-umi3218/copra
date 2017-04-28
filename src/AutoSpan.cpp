@@ -23,7 +23,7 @@
 
 namespace mpc {
 
-void AutoSpan::spanMatrix(Eigen::MatrixXd &mat, Eigen::Index new_dim, int addCols)
+void AutoSpan::spanMatrix(Eigen::MatrixXd& mat, Eigen::Index new_dim, int addCols)
 {
     auto matRows = mat.rows();
     if (new_dim == matRows)
@@ -40,7 +40,7 @@ void AutoSpan::spanMatrix(Eigen::MatrixXd &mat, Eigen::Index new_dim, int addCol
         mat.block(i * matRows, i * matCols, matRows, matCols) = tmp;
 }
 
-void AutoSpan::spanVector(Eigen::VectorXd &vec, Eigen::Index new_dim)
+void AutoSpan::spanVector(Eigen::VectorXd& vec, Eigen::Index new_dim)
 {
     auto vecRows = vec.rows();
     if (new_dim == vecRows)

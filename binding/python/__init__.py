@@ -5,8 +5,7 @@ from _mpc import NewControlBoundConstraint
 from _mpc import NewControlConstraint
 from _mpc import NewControlCost
 from _mpc import NewMixedConstraint
-from _mpc import NewMixedTargetCost
-from _mpc import NewMixedTrajectoryCost
+from _mpc import NewMixedCost
 from _mpc import NewPreviewSystem
 from _mpc import NewTargetCost
 from _mpc import NewTrajectoryBoundConstraint
@@ -23,8 +22,7 @@ __all__ = ["AutoSpan",
            "NewControlConstraint",
            "NewControlCost",
            "NewMixedConstraint",
-           "NewMixedTargetCost",
-           "NewMixedTrajectoryCost",
+           "NewMixedCost",
            "NewPreviewSystem",
            "NewTargetCost",
            "NewTrajectoryBoundConstraint",
