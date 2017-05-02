@@ -60,8 +60,7 @@ auto NewControlBoundConstraint = &createSharedPointer<ControlBoundConstraint, co
 auto NewTrajectoryCost = &createSharedPointer<TrajectoryCost, const Eigen::MatrixXd&, const Eigen::VectorXd&>;
 auto NewTargetCost = &createSharedPointer<TargetCost, const Eigen::MatrixXd&, const Eigen::VectorXd&>;
 auto NewControlCost = &createSharedPointer<ControlCost, const Eigen::MatrixXd&, const Eigen::VectorXd&>;
-auto NewMixedTrajectoryCost = &createSharedPointer<MixedTrajectoryCost, const Eigen::MatrixXd&, const Eigen::MatrixXd&, const Eigen::VectorXd&>;
-auto NewMixedTargetCost = &createSharedPointer<MixedTargetCost, const Eigen::MatrixXd&, const Eigen::MatrixXd&, const Eigen::VectorXd&>;
+auto NewMixedCost = &createSharedPointer<MixedCost, const Eigen::MatrixXd&, const Eigen::MatrixXd&, const Eigen::VectorXd&>;
 } // namespace mpc
 
 BOOST_PYTHON_MODULE(_mpc)
@@ -82,7 +81,7 @@ BOOST_PYTHON_MODULE(_mpc)
     def("NewTrajectoryCost", NewTrajectoryCost, "Create a new instance of a TrajectoryCost shared_ptr");
     def("NewTargetCost", NewTargetCost, "Create a new instance of a TargetCost shared_ptr");
     def("NewControlCost", NewControlCost, "Create a new instance of a ControlCost shared_ptr");
-    def("NewMixedCost", MixedCost, "Create a new instance of a NewMixedCost shared_ptr");
+    def("NewMixedCost", NewMixedCost, "Create a new instance of a NewMixedCost shared_ptr");
 
     enum_<SolverFlag>("SolverFlag", "Flags to qp solver")
         .value("DEFAULT", SolverFlag::DEFAULT)
