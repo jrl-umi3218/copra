@@ -100,7 +100,8 @@ MPC::MPC(const std::shared_ptr<PreviewSystem>& ps, SolverFlag sFlag)
     , solveTime_()
     , solveAndBuildTime_()
 {
-    Q_.setZero();
+    Q_.setIdentity();
+    Q_ *= 1e-6; // Ensure that Q is positive definite if no cost functions are used
     c_.setZero();
     lb_.setConstant(-std::numeric_limits<double>::max());
     ub_.setConstant(std::numeric_limits<double>::max());
@@ -120,7 +121,8 @@ void MPC::initializeController(const std::shared_ptr<PreviewSystem>& ps)
 
     Q_.resize(ps_->fullUDim, ps_->fullUDim);
     c_.resize(ps_->fullUDim);
-    Q_.setZero();
+    Q_.setIdentity();
+    Q_ *= 1e-6; // Ensure that Q is positive definite if no cost functions are used
     c_.setZero();
 }
 
