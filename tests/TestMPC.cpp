@@ -811,19 +811,11 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_TRAJECTORY_COST, Ineq
 
     auto fullM = spanMatrix(M, nbXStep);
     auto fullxd = spanVector(xd, nbXStep);
-    auto fullwx = spanVector(wx, nbXStep);
 
     checkSpan(M, -xd, wx);
+    checkSpan(M, -fullxd, wx);
     checkSpan(fullM, -xd, wx);
     checkSpan(fullM, -fullxd, wx);
-    checkSpan(fullM, -xd, fullwx);
-    checkSpan(M, -fullxd, wx);
-    checkSpan(fullM, -fullxd, wx);
-    checkSpan(M, -fullxd, fullwx);
-    checkSpan(M, -xd, fullwx);
-    checkSpan(fullM, -xd, fullwx);
-    checkSpan(M, -fullxd, fullwx);
-    checkSpan(fullM, -fullxd, fullwx);
 }
 
 BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_CONTROL_COST, IneqSystem)
@@ -842,19 +834,11 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_CONTROL_COST, IneqSys
 
     auto fullN = spanMatrix(N, nbStep);
     auto fullud = spanVector(ud, nbStep);
-    auto fullwu = spanVector(wu, nbStep);
 
     checkSpan(N, -ud, wu);
+    checkSpan(N, -fullud, wu);
     checkSpan(fullN, -ud, wu);
     checkSpan(fullN, -fullud, wu);
-    checkSpan(fullN, -ud, fullwu);
-    checkSpan(N, -fullud, wu);
-    checkSpan(fullN, -fullud, wu);
-    checkSpan(N, -fullud, fullwu);
-    checkSpan(N, -ud, fullwu);
-    checkSpan(fullN, -ud, fullwu);
-    checkSpan(N, -fullud, fullwu);
-    checkSpan(fullN, -fullud, fullwu);
 }
 
 BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_COST, IneqSystem)
@@ -880,15 +864,11 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_COST, IneqSyste
     auto xdVec = std::vector<Eigen::VectorXd>();
     xdVec.push_back(xd);
     xdVec.push_back(spanVector(xd, nbStep));
-    auto wxVec = std::vector<Eigen::VectorXd>();
-    wxVec.push_back(wx);
-    wxVec.push_back(spanVector(wx, nbStep));
 
     for (auto& i : MVec)
         for (auto& j : nnVec)
             for (auto& k : xdVec)
-                for (auto& l : wxVec)
-                    checkSpan(i, j, k, l);
+                checkSpan(i, j, k, wx);
 }
 
 BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_PREVIEW_SYSTEM, IneqSystem)

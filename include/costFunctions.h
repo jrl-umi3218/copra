@@ -48,14 +48,14 @@ public:
     template <typename TVec, typename = std::enable_if_t<!is_all_arithmetic<TVec>::value> >
     void weights(TVec&& weights)
     {
-        if (weights.rows() == weights_.rows() || weights.rows() % weights_.rows() == 0) {
+        if (weights.rows() == weights_.rows()) {
             weights_ = std::forward<TVec>(weights);
         } else if (weights_.rows() % weights.rows() == 0) {
             auto size = weights_.rows() / weights.rows();
             for (auto i = 0; i < size; ++i)
                 weights_.segment(i * weights.rows(), weights.rows()) = weights;
         } else {
-            DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("weights", "weights_", weights, weights_));
+            DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsOnDim("weights", weights, weights_.rows()));
         }
     }
 
