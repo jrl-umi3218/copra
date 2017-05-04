@@ -292,7 +292,7 @@ void MPC::checkDeleteCostsAndConstraints()
         for (auto it = sp.begin(); it != sp.end();) {
             if ((*it).use_count() <= delLimit) {
                 CONSTRAINT_DELETION_WARN(useWarn, "%s%s%s", "A '", (*it)->name().c_str(),
-                    "' has been destroyed.\nThe constraint has been removed from the controller\n");
+                    "' has been destroyed.\nIt has been removed from the controller\n");
                 (void)useWarn;
                 it = sp.erase(it);
             } else {
