@@ -30,14 +30,44 @@
 
 namespace mpc {
 
+/**
+ * \brief Abstract base class that represents cost functions.
+ * Any derived class of this one can be added to the MPC \see MPC::addCost.
+ */
 class MPC_DLLAPI CostFunction {
 public:
+    /**
+     * Constructor of a cost function.
+     * \param name Name of the constraint
+     */
     CostFunction(std::string&& name);
+
+    /**
+     * Declare virtual desturctor
+     */
     virtual ~CostFunction() = default;
 
+    /**
+     * \brief Generate the full size matrices
+     * This allows one to give a cost constant matrix/vector for one step
+     * and another cost matrix/vector with the full horizon.
+     * It will expand the first matrix/vector to fit the full horizon.
+     */
     virtual void autoSpan();
-    virtual void update(const PreviewSystem& ps) = 0;
+
+    /**
+     * \brief Initialize the cost function.
+     * \param ps The preview system.
+     * \throw Throw an std::domain_error if M, N or p is of bad dimension.
+     */
     virtual void initializeCost(const PreviewSystem& ps);
+
+    /**
+     * Compute \f$Q\f$ and \f$c\f$.
+     * \param ps The preview system.
+     */
+    virtual void update(const PreviewSystem& ps) = 0;
+    
 
     /**
      * Set the weights of the system.
@@ -69,16 +99,30 @@ public:
         weights_.setConstant(weight);
     }
 
+    /**
+     * Function that return the name of the cost function.
+     * \return The name of the constraint.
+     */
     const std::string& name() const noexcept
     {
         return name_;
     }
 
+    /**
+     * \brief Function that return the Q matrix of the cost function
+     * A cost function is written \f$ \frac{1}{2} x^T Q x + c^T x\f$.
+     * \return The Q matrix
+     */
     const Eigen::MatrixXd& Q() const noexcept
     {
         return Q_;
     }
 
+    /**
+     * \brief Function that return the c vector of the cost function
+     * A cost function is written \f$ \frac{1}{2} x^T Q x + c^T x\f$.
+     * \return The c vector matrix
+     */
     const Eigen::VectorXd& c() const noexcept
     {
         return c_;
@@ -92,8 +136,20 @@ protected:
     Eigen::VectorXd weights_;
 };
 
-class TrajectoryCost final : public CostFunction {
+/**
+ * \brief Trajectory cost function class.
+ * This cost function looks for a minimization around a trajectory.
+ * Mathematically, it is \f$(MX+p)^TW_X(MX+p) \Leftrightarrow \sum_k w_k\|Mx_k+p\|^2\f$.
+ */
+class MPC_DLLAPI TrajectoryCost final : public CostFunction {
 public:
+    /**
+     * \brief Constructor of the trajectory cost function.
+     * Create a cost function of type \f$(MX+p)^TW_X(MX+p)\f$.
+     * Perform a move semantic if an rvalue is given.
+     * \param M The matrix side of the cost function
+     * \param p The vector side of the cost function
+     */
     template <typename TMat, typename TVec,
         typename = std::enable_if_t<!is_all_arithmetic<TMat, TVec>::value> >
     TrajectoryCost(TMat&& M, TVec&& p)
@@ -105,16 +161,29 @@ public:
     }
 
     void autoSpan() override;
-    void update(const PreviewSystem& ps) override;
     void initializeCost(const PreviewSystem& ps) override;
+    void update(const PreviewSystem& ps) override;
 
 private:
     Eigen::MatrixXd M_;
     Eigen::VectorXd p_;
 };
 
-class TargetCost final : public CostFunction {
+/**
+ * \brief Target cost function class.
+ * This cost function looks for target a final point.
+ * Mathematically, it is \f$(Mx_N+p)^Tw_x(Mx_N+p) \Leftrightarrow w_x\|Mx_N+p\|^2\f$.
+ */
+class MPC_DLLAPI TargetCost final : public CostFunction {
 public:
+
+    /**
+     * \brief Constructor of the target cost function.
+     * Create a cost function of type \f$(Mx_N+p)^TW_X(Mx_N+p)\f$.
+     * Perform a move semantic if an rvalue is given.
+     * \param M The matrix side of the cost function
+     * \param p The vector side of the cost function
+     */
     template <typename TMat, typename TVec,
         typename = std::enable_if_t<!is_all_arithmetic<TMat, TVec>::value> >
     TargetCost(TMat&& M, TVec&& p)
@@ -125,16 +194,28 @@ public:
         weights_ = Eigen::VectorXd::Ones(p_.rows());
     }
 
-    void update(const PreviewSystem& ps) override;
     void initializeCost(const PreviewSystem& ps) override;
+    void update(const PreviewSystem& ps) override;
 
 private:
     Eigen::MatrixXd M_;
     Eigen::VectorXd p_;
 };
 
-class ControlCost final : public CostFunction {
+/**
+ * \brief Control cost function class.
+ * This cost function looks for a minimization of the control.
+ * Mathematically, it is \f$(NU+p)^TW_U(NU+p) \Leftrightarrow sum_k w_u\|Nu_k+p\|^2\f$.
+ */
+class MPC_DLLAPI ControlCost final : public CostFunction {
 public:
+    /**
+     * \brief Constructor of the control cost function.
+     * Create a cost function of type \f$(NU+p)^TW_U(NU+p)\f$.
+     * Perform a move semantic if an rvalue is given.
+     * \param N The matrix side of the cost function
+     * \param p The vector side of the cost function
+     */
     template <typename TMat, typename TVec,
         typename = std::enable_if_t<!is_all_arithmetic<TMat, TVec>::value> >
     ControlCost(TMat&& N, TVec&& p)
@@ -154,8 +235,20 @@ private:
     Eigen::VectorXd p_;
 };
 
-class MixedCost final : public CostFunction {
+/**
+ * \brief Mixed cost function class.
+ * This cost function looks for a minimization of a linear combination of trajectory and control.
+ * Mathematically, it is \f$(MX+NU+p)^TW_M(MX+NU+p) \Leftrightarrow sum_k w_m\|Mx_k+Nu_k+p\|^2\f$.
+ */
+class MPC_DLLAPI MixedCost final : public CostFunction {
 public:
+    /**
+     * \brief Constructor of the mixed cost function.
+     * Create a cost function of type \f$(MX+NU+p)^TW_M(MX+NU+p)\f$.
+     * Perform a move semantic if an rvalue is given.
+     * \param N The matrix side of the cost function
+     * \param p The vector side of the cost function
+     */
     template <typename TMat1, typename TMat2, typename TVec,
         typename = std::enable_if_t<!is_all_arithmetic<TMat1, TMat2, TVec>::value> >
     MixedCost(TMat1&& M, TMat2&& N, TVec&& p)

@@ -45,8 +45,8 @@ enum class ConstraintFlag {
 };
 
 /**
- * \brief Abstract base class that represents Constraints.
- * Any derived class of this one can be added to the PreviewController \see MPCTypeFull::addConstraint.
+ * \brief Abstract base class that represents constraints.
+ * Any derived class of this one can be added to the MPC \see MPC::addConstraint.
  */
 class MPC_DLLAPI Constraint {
 public:
@@ -71,13 +71,13 @@ public:
 
     /**
      * Initialization of the constraint.
-     * \param ps An unique pointer to a PreviewSystem.
+     * \param ps The PreviewSystem.
      */
     virtual void initializeConstraint(const PreviewSystem& ps) = 0;
 
     /**
      * Update the constraint.
-     * \param ps An unique pointer to a PreviewSystem.
+     * \param ps The PreviewSystem.
      */
     virtual void update(const PreviewSystem& ps) = 0;
 
@@ -166,7 +166,6 @@ public:
      * \param E The matrix side of the constraint
      * \param f The vector side of the constraint
      * \param isInequalityConstraint Whether the constraint is an Inequality (true) or an Equality (false)
-     * \throw Throw an std::domain_error if E and f have not the same number of rows
      */
     template <typename TMat, typename TVec,
         typename = std::enable_if_t<!is_all_arithmetic<TMat, TVec>::value> >
@@ -194,7 +193,7 @@ public:
 
     /**
      * Compute \f$A\f$ and \f$b\f$ from \f$E\f$, \f$f\f$ and the preview system.
-     * \param ps A preview system.
+     * \param ps The preview system.
      */
     void update(const PreviewSystem& ps) override;
 

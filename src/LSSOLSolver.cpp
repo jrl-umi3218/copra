@@ -64,8 +64,7 @@ void LSSOLSolver::SI_warmStart(bool w)
     solver_->warm(w);
 }
 
-const Eigen::VectorXd&
-LSSOLSolver::SI_result() const
+const Eigen::VectorXd& LSSOLSolver::SI_result() const
 {
     return solver_->result();
 }
