@@ -109,6 +109,11 @@ void MPC::selectQPSolver(SolverFlag flag)
     sol_ = solverFactory(flag);
 }
 
+void MPC::useSolver(sts::unique_ptr<SolverInterface>&& solver)
+{
+    solver_ = std::move(solver);
+}
+
 void MPC::initializeController(const std::shared_ptr<PreviewSystem>& ps)
 {
     ps_ = ps;

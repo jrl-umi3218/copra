@@ -70,10 +70,17 @@ public:
         SolverFlag sFlag = SolverFlag::DEFAULT);
 
     /**
-     * Select a solver. This function can be called at any time.
+     * Select a solver. It will load a solver with default values.
+     * \see useSolver if you want to give to the MPC a solver with specific parameters
      * \param flag The solver to use \see pc::SolverFlag.
      */
     void selectQPSolver(SolverFlag flag);
+
+    /**
+     * Make the MPC uses a user-defined qp solver.
+     * \param solver The user-defined solver. It must inheritate from the SolverInterface.
+     */
+    void useSolver(std::unique_ptr<SolverInterface>&& solver);
 
     /**
      * Initialize the controller with regard to the preview system.

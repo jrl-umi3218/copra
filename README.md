@@ -1,6 +1,6 @@
-# preview_controller
+# Model Predictive Control
 
-preview_controller is a library implementing a model preview controller.
+Model Predictive Control is a c++ library implementing a model predictive controller.
 It uses QP softwares to solve its problem. A python binding is available.
 
 ## Installing
@@ -37,8 +37,8 @@ To have python bindings and unit tests
 #### Building with c++14
 
 ```sh
-git clone --recursive https://github.com/vsamy/preview_controller
-cd preview_controller
+git clone --recursive git@github.com:vsamy/Model-Predictive-Control.git
+cd Model-Predictive-Control
 ./build_and_install
 gedit build_and_install_config
 ./build_and_install
@@ -57,8 +57,8 @@ the variable `BUILD_CXX_TESTS` to true (default is false).
 #### Building with c++11
 
 ```sh
-git clone --recursive https://github.com/vsamy/preview_controller
-cd preview_controller
+git clone --recursive https://github.com/vsamy/Model-Predictive-Control.git
+cd Model-Predictive-Control
 git checkout c++11-back-compatibility
 ./build_and_install
 gedit build_and_install_config
@@ -76,13 +76,13 @@ For c++
 ```sh
 cd _build/tests
 ./TestSolvers --log_level=all
-./TestPreviewControl --log_level=all
+./TestMPC --log_level=all
 ```
 
 For python
 ```sh
 cd binding/python/tests
-python TestPreviewControl.py
+python TestMPController.py
 ```
 
 ## Documentation
