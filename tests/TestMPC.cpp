@@ -42,6 +42,10 @@
 #include "systems.h"
 #include "tools.h"
 
+/********************************************************************************************************
+ *                               Check Bound constraint                                                 *
+ ********************************************************************************************************/
+
 BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
 {
     std::vector<std::pair<std::string, double> > solveTime;
@@ -209,34 +213,9 @@ BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
     BOOST_REQUIRE_LE(control.maxCoeff(), uUpper(0) + 1e-6); // QuadProg allows to exceeds the constrain of a small amount.
 }
 
-BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_BOUND_CONSTRAINT, BoundedSystem)
-{
-    auto ps = std::make_shared<mpc::PreviewSystem>();
-    ps->system(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
-    int nbXStep = nbStep + 1;
-
-    auto checkSpan = [&](const Eigen::VectorXd& xLower, const Eigen::VectorXd& xUpper, const Eigen::VectorXd& uLower, const Eigen::VectorXd& uUpper) {
-        auto trajConstr = std::make_shared<mpc::TrajectoryBoundConstraint>(xLower, xUpper);
-        trajConstr->autoSpan();
-
-        auto contConstr = std::make_shared<mpc::ControlBoundConstraint>(uLower, uUpper);
-        contConstr->autoSpan();
-
-        BOOST_REQUIRE_NO_THROW(controller.addConstraint(trajConstr));
-        BOOST_REQUIRE_NO_THROW(controller.addConstraint(contConstr));
-    };
-
-    auto fullxLower = spanVector(xLower, nbXStep);
-    auto fullxUpper = spanVector(xUpper, nbXStep);
-    auto fulluLower = spanVector(uLower, nbStep);
-    auto fulluUpper = spanVector(uUpper, nbStep);
-
-    checkSpan(xLower, xUpper, uLower, uUpper);
-    checkSpan(fullxLower, xUpper, fulluLower, uUpper);
-    checkSpan(xLower, fullxUpper, uLower, fulluUpper);
-    checkSpan(fullxLower, fullxUpper, fulluLower, fulluUpper);
-}
+/********************************************************************************************************
+ *                            Check inequality constraint                                               *
+ ********************************************************************************************************/
 
 BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
 {
@@ -405,34 +384,9 @@ BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
     BOOST_REQUIRE_LE(control.maxCoeff(), h(0) + 1e-6); // QuadProg allows to exceeds the constrain of a small amount.
 }
 
-BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_INEQUALITY_CONSTRAINT, IneqSystem)
-{
-    auto ps = std::make_shared<mpc::PreviewSystem>();
-    ps->system(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
-    int nbXStep = nbStep + 1;
-
-    auto checkSpan = [&](const Eigen::MatrixXd& E, const Eigen::VectorXd& f, const Eigen::MatrixXd& G, const Eigen::VectorXd& h) {
-        auto trajConstr = std::make_shared<mpc::TrajectoryConstraint>(E, f);
-        trajConstr->autoSpan();
-
-        auto contConstr = std::make_shared<mpc::ControlConstraint>(G, h);
-        contConstr->autoSpan();
-
-        BOOST_REQUIRE_NO_THROW(controller.addConstraint(trajConstr));
-        BOOST_REQUIRE_NO_THROW(controller.addConstraint(contConstr));
-    };
-
-    auto fullE = spanMatrix(E, nbXStep);
-    auto fullf = spanVector(f, nbXStep);
-    auto fullG = spanMatrix(G, nbStep);
-    auto fullh = spanVector(h, nbStep);
-
-    checkSpan(E, f, G, h);
-    checkSpan(fullE, f, fullG, h);
-    checkSpan(E, fullf, G, fullh);
-    checkSpan(fullE, fullf, fullG, fullh);
-}
+/********************************************************************************************************
+ *                               Check Mixed constraint                                                 *
+ ********************************************************************************************************/
 
 BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
 {
@@ -606,35 +560,9 @@ BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
     }
 }
 
-BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_CONSTRAINT, MixedSystem)
-{
-    auto ps = std::make_shared<mpc::PreviewSystem>();
-    ps->system(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
-
-    auto checkSpan = [&](const Eigen::MatrixXd& E, const Eigen::MatrixXd& G, const Eigen::VectorXd& f) {
-        auto mixedConstr = std::make_shared<mpc::MixedConstraint>(E, G, f);
-        mixedConstr->autoSpan();
-
-        BOOST_REQUIRE_NO_THROW(controller.addConstraint(mixedConstr));
-    };
-
-    auto fullE = spanMatrix(E, nbStep, 1);
-    auto fullG = spanMatrix(G, nbStep);
-    auto fullf = spanVector(f, nbStep);
-
-    checkSpan(E, G, f);
-    checkSpan(fullE, G, f);
-    checkSpan(fullE, fullG, f);
-    checkSpan(fullE, G, fullf);
-    checkSpan(E, fullG, f);
-    checkSpan(fullE, fullG, f);
-    checkSpan(E, fullG, fullf);
-    checkSpan(E, G, fullf);
-    checkSpan(fullE, G, fullf);
-    checkSpan(E, fullG, fullf);
-    checkSpan(fullE, fullG, fullf);
-}
+/********************************************************************************************************
+ *                              Check Equality constraint                                               *
+ ********************************************************************************************************/
 
 BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
 {
@@ -794,6 +722,98 @@ BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
     BOOST_REQUIRE_LE(velTraj.maxCoeff(), f(0) + 1e-6);
 }
 
+/********************************************************************************************************
+ *                                   Check Autospan                                                     *
+ ********************************************************************************************************/
+
+BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_BOUND_CONSTRAINT, BoundedSystem)
+{
+    auto ps = std::make_shared<mpc::PreviewSystem>();
+    ps->system(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
+    int nbXStep = nbStep + 1;
+
+    auto checkSpan = [&](const Eigen::VectorXd& xLower, const Eigen::VectorXd& xUpper, const Eigen::VectorXd& uLower, const Eigen::VectorXd& uUpper) {
+        auto trajConstr = std::make_shared<mpc::TrajectoryBoundConstraint>(xLower, xUpper);
+        trajConstr->autoSpan();
+
+        auto contConstr = std::make_shared<mpc::ControlBoundConstraint>(uLower, uUpper);
+        contConstr->autoSpan();
+
+        BOOST_REQUIRE_NO_THROW(controller.addConstraint(trajConstr));
+        BOOST_REQUIRE_NO_THROW(controller.addConstraint(contConstr));
+    };
+
+    auto fullxLower = spanVector(xLower, nbXStep);
+    auto fullxUpper = spanVector(xUpper, nbXStep);
+    auto fulluLower = spanVector(uLower, nbStep);
+    auto fulluUpper = spanVector(uUpper, nbStep);
+
+    checkSpan(xLower, xUpper, uLower, uUpper);
+    checkSpan(fullxLower, xUpper, fulluLower, uUpper);
+    checkSpan(xLower, fullxUpper, uLower, fulluUpper);
+    checkSpan(fullxLower, fullxUpper, fulluLower, fulluUpper);
+}
+
+BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_INEQUALITY_CONSTRAINT, IneqSystem)
+{
+    auto ps = std::make_shared<mpc::PreviewSystem>();
+    ps->system(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
+    int nbXStep = nbStep + 1;
+
+    auto checkSpan = [&](const Eigen::MatrixXd& E, const Eigen::VectorXd& f, const Eigen::MatrixXd& G, const Eigen::VectorXd& h) {
+        auto trajConstr = std::make_shared<mpc::TrajectoryConstraint>(E, f);
+        trajConstr->autoSpan();
+
+        auto contConstr = std::make_shared<mpc::ControlConstraint>(G, h);
+        contConstr->autoSpan();
+
+        BOOST_REQUIRE_NO_THROW(controller.addConstraint(trajConstr));
+        BOOST_REQUIRE_NO_THROW(controller.addConstraint(contConstr));
+    };
+
+    auto fullE = spanMatrix(E, nbXStep);
+    auto fullf = spanVector(f, nbXStep);
+    auto fullG = spanMatrix(G, nbStep);
+    auto fullh = spanVector(h, nbStep);
+
+    checkSpan(E, f, G, h);
+    checkSpan(fullE, f, fullG, h);
+    checkSpan(E, fullf, G, fullh);
+    checkSpan(fullE, fullf, fullG, fullh);
+}
+
+BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_CONSTRAINT, MixedSystem)
+{
+    auto ps = std::make_shared<mpc::PreviewSystem>();
+    ps->system(A, B, c, x0, nbStep);
+    auto controller = mpc::MPC(ps);
+
+    auto checkSpan = [&](const Eigen::MatrixXd& E, const Eigen::MatrixXd& G, const Eigen::VectorXd& f) {
+        auto mixedConstr = std::make_shared<mpc::MixedConstraint>(E, G, f);
+        mixedConstr->autoSpan();
+
+        BOOST_REQUIRE_NO_THROW(controller.addConstraint(mixedConstr));
+    };
+
+    auto fullE = spanMatrix(E, nbStep, 1);
+    auto fullG = spanMatrix(G, nbStep);
+    auto fullf = spanVector(f, nbStep);
+
+    checkSpan(E, G, f);
+    checkSpan(fullE, G, f);
+    checkSpan(fullE, fullG, f);
+    checkSpan(fullE, G, fullf);
+    checkSpan(E, fullG, f);
+    checkSpan(fullE, fullG, f);
+    checkSpan(E, fullG, fullf);
+    checkSpan(E, G, fullf);
+    checkSpan(fullE, G, fullf);
+    checkSpan(E, fullG, fullf);
+    checkSpan(fullE, fullG, fullf);
+}
+
 BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_TRAJECTORY_COST, IneqSystem)
 {
     auto ps = std::make_shared<mpc::PreviewSystem>();
@@ -870,6 +890,10 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_COST, IneqSyste
             for (auto& k : xdVec)
                 checkSpan(i, j, k, wx);
 }
+
+/********************************************************************************************************
+ *                                Check Error Messages                                                  *
+ ********************************************************************************************************/
 
 BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_PREVIEW_SYSTEM, IneqSystem)
 {
