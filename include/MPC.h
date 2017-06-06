@@ -87,7 +87,7 @@ public:
      * This function needs to be called each time the system dimension changes.
      * \param ps The preview system
      */
-    virtual void initializeController(const std::shared_ptr<PreviewSystem>& ps);
+    void initializeController(const std::shared_ptr<PreviewSystem>& ps);
 
     /**
      * Solve the system.
@@ -159,7 +159,7 @@ protected:
     /**
      * QP-like format.
      */
-    virtual void makeQPForm();
+    void makeQPForm();
 
     /**
      * Check if a cost or a constraint still exist.
