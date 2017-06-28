@@ -155,6 +155,7 @@ BOOST_PYTHON_MODULE(_mpc)
     };
 
     class_<ConstraintWrap, boost::noncopyable>("Constraint", no_init) // Disable the constructor because of move semantics. No need anyway.
+        .def("autoSpan", pure_virtual(&Constraint::autoSpan))
         .def("initializeConstraint", pure_virtual(&Constraint::initializeConstraint))
         .def("update", pure_virtual(&Constraint::update))
         .def("constraintType", pure_virtual(&Constraint::constraintType))
@@ -237,16 +238,6 @@ BOOST_PYTHON_MODULE(_mpc)
         {
             this->get_override("update")(ps);
         }
-
-        void eigenWeights(const Eigen::VectorXd& w)
-        {
-            weights(w);
-        }
-
-        void doubleWeight(double w)
-        {
-            weights(w);
-        }
     };
 
     class_<CostFunctionWrap, boost::noncopyable>("CostFunction", no_init) // Disable the constructor because of move semantics. No need anyway.
@@ -255,8 +246,8 @@ BOOST_PYTHON_MODULE(_mpc)
         .def("name", &CostFunction::name, return_internal_reference<>())
         .def("Q", &CostFunction::Q, return_internal_reference<>())
         .def("c", &CostFunction::c, return_internal_reference<>())
-        .def("weights", &CostFunctionWrap::eigenWeights)
-        .def("weights", &CostFunctionWrap::doubleWeight);
+        .def("weights", &CostFunction::weights<const Eigen::VectorXd&>)
+        .def("weights", &CostFunction::weights<double>);
 
     // Delete constructor to enforce call of New<Name_of_cost> function that return a shared_ptr.
     class_<TrajectoryCost, boost::noncopyable, bases<CostFunction> >("TrajectoryCost", "Trajectory cost. The object is instansiable through a NewTrajectoryCost function", no_init);
