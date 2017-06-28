@@ -266,7 +266,7 @@ BOOST_PYTHON_MODULE(_mpc)
         .def("solveAndBuildTime", &MPC::solveAndBuildTime)
         .def("control", &MPC::control, return_internal_reference<>())
         .def("trajectory", &MPC::trajectory)
-        .def("addCost", &MPC::addConstraint)
+        .def("addCost", &MPC::addCost)
         .def("addConstraint", &MPC::addConstraint)
         .def("resetConstraints", &MPC::resetConstraints);
 
