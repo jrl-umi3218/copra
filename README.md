@@ -76,7 +76,7 @@ For c++
 ```sh
 cd _build/tests
 ./TestSolvers --log_level=all
-./TestMPC --log_level=all
+./TestLMPC --log_level=all
 ```
 
 For python
@@ -94,5 +94,5 @@ Plus you can find detailed information [here](https://vsamy.github.io)
 
 ## Examples
 
-Please see [here](https://vsamy.github.io) for an example.
+Please see [here](https://vsamy.github.io) for a detailed example.
 You can also check the tests folder.
