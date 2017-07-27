@@ -1,6 +1,6 @@
-# Model Predictive Control
+# Copra
 
-Model Predictive Control is a c++ library implementing a model predictive controller.
+Copra (**Co**ntrol & **pr**eview **a**lgorithms) is a c++ library implementing a linear model predictive controller.
 It uses QP softwares to solve its problem. A python binding is available.
 
 ## Installing
