@@ -15,9 +15,14 @@ class TestMPC(unittest.TestCase):
                           self.mass, self.timestep / self.mass)
         self.c = Vector2d((-9.81/2.) * self.timestep**2, -9.81 * self.timestep)
         self.x0 = Vector2d(0, -5)
-        self.xd = Vector2d.Zero
         self.wu = VectorXd.Ones(1) * 1e-4
         self.wx = Vector2d(10, 10000)
+
+        # Costs
+        self.xd = Vector2d.Zero
+        self.ud = VectorXd.Zero(1)
+        self.M = MatrixXd.Identity(2, 2)
+        self.N = MatrixXd.Ones(1, 1)
 
         # Inequality constraints
         self.Gineq = MatrixXd.Ones(1, 1)
@@ -47,18 +52,22 @@ class TestMPC(unittest.TestCase):
         self.Eeq[0, 0] = 1
         self.feq = self.x0Eq
 
-    def test_mpcLast_ineq(self):
+    def test_lmpc_ineq(self):
         ps = mpc.NewPreviewSystem()
-        ps.system(self.A, self.B, self.c, self.x0, self.xd, self.nbStep)
+        ps.system(self.A, self.B, self.c, self.x0, self.nbStep)
 
-        controller = mpc.MPCTypeLast(ps)
+        controller = mpc.LMPC(ps)
+        xCost = mpc.NewTargetCost(self.M, -self.xd)
+        uCost = mpc.NewControlCost(self.N, -self.ud)
         trajConstr = mpc.NewTrajectoryConstraint(self.Eineq, self.fineq)
         contConstr = mpc.NewControlConstraint(self.Gineq, self.hineq)
+        xCost.weights(self.wx)
+        uCost.weights(self.wu)
 
+        controller.addCost(xCost)
+        controller.addCost(uCost)
         controller.addConstraint(trajConstr)
         controller.addConstraint(contConstr)
-
-        controller.weights(self.wx, self.wu)
 
         self.assertTrue(controller.solve())
         control = controller.control()
@@ -74,21 +83,25 @@ class TestMPC(unittest.TestCase):
         self.assertLessEqual(max(posTraj), self.x0[0])
         self.assertLessEqual(control.maxCoeff(), self.hineq[0])
 
-        print "Test mpc last with inequalities"
-        print controller.solveTime().wall * 1e-6
-        print controller.solveAndBuildTime().wall * 1e-6
+        print "Test lmpc with inequalities"
+        print controller.solveTime(), "s"
+        print controller.solveAndBuildTime(), "s"
         print
 
-    def test_mpcLast_mixed(self):
+    def test_lmpc_mixed(self):
         ps = mpc.NewPreviewSystem()
-        ps.system(self.A, self.B, self.c, self.x0, self.xd, self.nbStep)
+        ps.system(self.A, self.B, self.c, self.x0, self.nbStep)
 
-        controller = mpc.MPCTypeLast(ps)
+        controller = mpc.LMPC(ps)
+        xCost = mpc.NewTargetCost(self.M, -self.xd)
+        uCost = mpc.NewControlCost(self.N, -self.ud)
         mixedConstr = mpc.NewMixedConstraint(self.Eineq, self.Gineq, self.hineq)
+        xCost.weights(self.wx)
+        uCost.weights(self.wu)
 
+        controller.addCost(xCost)
+        controller.addCost(uCost)
         controller.addConstraint(mixedConstr)
-
-        controller.weights(self.wx, self.wu)
 
         self.assertTrue(controller.solve())
         control = controller.control()
@@ -110,23 +123,27 @@ class TestMPC(unittest.TestCase):
                 res += self.Gineq[i, j] * control[i * self.Gineq.cols() + j]
             self.assertLessEqual(res, self.hineq[0])
 
-        print "Test mpc last with inequalities"
-        print controller.solveTime().wall * 1e-6
-        print controller.solveAndBuildTime().wall * 1e-6
+        print "Test lmpc with inequalities"
+        print controller.solveTime(), "s"
+        print controller.solveAndBuildTime(), "s"
         print
 
-    def test_mpcLast_bound(self):
+    def test_lmpc_bound(self):
         ps = mpc.NewPreviewSystem()
-        ps.system(self.A, self.B, self.c, self.x0, self.xd, self.nbStep)
+        ps.system(self.A, self.B, self.c, self.x0, self.nbStep)
 
-        controller = mpc.MPCTypeLast(ps)
+        controller = mpc.LMPC(ps)
+        xCost = mpc.NewTargetCost(self.M, -self.xd)
+        uCost = mpc.NewControlCost(self.N, -self.ud)
         trajConstr = mpc.NewTrajectoryBoundConstraint(self.xLower, self.xUpper)
         contConstr = mpc.NewControlBoundConstraint(self.uLower, self.uUpper)
+        xCost.weights(self.wx)
+        uCost.weights(self.wu)
 
+        controller.addCost(xCost)
+        controller.addCost(uCost)
         controller.addConstraint(trajConstr)
         controller.addConstraint(contConstr)
-
-        controller.weights(self.wx, self.wu)
 
         self.assertTrue(controller.solve())
         control = controller.control()
@@ -143,21 +160,25 @@ class TestMPC(unittest.TestCase):
         self.assertLessEqual(max(velTraj), self.xUpper[1] + 1e-6)
         self.assertLessEqual(max(control), self.uUpper[0] + 1e-6)
 
-        print "Test mpc last with bounds"
-        print controller.solveTime().wall * 1e-6
-        print controller.solveAndBuildTime().wall * 1e-6
+        print "Test lmpc with bounds"
+        print controller.solveTime(), "s"
+        print controller.solveAndBuildTime(), "s"
         print
 
-    def test_mpcLast_eq(self):
+    def test_lmpc_eq(self):
         ps = mpc.NewPreviewSystem()
-        ps.system(self.A, self.B, self.c, self.x0Eq, self.xdEq, self.nbStep)
+        ps.system(self.A, self.B, self.c, self.x0Eq, self.nbStep)
 
-        controller = mpc.MPCTypeLast(ps)
+        controller = mpc.LMPC(ps)
+        xCost = mpc.NewTargetCost(self.M, -self.xdEq)
+        uCost = mpc.NewControlCost(self.N, -self.ud)
         trajConstr = mpc.NewTrajectoryConstraint(self.Eeq, self.feq, False)
+        xCost.weights(self.wx)
+        uCost.weights(self.wu)
 
+        controller.addCost(xCost)
+        controller.addCost(uCost)
         controller.addConstraint(trajConstr)
-
-        controller.weights(self.wx, self.wu)
 
         self.assertTrue(controller.solve())
         control = controller.control()
@@ -173,30 +194,22 @@ class TestMPC(unittest.TestCase):
         self.assertLessEqual(max(posTraj), self.x0[0] + 1e-6)
         self.assertLessEqual(max(velTraj), self.feq[0] + 1e-6)
 
-        print "Test mpc last with equalities"
-        print controller.solveTime().wall * 1e-6
-        print controller.solveAndBuildTime().wall * 1e-6
+        print "Test lmpc with equalities"
+        print controller.solveTime(), "s"
+        print controller.solveAndBuildTime(), "s"
         print
 
     def test_constructors_initialisations(self):
         ps = mpc.NewPreviewSystem()
-        ps.system(self.A, self.B, self.c, self.x0, self.xd, self.nbStep)
+        ps.system(self.A, self.B, self.c, self.x0, self.nbStep)
 
-        c1 = mpc.MPCTypeFull(ps)
-        mpc.MPCTypeFull(mpc.SolverFlag.QuadProgDense)
-        mpc.MPCTypeFull(ps)
-        mpc.MPCTypeFull(ps, mpc.SolverFlag.QuadProgDense)
-        c2 = mpc.MPCTypeLast(ps)
-        mpc.MPCTypeLast(mpc.SolverFlag.QuadProgDense)
-        mpc.MPCTypeLast(ps)
-        mpc.MPCTypeLast(ps, mpc.SolverFlag.QuadProgDense)
+        controller = mpc.LMPC(ps)
 
-        c1.initializeController(ps)
-        c2.initializeController(ps)
+        mpc.LMPC()
+        mpc.LMPC(mpc.SolverFlag.QuadProgDense)
+        mpc.LMPC(ps, mpc.SolverFlag.QuadProgDense)
 
-    @unittest.expectedFailure
-    def test_fail_construct_previewsystem(self):
-        ps = mpc.PreviewSystem()
+        controller.initializeController(ps)
 
     @unittest.expectedFailure
     def test_fail_construct_trajectory(self):
@@ -204,7 +217,6 @@ class TestMPC(unittest.TestCase):
 
     @unittest.expectedFailure
     def test_fail_construct_control(self):
-        print "here"
         constr = mpc.ControlConstraint()
 
     @unittest.expectedFailure
@@ -215,20 +227,25 @@ class TestMPC(unittest.TestCase):
     def test_fail_construct_control(self):
         constr = mpc.ControlBoundConstraint()
 
-    def test_constraint_deletion(self):
+    def test_constraint_and_cost_deletion(self):
         print "Testing 'test_constraint_deletion'."
         print "In order to see the outputs, the mpc must be installed under Debug mode."
 
         ps = mpc.NewPreviewSystem()
-        ps.system(self.A, self.B, self.c, self.x0, self.xd, self.nbStep)
+        ps.system(self.A, self.B, self.c, self.x0, self.nbStep)
 
-        controller = mpc.MPCTypeLast(ps)
+        controller = mpc.LMPC(ps)
         trajConstr = mpc.NewTrajectoryConstraint(self.Eineq, self.fineq)
         contConstr = mpc.NewControlConstraint(self.Gineq, self.hineq)
         trajEqConstr = mpc.NewTrajectoryConstraint(self.Eeq, self.feq, False)
         contEqConstr = mpc.NewControlConstraint(self.Geq, self.heq, False)
         trajBdConstr = mpc.NewTrajectoryBoundConstraint(self.xLower, self.xUpper)
         contBdConstr = mpc.NewControlBoundConstraint(self.uLower, self.uUpper)
+        targetCost = mpc.NewTargetCost(self.M, -self.xd)
+        trajectoryCost = mpc.NewTrajectoryCost(self.M, -self.xd)
+        controlCost = mpc.NewControlCost(self.N, -self.ud)
+        M_mixed = MatrixXd.Ones(1, 2)
+        mixedCost = mpc.NewMixedCost(M_mixed, self.N, -self.ud)
         
         controller.addConstraint(trajConstr)
         controller.addConstraint(contConstr)
@@ -236,33 +253,43 @@ class TestMPC(unittest.TestCase):
         controller.addConstraint(contEqConstr)
         controller.addConstraint(trajBdConstr)
         controller.addConstraint(contBdConstr)
+        controller.addCost(targetCost)
+        controller.addCost(trajectoryCost)
+        controller.addCost(controlCost)
+        controller.addCost(mixedCost)
 
         del trajConstr
 
-        controller.weights(self.wx, self.wu)
+        targetCost.weights(self.wx)
+        controlCost.weights(self.wu)
 
         del trajEqConstr
         del contEqConstr
         del trajBdConstr
         del contBdConstr
+        del trajectoryCost
+        del mixedCost
 
         self.assertFalse(controller.solve())
         self.assertTrue(controller.solve()) # Has kept the contConstr only
-        print 
 
     def test_preview_systeme_still_exist(self):
         ps = mpc.NewPreviewSystem()
-        ps.system(self.A, self.B, self.c, self.x0, self.xd, self.nbStep)
+        ps.system(self.A, self.B, self.c, self.x0, self.nbStep)
 
-        controller = mpc.MPCTypeLast(ps)
+        controller = mpc.LMPC(ps)
         del ps
         trajConstr = mpc.NewTrajectoryConstraint(self.Eineq, self.fineq)
         contConstr = mpc.NewControlConstraint(self.Gineq, self.hineq)
+        targetCost = mpc.NewTargetCost(self.M, -self.xd)
+        controlCost = mpc.NewControlCost(self.N, -self.ud)
+        targetCost.weights(self.wx)
+        controlCost.weights(self.wu)
 
         controller.addConstraint(trajConstr)
         controller.addConstraint(contConstr)
-
-        controller.weights(self.wx, self.wu)
+        controller.addCost(targetCost)
+        controller.addCost(controlCost)
 
         self.assertTrue(controller.solve())
         control = controller.control()
@@ -280,70 +307,33 @@ class TestMPC(unittest.TestCase):
 
     def test_throw_handler(self):
         ps = mpc.NewPreviewSystem()
-        ps.system(self.A, self.B, self.c, self.x0, self.xd, self.nbStep)
+        ps.system(self.A, self.B, self.c, self.x0, self.nbStep)
 
-        controller = mpc.MPCTypeLast(ps)
+        controller = mpc.LMPC(ps)
         # Test trajectory constraint throws
         with self.assertRaises(RuntimeError):
             constr = mpc.NewTrajectoryConstraint(MatrixXd.Identity(5, 5), VectorXd.Ones(2))
             controller.addConstraint(constr)
-        
+
         # Test control constraint throws
         with self.assertRaises(RuntimeError):
             constr = mpc.NewControlConstraint(MatrixXd.Identity(5, 5), VectorXd.Ones(2))
             controller.addConstraint(constr)
-        
+
         # Test mixed constraint throws
         with self.assertRaises(RuntimeError):
             constr = mpc.NewMixedConstraint(MatrixXd.Identity(5, 5), MatrixXd.Identity(5, 5), VectorXd.Ones(2))
             controller.addConstraint(constr)
-        
+
         # Test trajectory bound constraint throws
         with self.assertRaises(RuntimeError):
             constr = mpc.NewTrajectoryBoundConstraint(VectorXd.Ones(3), VectorXd.Ones(2))
             controller.addConstraint(constr)
-        
+
         # Test control bound constraint throws
         with self.assertRaises(RuntimeError):
             constr = mpc.NewControlBoundConstraint(VectorXd.Ones(3), VectorXd.Ones(2))
             controller.addConstraint(constr)
-        
-    def test_weights(self):
-        ps = mpc.NewPreviewSystem()
-        ps.system(self.A, self.B, self.c, self.x0, self.xd, 2)
-
-        controllerF = mpc.MPCTypeFull(ps)
-        controllerL = mpc.MPCTypeLast(ps)
-
-        controllerF.weights(2.3, 2.6)
-        controllerL.weights(2.3, 2.6)
-        controllerF.weights(self.wx, self.wu)
-        controllerL.weights(self.wx, self.wu)
-        wx = VectorXd([1, 2, 3, 4, 5, 6])
-        wu = VectorXd([3, 4])
-        controllerF.weights(wx, wu)
-        wx = VectorXd([1, 2])
-        controllerL.weights(wx, wu)
-        wx = VectorXd([3, 4, 5])
-        with self.assertRaises(RuntimeError):
-            controllerF.weights(wx, wu)
-        with self.assertRaises(RuntimeError):
-            controllerL.weights(wx, wu)
-        wx = VectorXd([1, 2])
-        wu = VectorXd([3, 4, 7])
-        with self.assertRaises(RuntimeError):
-            controllerF.weights(wx, wu)
-        with self.assertRaises(RuntimeError):
-            controllerL.weights(wx, wu)
-        # Just to check that a message is printed
-        try:
-            controllerL.weights(wx, wu)
-            self.assertTrue(False)
-        except RuntimeError as e:
-            print 'Test error message handler'
-            print e
-            self.assertTrue(True)
-            
 
     def test_dynamic_walk(self):
         A = MatrixXd([
@@ -436,15 +426,18 @@ class TestMPC(unittest.TestCase):
         h = VectorXd([47.76613348420254,9.80665,9.80665, 9.80665,9.806649999999998,49.86555936465245, 9.806649999999994,47.76613348420254,9.80665, 9.80665,9.80665,9.806649999999998, 49.86555936465245,9.806649999999994,47.76613348420254, 9.80665,9.80665,9.80665, 9.806649999999998,49.86555936465245,9.806649999999994, 47.76613348420254,9.80665,9.80665, 9.80665,9.806649999999998,49.86555936465245, 9.806649999999994,47.76613348420254,9.80665, 9.80665,9.80665,9.806649999999998, 49.86555936465245,9.806649999999994,47.76613348420254, 9.80665,9.80665,9.80665, 9.806649999999998,49.86555936465245,9.806649999999994, 9.806650000000007,9.806650000000008,9.80665, 9.806650000000001,9.806650000000007,9.806649999999996, 9.806650000000007,9.806650000000008,9.80665, 9.806650000000001,9.806650000000007,9.806649999999996, 9.806650000000007,9.806650000000008,9.80665, 9.806650000000001,9.806650000000007,9.806649999999996, 9.806650000000007,9.806650000000008,9.80665, 9.806650000000001,9.806650000000007,9.806649999999996])
 
         ps = mpc.NewPreviewSystem()
-        ps.system(A, B, c, x_init, x_goal, nb_steps)
+        ps.system(A, B, c, x_init, nb_steps)
 
-        controller = mpc.MPCTypeLast(ps)
+        controller = mpc.LMPC(ps)
         contConstr = mpc.NewControlConstraint(G, h)
+        M_cost = Matrix6d.Identity
+        targetCost = mpc.NewTargetCost(M_cost, -x_goal)
 
         controller.addConstraint(contConstr)
+        controller.addCost(targetCost)
 
         controller.solve()
-        print controller.solveTime().wall*1e-6
+        print controller.solveTime(), "s"
 
 nb_steps = 10
 
