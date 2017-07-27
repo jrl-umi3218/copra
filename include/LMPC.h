@@ -51,7 +51,7 @@ class CostFunction;
  * where \f$N\f$ is the dimension of the system (the number of steps).
  * \warning This class waits for a discretized system ! Continuous systems are not implemented.
  */
-class MPC_DLLAPI MPC {
+class MPC_DLLAPI LMPC {
 public:
     /**
      * Initialize problem variables to default and get the desired solver
@@ -59,14 +59,14 @@ public:
      * \param ps A preview system to amke a copy from.
      * \param sFlag The flag corresponding to the desired solver.
      */
-    MPC(SolverFlag sFlag = SolverFlag::DEFAULT);
+    LMPC(SolverFlag sFlag = SolverFlag::DEFAULT);
     /**
      * Initialize problem variables w.r.t. the PreviewSystem and get the desired
      * solver
      * \param ps A preview system to amke a copy from.
      * \param sFlag The flag corresponding to the desired solver.
      */
-    MPC(const std::shared_ptr<PreviewSystem>& ps,
+    LMPC(const std::shared_ptr<PreviewSystem>& ps,
         SolverFlag sFlag = SolverFlag::DEFAULT);
 
     /**

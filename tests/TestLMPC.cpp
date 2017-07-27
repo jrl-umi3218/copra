@@ -31,7 +31,7 @@
 #include <Eigen/Core>
 
 // mpc
-#include "MPC.h"
+#include "LMPC.h"
 #include "PreviewSystem.h"
 #include "constraints.h"
 #include "costFunctions.h"
@@ -52,7 +52,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
 
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
+    auto controller = mpc::LMPC(ps);
     auto xCost = std::make_shared<mpc::TargetCost>(M, -xd);
     auto uCost = std::make_shared<mpc::ControlCost>(N, -ud);
     auto trajConstr = std::make_shared<mpc::TrajectoryBoundConstraint>(xLower, xUpper);
@@ -117,7 +117,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS, BoundedSyste
 
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
+    auto controller = mpc::LMPC(ps);
     auto xCost = std::make_shared<mpc::TrajectoryCost>(M, -xd);
     auto uCost = std::make_shared<mpc::ControlCost>(N, -ud);
     auto trajConstr = std::make_shared<mpc::TrajectoryBoundConstraint>(xLower, xUpper);
@@ -179,7 +179,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
 {
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
+    auto controller = mpc::LMPC(ps);
     auto xCost = std::make_shared<mpc::MixedCost>(M, Eigen::MatrixXd::Zero(2, 1), -xd); // min(||X - Xt||^2)
     auto uCost = std::make_shared<mpc::MixedCost>(Eigen::MatrixXd::Zero(1, 2), N, -ud); // min(||U - Ut||^2)
     auto trajConstr = std::make_shared<mpc::TrajectoryBoundConstraint>(xLower, xUpper);
@@ -223,7 +223,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
 
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
+    auto controller = mpc::LMPC(ps);
     auto xCost = std::make_shared<mpc::TargetCost>(M, -xd);
     auto uCost = std::make_shared<mpc::ControlCost>(N, -ud);
     auto trajConstr = std::make_shared<mpc::TrajectoryConstraint>(E, f);
@@ -288,7 +288,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSys
 
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
+    auto controller = mpc::LMPC(ps);
     auto xCost = std::make_shared<mpc::TrajectoryCost>(M, -xd);
     auto uCost = std::make_shared<mpc::ControlCost>(N, -ud);
     auto trajConstr = std::make_shared<mpc::TrajectoryConstraint>(E, f);
@@ -350,7 +350,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
 {
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
+    auto controller = mpc::LMPC(ps);
     auto xCost = std::make_shared<mpc::MixedCost>(M, Eigen::MatrixXd::Zero(2, 1), -xd);
     auto uCost = std::make_shared<mpc::MixedCost>(Eigen::MatrixXd::Zero(1, 2), N, -ud);
     auto trajConstr = std::make_shared<mpc::TrajectoryConstraint>(E, f);
@@ -394,7 +394,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
 
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
+    auto controller = mpc::LMPC(ps);
     auto xCost = std::make_shared<mpc::TargetCost>(M, -xd);
     auto uCost = std::make_shared<mpc::ControlCost>(N, -ud);
     auto mixedConstr = std::make_shared<mpc::MixedConstraint>(E, G, f);
@@ -460,7 +460,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
 
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
+    auto controller = mpc::LMPC(ps);
     auto xCost = std::make_shared<mpc::TrajectoryCost>(M, -xd);
     auto uCost = std::make_shared<mpc::ControlCost>(N, -ud);
     auto mixedConstr = std::make_shared<mpc::MixedConstraint>(E, G, f);
@@ -525,7 +525,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
 
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
+    auto controller = mpc::LMPC(ps);
     auto xCost = std::make_shared<mpc::MixedCost>(M, Eigen::MatrixXd::Zero(2, 1), -xd);
     auto uCost = std::make_shared<mpc::MixedCost>(Eigen::MatrixXd::Zero(1, 2), N, -ud);
     auto mixedConstr = std::make_shared<mpc::MixedConstraint>(E, G, f);
@@ -570,7 +570,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
 
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
+    auto controller = mpc::LMPC(ps);
     auto xCost = std::make_shared<mpc::TargetCost>(M, -xd);
     auto uCost = std::make_shared<mpc::ControlCost>(N, -ud);
     auto trajConstr = std::make_shared<mpc::TrajectoryConstraint>(E, f, false);
@@ -632,7 +632,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
 
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
+    auto controller = mpc::LMPC(ps);
     auto xCost = std::make_shared<mpc::TrajectoryCost>(M, -xd);
     auto uCost = std::make_shared<mpc::ControlCost>(N, -ud);
     auto trajConstr = std::make_shared<mpc::TrajectoryConstraint>(E, f, false);
@@ -691,7 +691,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
 {
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
+    auto controller = mpc::LMPC(ps);
     auto xCost = std::make_shared<mpc::MixedCost>(M, Eigen::MatrixXd::Zero(2, 1), -xd);
     auto uCost = std::make_shared<mpc::MixedCost>(Eigen::MatrixXd::Zero(1, 2), N, -ud);
     auto trajConstr = std::make_shared<mpc::TrajectoryConstraint>(E, f, false);
@@ -730,7 +730,7 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_BOUND_CONSTRAINT, Bou
 {
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
+    auto controller = mpc::LMPC(ps);
     int nbXStep = nbStep + 1;
 
     auto checkSpan = [&](const Eigen::VectorXd& xLower, const Eigen::VectorXd& xUpper, const Eigen::VectorXd& uLower, const Eigen::VectorXd& uUpper) {
@@ -759,7 +759,7 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_INEQUALITY_CONSTRAINT
 {
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
+    auto controller = mpc::LMPC(ps);
     int nbXStep = nbStep + 1;
 
     auto checkSpan = [&](const Eigen::MatrixXd& E, const Eigen::VectorXd& f, const Eigen::MatrixXd& G, const Eigen::VectorXd& h) {
@@ -788,7 +788,7 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_CONSTRAINT, Mix
 {
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
+    auto controller = mpc::LMPC(ps);
 
     auto checkSpan = [&](const Eigen::MatrixXd& E, const Eigen::MatrixXd& G, const Eigen::VectorXd& f) {
         auto mixedConstr = std::make_shared<mpc::MixedConstraint>(E, G, f);
@@ -818,7 +818,7 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_TRAJECTORY_COST, Ineq
 {
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
+    auto controller = mpc::LMPC(ps);
     int nbXStep = nbStep + 1;
 
     auto checkSpan = [&](const Eigen::MatrixXd& M, const Eigen::VectorXd& p, const Eigen::VectorXd& weights) {
@@ -842,7 +842,7 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_CONTROL_COST, IneqSys
 {
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
+    auto controller = mpc::LMPC(ps);
 
     auto checkSpan = [&](const Eigen::MatrixXd& M, const Eigen::VectorXd& p, const Eigen::VectorXd& weights) {
         auto cost = std::make_shared<mpc::ControlCost>(M, p);
@@ -865,7 +865,7 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_COST, IneqSyste
 {
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
+    auto controller = mpc::LMPC(ps);
 
     auto checkSpan = [&](const Eigen::MatrixXd& M, const Eigen::MatrixXd& N, const Eigen::VectorXd& p, const Eigen::VectorXd& weights) {
         auto cost = std::make_shared<mpc::MixedCost>(M, N, p);
@@ -917,7 +917,7 @@ BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_WEIGTHS, IneqSystem)
 {
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
+    auto controller = mpc::LMPC(ps);
     auto cost = std::make_shared<mpc::TrajectoryCost>(M, -xd);
 
     BOOST_REQUIRE_NO_THROW(cost->weights(2));
@@ -930,7 +930,7 @@ BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_WEIGTHS, IneqSystem)
 BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_TRAJECTORY_COST, IneqSystem)
 {
     auto ps = std::make_shared<mpc::PreviewSystem>(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
+    auto controller = mpc::LMPC(ps);
 
     auto badCost1 = std::make_shared<mpc::TrajectoryCost>(Eigen::MatrixXd::Identity(5, 5), Eigen::VectorXd::Ones(2));
     BOOST_REQUIRE_THROW(controller.addCost(badCost1), std::domain_error);
@@ -941,7 +941,7 @@ BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_TRAJECTORY_COST, IneqSystem)
 BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_TARGET_COST, IneqSystem)
 {
     auto ps = std::make_shared<mpc::PreviewSystem>(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
+    auto controller = mpc::LMPC(ps);
 
     auto badCost1 = std::make_shared<mpc::TargetCost>(Eigen::MatrixXd::Identity(5, 5), Eigen::VectorXd::Ones(2));
     BOOST_REQUIRE_THROW(controller.addCost(badCost1), std::domain_error);
@@ -952,7 +952,7 @@ BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_TARGET_COST, IneqSystem)
 BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_CONTROL_COST, IneqSystem)
 {
     auto ps = std::make_shared<mpc::PreviewSystem>(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
+    auto controller = mpc::LMPC(ps);
 
     auto badCost1 = std::make_shared<mpc::ControlCost>(Eigen::MatrixXd::Identity(5, 5), Eigen::VectorXd::Ones(2));
     BOOST_REQUIRE_THROW(controller.addCost(badCost1), std::domain_error);
@@ -963,7 +963,7 @@ BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_CONTROL_COST, IneqSystem)
 BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_MIXED_COST, IneqSystem)
 {
     auto ps = std::make_shared<mpc::PreviewSystem>(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
+    auto controller = mpc::LMPC(ps);
 
     auto badCost1 = std::make_shared<mpc::MixedCost>(Eigen::MatrixXd::Identity(5, 5), Eigen::MatrixXd::Identity(2, 1), Eigen::VectorXd::Ones(2));
     BOOST_REQUIRE_THROW(controller.addCost(badCost1), std::domain_error);
@@ -977,7 +977,7 @@ BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_TRAJECTORY_CONSTRAINT, IneqSystem)
 {
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
+    auto controller = mpc::LMPC(ps);
 
     auto badConstr = std::make_shared<mpc::TrajectoryConstraint>(Eigen::MatrixXd::Identity(5, 5), Eigen::VectorXd::Ones(2));
     BOOST_REQUIRE_THROW(controller.addConstraint(badConstr), std::domain_error);
@@ -989,7 +989,7 @@ BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_CONTROL_CONSTRAINT, IneqSystem)
 {
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
+    auto controller = mpc::LMPC(ps);
 
     auto badConstr1 = std::make_shared<mpc::ControlConstraint>(Eigen::MatrixXd::Identity(5, 5), Eigen::VectorXd::Ones(2));
     BOOST_REQUIRE_THROW(controller.addConstraint(badConstr1), std::domain_error);
@@ -1005,7 +1005,7 @@ BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_MIXED_CONSTRAINT, IneqSystem)
 {
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
+    auto controller = mpc::LMPC(ps);
 
     auto badConstr1 = std::make_shared<mpc::MixedConstraint>(Eigen::MatrixXd::Identity(5, 5), Eigen::MatrixXd::Identity(2, 1), Eigen::VectorXd::Ones(2));
     BOOST_REQUIRE_THROW(controller.addConstraint(badConstr1), std::domain_error);
@@ -1019,7 +1019,7 @@ BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_TRAJECTORY_BOUND_CONSTRAINT, BoundedSy
 {
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
+    auto controller = mpc::LMPC(ps);
 
     auto badConstr = std::make_shared<mpc::TrajectoryBoundConstraint>(Eigen::VectorXd::Ones(3), Eigen::VectorXd::Ones(2));
     BOOST_REQUIRE_THROW(controller.addConstraint(badConstr), std::domain_error);
@@ -1031,7 +1031,7 @@ BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_CONTROL_BOUND_CONSTRAINT, BoundedSyste
 {
     auto ps = std::make_shared<mpc::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
-    auto controller = mpc::MPC(ps);
+    auto controller = mpc::LMPC(ps);
 
     auto badConstr1 = std::make_shared<mpc::ControlBoundConstraint>(Eigen::VectorXd::Ones(3), Eigen::VectorXd::Ones(2));
     BOOST_REQUIRE_THROW(controller.addConstraint(badConstr1), std::domain_error);

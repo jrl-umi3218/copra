@@ -16,7 +16,7 @@
 // <http://www.gnu.org/licenses/>.
 
 // header
-#include "MPC.h"
+#include "LMPC.h"
 
 // stl
 #include <algorithm>
@@ -30,7 +30,7 @@
 
 namespace mpc {
 
-MPC::Constraints::Constraints()
+LMPC::Constraints::Constraints()
     : nrEqConstr(0)
     , nrIneqConstr(0)
     , spConstr()
@@ -40,7 +40,7 @@ MPC::Constraints::Constraints()
 {
 }
 
-void MPC::Constraints::updateNr()
+void LMPC::Constraints::updateNr()
 {
     nrEqConstr = 0;
     nrIneqConstr = 0;
@@ -54,7 +54,7 @@ void MPC::Constraints::updateNr()
     countConstr(spIneqConstr, nrIneqConstr);
 }
 
-void MPC::Constraints::clear()
+void LMPC::Constraints::clear()
 {
     nrEqConstr = 0;
     nrIneqConstr = 0;
@@ -65,10 +65,10 @@ void MPC::Constraints::clear()
 }
 
 /*************************************************************************************************
- *                                             MPC                                               *
+ *                                             LMPC                                               *
  *************************************************************************************************/
 
-MPC::MPC(SolverFlag sFlag)
+LMPC::LMPC(SolverFlag sFlag)
     : ps_(nullptr)
     , sol_(solverFactory(sFlag))
     , constraints_()
@@ -85,7 +85,7 @@ MPC::MPC(SolverFlag sFlag)
 {
 }
 
-MPC::MPC(const std::shared_ptr<PreviewSystem>& ps, SolverFlag sFlag)
+LMPC::LMPC(const std::shared_ptr<PreviewSystem>& ps, SolverFlag sFlag)
     : ps_(ps)
     , sol_(solverFactory(sFlag))
     , constraints_()
@@ -104,17 +104,17 @@ MPC::MPC(const std::shared_ptr<PreviewSystem>& ps, SolverFlag sFlag)
     ub_.setConstant(std::numeric_limits<double>::max());
 }
 
-void MPC::selectQPSolver(SolverFlag flag)
+void LMPC::selectQPSolver(SolverFlag flag)
 {
     sol_ = solverFactory(flag);
 }
 
-void MPC::useSolver(std::unique_ptr<SolverInterface>&& solver)
+void LMPC::useSolver(std::unique_ptr<SolverInterface>&& solver)
 {
     sol_ = std::move(solver);
 }
 
-void MPC::initializeController(const std::shared_ptr<PreviewSystem>& ps)
+void LMPC::initializeController(const std::shared_ptr<PreviewSystem>& ps)
 {
     ps_ = ps;
     clearConstraintMatrices();
@@ -123,7 +123,7 @@ void MPC::initializeController(const std::shared_ptr<PreviewSystem>& ps)
     c_.resize(ps_->fullUDim);
 }
 
-bool MPC::solve()
+bool LMPC::solve()
 {
     using namespace std::chrono;
     auto sabTime = high_resolution_clock::now();
@@ -144,39 +144,39 @@ bool MPC::solve()
     return success;
 }
 
-const Eigen::VectorXd& MPC::control() const noexcept
+const Eigen::VectorXd& LMPC::control() const noexcept
 {
     return sol_->SI_result();
 }
 
-Eigen::VectorXd MPC::trajectory() const noexcept
+Eigen::VectorXd LMPC::trajectory() const noexcept
 {
     return ps_->Phi * ps_->x0 + ps_->Psi * control() + ps_->xi;
 }
 
-double MPC::solveTime() const noexcept
+double LMPC::solveTime() const noexcept
 {
     return solveTime_.count();
 }
 
-double MPC::solveAndBuildTime() const noexcept
+double LMPC::solveAndBuildTime() const noexcept
 {
     return solveAndBuildTime_.count();
 }
 
-void MPC::addCost(const std::shared_ptr<CostFunction>& costFun)
+void LMPC::addCost(const std::shared_ptr<CostFunction>& costFun)
 {
     costFun->initializeCost(*ps_);
     spCost_.emplace_back(costFun);
 }
 
-void MPC::addConstraint(const std::shared_ptr<Constraint>& constr)
+void LMPC::addConstraint(const std::shared_ptr<Constraint>& constr)
 {
     constr->initializeConstraint(*ps_);
     addConstraintByType(constr);
 }
 
-void MPC::resetConstraints() noexcept
+void LMPC::resetConstraints() noexcept
 {
     constraints_.clear();
     clearConstraintMatrices();
@@ -186,7 +186,7 @@ void MPC::resetConstraints() noexcept
  *  Protected methods
  */
 
-void MPC::addConstraintByType(const std::shared_ptr<Constraint>& constr)
+void LMPC::addConstraintByType(const std::shared_ptr<Constraint>& constr)
 {
     switch (constr->constraintType()) {
     case ConstraintFlag::EqualityConstraint: {
@@ -213,7 +213,7 @@ void MPC::addConstraintByType(const std::shared_ptr<Constraint>& constr)
     constraints_.spConstr.emplace_back(constr);
 }
 
-void MPC::clearConstraintMatrices()
+void LMPC::clearConstraintMatrices()
 {
     assert(ps_ != nullptr);
 
@@ -227,7 +227,7 @@ void MPC::clearConstraintMatrices()
     ub_.setConstant(std::numeric_limits<double>::max());
 }
 
-void MPC::updateSystem()
+void LMPC::updateSystem()
 {
     // Reset the QP variables
     Q_.setIdentity();
@@ -253,7 +253,7 @@ void MPC::updateSystem()
         sp->update(*ps_);
 }
 
-void MPC::makeQPForm()
+void LMPC::makeQPForm()
 {
     for (auto& cost : spCost_) {
         Q_ += cost->Q();
@@ -285,7 +285,7 @@ void MPC::makeQPForm()
     }
 }
 
-void MPC::checkDeleteCostsAndConstraints()
+void LMPC::checkDeleteCostsAndConstraints()
 {
     auto check = [](auto& sp, bool useWarn = false, int delLimit = 2) {
         for (auto it = sp.begin(); it != sp.end();) {
