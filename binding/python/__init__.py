@@ -1,6 +1,6 @@
 from _mpc import AutoSpan
 from _mpc import ControlConstraint
-from _mpc import MPC
+from _mpc import LMPC
 from _mpc import NewControlBoundConstraint
 from _mpc import NewControlConstraint
 from _mpc import NewControlCost
@@ -17,7 +17,7 @@ from _mpc import TrajectoryConstraint
 
 __all__ = ["AutoSpan",
            "ControlConstraint",
-           "MPC",
+           "LMPC",
            "NewControlBoundConstraint",
            "NewControlConstraint",
            "NewControlCost",

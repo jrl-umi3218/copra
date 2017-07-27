@@ -15,7 +15,7 @@
 // along with mpc.  If not, see
 // <http://www.gnu.org/licenses/>.
 
-#include "MPC.h"
+#include "LMPC.h"
 #include "AutoSpan.h"
 #include "PreviewSystem.h"
 #include "constraints.h"
@@ -255,20 +255,20 @@ BOOST_PYTHON_MODULE(_mpc)
     class_<ControlCost, boost::noncopyable, bases<CostFunction> >("ControlCost", "Control cost. The object is instansiable through a NewControlCost function", no_init);
     class_<MixedCost, boost::noncopyable, bases<CostFunction> >("MixedCost", "Mixed cost. The object is instansiable through a NewMixedCost function", no_init);
 
-    //MPC
-    class_<MPC, boost::noncopyable>("MPC",
-        "MPC. This class runs the mpc with the desired QP and fills the PreviewSystem it is attach to", init<optional<SolverFlag> >())
+    //LMPC
+    class_<LMPC, boost::noncopyable>("LMPC",
+        "LMPC. This class runs the mpc with the desired QP and fills the PreviewSystem it is attach to", init<optional<SolverFlag> >())
         .def(init<const std::shared_ptr<PreviewSystem>&, optional<SolverFlag> >())
-        .def("selectQPSolver", &MPC::selectQPSolver)
-        .def("initializeController", &MPC::initializeController)
-        .def("solve", &MPC::solve)
-        .def("solveTime", &MPC::solveTime)
-        .def("solveAndBuildTime", &MPC::solveAndBuildTime)
-        .def("control", &MPC::control, return_internal_reference<>())
-        .def("trajectory", &MPC::trajectory)
-        .def("addCost", &MPC::addCost)
-        .def("addConstraint", &MPC::addConstraint)
-        .def("resetConstraints", &MPC::resetConstraints);
+        .def("selectQPSolver", &LMPC::selectQPSolver)
+        .def("initializeController", &LMPC::initializeController)
+        .def("solve", &LMPC::solve)
+        .def("solveTime", &LMPC::solveTime)
+        .def("solveAndBuildTime", &LMPC::solveAndBuildTime)
+        .def("control", &LMPC::control, return_internal_reference<>())
+        .def("trajectory", &LMPC::trajectory)
+        .def("addCost", &LMPC::addCost)
+        .def("addConstraint", &LMPC::addConstraint)
+        .def("resetConstraints", &LMPC::resetConstraints);
 
     // Register pointer
     register_ptr_to_python<std::shared_ptr<ControlBoundConstraint> >();
