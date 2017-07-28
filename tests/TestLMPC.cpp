@@ -871,7 +871,7 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_COST, IneqSyste
         auto cost = std::make_shared<mpc::MixedCost>(M, N, p);
         cost->weights(weights);
         cost->autoSpan();
-        
+
         BOOST_REQUIRE_NO_THROW(controller.addCost(cost));
     };
 
@@ -1041,4 +1041,35 @@ BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_CONTROL_BOUND_CONSTRAINT, BoundedSyste
     auto goodConstr = std::make_shared<mpc::ControlBoundConstraint>(uLower, uUpper);
     controller.addConstraint(goodConstr);
     BOOST_REQUIRE_THROW(controller.addConstraint(goodConstr), std::runtime_error);
+}
+
+/********************************************************************************************************
+ *                               Check remove functions                                                 *
+ ********************************************************************************************************/
+
+BOOST_FIXTURE_TEST_CASE(REMOVE_COST_AND_CONSTRAINT, IneqSystem)
+{
+    auto ps = std::make_shared<mpc::PreviewSystem>(A, B, c, x0, nbStep);
+    auto controller = mpc::LMPC(ps);
+
+    {
+        auto xCost = std::make_shared<mpc::TargetCost>(M, -xd);
+        auto uCost = std::make_shared<mpc::ControlCost>(N, -ud);
+        auto trajConstr = std::make_shared<mpc::TrajectoryConstraint>(E, f);
+        auto contConstr = std::make_shared<mpc::ControlConstraint>(G, h);
+
+        controller.addCost(xCost);
+        controller.addCost(uCost);
+        controller.addConstraint(trajConstr);
+        controller.addConstraint(contConstr);
+
+        controller.removeCost(xCost);
+        controller.removeCost(uCost);
+        controller.removeConstraint(trajConstr);
+        controller.removeConstraint(contConstr);
+    }
+
+    BOOST_TEST_MESSAGE("\nIn DEBUG mode, if a message appears between this line\n*******");
+    controller.solve();
+    BOOST_TEST_MESSAGE("*******\nand this line, the remove methods have failed!");
 }

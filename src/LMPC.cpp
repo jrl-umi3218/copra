@@ -182,6 +182,33 @@ void LMPC::resetConstraints() noexcept
     clearConstraintMatrices();
 }
 
+void LMPC::removeCost(const std::shared_ptr<CostFunction>& costFun)
+{
+    auto rCost = std::find(spCost_.begin(), spCost_.end(), costFun);
+    if (rCost != spCost_.end())
+        spCost_.erase(rCost);
+}
+
+void LMPC::removeConstraint(const std::shared_ptr<Constraint>& constr)
+{
+    auto rConstr = std::find(constraints_.spConstr.begin(), constraints_.spConstr.end(), constr);
+    if (rConstr != constraints_.spConstr.end()) {
+        constraints_.spConstr.erase(rConstr);
+        switch (constr->constraintType()) {
+            case ConstraintFlag::Constraint:
+            case ConstraintFlag::EqualityConstraint: 
+                constraints_.spEqConstr.erase(std::find(constraints_.spEqConstr.begin(), constraints_.spEqConstr.end(), constr));
+                break;
+            case ConstraintFlag::InequalityConstraint:
+                constraints_.spIneqConstr.erase(std::find(constraints_.spIneqConstr.begin(), constraints_.spIneqConstr.end(), constr));
+                break;
+            case ConstraintFlag::BoundConstraint:
+                constraints_.spBoundConstr.erase(std::find(constraints_.spBoundConstr.begin(), constraints_.spBoundConstr.end(), constr));
+                break;
+        }
+    }
+}
+
 /*
  *  Protected methods
  */
@@ -194,7 +221,6 @@ void LMPC::addConstraintByType(const std::shared_ptr<Constraint>& constr)
         // DownCasting to std::shared_ptr<EqIneqConstraint>
         // This is a safe operation since we know that the object is a derived class of a EqIneqConstraint
         constraints_.spEqConstr.emplace_back(std::static_pointer_cast<EqIneqConstraint>(constr));
-    ub_.setConstant(std::numeric_limits<double>::max());
     } break;
     case ConstraintFlag::InequalityConstraint: {
         constraints_.nrIneqConstr += constr->nrConstr();
@@ -303,7 +329,6 @@ void LMPC::checkDeleteCostsAndConstraints()
     check(constraints_.spConstr, true);
     check(constraints_.spEqConstr);
     check(constraints_.spIneqConstr);
-    check(constraints_.spBoundConstr);
     check(constraints_.spBoundConstr);
     check(spCost_, true, 1);
 }

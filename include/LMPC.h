@@ -137,6 +137,16 @@ public:
      */
     void resetConstraints() noexcept;
 
+    /**
+     * Remove cost
+     */
+    void removeCost(const std::shared_ptr<CostFunction>& costFun);
+
+    /**
+     * Remove cost
+     */
+    void removeConstraint(const std::shared_ptr<Constraint>& constr);
+
 protected:
     /**
      * Add constraints into constraints_ \see Constraints
