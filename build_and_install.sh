@@ -65,10 +65,10 @@ main() {
 
 	load_build_config
 
-	build_and_install eigen-quadprog
+	build_and_install 3rd-party/eigen-quadprog
 	if $PYTHON_BINDINGS
 	then
-		build_and_install minieigen
+		build_and_install 3rd-party/minieigen
 	fi
 	build_and_install ./
 }
