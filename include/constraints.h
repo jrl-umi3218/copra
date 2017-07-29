@@ -1,18 +1,18 @@
-// This file is part of mpc.
+// This file is part of copra.
 
-// mpc is free software: you can redistribute it and/or
+// copra is free software: you can redistribute it and/or
 // modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// mpc is distributed in the hope that it will be useful,
+// copra is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with mpc.  If not, see
+// along with copra.  If not, see
 // <http://www.gnu.org/licenses/>.
 
 #pragma once
@@ -24,12 +24,12 @@
 // eigen
 #include <Eigen/Core>
 
-// mpc
+// copra
 #include "config.hh"
 #include "debugUtils.h"
 #include "typedefs.h"
 
-namespace mpc {
+namespace copra {
 
 //forward declaration
 struct PreviewSystem;
@@ -48,7 +48,7 @@ enum class ConstraintFlag {
  * \brief Abstract base class that represents constraints.
  * Any derived class of this one can be added to the MPC \see MPC::addConstraint.
  */
-class MPC_DLLAPI Constraint {
+class COPRA_DLLAPI Constraint {
 public:
     /**
      * Constructor of a constraint.
@@ -116,7 +116,7 @@ protected:
  * \brief Abstract Class for Equality and Inequality constraints.
  * Even if Equality and Inequality constraints are different, their matrices are written the same way.
  */
-class MPC_DLLAPI EqIneqConstraint : public Constraint {
+class COPRA_DLLAPI EqIneqConstraint : public Constraint {
 public:
     /**
      * Constructor of a constraint.
@@ -155,7 +155,7 @@ protected:
  * it can be an Equality constraints (\f$Ex = f\f$ or \f$EX = f\f$)
  * or an Inequality constraints (\f$Ex\leq f\f$ or \f$EX\leq f\f$) with \f$X=[x_1^T ... x_{nrStep}^T]^T\f$.
  */
-class MPC_DLLAPI TrajectoryConstraint final : public EqIneqConstraint {
+class COPRA_DLLAPI TrajectoryConstraint final : public EqIneqConstraint {
 public:
     /**
      * \brief Constructor of the trajectory constraint.
@@ -215,7 +215,7 @@ private:
  * it can be an Equality constraints (\f$Eu = f\f$ or \f$EU = f\f$)
  * or an Inequality constraints (\f$Eu\leq f\f$ or \f$EU\leq f\f$) with \f$U=[u_0^T ... u_{N-1}^T]^T\f$
  */
-class MPC_DLLAPI ControlConstraint final : public EqIneqConstraint {
+class COPRA_DLLAPI ControlConstraint final : public EqIneqConstraint {
 public:
     /**
      * \brief Constructor of the control constraint.
@@ -276,7 +276,7 @@ private:
  * or an Inequality constraints (\f$Ex + Gu\leq f\f$ or \f$EX + GU\leq f\f$)\n
  * with \f$X=[x_1^T ... x_N^T]^T\f$ and \f$U=[u_0^T ... u_{N-1}^T]^T\f$
  */
-class MPC_DLLAPI MixedConstraint final : public EqIneqConstraint {
+class COPRA_DLLAPI MixedConstraint final : public EqIneqConstraint {
 public:
     /**
      * \brief Constructor of the control constraint.
@@ -341,7 +341,7 @@ private:
  * \warning This constraint is defined in the QP as an Inequality constraint. 
  * It might be faster to transform yourself this constraint into an inequality constraint.
  */
-class MPC_DLLAPI TrajectoryBoundConstraint final : public EqIneqConstraint {
+class COPRA_DLLAPI TrajectoryBoundConstraint final : public EqIneqConstraint {
 public:
     /**
      * \brief Constructor of the trajectory Bound constraint.
@@ -409,7 +409,7 @@ private:
  * \brief Control Bound constraint.
  * It bounds the optimization \f$\underline{u}\leq u \leq\overline{u}\f$
  */
-class MPC_DLLAPI ControlBoundConstraint final : public Constraint {
+class COPRA_DLLAPI ControlBoundConstraint final : public Constraint {
 public:
     /**
      * \brief Constructor of the trajectory Bound constraint.
@@ -474,4 +474,4 @@ private:
     Eigen::VectorXd lower_, upper_, lb_, ub_;
 };
 
-} // namespace mpc
+} // namespace copra

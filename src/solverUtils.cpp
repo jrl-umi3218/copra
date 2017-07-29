@@ -1,25 +1,25 @@
-// This file is part of mpc.
+// This file is part of copra.
 
-// mpc is free software: you can redistribute it and/or
+// copra is free software: you can redistribute it and/or
 // modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// mpc is distributed in the hope that it will be useful,
+// copra is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with mpc.  If not, see
+// along with copra.  If not, see
 // <http://www.gnu.org/licenses/>.
 
 #include "solverUtils.h"
 
-namespace mpc {
+namespace copra {
 
-std::unique_ptr<SolverInterface> MPC_DLLAPI solverFactory(SolverFlag flag)
+std::unique_ptr<SolverInterface> solverFactory(SolverFlag flag)
 {
     switch (flag) {
 #ifdef EIGEN_LSSOL_FOUND
@@ -63,4 +63,4 @@ SolverInterface* pythonSolverFactory(SolverFlag flag)
     }
 }
 
-} // namespace mpc
+} // namespace copra

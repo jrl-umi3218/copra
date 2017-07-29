@@ -1,18 +1,18 @@
-# This file is part of mpc.
+# This file is part of copra.
 
-# mpc is free software: you can redistribute it and/or
+# copra is free software: you can redistribute it and/or
 # modify
 # it under the terms of the GNU Lesser General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# mpc is distributed in the hope that it will be useful,
+# copra is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License for more details.
 #
 # You should have received a copy of the GNU Lesser General Public License
-# along with mpc.  If not, see
+# along with copra.  If not, see
 # <http://www.gnu.org/licenses/>.
 
 # Version minimum
@@ -21,9 +21,9 @@ include(cmake/base.cmake)
 include(cmake/eigen.cmake)
 include(cmake/boost.cmake)
 
-set(PROJECT_NAME mpc)
-set(PROJECT_DESCRIPTION "This a generic model preview control")
-set(PROJECT_URL "https://github.com/vsamy/preview_controller")
+set(PROJECT_NAME copra)
+set(PROJECT_DESCRIPTION "This library is an implementation of a linear model predictive control")
+set(PROJECT_URL "https://github.com/vsamy/Copra")
 
 #SET(CXX_DISABLE_WERROR True)
 set(DOXYGEN_USE_MATHJAX "YES")

@@ -1,18 +1,18 @@
-// This file is part of mpc.
+// This file is part of copra.
 
-// mpc is free software: you can redistribute it and/or
+// copra is free software: you can redistribute it and/or
 // modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// mpc is distributed in the hope that it will be useful,
+// copra is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with mpc.  If not, see
+// along with copra.  If not, see
 // <http://www.gnu.org/licenses/>.
 
 #pragma once
@@ -23,7 +23,7 @@
 // Eigen
 #include <Eigen/Core>
 
-// mpc
+// copra
 #include "PreviewSystem.h"
 #include "typedefs.h"
 
@@ -36,21 +36,21 @@
     }
 #endif
 
-namespace mpc {
+namespace copra {
 
 template <class E> //see http://stackoverflow.com/questions/37181621/easy-way-of-constructing-information-message-for-throwing-stdexception-using-p
-[[noreturn]] void fancy_throw(std::string msg, char const* file, char const* function, std::size_t line)
+[[noreturn]] void COPRA_DLLAPI fancy_throw(std::string msg, char const* file, char const* function, std::size_t line)
 {
     throw E(std::string("In file: ") + file + "(line " + std::to_string(line) + "): [In function: " + function + "]\n" + msg);
 }
-} // namespace mpc
+} // namespace copra
 
 #define EXCEPTION(TYPE, MESSAGE) \
     fancy_throw<TYPE>(MESSAGE, __FILE__, __func__, __LINE__)
 #define DOMAIN_ERROR_EXCEPTION(MESSAGE) EXCEPTION(std::domain_error, MESSAGE)
 #define RUNTIME_ERROR_EXCEPTION(MESSAGE) EXCEPTION(std::runtime_error, MESSAGE)
 
-namespace mpc {
+namespace copra {
 
 /**
  * \brief Message error where two matrices have the same number of rows.

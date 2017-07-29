@@ -1,10 +1,27 @@
+# This file is part of copra.
+
+# copra is free software: you can redistribute it and/or
+# modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# copra is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+
+# You should have received a copy of the GNU Lesser General Public License
+# along with copra.  If not, see
+# <http://www.gnu.org/licenses/>.
+
 import unittest
-import mpc
+import copra
 from minieigen import *
 from sys import float_info
 
 
-class TestMPC(unittest.TestCase):
+class TestCopra(unittest.TestCase):
     def setUp(self):
         self.timestep = 0.005
         self.mass = 5
@@ -53,14 +70,14 @@ class TestMPC(unittest.TestCase):
         self.feq = self.x0Eq
 
     def test_lmpc_ineq(self):
-        ps = mpc.NewPreviewSystem()
+        ps = copra.NewPreviewSystem()
         ps.system(self.A, self.B, self.c, self.x0, self.nbStep)
 
-        controller = mpc.LMPC(ps)
-        xCost = mpc.NewTargetCost(self.M, -self.xd)
-        uCost = mpc.NewControlCost(self.N, -self.ud)
-        trajConstr = mpc.NewTrajectoryConstraint(self.Eineq, self.fineq)
-        contConstr = mpc.NewControlConstraint(self.Gineq, self.hineq)
+        controller = copra.LMPC(ps)
+        xCost = copra.NewTargetCost(self.M, -self.xd)
+        uCost = copra.NewControlCost(self.N, -self.ud)
+        trajConstr = copra.NewTrajectoryConstraint(self.Eineq, self.fineq)
+        contConstr = copra.NewControlConstraint(self.Gineq, self.hineq)
         xCost.weights(self.wx)
         uCost.weights(self.wu)
 
@@ -89,13 +106,13 @@ class TestMPC(unittest.TestCase):
         print
 
     def test_lmpc_mixed(self):
-        ps = mpc.NewPreviewSystem()
+        ps = copra.NewPreviewSystem()
         ps.system(self.A, self.B, self.c, self.x0, self.nbStep)
 
-        controller = mpc.LMPC(ps)
-        xCost = mpc.NewTargetCost(self.M, -self.xd)
-        uCost = mpc.NewControlCost(self.N, -self.ud)
-        mixedConstr = mpc.NewMixedConstraint(self.Eineq, self.Gineq, self.hineq)
+        controller = copra.LMPC(ps)
+        xCost = copra.NewTargetCost(self.M, -self.xd)
+        uCost = copra.NewControlCost(self.N, -self.ud)
+        mixedConstr = copra.NewMixedConstraint(self.Eineq, self.Gineq, self.hineq)
         xCost.weights(self.wx)
         uCost.weights(self.wu)
 
@@ -129,14 +146,14 @@ class TestMPC(unittest.TestCase):
         print
 
     def test_lmpc_bound(self):
-        ps = mpc.NewPreviewSystem()
+        ps = copra.NewPreviewSystem()
         ps.system(self.A, self.B, self.c, self.x0, self.nbStep)
 
-        controller = mpc.LMPC(ps)
-        xCost = mpc.NewTargetCost(self.M, -self.xd)
-        uCost = mpc.NewControlCost(self.N, -self.ud)
-        trajConstr = mpc.NewTrajectoryBoundConstraint(self.xLower, self.xUpper)
-        contConstr = mpc.NewControlBoundConstraint(self.uLower, self.uUpper)
+        controller = copra.LMPC(ps)
+        xCost = copra.NewTargetCost(self.M, -self.xd)
+        uCost = copra.NewControlCost(self.N, -self.ud)
+        trajConstr = copra.NewTrajectoryBoundConstraint(self.xLower, self.xUpper)
+        contConstr = copra.NewControlBoundConstraint(self.uLower, self.uUpper)
         xCost.weights(self.wx)
         uCost.weights(self.wu)
 
@@ -166,13 +183,13 @@ class TestMPC(unittest.TestCase):
         print
 
     def test_lmpc_eq(self):
-        ps = mpc.NewPreviewSystem()
+        ps = copra.NewPreviewSystem()
         ps.system(self.A, self.B, self.c, self.x0Eq, self.nbStep)
 
-        controller = mpc.LMPC(ps)
-        xCost = mpc.NewTargetCost(self.M, -self.xdEq)
-        uCost = mpc.NewControlCost(self.N, -self.ud)
-        trajConstr = mpc.NewTrajectoryConstraint(self.Eeq, self.feq, False)
+        controller = copra.LMPC(ps)
+        xCost = copra.NewTargetCost(self.M, -self.xdEq)
+        uCost = copra.NewControlCost(self.N, -self.ud)
+        trajConstr = copra.NewTrajectoryConstraint(self.Eeq, self.feq, False)
         xCost.weights(self.wx)
         uCost.weights(self.wu)
 
@@ -200,52 +217,52 @@ class TestMPC(unittest.TestCase):
         print
 
     def test_constructors_initialisations(self):
-        ps = mpc.NewPreviewSystem()
+        ps = copra.NewPreviewSystem()
         ps.system(self.A, self.B, self.c, self.x0, self.nbStep)
 
-        controller = mpc.LMPC(ps)
+        controller = copra.LMPC(ps)
 
-        mpc.LMPC()
-        mpc.LMPC(mpc.SolverFlag.QuadProgDense)
-        mpc.LMPC(ps, mpc.SolverFlag.QuadProgDense)
+        copra.LMPC()
+        copra.LMPC(copra.SolverFlag.QuadProgDense)
+        copra.LMPC(ps, copra.SolverFlag.QuadProgDense)
 
         controller.initializeController(ps)
 
     @unittest.expectedFailure
     def test_fail_construct_trajectory(self):
-        constr = mpc.TrajectoryConstraint()
+        constr = copra.TrajectoryConstraint()
 
     @unittest.expectedFailure
     def test_fail_construct_control(self):
-        constr = mpc.ControlConstraint()
+        constr = copra.ControlConstraint()
 
     @unittest.expectedFailure
     def test_fail_construct_control(self):
-        constr = mpc.TrajectoryBoundConstraint()
+        constr = copra.TrajectoryBoundConstraint()
 
     @unittest.expectedFailure
     def test_fail_construct_control(self):
-        constr = mpc.ControlBoundConstraint()
+        constr = copra.ControlBoundConstraint()
 
     def test_constraint_and_cost_deletion(self):
         print "Testing 'test_constraint_deletion'."
-        print "In order to see the outputs, the mpc must be installed under Debug mode."
+        print "In order to see the outputs, the copra must be installed under Debug mode."
 
-        ps = mpc.NewPreviewSystem()
+        ps = copra.NewPreviewSystem()
         ps.system(self.A, self.B, self.c, self.x0, self.nbStep)
 
-        controller = mpc.LMPC(ps)
-        trajConstr = mpc.NewTrajectoryConstraint(self.Eineq, self.fineq)
-        contConstr = mpc.NewControlConstraint(self.Gineq, self.hineq)
-        trajEqConstr = mpc.NewTrajectoryConstraint(self.Eeq, self.feq, False)
-        contEqConstr = mpc.NewControlConstraint(self.Geq, self.heq, False)
-        trajBdConstr = mpc.NewTrajectoryBoundConstraint(self.xLower, self.xUpper)
-        contBdConstr = mpc.NewControlBoundConstraint(self.uLower, self.uUpper)
-        targetCost = mpc.NewTargetCost(self.M, -self.xd)
-        trajectoryCost = mpc.NewTrajectoryCost(self.M, -self.xd)
-        controlCost = mpc.NewControlCost(self.N, -self.ud)
+        controller = copra.LMPC(ps)
+        trajConstr = copra.NewTrajectoryConstraint(self.Eineq, self.fineq)
+        contConstr = copra.NewControlConstraint(self.Gineq, self.hineq)
+        trajEqConstr = copra.NewTrajectoryConstraint(self.Eeq, self.feq, False)
+        contEqConstr = copra.NewControlConstraint(self.Geq, self.heq, False)
+        trajBdConstr = copra.NewTrajectoryBoundConstraint(self.xLower, self.xUpper)
+        contBdConstr = copra.NewControlBoundConstraint(self.uLower, self.uUpper)
+        targetCost = copra.NewTargetCost(self.M, -self.xd)
+        trajectoryCost = copra.NewTrajectoryCost(self.M, -self.xd)
+        controlCost = copra.NewControlCost(self.N, -self.ud)
         M_mixed = MatrixXd.Ones(1, 2)
-        mixedCost = mpc.NewMixedCost(M_mixed, self.N, -self.ud)
+        mixedCost = copra.NewMixedCost(M_mixed, self.N, -self.ud)
         
         controller.addConstraint(trajConstr)
         controller.addConstraint(contConstr)
@@ -274,15 +291,15 @@ class TestMPC(unittest.TestCase):
         self.assertTrue(controller.solve()) # Has kept the contConstr only
 
     def test_preview_systeme_still_exist(self):
-        ps = mpc.NewPreviewSystem()
+        ps = copra.NewPreviewSystem()
         ps.system(self.A, self.B, self.c, self.x0, self.nbStep)
 
-        controller = mpc.LMPC(ps)
+        controller = copra.LMPC(ps)
         del ps
-        trajConstr = mpc.NewTrajectoryConstraint(self.Eineq, self.fineq)
-        contConstr = mpc.NewControlConstraint(self.Gineq, self.hineq)
-        targetCost = mpc.NewTargetCost(self.M, -self.xd)
-        controlCost = mpc.NewControlCost(self.N, -self.ud)
+        trajConstr = copra.NewTrajectoryConstraint(self.Eineq, self.fineq)
+        contConstr = copra.NewControlConstraint(self.Gineq, self.hineq)
+        targetCost = copra.NewTargetCost(self.M, -self.xd)
+        controlCost = copra.NewControlCost(self.N, -self.ud)
         targetCost.weights(self.wx)
         controlCost.weights(self.wu)
 
@@ -306,33 +323,33 @@ class TestMPC(unittest.TestCase):
         self.assertLessEqual(control.maxCoeff(), self.hineq[0])
 
     def test_throw_handler(self):
-        ps = mpc.NewPreviewSystem()
+        ps = copra.NewPreviewSystem()
         ps.system(self.A, self.B, self.c, self.x0, self.nbStep)
 
-        controller = mpc.LMPC(ps)
+        controller = copra.LMPC(ps)
         # Test trajectory constraint throws
         with self.assertRaises(RuntimeError):
-            constr = mpc.NewTrajectoryConstraint(MatrixXd.Identity(5, 5), VectorXd.Ones(2))
+            constr = copra.NewTrajectoryConstraint(MatrixXd.Identity(5, 5), VectorXd.Ones(2))
             controller.addConstraint(constr)
 
         # Test control constraint throws
         with self.assertRaises(RuntimeError):
-            constr = mpc.NewControlConstraint(MatrixXd.Identity(5, 5), VectorXd.Ones(2))
+            constr = copra.NewControlConstraint(MatrixXd.Identity(5, 5), VectorXd.Ones(2))
             controller.addConstraint(constr)
 
         # Test mixed constraint throws
         with self.assertRaises(RuntimeError):
-            constr = mpc.NewMixedConstraint(MatrixXd.Identity(5, 5), MatrixXd.Identity(5, 5), VectorXd.Ones(2))
+            constr = copra.NewMixedConstraint(MatrixXd.Identity(5, 5), MatrixXd.Identity(5, 5), VectorXd.Ones(2))
             controller.addConstraint(constr)
 
         # Test trajectory bound constraint throws
         with self.assertRaises(RuntimeError):
-            constr = mpc.NewTrajectoryBoundConstraint(VectorXd.Ones(3), VectorXd.Ones(2))
+            constr = copra.NewTrajectoryBoundConstraint(VectorXd.Ones(3), VectorXd.Ones(2))
             controller.addConstraint(constr)
 
         # Test control bound constraint throws
         with self.assertRaises(RuntimeError):
-            constr = mpc.NewControlBoundConstraint(VectorXd.Ones(3), VectorXd.Ones(2))
+            constr = copra.NewControlBoundConstraint(VectorXd.Ones(3), VectorXd.Ones(2))
             controller.addConstraint(constr)
 
     def test_dynamic_walk(self):
@@ -425,13 +442,13 @@ class TestMPC(unittest.TestCase):
 
         h = VectorXd([47.76613348420254,9.80665,9.80665, 9.80665,9.806649999999998,49.86555936465245, 9.806649999999994,47.76613348420254,9.80665, 9.80665,9.80665,9.806649999999998, 49.86555936465245,9.806649999999994,47.76613348420254, 9.80665,9.80665,9.80665, 9.806649999999998,49.86555936465245,9.806649999999994, 47.76613348420254,9.80665,9.80665, 9.80665,9.806649999999998,49.86555936465245, 9.806649999999994,47.76613348420254,9.80665, 9.80665,9.80665,9.806649999999998, 49.86555936465245,9.806649999999994,47.76613348420254, 9.80665,9.80665,9.80665, 9.806649999999998,49.86555936465245,9.806649999999994, 9.806650000000007,9.806650000000008,9.80665, 9.806650000000001,9.806650000000007,9.806649999999996, 9.806650000000007,9.806650000000008,9.80665, 9.806650000000001,9.806650000000007,9.806649999999996, 9.806650000000007,9.806650000000008,9.80665, 9.806650000000001,9.806650000000007,9.806649999999996, 9.806650000000007,9.806650000000008,9.80665, 9.806650000000001,9.806650000000007,9.806649999999996])
 
-        ps = mpc.NewPreviewSystem()
+        ps = copra.NewPreviewSystem()
         ps.system(A, B, c, x_init, nb_steps)
 
-        controller = mpc.LMPC(ps)
-        contConstr = mpc.NewControlConstraint(G, h)
+        controller = copra.LMPC(ps)
+        contConstr = copra.NewControlConstraint(G, h)
         M_cost = Matrix6d.Identity
-        targetCost = mpc.NewTargetCost(M_cost, -x_goal)
+        targetCost = copra.NewTargetCost(M_cost, -x_goal)
 
         controller.addConstraint(contConstr)
         controller.addCost(targetCost)

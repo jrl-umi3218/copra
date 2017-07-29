@@ -1,18 +1,18 @@
-// This file is part of mpc.
+// This file is part of copra.
 
-// mpc is free software: you can redistribute it and/or
+// copra is free software: you can redistribute it and/or
 // modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// mpc is distributed in the hope that it will be useful,
+// copra is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with mpc.  If not, see
+// along with copra.  If not, see
 // <http://www.gnu.org/licenses/>.
 
 #pragma once
@@ -21,14 +21,14 @@
 #include <memory>
 #include <utility>
 
-// mpc
+// copra
 #include "QuadProgSolver.h"
 #include "config.hh"
 
 // optional mpc
 #include "solverConfig.h"
 
-namespace mpc {
+namespace copra {
 
 /**
  * Enum class that handles flag for selecting a qp solver.
@@ -53,7 +53,7 @@ enum class SolverFlag {
  * \param flag Flag of the solver.
  * \return An unique pointer to the desired solver.
  */
-std::unique_ptr<SolverInterface> MPC_DLLAPI solverFactory(SolverFlag flag);
+std::unique_ptr<SolverInterface> COPRA_DLLAPI solverFactory(SolverFlag flag);
 
 /**
  * Helper function to get a desired solver.

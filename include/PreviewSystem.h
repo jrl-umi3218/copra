@@ -1,18 +1,18 @@
-// This file is part of mpc.
+// This file is part of copra.
 
-// mpc is free software: you can redistribute it and/or
+// copra is free software: you can redistribute it and/or
 // modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// mpc is distributed in the hope that it will be useful,
+// copra is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with mpc.  If not, see
+// along with copra.  If not, see
 // <http://www.gnu.org/licenses/>.
 
 #pragma once
@@ -20,10 +20,10 @@
 // eigen
 #include <Eigen/Core>
 
-// mpc
+// copra
 #include "config.hh"
 
-namespace mpc {
+namespace copra {
 
 /**
  * Structure representing all variables of a system for performing preview control.
@@ -35,7 +35,7 @@ namespace mpc {
  * where \f$N\f$ is the dimension of the system (the number of steps).\n
  * So, \f$X\f$ dimension is \f$N+1\f$ and \f$U\f$ dimension is \f$N\f%.
  */
-struct MPC_DLLAPI PreviewSystem {
+struct COPRA_DLLAPI PreviewSystem {
     /**
      * Default constructor.
      */
@@ -90,4 +90,4 @@ struct MPC_DLLAPI PreviewSystem {
     Eigen::VectorXd xi; /**< The full (after nrStep) bias vector */
 };
 
-} // namespace mpc
+} // namespace copra

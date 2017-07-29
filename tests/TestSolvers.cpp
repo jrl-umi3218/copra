@@ -1,18 +1,18 @@
-// This file is part of mpc.
+// This file is part of copra.
 
-// mpc is free software: you can redistribute it and/or
+// copra is free software: you can redistribute it and/or
 // modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// mpc is distributed in the hope that it will be useful,
+// copra is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with mpc.  If not, see
+// along with copra.  If not, see
 // <http://www.gnu.org/licenses/>.
 
 #define BOOST_TEST_MODULE TestSolvers
@@ -27,7 +27,7 @@
 // eigen
 #include <Eigen/Core>
 
-// mpc
+// copra
 #include "QuadProgSolver.h"
 
 // optional mpc
@@ -38,7 +38,7 @@
 
 BOOST_FIXTURE_TEST_CASE(QuadProgTest, Problem)
 {
-    mpc::QuadProgDenseSolver qpQuadProg;
+    copra::QuadProgDenseSolver qpQuadProg;
 
     qpQuadProg.SI_problem(nrvars, nreqs, nrineqs);
     BOOST_REQUIRE(qpQuadProg.SI_solve(Q, c, Aeq, beq, Aineq, bineq, XL, XU));
@@ -49,8 +49,8 @@ BOOST_FIXTURE_TEST_CASE(QuadProgTest, Problem)
 #ifdef EIGEN_QLD_FOUND
 BOOST_FIXTURE_TEST_CASE(QLDOnQuadProgTest, Problem)
 {
-    mpc::QLDSolver qpQLD;
-    mpc::QuadProgDenseSolver qpQuadProg;
+    copra::QLDSolver qpQLD;
+    copra::QuadProgDenseSolver qpQuadProg;
 
     qpQLD.SI_problem(nrvars, nreqs, nrineqs);
     qpQuadProg.SI_problem(nrvars, nreqs, nrineqs);
@@ -68,8 +68,8 @@ BOOST_FIXTURE_TEST_CASE(QLDOnQuadProgTest, Problem)
 #ifdef EIGEN_LSSOL_FOUND
 BOOST_FIXTURE_TEST_CASE(LSSOLOnQuadProgTest, Problem)
 {
-    mpc::QuadProgDenseSolver qpQuadProg;
-    mpc::LSSOLSolver qpLSSOL;
+    copra::QuadProgDenseSolver qpQuadProg;
+    copra::LSSOLSolver qpLSSOL;
 
     qpQuadProg.SI_problem(nrvars, nreqs, nrineqs);
     qpLSSOL.SI_problem(nrvars, nreqs, nrineqs);
@@ -86,8 +86,8 @@ BOOST_FIXTURE_TEST_CASE(LSSOLOnQuadProgTest, Problem)
 #ifdef EIGEN_GUROBI_FOUND
 BOOST_FIXTURE_TEST_CASE(GUROBIOnQuadProgTest, Problem)
 {
-    mpc::QuadProgDenseSolver qpQuadProg;
-    mpc::GUROBISolver qpGUROBI;
+    copra::QuadProgDenseSolver qpQuadProg;
+    copra::GUROBISolver qpGUROBI;
 
     qpQuadProg.SI_problem(nrvars, nreqs, nrineqs);
     qpGUROBI.SI_problem(nrvars, nreqs, nrineqs);

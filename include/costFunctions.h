@@ -1,18 +1,18 @@
-// This file is part of mpc.
+// This file is part of copra.
 
-// mpc is free software: you can redistribute it and/or
+// copra is free software: you can redistribute it and/or
 // modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// mpc is distributed in the hope that it will be useful,
+// copra is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with mpc.  If not, see
+// along with copra.  If not, see
 // <http://www.gnu.org/licenses/>.
 
 #pragma once
@@ -23,18 +23,18 @@
 // Eigen
 #include <Eigen/Core>
 
-// mpc
+// copra
 #include "config.hh"
 #include "debugUtils.h"
 #include "typedefs.h"
 
-namespace mpc {
+namespace copra {
 
 /**
  * \brief Abstract base class that represents cost functions.
  * Any derived class of this one can be added to the MPC \see MPC::addCost.
  */
-class MPC_DLLAPI CostFunction {
+class COPRA_DLLAPI CostFunction {
 public:
     /**
      * Constructor of a cost function.
@@ -141,7 +141,7 @@ protected:
  * This cost function looks for a minimization around a trajectory.
  * Mathematically, it is \f$(MX+p)^TW_X(MX+p) \Leftrightarrow \sum_k w_k\|Mx_k+p\|^2\f$.
  */
-class MPC_DLLAPI TrajectoryCost final : public CostFunction {
+class COPRA_DLLAPI TrajectoryCost final : public CostFunction {
 public:
     /**
      * \brief Constructor of the trajectory cost function.
@@ -174,7 +174,7 @@ private:
  * This cost function looks for target a final point.
  * Mathematically, it is \f$(Mx_N+p)^Tw_x(Mx_N+p) \Leftrightarrow w_x\|Mx_N+p\|^2\f$.
  */
-class MPC_DLLAPI TargetCost final : public CostFunction {
+class COPRA_DLLAPI TargetCost final : public CostFunction {
 public:
 
     /**
@@ -207,7 +207,7 @@ private:
  * This cost function looks for a minimization of the control.
  * Mathematically, it is \f$(NU+p)^TW_U(NU+p) \Leftrightarrow sum_k w_u\|Nu_k+p\|^2\f$.
  */
-class MPC_DLLAPI ControlCost final : public CostFunction {
+class COPRA_DLLAPI ControlCost final : public CostFunction {
 public:
     /**
      * \brief Constructor of the control cost function.
@@ -240,7 +240,7 @@ private:
  * This cost function looks for a minimization of a linear combination of trajectory and control.
  * Mathematically, it is \f$(MX+NU+p)^TW_M(MX+NU+p) \Leftrightarrow sum_k w_m\|Mx_k+Nu_k+p\|^2\f$.
  */
-class MPC_DLLAPI MixedCost final : public CostFunction {
+class COPRA_DLLAPI MixedCost final : public CostFunction {
 public:
     /**
      * \brief Constructor of the mixed cost function.
@@ -269,4 +269,4 @@ private:
     Eigen::VectorXd p_;
 };
 
-} // namespace mpc
+} // namespace copra

@@ -1,18 +1,18 @@
-// This file is part of mpc.
+// This file is part of copra.
 
-// mpc is free software: you can redistribute it and/or
+// copra is free software: you can redistribute it and/or
 // modify
 // it under the terms of the GNU Lesser General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// mpc is distributed in the hope that it will be useful,
+// copra is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with mpc.  If not, see
+// along with copra.  If not, see
 // <http://www.gnu.org/licenses/>.
 
 #include "LMPC.h"
@@ -38,7 +38,7 @@ T* get_pointer(std::shared_ptr<T> p)
 
 } // namespace boost
 
-namespace mpc {
+namespace copra {
 
 template <typename T, typename... Args>
 std::shared_ptr<T> createSharedPointer(Args... args)
@@ -61,11 +61,11 @@ auto NewTrajectoryCost = &createSharedPointer<TrajectoryCost, const Eigen::Matri
 auto NewTargetCost = &createSharedPointer<TargetCost, const Eigen::MatrixXd&, const Eigen::VectorXd&>;
 auto NewControlCost = &createSharedPointer<ControlCost, const Eigen::MatrixXd&, const Eigen::VectorXd&>;
 auto NewMixedCost = &createSharedPointer<MixedCost, const Eigen::MatrixXd&, const Eigen::MatrixXd&, const Eigen::VectorXd&>;
-} // namespace mpc
+} // namespace copra
 
-BOOST_PYTHON_MODULE(_mpc)
+BOOST_PYTHON_MODULE(_copra)
 {
-    using namespace mpc;
+    using namespace copra;
     using namespace boost::python;
 
     def("NewPreviewSystem", NewPreviewSystem1, "Create a new instance of a PrevieSystem shared_ptr with default constructor");
@@ -257,7 +257,7 @@ BOOST_PYTHON_MODULE(_mpc)
 
     //LMPC
     class_<LMPC, boost::noncopyable>("LMPC",
-        "LMPC. This class runs the mpc with the desired QP and fills the PreviewSystem it is attach to", init<optional<SolverFlag> >())
+        "LMPC. This class runs the lmpc with the desired QP and fills the PreviewSystem it is attach to", init<optional<SolverFlag> >())
         .def(init<const std::shared_ptr<PreviewSystem>&, optional<SolverFlag> >())
         .def("selectQPSolver", &LMPC::selectQPSolver)
         .def("initializeController", &LMPC::initializeController)
