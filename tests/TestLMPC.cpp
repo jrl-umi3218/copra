@@ -17,28 +17,28 @@
 
 #define BOOST_TEST_MODULE TestPreviewControl
 
-// stl
+// STL
 #include <algorithm>
 #include <memory>
 #include <numeric>
 #include <vector>
 
-// boost
+// Boost
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/test/unit_test.hpp>
 
-// eigen
+// Eigen
 #include <Eigen/Core>
 
-// copra
-#include "LMPC.h"
-#include "PreviewSystem.h"
-#include "constraints.h"
-#include "costFunctions.h"
-#include "solverConfig.h"
-#include "solverUtils.h"
+// Copra
+#include <copra/LMPC.h>
+#include <copra/PreviewSystem.h>
+#include <copra/constraints.h>
+#include <copra/costFunctions.h>
+#include <copra/solverConfig.h>
+#include <copra/solverUtils.h>
 
-// Tests helpers
+// Test helpers
 #include "systems.h"
 #include "tools.h"
 

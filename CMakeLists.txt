@@ -50,13 +50,8 @@ if(lower_case STREQUAL "debug")
     set(CMAKE_CXX_FLAGS_DEBUG "-D_DEBUG")
 endif()
 
-if(NOT DEFINED PYTHON_BINDINGS)
-    set(PYTHON_BINDINGS ON CACHE BOOL)
-endif()
-
-if(NOT DEFINED BUILD_CXX_TESTS)
-    set(BUILD_CXX_TESTS OFF CACHE BOOL)
-endif()
+option(PYTHON_BINDINGS "Generate python bindings." OFF)
+option(BUILD_CXX_TESTS "Build unit tests." OFF)
 
 SETUP_PROJECT()
 
