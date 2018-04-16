@@ -4,28 +4,27 @@ Copra (**Co**ntrol & **pr**eview **a**lgorithms) is a C++ library implementing
 linear model predictive control. It relies on quadratic programming (QP)
 solvers. Python bindings are available.
 
-## Installing
+## Installation
+
+Compilation has been tested on Linux (gcc/clang).
 
 ### Dependencies
 
-* [CMake]() >= 2.8
-* [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) >= 3.2
-* [Git]()
-* [c++ compiler]() It must compile C++11 but C++14 is recommended
-* [doxygen]()
-* [gcc]()
-* [gfortran]()
-* [pkg-config]()
+ * Any compiler with C++11 support
+ * [CMake](https://cmake.org) >= 2.8
+ * [Doxygen](http://www.stack.nl/~dimitri/doxygen/): to generate documentation
+ * [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) >= 3.2
+ * [Git](https://git-scm.com/)
+ * [pkg-config](https://www.freedesktop.org/wiki/Software/pkg-config/)
 
 #### Optional
 
-* [Boost](http://www.boost.org/doc/libs/1_58_0/more/getting_started/unix-variants.html) >= 1.58, for Python bindings and unit tests
-* [Doxygen](http://www.stack.nl/~dimitri/doxygen/) to generate documentation
-* [GUROBI](http://www.gurobi.com/) >= 4.0, optional QP solver
-* [eigen-gurobi](https://github.com/vsamy/eigen-gurobi), bindings for GUROBI
-* [eigen-qld](https://github.com/jrl-umi3218/eigen-qld.git), optional QP solver
+* [Boost](http://www.boost.org/doc/libs/1_58_0/more/getting_started/unix-variants.html) >= 1.58: for Python bindings and unit tests
+* [GUROBI](http://www.gurobi.com/) >= 4.0: optional QP solver
+* [eigen-gurobi](https://github.com/vsamy/eigen-gurobi): bindings for GUROBI
+* [eigen-qld](https://github.com/jrl-umi3218/eigen-qld.git): optional QP solver
 
-### Building
+### Building from source on Linux
 
 The library assumes you are compiling C++14 by default:
 
