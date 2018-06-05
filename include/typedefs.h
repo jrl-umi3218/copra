@@ -20,9 +20,10 @@
 
 namespace Eigen {
 
-#ifdef EIGEN_3_2_FOUND
+#if EIGEN_VERSION_AT_LEAST(3, 2, 0)
 using Index = Eigen::Matrix<int, 1, 1>::Index;
 #endif
+
 } // namespace Eigen
 
 namespace copra {
