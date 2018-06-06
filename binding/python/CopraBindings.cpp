@@ -247,7 +247,7 @@ BOOST_PYTHON_MODULE(_copra)
         .def("Q", &CostFunction::Q, return_internal_reference<>())
         .def("c", &CostFunction::c, return_internal_reference<>())
         .def("weights", &CostFunction::weights<const Eigen::VectorXd&>)
-        .def("weights", &CostFunction::weights<double>);
+        .def("weight", &CostFunction::weight<double>);
 
     // Delete constructor to enforce call of New<Name_of_cost> function that return a shared_ptr.
     class_<TrajectoryCost, boost::noncopyable, bases<CostFunction> >("TrajectoryCost", "Trajectory cost. The object is instansiable through a NewTrajectoryCost function", no_init);

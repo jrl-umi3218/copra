@@ -94,7 +94,7 @@ public:
      * \param weight Weight to apply.
      */
     template <typename T, typename = std::enable_if_t<is_all_arithmetic<T>::value> >
-    void weights(T weight)
+    void weight(T weight)
     {
         weights_.setConstant(weight);
     }
