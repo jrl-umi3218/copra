@@ -98,6 +98,11 @@ public:
     bool solve();
 
     /**
+     * Print information on the QP solver status.
+     */
+    void inform() const noexcept;
+
+    /**
      * Get the solver result.
      * \return The control vector \f$U\f$.
      */
