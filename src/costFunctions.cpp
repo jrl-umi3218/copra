@@ -137,10 +137,10 @@ void ControlCost::update(const PreviewSystem& ps)
 {
     if (fullSizeEntry_) {
         Q_.noalias() = N_.transpose() * weights_.asDiagonal() * N_;
-        c_.noalias() = p_.transpose() * weights_.asDiagonal() * N_;
+        c_.noalias() = -p_.transpose() * weights_.asDiagonal() * N_;
     } else {
         Eigen::MatrixXd mat {N_.transpose() * weights_.asDiagonal() * N_};
-        Eigen::VectorXd vec {p_.transpose() * weights_.asDiagonal() * N_};
+        Eigen::VectorXd vec {-p_.transpose() * weights_.asDiagonal() * N_};
         for (int i = 0; i < ps.nrUStep; ++i) {
             Q_.block(i * ps.uDim, i * ps.uDim, ps.uDim, ps.uDim) = mat;
             c_.segment(i * ps.uDim, ps.uDim) = vec;
