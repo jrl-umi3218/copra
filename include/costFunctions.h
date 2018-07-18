@@ -172,14 +172,14 @@ private:
 /**
  * \brief Target cost function class.
  * This cost function looks for target a final point.
- * Mathematically, it is \f$(Mx_N+p)^Tw_x(Mx_N+p) \Leftrightarrow w_x\|Mx_N+p\|^2\f$.
+ * Mathematically, it is \f$(Mx_N-p)^Tw_x(Mx_N-p) \Leftrightarrow w_x\|Mx_N-p\|^2\f$.
  */
 class COPRA_DLLAPI TargetCost final : public CostFunction {
 public:
 
     /**
      * \brief Constructor of the target cost function.
-     * Create a cost function of type \f$(Mx_N+p)^TW_X(Mx_N+p)\f$.
+     * Create a cost function of type \f$(Mx_N-p)^TW_X(Mx_N-p)\f$.
      * Perform a move semantic if an rvalue is given.
      * \param M The matrix side of the cost function
      * \param p The vector side of the cost function

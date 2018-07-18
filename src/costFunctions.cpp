@@ -104,7 +104,7 @@ void TargetCost::update(const PreviewSystem& ps)
 {
     Eigen::MatrixXd tmp {M_ * ps.Psi.bottomRows(ps.xDim)};
     Q_.noalias() = tmp.transpose() * weights_.asDiagonal() * tmp;
-    c_.noalias() = (M_ * (ps.Phi.bottomRows(ps.xDim) * ps.x0 + ps.xi.bottomRows(ps.xDim)) + p_).transpose() * weights_.asDiagonal() * tmp;
+    c_.noalias() = (M_ * (ps.Phi.bottomRows(ps.xDim) * ps.x0 + ps.xi.bottomRows(ps.xDim)) - p_).transpose() * weights_.asDiagonal() * tmp;
 }
 
 /*************************************************************************************************
