@@ -76,12 +76,12 @@ void TrajectoryCost::update(const PreviewSystem& ps)
     if (fullSizeEntry_) {
         Eigen::MatrixXd tmp {M_ * ps.Psi};
         Q_ = tmp.transpose() * weights_.asDiagonal() * tmp;
-        c_ = (M_ * (ps.Phi * ps.x0 + ps.xi) + p_).transpose() * weights_.asDiagonal() * tmp;
+        c_ = (M_ * (ps.Phi * ps.x0 + ps.xi) - p_).transpose() * weights_.asDiagonal() * tmp;
     } else {
         for (int i = 0; i < ps.nrXStep; ++i) { // Can be optimized. Lot of sums of zero here
             Eigen::MatrixXd tmp {M_ * ps.Psi.block(i * ps.xDim, 0, ps.xDim, ps.fullUDim)};
             Q_.noalias() += tmp.transpose() * weights_.asDiagonal() * tmp;
-            c_.noalias() += (M_ * (ps.Phi.block(i * ps.xDim, 0, ps.xDim, ps.xDim) * ps.x0 + ps.xi.segment(i * ps.xDim, ps.xDim)) + p_).transpose() * weights_.asDiagonal() * tmp;
+            c_.noalias() += (M_ * (ps.Phi.block(i * ps.xDim, 0, ps.xDim, ps.xDim) * ps.x0 + ps.xi.segment(i * ps.xDim, ps.xDim)) - p_).transpose() * weights_.asDiagonal() * tmp;
         }
     }
 }

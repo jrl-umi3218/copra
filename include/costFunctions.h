@@ -139,13 +139,13 @@ protected:
 /**
  * \brief Trajectory cost function class.
  * This cost function looks for a minimization around a trajectory.
- * Mathematically, it is \f$(MX+p)^TW_X(MX+p) \Leftrightarrow \sum_k w_k\|Mx_k+p\|^2\f$.
+ * Mathematically, it is \f$(MX-p)^TW_X(MX-p) \Leftrightarrow \sum_k w_k\|Mx_k-p\|^2\f$.
  */
 class COPRA_DLLAPI TrajectoryCost final : public CostFunction {
 public:
     /**
      * \brief Constructor of the trajectory cost function.
-     * Create a cost function of type \f$(MX+p)^TW_X(MX+p)\f$.
+     * Create a cost function of type \f$(MX-p)^TW_X(MX-p)\f$.
      * Perform a move semantic if an rvalue is given.
      * \param M The matrix side of the cost function
      * \param p The vector side of the cost function
