@@ -184,13 +184,13 @@ void MixedCost::update(const PreviewSystem& ps)
     if (fullSizeEntry_) {
         Eigen::MatrixXd tmp = M_ * ps.Psi + N_;
         Q_.noalias() = tmp.transpose() * weights_.asDiagonal() * tmp;
-        c_.noalias() = (M_ * (ps.Phi * ps.x0 + ps.xi) + p_).transpose() * weights_.asDiagonal() * tmp;
+        c_.noalias() = (M_ * (ps.Phi * ps.x0 + ps.xi) - p_).transpose() * weights_.asDiagonal() * tmp;
     } else {
         for (int i = 0; i < ps.nrUStep; ++i) { // Can be optimized. Lot of sums of zero here
             Eigen::MatrixXd tmp {M_ * ps.Psi.block(i * ps.xDim, 0, ps.xDim, ps.fullUDim)};
             tmp.block(0, i * ps.uDim, M_.rows(), ps.uDim).noalias() += N_;
             Q_.noalias() += tmp.transpose() * weights_.asDiagonal() * tmp;
-            c_.noalias() += (M_ * (ps.Phi.block(i * ps.xDim, 0, ps.xDim, ps.xDim) * ps.x0 + ps.xi.segment(i * ps.xDim, ps.xDim)) + p_).transpose() * weights_.asDiagonal() * tmp;
+            c_.noalias() += (M_ * (ps.Phi.block(i * ps.xDim, 0, ps.xDim, ps.xDim) * ps.x0 + ps.xi.segment(i * ps.xDim, ps.xDim)) - p_).transpose() * weights_.asDiagonal() * tmp;
         }
     }
 }

@@ -238,13 +238,13 @@ private:
 /**
  * \brief Mixed cost function class.
  * This cost function looks for a minimization of a linear combination of trajectory and control.
- * Mathematically, it is \f$(MX+NU+p)^TW_M(MX+NU+p) \Leftrightarrow sum_k w_m\|Mx_k+Nu_k+p\|^2\f$.
+ * Mathematically, it is \f$(MX+NU-p)^TW_M(MX+NU-p) \Leftrightarrow sum_k w_m\|Mx_k+Nu_k-p\|^2\f$.
  */
 class COPRA_DLLAPI MixedCost final : public CostFunction {
 public:
     /**
      * \brief Constructor of the mixed cost function.
-     * Create a cost function of type \f$(MX+NU+p)^TW_M(MX+NU+p)\f$.
+     * Create a cost function of type \f$(MX+NU-p)^TW_M(MX+NU-p)\f$.
      * Perform a move semantic if an rvalue is given.
      * \param N The matrix side of the cost function
      * \param p The vector side of the cost function
