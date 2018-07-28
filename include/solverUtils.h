@@ -36,7 +36,7 @@ namespace copra {
 enum class SolverFlag {
     DEFAULT, /**< Default solver (QuadProgDense solver) */
 #ifdef EIGEN_LSSOL_FOUND
-    LSSOL, /**< Standford LSSOL solver */
+    LSSOL, /**< Stanford LSSOL solver */
 #endif
 #ifdef EIGEN_GUROBI_FOUND
     GUROBIDense, /**< Gurobi quadratic dense solver */
