@@ -903,14 +903,6 @@ BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_PREVIEW_SYSTEM, IneqSystem)
     BOOST_REQUIRE_THROW(ps->system(A, Eigen::MatrixXd::Ones(5, 1), c, x0, nbStep), std::domain_error);
     BOOST_REQUIRE_THROW(ps->system(A, B, Eigen::VectorXd::Ones(5), x0, nbStep), std::domain_error);
     BOOST_REQUIRE_THROW(ps->system(A, B, c, x0, -1), std::domain_error);
-
-    try {
-        ps->system(A, B, c, x0, -1);
-    } catch (const std::domain_error& e) {
-        std::cerr << "Test error message output" << std::endl;
-        std::cerr << e.what() << std::endl
-                  << std::endl;
-    }
 }
 
 BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_WEIGTHS, IneqSystem)
