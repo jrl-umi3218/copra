@@ -17,28 +17,28 @@
 
 #define BOOST_TEST_MODULE TestPreviewControl
 
-// stl
+// STL
 #include <algorithm>
 #include <memory>
 #include <numeric>
 #include <vector>
 
-// boost
+// Boost
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/test/unit_test.hpp>
 
-// eigen
+// Eigen
 #include <Eigen/Core>
 
-// copra
-#include "LMPC.h"
-#include "PreviewSystem.h"
-#include "constraints.h"
-#include "costFunctions.h"
-#include "solverConfig.h"
-#include "solverUtils.h"
+// Copra
+#include <copra/LMPC.h>
+#include <copra/PreviewSystem.h>
+#include <copra/constraints.h>
+#include <copra/costFunctions.h>
+#include <copra/solverConfig.h>
+#include <copra/solverUtils.h>
 
-// Tests helpers
+// Test helpers
 #include "systems.h"
 #include "tools.h"
 
@@ -53,8 +53,8 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
-    auto xCost = std::make_shared<copra::TargetCost>(M, -xd);
-    auto uCost = std::make_shared<copra::ControlCost>(N, -ud);
+    auto xCost = std::make_shared<copra::TargetCost>(M, xd);
+    auto uCost = std::make_shared<copra::ControlCost>(N, ud);
     auto trajConstr = std::make_shared<copra::TrajectoryBoundConstraint>(xLower, xUpper);
     auto contConstr = std::make_shared<copra::ControlBoundConstraint>(uLower, uUpper);
     xCost->weights(wx);
@@ -118,8 +118,8 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS, BoundedSyste
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
-    auto xCost = std::make_shared<copra::TrajectoryCost>(M, -xd);
-    auto uCost = std::make_shared<copra::ControlCost>(N, -ud);
+    auto xCost = std::make_shared<copra::TrajectoryCost>(M, xd);
+    auto uCost = std::make_shared<copra::ControlCost>(N, ud);
     auto trajConstr = std::make_shared<copra::TrajectoryBoundConstraint>(xLower, xUpper);
     auto contConstr = std::make_shared<copra::ControlBoundConstraint>(uLower, uUpper);
     xCost->weights(wx);
@@ -180,8 +180,8 @@ BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
-    auto xCost = std::make_shared<copra::MixedCost>(M, Eigen::MatrixXd::Zero(2, 1), -xd); // min(||X - Xt||^2)
-    auto uCost = std::make_shared<copra::MixedCost>(Eigen::MatrixXd::Zero(1, 2), N, -ud); // min(||U - Ut||^2)
+    auto xCost = std::make_shared<copra::MixedCost>(M, Eigen::MatrixXd::Zero(2, 1), xd); // min(||X - Xt||^2)
+    auto uCost = std::make_shared<copra::MixedCost>(Eigen::MatrixXd::Zero(1, 2), N, ud); // min(||U - Ut||^2)
     auto trajConstr = std::make_shared<copra::TrajectoryBoundConstraint>(xLower, xUpper);
     auto contConstr = std::make_shared<copra::ControlBoundConstraint>(uLower, uUpper);
     xCost->weights(wx);
@@ -224,8 +224,8 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
-    auto xCost = std::make_shared<copra::TargetCost>(M, -xd);
-    auto uCost = std::make_shared<copra::ControlCost>(N, -ud);
+    auto xCost = std::make_shared<copra::TargetCost>(M, xd);
+    auto uCost = std::make_shared<copra::ControlCost>(N, ud);
     auto trajConstr = std::make_shared<copra::TrajectoryConstraint>(E, f);
     auto contConstr = std::make_shared<copra::ControlConstraint>(G, h);
     xCost->weights(wx);
@@ -289,8 +289,8 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSys
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
-    auto xCost = std::make_shared<copra::TrajectoryCost>(M, -xd);
-    auto uCost = std::make_shared<copra::ControlCost>(N, -ud);
+    auto xCost = std::make_shared<copra::TrajectoryCost>(M, xd);
+    auto uCost = std::make_shared<copra::ControlCost>(N, ud);
     auto trajConstr = std::make_shared<copra::TrajectoryConstraint>(E, f);
     auto contConstr = std::make_shared<copra::ControlConstraint>(G, h);
     xCost->weights(wx);
@@ -351,8 +351,8 @@ BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
-    auto xCost = std::make_shared<copra::MixedCost>(M, Eigen::MatrixXd::Zero(2, 1), -xd);
-    auto uCost = std::make_shared<copra::MixedCost>(Eigen::MatrixXd::Zero(1, 2), N, -ud);
+    auto xCost = std::make_shared<copra::MixedCost>(M, Eigen::MatrixXd::Zero(2, 1), xd);
+    auto uCost = std::make_shared<copra::MixedCost>(Eigen::MatrixXd::Zero(1, 2), N, ud);
     auto trajConstr = std::make_shared<copra::TrajectoryConstraint>(E, f);
     auto contConstr = std::make_shared<copra::ControlConstraint>(G, h);
     xCost->weights(wx);
@@ -395,8 +395,8 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
-    auto xCost = std::make_shared<copra::TargetCost>(M, -xd);
-    auto uCost = std::make_shared<copra::ControlCost>(N, -ud);
+    auto xCost = std::make_shared<copra::TargetCost>(M, xd);
+    auto uCost = std::make_shared<copra::ControlCost>(N, ud);
     auto mixedConstr = std::make_shared<copra::MixedConstraint>(E, G, f);
     xCost->weights(wx);
     uCost->weights(wu);
@@ -461,8 +461,8 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
-    auto xCost = std::make_shared<copra::TrajectoryCost>(M, -xd);
-    auto uCost = std::make_shared<copra::ControlCost>(N, -ud);
+    auto xCost = std::make_shared<copra::TrajectoryCost>(M, xd);
+    auto uCost = std::make_shared<copra::ControlCost>(N, ud);
     auto mixedConstr = std::make_shared<copra::MixedConstraint>(E, G, f);
     xCost->weights(wx);
     uCost->weights(wu);
@@ -526,8 +526,8 @@ BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
-    auto xCost = std::make_shared<copra::MixedCost>(M, Eigen::MatrixXd::Zero(2, 1), -xd);
-    auto uCost = std::make_shared<copra::MixedCost>(Eigen::MatrixXd::Zero(1, 2), N, -ud);
+    auto xCost = std::make_shared<copra::MixedCost>(M, Eigen::MatrixXd::Zero(2, 1), xd);
+    auto uCost = std::make_shared<copra::MixedCost>(Eigen::MatrixXd::Zero(1, 2), N, ud);
     auto mixedConstr = std::make_shared<copra::MixedConstraint>(E, G, f);
     xCost->weights(wx);
     uCost->weights(wu);
@@ -571,8 +571,8 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
-    auto xCost = std::make_shared<copra::TargetCost>(M, -xd);
-    auto uCost = std::make_shared<copra::ControlCost>(N, -ud);
+    auto xCost = std::make_shared<copra::TargetCost>(M, xd);
+    auto uCost = std::make_shared<copra::ControlCost>(N, ud);
     auto trajConstr = std::make_shared<copra::TrajectoryConstraint>(E, f, false);
     xCost->weights(wx);
     uCost->weights(wu);
@@ -633,8 +633,8 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
-    auto xCost = std::make_shared<copra::TrajectoryCost>(M, -xd);
-    auto uCost = std::make_shared<copra::ControlCost>(N, -ud);
+    auto xCost = std::make_shared<copra::TrajectoryCost>(M, xd);
+    auto uCost = std::make_shared<copra::ControlCost>(N, ud);
     auto trajConstr = std::make_shared<copra::TrajectoryConstraint>(E, f, false);
     xCost->weights(wx);
     uCost->weights(wu);
@@ -692,8 +692,8 @@ BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
-    auto xCost = std::make_shared<copra::MixedCost>(M, Eigen::MatrixXd::Zero(2, 1), -xd);
-    auto uCost = std::make_shared<copra::MixedCost>(Eigen::MatrixXd::Zero(1, 2), N, -ud);
+    auto xCost = std::make_shared<copra::MixedCost>(M, Eigen::MatrixXd::Zero(2, 1), xd);
+    auto uCost = std::make_shared<copra::MixedCost>(Eigen::MatrixXd::Zero(1, 2), N, ud);
     auto trajConstr = std::make_shared<copra::TrajectoryConstraint>(E, f, false);
     xCost->weights(wx);
     uCost->weights(wu);
@@ -832,10 +832,10 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_TRAJECTORY_COST, Ineq
     auto fullM = spanMatrix(M, nbXStep);
     auto fullxd = spanVector(xd, nbXStep);
 
-    checkSpan(M, -xd, wx);
-    checkSpan(M, -fullxd, wx);
-    checkSpan(fullM, -xd, wx);
-    checkSpan(fullM, -fullxd, wx);
+    checkSpan(M, xd, wx);
+    checkSpan(M, fullxd, wx);
+    checkSpan(fullM, xd, wx);
+    checkSpan(fullM, fullxd, wx);
 }
 
 BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_CONTROL_COST, IneqSystem)
@@ -855,10 +855,10 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_CONTROL_COST, IneqSys
     auto fullN = spanMatrix(N, nbStep);
     auto fullud = spanVector(ud, nbStep);
 
-    checkSpan(N, -ud, wu);
-    checkSpan(N, -fullud, wu);
-    checkSpan(fullN, -ud, wu);
-    checkSpan(fullN, -fullud, wu);
+    checkSpan(N, ud, wu);
+    checkSpan(N, fullud, wu);
+    checkSpan(fullN, ud, wu);
+    checkSpan(fullN, fullud, wu);
 }
 
 BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_COST, IneqSystem)
@@ -903,14 +903,6 @@ BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_PREVIEW_SYSTEM, IneqSystem)
     BOOST_REQUIRE_THROW(ps->system(A, Eigen::MatrixXd::Ones(5, 1), c, x0, nbStep), std::domain_error);
     BOOST_REQUIRE_THROW(ps->system(A, B, Eigen::VectorXd::Ones(5), x0, nbStep), std::domain_error);
     BOOST_REQUIRE_THROW(ps->system(A, B, c, x0, -1), std::domain_error);
-
-    try {
-        ps->system(A, B, c, x0, -1);
-    } catch (const std::domain_error& e) {
-        std::cerr << "Test error message output" << std::endl;
-        std::cerr << e.what() << std::endl
-                  << std::endl;
-    }
 }
 
 BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_WEIGTHS, IneqSystem)
@@ -918,9 +910,9 @@ BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_WEIGTHS, IneqSystem)
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
-    auto cost = std::make_shared<copra::TrajectoryCost>(M, -xd);
+    auto cost = std::make_shared<copra::TrajectoryCost>(M, xd);
 
-    BOOST_REQUIRE_NO_THROW(cost->weights(2));
+    BOOST_REQUIRE_NO_THROW(cost->weight(2));
     BOOST_REQUIRE_THROW(cost->weights(Eigen::VectorXd::Ones(5)), std::domain_error);
     BOOST_REQUIRE_NO_THROW(cost->weights(wx));
     BOOST_REQUIRE_NO_THROW(controller.addCost(cost));
@@ -1053,8 +1045,8 @@ BOOST_FIXTURE_TEST_CASE(REMOVE_COST_AND_CONSTRAINT, IneqSystem)
     auto controller = copra::LMPC(ps);
 
     {
-        auto xCost = std::make_shared<copra::TargetCost>(M, -xd);
-        auto uCost = std::make_shared<copra::ControlCost>(N, -ud);
+        auto xCost = std::make_shared<copra::TargetCost>(M, xd);
+        auto uCost = std::make_shared<copra::ControlCost>(N, ud);
         auto trajConstr = std::make_shared<copra::TrajectoryConstraint>(E, f);
         auto contConstr = std::make_shared<copra::ControlConstraint>(G, h);
 

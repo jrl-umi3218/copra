@@ -137,11 +137,14 @@ bool LMPC::solve()
     solveTime_ = duration_cast<duration<double> >(high_resolution_clock::now() - sTime);
 
     checkDeleteCostsAndConstraints();
-    if (!success)
-        sol_->SI_inform();
 
     solveAndBuildTime_ = duration_cast<duration<double> >(high_resolution_clock::now() - sabTime);
     return success;
+}
+
+void LMPC::inform() const noexcept
+{
+  return sol_->SI_inform();
 }
 
 const Eigen::VectorXd& LMPC::control() const noexcept

@@ -94,7 +94,7 @@ public:
      * \param weight Weight to apply.
      */
     template <typename T, typename = std::enable_if_t<is_all_arithmetic<T>::value> >
-    void weights(T weight)
+    void weight(T weight)
     {
         weights_.setConstant(weight);
     }
@@ -139,13 +139,13 @@ protected:
 /**
  * \brief Trajectory cost function class.
  * This cost function looks for a minimization around a trajectory.
- * Mathematically, it is \f$(MX+p)^TW_X(MX+p) \Leftrightarrow \sum_k w_k\|Mx_k+p\|^2\f$.
+ * Mathematically, it is \f$(MX-p)^TW_X(MX-p) \Leftrightarrow \sum_k w_k\|Mx_k-p\|^2\f$.
  */
 class COPRA_DLLAPI TrajectoryCost final : public CostFunction {
 public:
     /**
      * \brief Constructor of the trajectory cost function.
-     * Create a cost function of type \f$(MX+p)^TW_X(MX+p)\f$.
+     * Create a cost function of type \f$(MX-p)^TW_X(MX-p)\f$.
      * Perform a move semantic if an rvalue is given.
      * \param M The matrix side of the cost function
      * \param p The vector side of the cost function
@@ -172,14 +172,14 @@ private:
 /**
  * \brief Target cost function class.
  * This cost function looks for target a final point.
- * Mathematically, it is \f$(Mx_N+p)^Tw_x(Mx_N+p) \Leftrightarrow w_x\|Mx_N+p\|^2\f$.
+ * Mathematically, it is \f$(Mx_N-p)^Tw_x(Mx_N-p) \Leftrightarrow w_x\|Mx_N-p\|^2\f$.
  */
 class COPRA_DLLAPI TargetCost final : public CostFunction {
 public:
 
     /**
      * \brief Constructor of the target cost function.
-     * Create a cost function of type \f$(Mx_N+p)^TW_X(Mx_N+p)\f$.
+     * Create a cost function of type \f$(Mx_N-p)^TW_X(Mx_N-p)\f$.
      * Perform a move semantic if an rvalue is given.
      * \param M The matrix side of the cost function
      * \param p The vector side of the cost function
@@ -205,13 +205,13 @@ private:
 /**
  * \brief Control cost function class.
  * This cost function looks for a minimization of the control.
- * Mathematically, it is \f$(NU+p)^TW_U(NU+p) \Leftrightarrow sum_k w_u\|Nu_k+p\|^2\f$.
+ * Mathematically, it is \f$(NU-p)^TW_U(NU-p) \Leftrightarrow sum_k w_u\|Nu_k-p\|^2\f$.
  */
 class COPRA_DLLAPI ControlCost final : public CostFunction {
 public:
     /**
      * \brief Constructor of the control cost function.
-     * Create a cost function of type \f$(NU+p)^TW_U(NU+p)\f$.
+     * Create a cost function of type \f$(NU-p)^TW_U(NU-p)\f$.
      * Perform a move semantic if an rvalue is given.
      * \param N The matrix side of the cost function
      * \param p The vector side of the cost function
@@ -238,13 +238,13 @@ private:
 /**
  * \brief Mixed cost function class.
  * This cost function looks for a minimization of a linear combination of trajectory and control.
- * Mathematically, it is \f$(MX+NU+p)^TW_M(MX+NU+p) \Leftrightarrow sum_k w_m\|Mx_k+Nu_k+p\|^2\f$.
+ * Mathematically, it is \f$(MX+NU-p)^TW_M(MX+NU-p) \Leftrightarrow sum_k w_m\|Mx_k+Nu_k-p\|^2\f$.
  */
 class COPRA_DLLAPI MixedCost final : public CostFunction {
 public:
     /**
      * \brief Constructor of the mixed cost function.
-     * Create a cost function of type \f$(MX+NU+p)^TW_M(MX+NU+p)\f$.
+     * Create a cost function of type \f$(MX+NU-p)^TW_M(MX+NU-p)\f$.
      * Perform a move semantic if an rvalue is given.
      * \param N The matrix side of the cost function
      * \param p The vector side of the cost function

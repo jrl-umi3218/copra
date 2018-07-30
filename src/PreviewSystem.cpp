@@ -40,7 +40,7 @@ void PreviewSystem::system(const Eigen::MatrixXd& state, const Eigen::MatrixXd& 
         DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("xInit", "control", xInit, control));
     if (xInit.rows() != bias.rows())
         DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("xInit", "state", xInit, bias));
-    if (numberOfSteps <= 0) // This should desappear later
+    if (numberOfSteps <= 0) // This should disappear later
         DOMAIN_ERROR_EXCEPTION("The number of step sould be a positive number! ");
 
     isUpdated = false;

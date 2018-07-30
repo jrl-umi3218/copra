@@ -1,85 +1,59 @@
 # Copra
 
-Copra (**Co**ntrol & **pr**eview **a**lgorithms) is a c++ library implementing a linear model predictive controller.
-It uses QP softwares to solve its problem. A python binding is available.
+Copra (**Co**ntrol & **pr**eview **a**lgorithms) is a C++ library implementing
+linear model predictive control. It relies on quadratic programming (QP)
+solvers. Python bindings are available.
 
-## Installing
+## Installation
 
-### Manual
+Compilation has been tested on Linux (gcc/clang).
 
-#### Dependencies
+### Dependencies
 
-To compile you need the following tools:
-
- * [Git]()
- * [CMake]() >= 2.8
- * [pkg-config]()
- * [doxygen]()
- * [c++ compiler]() It must compile C++11 but C++14 is recommended
- * [gfortran]()
- * [gcc]()
+ * Any compiler with C++11 support
+ * [CMake](https://cmake.org) >= 2.8
+ * [Doxygen](http://www.stack.nl/~dimitri/doxygen/): to generate documentation
  * [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) >= 3.2
+ * [Git](https://git-scm.com/)
+ * [pkg-config](https://www.freedesktop.org/wiki/Software/pkg-config/)
 
-#### Optional dependencies
+#### Optional
 
-To have more qp solver:
- * [eigen-qld](https://github.com/jrl-umi3218/eigen-qld.git)
- * [GUROBI](http://www.gurobi.com/) >= 4.0
- * [eigen-gurobi](https://github.com/vsamy/eigen-gurobi)
-Also compatible with the LSSOL QP Solver. Unfortunately this not under public license.
+* [Boost](http://www.boost.org/doc/libs/1_58_0/more/getting_started/unix-variants.html) >= 1.58: for Python bindings and unit tests
+* [GUROBI](http://www.gurobi.com/) >= 4.0: optional QP solver
+* [eigen-gurobi](https://github.com/vsamy/eigen-gurobi): bindings for GUROBI
+* [eigen-qld](https://github.com/jrl-umi3218/eigen-qld.git): optional QP solver
 
-To generate the documantation:
- * [Doxygen](http://www.stack.nl/~dimitri/doxygen/)
+### Building from source on Linux
 
-To have python bindings and unit tests
- * [Boost](http://www.boost.org/doc/libs/1_58_0/more/getting_started/unix-variants.html) >= 1.58 (>= 1.21 should work)
-
-#### Building with c++14
+The library assumes you are compiling C++14 by default:
 
 ```sh
-git clone --recursive git@github.com:vsamy/Model-Predictive-Control.git
-cd Model-Predictive-Control
-./build_and_install
-gedit build_and_install_config
-./build_and_install
+git clone --recursive git@github.com:stephane-caron/Copra.git
+cd Copra
+mkdir build && cd build
+cmake ..
+ccmake .  # configure e.g. PYTHON_BINDINGS or BUILD_CXX_TESTS
+make -j4
+sudo make install
 ```
 
-Please defines in build_and_install_config where to install the library, the build type, the number of core, etc...
-Note that you leave the BOOST_ROOT empty if boost has been installed by default.
+Take a look at the ``c++11-back-compatibility`` branch if you'd rather compile
+for C++11.
 
-##### Specific builds
-If you don't want to compile the python bindings you need to
-set the variable `PYTHON_BINDINGS` to false (default is true).
+### Testing
 
-If you want to compile the C++ unit tests, you need to set
-the variable `BUILD_CXX_TESTS` to true (default is false).
-
-#### Building with c++11
+C++ tests will be compiled in your build folder if you enabled the
+``BUILD_CXX_TESTS`` option:
 
 ```sh
-git clone --recursive https://github.com/vsamy/Model-Predictive-Control.git
-cd Model-Predictive-Control
-git checkout c++11-back-compatibility
-./build_and_install
-gedit build_and_install_config
-./build_and_install
-```
-
-Please defines in build_and_install_config where to install the library, the build type, the number of core, etc...
-Note that you leave the BOOST_ROOT empty if boost has been installed by default. 
-
-#### Testing and performance test
-
-You can test the C++ and python version. Those are still basic tests and need to be completed
-
-For c++
-```sh
-cd _build/tests
+cd build/tests
 ./TestSolvers --log_level=all
 ./TestLMPC --log_level=all
 ```
 
-For python
+Once Python bindings are installed, you can check them with:
+
 ```sh
 cd binding/python/tests
 python TestMPController.py
@@ -87,12 +61,10 @@ python TestMPController.py
 
 ## Documentation
 
-You have access to the doxygen files.
-Those files are in `<install_path>/share/doc/mpc/doxygen-html/`.
-Open the `index.html` file in your web browser.
-Plus you can find detailed information [here](https://vsamy.github.io)
+Doxygen files will be compiled into
+``<install_path>/share/doc/mpc/doxygen-html/``. Open the `index.html` file in
+your web browser. You can also check out unit tests, as well as the following
+two examples:
 
-## Examples
-
-Please see [here](https://vsamy.github.io) for a detailed example.
-You can also check the tests folder.
+- [C++ example of Copra](https://vsamy.github.io/en/blog/copra-example-cpp)
+- [Python example of Copra](https://vsamy.github.io/en/blog/copra-example-python)

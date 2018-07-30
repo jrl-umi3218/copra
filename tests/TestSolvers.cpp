@@ -17,23 +17,21 @@
 
 #define BOOST_TEST_MODULE TestSolvers
 
-// stl
+// STL
 #include <iostream>
 #include <numeric>
 
-// boost
+// Boost
 #include <boost/test/unit_test.hpp>
 
-// eigen
+// Eigen
 #include <Eigen/Core>
 
-// copra
-#include "QuadProgSolver.h"
+// Copra
+#include <copra/QuadProgSolver.h>
+#include <copra/solverConfig.h>
 
-// optional mpc
-#include "solverConfig.h"
-
-// Tests problems
+// Test problems
 #include "systems.h"
 
 BOOST_FIXTURE_TEST_CASE(QuadProgTest, Problem)

@@ -84,8 +84,8 @@ struct BoundedSystem {
         // Cost
         M << 1, 0, 0, 1;
         N << 1;
-        xd << 0, 0;
-        ud << 0;
+        xd << 0, -1;
+        ud << 2;
 
         // Control bound
         uLower.setConstant(-std::numeric_limits<double>::infinity());
@@ -140,8 +140,8 @@ struct IneqSystem {
         // Cost
         M << 1, 0, 0, 1;
         N << 1;
-        xd << 0, 0;
-        ud << 0;
+        xd << 0, -1;
+        ud << 2;
     }
 
     double T, mass;
@@ -185,8 +185,8 @@ struct MixedSystem {
         // Cost
         M << 1, 0, 0, 1;
         N << 1;
-        xd << 0, 0;
-        ud << 0;
+        xd << 0, -1;
+        ud << 2;
     }
 
     double T, mass;
@@ -228,7 +228,7 @@ struct EqSystem {
         M << 1, 0, 0, 1;
         N << 1;
         xd << 0, 0;
-        ud << 0;
+        ud << 2;
 
         // Trajectory equality constraint
         E.setZero();
@@ -246,5 +246,5 @@ struct EqSystem {
     double T, mass;
     int nbStep;
     Eigen::MatrixXd A, B, E, M, N;
-    Eigen::VectorXd c, f, x0, xd, ud, wx, wu, uLower, uUpper;
+    Eigen::VectorXd c, f, x0, xd, ud, wx, wu;
 };

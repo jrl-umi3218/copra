@@ -57,7 +57,7 @@ public:
     int SI_fail() const override;
 
     /**
-	 * Print an information on the current solver status.
+	 * Print information on the current solver status.
 	 */
     void SI_inform() const override;
 
