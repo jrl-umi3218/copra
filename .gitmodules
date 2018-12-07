@@ -1,6 +1,0 @@
-[submodule "eigen-quadprog"]
-	path = 3rd-party/eigen-quadprog
-	url = https://github.com/vsamy/eigen-quadprog.git
-[submodule "minieigen"]
-	path = 3rd-party/minieigen
-	url = https://github.com/vsamy/minieigen.git
