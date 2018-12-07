@@ -10,12 +10,13 @@ Compilation has been tested on Linux (gcc/clang).
 
 ### Dependencies
 
- * Any compiler with C++11 support
- * [CMake](https://cmake.org) >= 2.8
- * [Doxygen](http://www.stack.nl/~dimitri/doxygen/): to generate documentation
- * [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) >= 3.2
- * [Git](https://git-scm.com/)
- * [pkg-config](https://www.freedesktop.org/wiki/Software/pkg-config/)
+* Any compiler with C++14 support
+* [CMake](https://cmake.org) >= 2.8
+* [Doxygen](http://www.stack.nl/~dimitri/doxygen/): to generate documentation
+* [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) >= 3.2
+* [Git](https://git-scm.com/)
+* [pkg-config](https://www.freedesktop.org/wiki/Software/pkg-config/)
+* [eigen-quadprog](https://github.com/vsamy/eigen-quadprog)
 
 #### Optional
 
@@ -23,6 +24,7 @@ Compilation has been tested on Linux (gcc/clang).
 * [GUROBI](http://www.gurobi.com/) >= 4.0: optional QP solver
 * [eigen-gurobi](https://github.com/vsamy/eigen-gurobi): bindings for GUROBI
 * [eigen-qld](https://github.com/jrl-umi3218/eigen-qld.git): optional QP solver
+* [pygen-converter](https://github.com/vsamy/pygen-converter): for python bindings
 
 ### Building from source on Linux
 

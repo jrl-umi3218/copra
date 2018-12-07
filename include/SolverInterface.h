@@ -17,10 +17,8 @@
 
 #pragma once
 
-// copra
-#include "config.hh"
+#include "api.h"
 
-// eigen
 #include <Eigen/Core>
 
 namespace copra {

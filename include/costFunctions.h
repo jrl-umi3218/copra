@@ -17,16 +17,12 @@
 
 #pragma once
 
-// stl
-#include <memory>
+#include "api.h"
 
-// Eigen
-#include <Eigen/Core>
-
-// copra
-#include "config.hh"
 #include "debugUtils.h"
 #include "typedefs.h"
+#include <Eigen/Core>
+#include <memory>
 
 namespace copra {
 
@@ -67,7 +63,6 @@ public:
      * \param ps The preview system.
      */
     virtual void update(const PreviewSystem& ps) = 0;
-    
 
     /**
      * Set the weights of the system.
@@ -75,7 +70,7 @@ public:
      * \param Weights of to set.
      * \throw Throw a std::domain_error if weights is badly dimension.
      */
-    template <typename TVec, typename = std::enable_if_t<!is_all_arithmetic<TVec>::value> >
+    template <typename TVec, typename = std::enable_if_t<!is_all_arithmetic<TVec>::value>>
     void weights(TVec&& weights)
     {
         if (weights.rows() == weights_.rows()) {
@@ -93,7 +88,7 @@ public:
      * Set the weights of the system. All variables are set to the same weight.
      * \param weight Weight to apply.
      */
-    template <typename T, typename = std::enable_if_t<is_all_arithmetic<T>::value> >
+    template <typename T, typename = std::enable_if_t<is_all_arithmetic<T>::value>>
     void weight(T weight)
     {
         weights_.setConstant(weight);
@@ -103,30 +98,21 @@ public:
      * Function that return the name of the cost function.
      * \return The name of the constraint.
      */
-    const std::string& name() const noexcept
-    {
-        return name_;
-    }
+    const std::string& name() const noexcept { return name_; }
 
     /**
      * \brief Function that return the Q matrix of the cost function
      * A cost function is written \f$ \frac{1}{2} x^T Q x + c^T x\f$.
      * \return The Q matrix
      */
-    const Eigen::MatrixXd& Q() const noexcept
-    {
-        return Q_;
-    }
+    const Eigen::MatrixXd& Q() const noexcept { return Q_; }
 
     /**
      * \brief Function that return the c vector of the cost function
      * A cost function is written \f$ \frac{1}{2} x^T Q x + c^T x\f$.
      * \return The c vector matrix
      */
-    const Eigen::VectorXd& c() const noexcept
-    {
-        return c_;
-    }
+    const Eigen::VectorXd& c() const noexcept { return c_; }
 
 protected:
     std::string name_;
@@ -150,8 +136,7 @@ public:
      * \param M The matrix side of the cost function
      * \param p The vector side of the cost function
      */
-    template <typename TMat, typename TVec,
-        typename = std::enable_if_t<!is_all_arithmetic<TMat, TVec>::value> >
+    template <typename TMat, typename TVec, typename = std::enable_if_t<!is_all_arithmetic<TMat, TVec>::value>>
     TrajectoryCost(TMat&& M, TVec&& p)
         : CostFunction("TrajectoryCost")
         , M_(std::forward<TMat>(M))
@@ -176,7 +161,6 @@ private:
  */
 class COPRA_DLLAPI TargetCost final : public CostFunction {
 public:
-
     /**
      * \brief Constructor of the target cost function.
      * Create a cost function of type \f$(Mx_N-p)^TW_X(Mx_N-p)\f$.
@@ -184,8 +168,7 @@ public:
      * \param M The matrix side of the cost function
      * \param p The vector side of the cost function
      */
-    template <typename TMat, typename TVec,
-        typename = std::enable_if_t<!is_all_arithmetic<TMat, TVec>::value> >
+    template <typename TMat, typename TVec, typename = std::enable_if_t<!is_all_arithmetic<TMat, TVec>::value>>
     TargetCost(TMat&& M, TVec&& p)
         : CostFunction("TargetCost")
         , M_(std::forward<TMat>(M))
@@ -216,8 +199,7 @@ public:
      * \param N The matrix side of the cost function
      * \param p The vector side of the cost function
      */
-    template <typename TMat, typename TVec,
-        typename = std::enable_if_t<!is_all_arithmetic<TMat, TVec>::value> >
+    template <typename TMat, typename TVec, typename = std::enable_if_t<!is_all_arithmetic<TMat, TVec>::value>>
     ControlCost(TMat&& N, TVec&& p)
         : CostFunction("ControlCost")
         , N_(std::forward<TMat>(N))
@@ -249,8 +231,7 @@ public:
      * \param N The matrix side of the cost function
      * \param p The vector side of the cost function
      */
-    template <typename TMat1, typename TMat2, typename TVec,
-        typename = std::enable_if_t<!is_all_arithmetic<TMat1, TMat2, TVec>::value> >
+    template <typename TMat1, typename TMat2, typename TVec, typename = std::enable_if_t<!is_all_arithmetic<TMat1, TMat2, TVec>::value>>
     MixedCost(TMat1&& M, TMat2&& N, TVec&& p)
         : CostFunction("MixedCost")
         , M_(std::forward<TMat1>(M))

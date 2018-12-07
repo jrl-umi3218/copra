@@ -15,10 +15,7 @@
 // along with copra.  If not, see
 // <http://www.gnu.org/licenses/>.
 
-// header
 #include "QuadProgSolver.h"
-
-// stl
 #include <iostream>
 
 namespace copra {

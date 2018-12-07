@@ -15,22 +15,22 @@
 # along with copra.  If not, see
 # <http://www.gnu.org/licenses/>.
 
-from _copra import AutoSpan
-from _copra import ControlConstraint
-from _copra import LMPC
-from _copra import NewControlBoundConstraint
-from _copra import NewControlConstraint
-from _copra import NewControlCost
-from _copra import NewMixedConstraint
-from _copra import NewMixedCost
-from _copra import NewPreviewSystem
-from _copra import NewTargetCost
-from _copra import NewTrajectoryBoundConstraint
-from _copra import NewTrajectoryConstraint
-from _copra import NewTrajectoryCost
-from _copra import PreviewSystem
-from _copra import SolverFlag
-from _copra import TrajectoryConstraint
+from .pyCopra import AutoSpan
+from .pyCopra import ControlConstraint
+from .pyCopra import LMPC
+from .pyCopra import ControlBoundConstraint
+from .pyCopra import ControlConstraint
+from .pyCopra import ControlCost
+from .pyCopra import MixedConstraint
+from .pyCopra import MixedCost
+from .pyCopra import PreviewSystem
+from .pyCopra import TargetCost
+from .pyCopra import TrajectoryBoundConstraint
+from .pyCopra import TrajectoryConstraint
+from .pyCopra import TrajectoryCost
+from .pyCopra import PreviewSystem
+from .pyCopra import SolverFlag
+from .pyCopra import TrajectoryConstraint
 
 __all__ = ["AutoSpan",
            "ControlConstraint",

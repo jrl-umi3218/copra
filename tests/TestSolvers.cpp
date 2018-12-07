@@ -17,22 +17,21 @@
 
 #define BOOST_TEST_MODULE TestSolvers
 
-// STL
+#include "systems.h"
+#include <Eigen/Core>
+#include <boost/test/unit_test.hpp>
+#include <copra/QuadProgSolver.h>
 #include <iostream>
 #include <numeric>
-
-// Boost
-#include <boost/test/unit_test.hpp>
-
-// Eigen
-#include <Eigen/Core>
-
-// Copra
-#include <copra/QuadProgSolver.h>
-#include <copra/solverConfig.h>
-
-// Test problems
-#include "systems.h"
+#ifdef EIGEN_QLD_FOUND
+#include <copra/QLDSolver.h>
+#endif
+#ifdef EIGEN_LSSOL_FOUND
+#include <copra/LSSOLSolver.h>
+#endif
+#ifdef EIGEN_GUROBI_FOUND
+#include <copra/GUROBISolver.h>
+#endif
 
 BOOST_FIXTURE_TEST_CASE(QuadProgTest, Problem)
 {

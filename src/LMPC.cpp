@@ -15,18 +15,13 @@
 // along with copra.  If not, see
 // <http://www.gnu.org/licenses/>.
 
-// header
 #include "LMPC.h"
-
-// stl
-#include <algorithm>
-#include <exception>
-#include <numeric>
-
-// copra
 #include "PreviewSystem.h"
 #include "constraints.h"
 #include "costFunctions.h"
+#include <algorithm>
+#include <exception>
+#include <numeric>
 
 namespace copra {
 
@@ -134,17 +129,17 @@ bool LMPC::solve()
 
     auto sTime = high_resolution_clock::now();
     bool success = sol_->SI_solve(Q_, c_, Aeq_, beq_, Aineq_, bineq_, lb_, ub_);
-    solveTime_ = duration_cast<duration<double> >(high_resolution_clock::now() - sTime);
+    solveTime_ = duration_cast<duration<double>>(high_resolution_clock::now() - sTime);
 
     checkDeleteCostsAndConstraints();
 
-    solveAndBuildTime_ = duration_cast<duration<double> >(high_resolution_clock::now() - sabTime);
+    solveAndBuildTime_ = duration_cast<duration<double>>(high_resolution_clock::now() - sabTime);
     return success;
 }
 
 void LMPC::inform() const noexcept
 {
-  return sol_->SI_inform();
+    return sol_->SI_inform();
 }
 
 const Eigen::VectorXd& LMPC::control() const noexcept
@@ -198,16 +193,16 @@ void LMPC::removeConstraint(const std::shared_ptr<Constraint>& constr)
     if (rConstr != constraints_.spConstr.end()) {
         constraints_.spConstr.erase(rConstr);
         switch (constr->constraintType()) {
-            case ConstraintFlag::Constraint:
-            case ConstraintFlag::EqualityConstraint: 
-                constraints_.spEqConstr.erase(std::find(constraints_.spEqConstr.begin(), constraints_.spEqConstr.end(), constr));
-                break;
-            case ConstraintFlag::InequalityConstraint:
-                constraints_.spIneqConstr.erase(std::find(constraints_.spIneqConstr.begin(), constraints_.spIneqConstr.end(), constr));
-                break;
-            case ConstraintFlag::BoundConstraint:
-                constraints_.spBoundConstr.erase(std::find(constraints_.spBoundConstr.begin(), constraints_.spBoundConstr.end(), constr));
-                break;
+        case ConstraintFlag::Constraint:
+        case ConstraintFlag::EqualityConstraint:
+            constraints_.spEqConstr.erase(std::find(constraints_.spEqConstr.begin(), constraints_.spEqConstr.end(), constr));
+            break;
+        case ConstraintFlag::InequalityConstraint:
+            constraints_.spIneqConstr.erase(std::find(constraints_.spIneqConstr.begin(), constraints_.spIneqConstr.end(), constr));
+            break;
+        case ConstraintFlag::BoundConstraint:
+            constraints_.spBoundConstr.erase(std::find(constraints_.spBoundConstr.begin(), constraints_.spBoundConstr.end(), constr));
+            break;
         }
     }
 }

@@ -18,7 +18,7 @@
 enable_testing()
 
 set(BOOST_COMPONENTS system unit_test_framework)
-SEARCH_FOR_BOOST()
+search_for_boost()
 
 add_definitions(-DBOOST_TEST_DYN_LINK)
 include_directories("${PROJECT_SOURCE_DIR}/src")
@@ -26,7 +26,12 @@ include_directories(${Boost_INCLUDE_DIRS})
 
 macro(addTest testName)
     add_executable(${testName} ${testName}.cpp systems.h tools.h)
-    target_link_libraries(${testName} ${Boost_LIBRARIES} ${PROJECT_NAME})
+    if(MSVC)
+      # for msvc, we let boost auto-link do the work
+        target_link_libraries(${testName} ${PROJECT_NAME})
+    else()
+        target_link_libraries(${testName} ${Boost_LIBRARIES} ${PROJECT_NAME})
+    endif()
     PKG_CONFIG_USE_DEPENDENCY(${testName} eigen-quadprog)
     if(${EIGEN_QLD_FOUND})
         PKG_CONFIG_USE_DEPENDENCY(${testName} eigen-qld)

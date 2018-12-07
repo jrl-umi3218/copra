@@ -17,11 +17,9 @@
 
 #pragma once
 
-// eigen
-#include <Eigen/Core>
+#include "api.h"
 
-// copra
-#include "config.hh"
+#include <Eigen/Core>
 
 namespace copra {
 
@@ -39,8 +37,7 @@ struct COPRA_DLLAPI PreviewSystem {
     /**
      * Default constructor.
      */
-    PreviewSystem() 
-    {}
+    PreviewSystem() {}
 
     /**
      * Constructor of the class.
@@ -77,10 +74,7 @@ struct COPRA_DLLAPI PreviewSystem {
     /**
      * \brief Update the initial state.
      */
-    void xInit(const Eigen::VectorXd& xInit)
-    {
-        x0 = xInit;
-    }
+    void xInit(const Eigen::VectorXd& xInit) { x0 = xInit; }
 
     bool isUpdated = false; /**< State whether or not the preview system has been updated. This is done when calling the solve function of a mpc. Calling \see system or setting this to false will force a new update*/
     int nrUStep = 0; /**< The number of iteration to perform for U (it is the dimension of \f$U\f$, \f$N\f$). */

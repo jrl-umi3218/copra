@@ -17,30 +17,29 @@
 
 #define BOOST_TEST_MODULE TestPreviewControl
 
-// STL
+#include "systems.h"
+#include "tools.h"
+#include <Eigen/Core>
 #include <algorithm>
-#include <memory>
-#include <numeric>
-#include <vector>
-
-// Boost
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/test/unit_test.hpp>
-
-// Eigen
-#include <Eigen/Core>
-
-// Copra
 #include <copra/LMPC.h>
 #include <copra/PreviewSystem.h>
 #include <copra/constraints.h>
 #include <copra/costFunctions.h>
-#include <copra/solverConfig.h>
-#include <copra/solverUtils.h>
-
-// Test helpers
-#include "systems.h"
-#include "tools.h"
+#include <copra/QuadProgSolver.h>
+#ifdef EIGEN_QLD_FOUND
+#include <copra/QLDSolver.h>
+#endif
+#ifdef EIGEN_LSSOL_FOUND
+#include <copra/LSSOLSolver.h>
+#endif
+#ifdef EIGEN_GUROBI_FOUND
+#include <copra/GUROBISolver.h>
+#endif
+#include <memory>
+#include <numeric>
+#include <vector>
 
 /********************************************************************************************************
  *                               Check Bound constraint                                                 *
@@ -48,7 +47,7 @@
 
 BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
 {
-    std::vector<std::pair<std::string, double> > solveTime;
+    std::vector<std::pair<std::string, double>> solveTime;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
@@ -108,12 +107,12 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
     for (auto sol : solveTime)
         ss << sol.first << " (" + std::to_string(sol.second) << "ms) > ";
 
-    BOOST_MESSAGE(ss.str());
+    BOOST_TEST_MESSAGE(ss.str());
 }
 
 BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
 {
-    std::vector<std::pair<std::string, double> > solveTime;
+    std::vector<std::pair<std::string, double>> solveTime;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
@@ -172,7 +171,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS, BoundedSyste
     ss << "Solving fasteness: ";
     for (auto sol : solveTime)
         ss << sol.first << " (" + std::to_string(sol.second) << "ms) > ";
-    BOOST_MESSAGE(ss.str());
+    BOOST_TEST_MESSAGE(ss.str());
 }
 
 BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
@@ -219,7 +218,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
 
 BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
 {
-    std::vector<std::pair<std::string, double> > solveTime;
+    std::vector<std::pair<std::string, double>> solveTime;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
@@ -279,12 +278,12 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
     for (auto sol : solveTime)
         ss << sol.first << " (" + std::to_string(sol.second) << "ms) > ";
 
-    BOOST_MESSAGE(ss.str());
+    BOOST_TEST_MESSAGE(ss.str());
 }
 
 BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
 {
-    std::vector<std::pair<std::string, double> > solveTime;
+    std::vector<std::pair<std::string, double>> solveTime;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
@@ -343,7 +342,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSys
     ss << "Solving fasteness: ";
     for (auto sol : solveTime)
         ss << sol.first << " (" + std::to_string(sol.second) << "ms) > ";
-    BOOST_MESSAGE(ss.str());
+    BOOST_TEST_MESSAGE(ss.str());
 }
 
 BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
@@ -390,7 +389,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
 
 BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
 {
-    std::vector<std::pair<std::string, double> > solveTime;
+    std::vector<std::pair<std::string, double>> solveTime;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
@@ -451,12 +450,12 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
     for (auto sol : solveTime)
         ss << sol.first << " (" + std::to_string(sol.second) << "ms) > ";
 
-    BOOST_MESSAGE(ss.str());
+    BOOST_TEST_MESSAGE(ss.str());
 }
 
 BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
 {
-    std::vector<std::pair<std::string, double> > solveTime;
+    std::vector<std::pair<std::string, double>> solveTime;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
@@ -516,12 +515,12 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
     ss << "Solving fasteness: ";
     for (auto sol : solveTime)
         ss << sol.first << " (" + std::to_string(sol.second) << "ms) > ";
-    BOOST_MESSAGE(ss.str());
+    BOOST_TEST_MESSAGE(ss.str());
 }
 
 BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
 {
-    std::vector<std::pair<std::string, double> > solveTime;
+    std::vector<std::pair<std::string, double>> solveTime;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
@@ -566,7 +565,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
 
 BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
 {
-    std::vector<std::pair<std::string, double> > solveTime;
+    std::vector<std::pair<std::string, double>> solveTime;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
@@ -623,12 +622,12 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
     for (auto sol : solveTime)
         ss << sol.first << " (" + std::to_string(sol.second) << "ms) > ";
 
-    BOOST_MESSAGE(ss.str());
+    BOOST_TEST_MESSAGE(ss.str());
 }
 
 BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
 {
-    std::vector<std::pair<std::string, double> > solveTime;
+    std::vector<std::pair<std::string, double>> solveTime;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
@@ -684,7 +683,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
     ss << "Solving fasteness: ";
     for (auto sol : solveTime)
         ss << sol.first << " (" + std::to_string(sol.second) << "ms) > ";
-    BOOST_MESSAGE(ss.str());
+    BOOST_TEST_MESSAGE(ss.str());
 }
 
 BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)

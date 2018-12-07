@@ -15,10 +15,7 @@
 // along with copra.  If not, see
 // <http://www.gnu.org/licenses/>.
 
-// header
 #include "debugUtils.h"
-
-// stl
 #include <sstream>
 
 namespace copra {

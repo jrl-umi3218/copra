@@ -27,6 +27,7 @@ set(SOURCES
     solverUtils.cpp)
 
 set(HEADERS 
+    ../include/api.h
     ../include/AutoSpan.h
     ../include/costFunctions.h
     ../include/PreviewSystem.h 
@@ -53,17 +54,19 @@ if(${EIGEN_QLD_FOUND})
     list(APPEND HEADERS ../include/QLDSolver.h)
 endif()
 
+add_compile_options(-Dcopra_EXPORTS)
+
 add_library(${PROJECT_NAME} SHARED ${SOURCES} ${HEADERS})
 
-PKG_CONFIG_USE_DEPENDENCY(${PROJECT_NAME} eigen-quadprog)
+pkg_config_use_dependency(${PROJECT_NAME} eigen-quadprog)
 if(${EIGEN_QLD_FOUND})
-    PKG_CONFIG_USE_DEPENDENCY(${PROJECT_NAME} eigen-qld)
+    pkg_config_use_dependency(${PROJECT_NAME} eigen-qld)
 endif()
 if(${EIGEN_LSSOL_FOUND})
-    PKG_CONFIG_USE_DEPENDENCY(${PROJECT_NAME} eigen-lssol)
+    pkg_config_use_dependency(${PROJECT_NAME} eigen-lssol)
 endif()
 if(${EIGEN_GUROBI_FOUND})
-    PKG_CONFIG_USE_DEPENDENCY(${PROJECT_NAME} eigen-gurobi)
+    pkg_config_use_dependency(${PROJECT_NAME} eigen-gurobi)
 endif()
 
 set(INSTALL_PATH include/${PROJECT_NAME})

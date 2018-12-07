@@ -17,23 +17,27 @@
 
 #pragma once
 
-// stl
+#include "api.h"
+
+#include "QuadProgSolver.h"
+#ifdef EIGEN_QLD_FOUND
+#include "QLDSolver.h"
+#endif
+#ifdef EIGEN_LSSOL_FOUND
+#include "LSSOLSolver.h"
+#endif
+#ifdef EIGEN_GUROBI_FOUND
+#include "GUROBISolver.h"
+#endif
 #include <memory>
 #include <utility>
-
-// copra
-#include "QuadProgSolver.h"
-#include "config.hh"
-
-// optional mpc
-#include "solverConfig.h"
 
 namespace copra {
 
 /**
  * Enum class that handles flag for selecting a qp solver.
  */
-enum class SolverFlag {
+enum class COPRA_DLLAPI SolverFlag {
     DEFAULT, /**< Default solver (QuadProgDense solver) */
 #ifdef EIGEN_LSSOL_FOUND
     LSSOL, /**< Stanford LSSOL solver */
@@ -53,7 +57,7 @@ enum class SolverFlag {
  * \param flag Flag of the solver.
  * \return An unique pointer to the desired solver.
  */
-std::unique_ptr<SolverInterface> COPRA_DLLAPI solverFactory(SolverFlag flag);
+COPRA_DLLAPI std::unique_ptr<SolverInterface> solverFactory(SolverFlag flag);
 
 /**
  * Helper function to get a desired solver.
@@ -61,6 +65,6 @@ std::unique_ptr<SolverInterface> COPRA_DLLAPI solverFactory(SolverFlag flag);
  * \param flag Flag of the solver.
  * \return The desired solver.
  */
-SolverInterface* pythonSolverFactory(SolverFlag flag);
+COPRA_DLLAPI SolverInterface* pythonSolverFactory(SolverFlag flag);
 
 } // namespace pc

@@ -17,20 +17,16 @@
 
 #pragma once
 
-// stl
+#include "api.h"
+
+#include "debugUtils.h"
+#include "solverUtils.h"
+#include "typedefs.h"
+#include <Eigen/Core>
 #include <chrono>
 #include <memory>
 #include <string>
 #include <vector>
-
-// eigen
-#include <Eigen/Core>
-
-// copra
-#include "config.hh"
-#include "debugUtils.h"
-#include "solverUtils.h"
-#include "typedefs.h"
 
 namespace copra {
 
@@ -66,8 +62,7 @@ public:
      * \param ps A preview system to amke a copy from.
      * \param sFlag The flag corresponding to the desired solver.
      */
-    LMPC(const std::shared_ptr<PreviewSystem>& ps,
-        SolverFlag sFlag = SolverFlag::DEFAULT);
+    LMPC(const std::shared_ptr<PreviewSystem>& ps, SolverFlag sFlag = SolverFlag::DEFAULT);
 
     /**
      * Select a solver. It will load a solver with default values.
@@ -191,16 +186,16 @@ protected:
 
         int nrEqConstr;
         int nrIneqConstr;
-        std::vector<std::shared_ptr<Constraint> > spConstr;
-        std::vector<std::shared_ptr<EqIneqConstraint> > spEqConstr;
-        std::vector<std::shared_ptr<EqIneqConstraint> > spIneqConstr;
-        std::vector<std::shared_ptr<ControlBoundConstraint> > spBoundConstr;
+        std::vector<std::shared_ptr<Constraint>> spConstr;
+        std::vector<std::shared_ptr<EqIneqConstraint>> spEqConstr;
+        std::vector<std::shared_ptr<EqIneqConstraint>> spIneqConstr;
+        std::vector<std::shared_ptr<ControlBoundConstraint>> spBoundConstr;
     };
 
 protected:
     std::shared_ptr<PreviewSystem> ps_;
     std::unique_ptr<SolverInterface> sol_;
-    std::vector<std::shared_ptr<CostFunction> > spCost_;
+    std::vector<std::shared_ptr<CostFunction>> spCost_;
     Constraints constraints_;
 
     Eigen::MatrixXd Q_, Aineq_, Aeq_;

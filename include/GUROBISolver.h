@@ -17,16 +17,12 @@
 
 #pragma once
 
-// stl
-#include <memory>
+#include "api.h"
 
-// eigen
+#include "SolverInterface.h"
 #include <Eigen/Core>
 #include <eigen-gurobi/Gurobi.h>
-
-// copra
-#include "SolverInterface.h"
-#include "config.hh"
+#include <memory>
 
 namespace copra {
 

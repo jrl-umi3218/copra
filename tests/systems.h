@@ -17,7 +17,6 @@
 
 #pragma once
 
-// Eigen
 #include <Eigen/Core>
 
 // Test base on scilab qld example:
@@ -234,13 +233,6 @@ struct EqSystem {
         E.setZero();
         E(0, 0) = 1;
         f = x0;
-    }
-
-    bool printErrorMessage(const std::domain_error& e)
-    {
-        std::cout << e.what() << std::endl
-                  << std::endl;
-        return true;
     }
 
     double T, mass;

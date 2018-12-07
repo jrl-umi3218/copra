@@ -15,14 +15,9 @@
 // along with copra.  If not, see
 // <http://www.gnu.org/licenses/>.
 
-// header
 #include "constraints.h"
-
-// copra
 #include "AutoSpan.h"
 #include "PreviewSystem.h"
-
-// stl
 #include <sstream>
 
 namespace copra {

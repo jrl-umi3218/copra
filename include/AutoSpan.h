@@ -17,11 +17,10 @@
 
 #pragma once
 
-// Eigen
-#include <Eigen/Core>
+#include "api.h"
 
-// copra
 #include "typedefs.h"
+#include <Eigen/Core>
 
 namespace copra {
 
@@ -31,10 +30,9 @@ namespace copra {
  * This class has helper functions for automatically extending a matrix to a given dimension.
  * The result is a block diagonal matrix.
  */
-class AutoSpan
-{
+struct COPRA_DLLAPI AutoSpan {
 public:
-    // Delete the default constrcutor. This class should not be instantiated
+    // Delete the default constructor. This class should not be instantiated
     AutoSpan() = delete;
 
     /**
@@ -44,7 +42,7 @@ public:
      * \param addCols Additional zero columns to add at the end of the matrix: the number of columns added is addCols * mat.cols().
      * \throw std::domain_error if new_dim is not a multiple of mat.rows()
      * \note Does nothing if mat.rows() == new_dim
-     */ 
+     */
     static void spanMatrix(Eigen::MatrixXd& mat, Eigen::Index new_dim, int addCols = 0);
 
     /**
@@ -53,7 +51,7 @@ public:
      * \param new_dim The new dimension of the vector. Must be a multiple of vec.size().
      * \throw std::domain_error if new_dim is not a multiple of vec.rows()
      * \note Does nothing if mat.rows() == new_dim
-     */ 
+     */
     static void spanVector(Eigen::VectorXd& vec, Eigen::Index new_dim);
 };
 

@@ -20,13 +20,16 @@ cmake_minimum_required(VERSION 2.8)
 include(cmake/base.cmake)
 include(cmake/eigen.cmake)
 include(cmake/boost.cmake)
+include(cmake/msvc-specific.cmake)
 
 set(PROJECT_NAME copra)
 set(PROJECT_DESCRIPTION "This library is an implementation of a linear model predictive control")
-set(PROJECT_URL "https://github.com/vsamy/Copra")
+set(PROJECT_URL "https://github.com/vsamy/copra")
 
-#SET(CXX_DISABLE_WERROR True)
+# SET(CXX_DISABLE_WERROR True)
 set(DOXYGEN_USE_MATHJAX "YES")
+
+cmake_policy(VERSION ${CMAKE_VERSION})
 
 project(${PROJECT_NAME} CXX)
 
@@ -50,10 +53,15 @@ if(lower_case STREQUAL "debug")
     set(CMAKE_CXX_FLAGS_DEBUG "-D_DEBUG")
 endif()
 
-option(PYTHON_BINDINGS "Generate python bindings." OFF)
-option(BUILD_CXX_TESTS "Build unit tests." OFF)
+option(PYTHON_BINDING "Generate python bindings." OFF)
+option(DISABLE_TESTS "Build unit tests." OFF)
 
-SETUP_PROJECT()
+setup_project()
+
+if(MSVC)
+    set(CMAKE_MSVCIDE_RUN_PATH "\$(SolutionDir)/src/\$(Configuration)")
+    add_compile_options("/bigobj")
+endif(MSVC)
 
 set(BOOST_REQUIRED 1.48)
 set(BOOST_COMPONENTS system timer)
@@ -64,31 +72,42 @@ if(${_Eigen_VERSION} VERSION_LESS 3.3)
   add_definitions(-DEIGEN_3_2_FOUND) # Will add Eigen::Index as in 3.3
 endif()
 
-ADD_REQUIRED_DEPENDENCY("eigen-quadprog")
-ADD_OPTIONAL_DEPENDENCY("eigen-qld")
-ADD_OPTIONAL_DEPENDENCY("eigen-lssol")
-ADD_OPTIONAL_DEPENDENCY("eigen-gurobi")
+add_required_dependency("eigen-quadprog")
+add_optional_dependency("eigen-qld")
+add_optional_dependency("eigen-lssol")
+add_optional_dependency("eigen-gurobi")
+if(${EIGEN_LSSOL_FOUND})
+    add_compile_options(-DEIGEN_LSSOL_FOUND)
+endif()
+if(${EIGEN_GUROBI_FOUND})
+    add_compile_options(-DEIGEN_GUROBI_FOUND)
+endif()
+if(${EIGEN_QLD_FOUND})
+    add_compile_options(-DEIGEN_QLD_FOUND)
+endif()
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -std=c++14 -pedantic")
+if(NOT WIN32)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -std=c++14 -pedantic")
+endif()
 
 # Header for define and include found c++ QP solver
-configure_file(cmake/solverConfig.cmake.in include/${HEADER_DIR}/solverConfig.h)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/include/${HEADER_DIR}/solverConfig.h
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${HEADER_DIR})
+# configure_file(cmake/solverConfig.cmake.in include/${HEADER_DIR}/solverConfig.h)
+# install(FILES ${CMAKE_CURRENT_BINARY_DIR}/include/${HEADER_DIR}/solverConfig.h
+#     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${HEADER_DIR})
 
 # Include the automatically generated configuration files.
-include_directories(${CMAKE_CURRENT_BINARY_DIR}/include/${HEADER_DIR})
+# include_directories(${CMAKE_CURRENT_BINARY_DIR}/include/${HEADER_DIR})
 
 add_subdirectory(src)
-if(${BUILD_CXX_TESTS})
+if(NOT ${DISABLE_TESTS})
     add_subdirectory(tests)
 endif()
 
-if(${PYTHON_BINDINGS})
+if(${PYTHON_BINDING})
     add_subdirectory(binding/python)
 endif()
 
 # Add dependency towards the library in the pkg-config file.
 pkg_config_append_libs(${PROJECT_NAME})
 
-SETUP_PROJECT_FINALIZE()
+setup_project_finalize()

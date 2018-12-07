@@ -17,24 +17,19 @@
 
 #pragma once
 
-// stl
-#include <memory>
+#include "api.h"
 
-// eigen
+#include "SolverInterface.h"
 #include <Eigen/Core>
 #include <eigen-lssol/LSSOL.h>
-
-// copra
-#include "SolverInterface.h"
-#include "config.hh"
+#include <memory>
 
 namespace copra {
 
 /**
  * LSSOLSolver solver for both dense matrix.
  */
-class COPRA_DLLAPI LSSOLSolver : public SolverInterface // TODO: Enable sparse matrix
-{
+class COPRA_DLLAPI LSSOLSolver : public SolverInterface {
 public:
     /**
      * LSSOLSolver default constructor

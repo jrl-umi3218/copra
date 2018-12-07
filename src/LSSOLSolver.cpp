@@ -15,7 +15,6 @@
 // along with copra.  If not, see
 // <http://www.gnu.org/licenses/>.
 
-// header
 #include "LSSOLSolver.h"
 
 namespace copra {

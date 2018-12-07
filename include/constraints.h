@@ -17,17 +17,13 @@
 
 #pragma once
 
-// stl
-#include <string>
-#include <vector>
+#include "api.h"
 
-// eigen
-#include <Eigen/Core>
-
-// copra
-#include "config.hh"
 #include "debugUtils.h"
 #include "typedefs.h"
+#include <Eigen/Core>
+#include <string>
+#include <vector>
 
 namespace copra {
 
@@ -37,7 +33,7 @@ struct PreviewSystem;
 /**
  * Flags to identify the type of the constraints
  */
-enum class ConstraintFlag {
+enum class COPRA_DLLAPI ConstraintFlag {
     Constraint, /**< Any constraints */
     EqualityConstraint, /**< Equality constraint flag */
     InequalityConstraint, /**< Inequality constraint flag */
@@ -91,19 +87,13 @@ public:
      * Function that return the name of the constraint.
      * \return The name of the constraint.
      */
-    const std::string& name() const noexcept
-    {
-        return name_;
-    }
+    const std::string& name() const noexcept { return name_; }
 
     /**
      * Function that return the number of constraints.
      * \return The number of constraints.
      */
-    int nrConstr() noexcept
-    {
-        return nrConstr_;
-    }
+    int nrConstr() noexcept { return nrConstr_; }
 
 protected:
     std::string name_;
@@ -129,19 +119,13 @@ public:
      * Get the 'A' matrix of the Equality/Inequality (\f$Ax\leq b\f$, \f$Ax = b\f$)
      * \return The 'A' matrix of the constraint
      */
-    const Eigen::MatrixXd& A() const noexcept
-    {
-        return A_;
-    }
+    const Eigen::MatrixXd& A() const noexcept { return A_; }
 
     /**
      * Get the 'b' vector of the Equality/Inequality (\f$Ax\leq b\f$, \f$Ax = b\f$)
      * \return The 'b' vector of the constraint
      */
-    const Eigen::VectorXd& b() const noexcept
-    {
-        return b_;
-    }
+    const Eigen::VectorXd& b() const noexcept { return b_; }
 
 protected:
     Eigen::MatrixXd A_;
@@ -168,7 +152,7 @@ public:
      * \param isInequalityConstraint Whether the constraint is an Inequality (true) or an Equality (false)
      */
     template <typename TMat, typename TVec,
-        typename = std::enable_if_t<!is_all_arithmetic<TMat, TVec>::value> >
+        typename = std::enable_if_t<!is_all_arithmetic<TMat, TVec>::value>>
     TrajectoryConstraint(TMat&& E, TVec&& f, bool isInequalityConstraint = true)
         : EqIneqConstraint("Trajectory", isInequalityConstraint)
         , E_(std::forward<TMat>(E))
@@ -229,7 +213,7 @@ public:
      * \throw Throw an std::domain_error if G and f have not the same number of rows
      */
     template <typename TMat, typename TVec,
-        typename = std::enable_if_t<!is_all_arithmetic<TMat, TVec>::value> >
+        typename = std::enable_if_t<!is_all_arithmetic<TMat, TVec>::value>>
     ControlConstraint(TMat&& G, TVec&& f, bool isInequalityConstraint = true)
         : EqIneqConstraint("Control", isInequalityConstraint)
         , G_(std::forward<TMat>(G))
@@ -293,7 +277,7 @@ public:
      * \throw Throw an std::domain_error if E, G and f have not the same number of rows
      */
     template <typename TMat1, typename TMat2, typename TVec,
-        typename = std::enable_if_t<!is_all_arithmetic<TMat1, TMat2, TVec>::value> >
+        typename = std::enable_if_t<!is_all_arithmetic<TMat1, TMat2, TVec>::value>>
     MixedConstraint(TMat1&& E, TMat2&& G, TVec&& f, bool isInequalityConstraint = true)
         : EqIneqConstraint("Control", isInequalityConstraint)
         , E_(std::forward<TMat1>(E))
@@ -355,7 +339,7 @@ public:
      * \throw Throw an std::domain_error if lower and upper are not of the same dimension
      */
     template <typename TVec1, typename TVec2,
-        typename = std::enable_if_t<!is_all_arithmetic<TVec1, TVec2>::value> >
+        typename = std::enable_if_t<!is_all_arithmetic<TVec1, TVec2>::value>>
     TrajectoryBoundConstraint(TVec1&& lower, TVec2&& upper)
         : EqIneqConstraint("Trajectory bound", true)
         , lower_(std::forward<TVec1>(lower))
@@ -423,7 +407,7 @@ public:
      * \throw Throw an std::domain_error if lower and upper are not of the same dimension
      */
     template <typename TVec1, typename TVec2,
-        typename = std::enable_if_t<!is_all_arithmetic<TVec1, TVec2>::value> >
+        typename = std::enable_if_t<!is_all_arithmetic<TVec1, TVec2>::value>>
     ControlBoundConstraint(TVec1&& lower, TVec2&& upper)
         : Constraint("Control bound constraint")
         , lower_(std::forward<TVec1>(lower))
@@ -460,15 +444,17 @@ public:
      */
     ConstraintFlag constraintType() const noexcept override;
 
-    const Eigen::VectorXd& lower()
-    {
-        return lb_;
-    }
+    /**
+     * Get the lower bound of the constraint
+     * \return Lower bound
+     */
+    const Eigen::VectorXd& lower() { return lb_; }
 
-    const Eigen::VectorXd& upper()
-    {
-        return ub_;
-    }
+    /**
+     * Get the upper bound of the constraint
+     * \return Upper bound
+     */
+    const Eigen::VectorXd& upper() { return ub_; }
 
 private:
     Eigen::VectorXd lower_, upper_, lb_, ub_;

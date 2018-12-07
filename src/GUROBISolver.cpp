@@ -15,10 +15,7 @@
 // along with copra.  If not, see
 // <http://www.gnu.org/licenses/>.
 
-// header
 #include "GUROBISolver.h"
-
-// stl
 #include <iostream>
 
 namespace copra {

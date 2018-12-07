@@ -15,10 +15,7 @@
 // along with copra.  If not, see
 // <http://www.gnu.org/licenses/>.
 
-// header
 #include "AutoSpan.h"
-
-// copra
 #include "debugUtils.h"
 
 namespace copra {
