@@ -23,19 +23,19 @@
 #include <algorithm>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/test/unit_test.hpp>
-#include <copra/LMPC.h>
-#include <copra/PreviewSystem.h>
-#include <copra/constraints.h>
-#include <copra/costFunctions.h>
-#include <copra/QuadProgSolver.h>
+#include "LMPC.h"
+#include "PreviewSystem.h"
+#include "constraints.h"
+#include "costFunctions.h"
+#include "QuadProgSolver.h"
 #ifdef EIGEN_QLD_FOUND
-#include <copra/QLDSolver.h>
+#include "QLDSolver.h"
 #endif
 #ifdef EIGEN_LSSOL_FOUND
-#include <copra/LSSOLSolver.h>
+#include "LSSOLSolver.h"
 #endif
 #ifdef EIGEN_GUROBI_FOUND
-#include <copra/GUROBISolver.h>
+#include "GUROBISolver.h"
 #endif
 #include <memory>
 #include <numeric>
@@ -65,6 +65,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
     controller.addConstraint(contConstr);
 
     auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag) {
+        BOOST_TEST_MESSAGE(solverName);
         controller.selectQPSolver(sFlag);
 
         BOOST_REQUIRE(controller.solve());
@@ -130,6 +131,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS, BoundedSyste
     controller.addConstraint(contConstr);
 
     auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag) {
+        BOOST_TEST_MESSAGE(solverName);
         controller.selectQPSolver(sFlag);
 
         BOOST_REQUIRE(controller.solve());
@@ -236,6 +238,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
     controller.addConstraint(contConstr);
 
     auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag) {
+        BOOST_TEST_MESSAGE(solverName);
         controller.selectQPSolver(sFlag);
 
         BOOST_REQUIRE(controller.solve());
@@ -301,6 +304,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSys
     controller.addConstraint(contConstr);
 
     auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag) {
+        BOOST_TEST_MESSAGE(solverName);
         controller.selectQPSolver(sFlag);
 
         BOOST_REQUIRE(controller.solve());
@@ -405,6 +409,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
     controller.addConstraint(mixedConstr);
 
     auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag) {
+        BOOST_TEST_MESSAGE(solverName);
         controller.selectQPSolver(sFlag);
 
         BOOST_REQUIRE(controller.solve());
@@ -471,6 +476,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
     controller.addConstraint(mixedConstr);
 
     auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag) {
+        BOOST_TEST_MESSAGE(solverName);
         controller.selectQPSolver(sFlag);
 
         BOOST_REQUIRE(controller.solve());
@@ -581,6 +587,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
     controller.addConstraint(trajConstr);
 
     auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag) {
+        BOOST_TEST_MESSAGE(solverName);
         controller.selectQPSolver(sFlag);
 
         BOOST_REQUIRE(controller.solve());
@@ -643,6 +650,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
     controller.addConstraint(trajConstr);
 
     auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag) {
+        BOOST_TEST_MESSAGE(solverName);
         controller.selectQPSolver(sFlag);
 
         BOOST_REQUIRE(controller.solve());

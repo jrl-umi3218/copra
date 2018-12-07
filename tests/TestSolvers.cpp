@@ -20,17 +20,17 @@
 #include "systems.h"
 #include <Eigen/Core>
 #include <boost/test/unit_test.hpp>
-#include <copra/QuadProgSolver.h>
+#include "QuadProgSolver.h"
 #include <iostream>
 #include <numeric>
 #ifdef EIGEN_QLD_FOUND
-#include <copra/QLDSolver.h>
+#include "QLDSolver.h"
 #endif
 #ifdef EIGEN_LSSOL_FOUND
-#include <copra/LSSOLSolver.h>
+#include "LSSOLSolver.h"
 #endif
 #ifdef EIGEN_GUROBI_FOUND
-#include <copra/GUROBISolver.h>
+#include "GUROBISolver.h"
 #endif
 
 BOOST_FIXTURE_TEST_CASE(QuadProgTest, Problem)
