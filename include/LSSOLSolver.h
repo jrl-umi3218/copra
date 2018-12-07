@@ -21,7 +21,7 @@
 
 #include "SolverInterface.h"
 #include <Eigen/Core>
-#include <eigen-lssol/LSSOL.h>
+#include <eigen-lssol/LSSOL_QP.h>
 #include <memory>
 
 namespace copra {
@@ -52,45 +52,45 @@ public:
     int SI_fail() const override;
 
     /**
-	 * Print information on the current solver status.
-	 */
+   * Print information on the current solver status.
+   */
     void SI_inform() const override;
 
     /**
-	 * Get the number of needed iteration if available
-	 * \return The number of iteration
-	 */
+   * Get the number of needed iteration if available
+   * \return The number of iteration
+   */
     int SI_iter() const override;
 
     /**
-	 * Select the print level of the solver if available
-	 * \param pl The print level.
+   * Select the print level of the solver if available
+   * \param pl The print level.
      * \param pl =0  : Nothing is printed
      * \param pl =1  : The final solution is printed
      * \param pl =5  : One line of output for each iteration
      * \param pl =10 : One line of output for each iteration and the final solution is printed
-     * \param pl >20 : At each iteration, the Lagrangian multipliers, the variables x, 
+     * \param pl >20 : At each iteration, the Lagrangian multipliers, the variables x,
      * the constraints values Cx and the constraints status.
      * \param pl >30 : For an understanding of this, see the official documentation.
-	 */
+   */
     void SI_printLevel(int pl) override;
 
     /**
-	 * Set the maximum error tolerance of the solution if available
-	 * \param tol The error tolerance
-	 */
+   * Set the maximum error tolerance of the solution if available
+   * \param tol The error tolerance
+   */
     void SI_feasibilityTolerance(double tol) override;
 
     /**
-	 * Get the warm start status of the solver if available
-	 * \return True for warm start, False for cold start
-	 */
+   * Get the warm start status of the solver if available
+   * \return True for warm start, False for cold start
+   */
     bool SI_warmStart() const override;
 
     /**
-	 * Set the warm start status of the solver if available
-	 * \param w True for warm start, False for cold start
-	 */
+   * Set the warm start status of the solver if available
+   * \param w True for warm start, False for cold start
+   */
     void SI_warmStart(bool w) override;
 
     /**
@@ -117,7 +117,11 @@ public:
         const Eigen::VectorXd& XL, const Eigen::VectorXd& XU) override;
 
 private:
-    std::unique_ptr<Eigen::StdLSSOL> solver_;
+    std::unique_ptr<Eigen::LSSOL_QP> solver_;
+    Eigen::MatrixXd Q_;
+    Eigen::MatrixXd A_;
+    Eigen::VectorXd bl_;
+    Eigen::VectorXd bu_;
 };
 
 } // namespace pc

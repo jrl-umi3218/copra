@@ -34,6 +34,10 @@
 
 namespace copra {
 
+#pragma GCC diagnostic push
+// Work around GCC bug see: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=43407
+#pragma GCC diagnostic ignored "-Wattributes"
+
 /**
  * Enum class that handles flag for selecting a qp solver.
  */
@@ -51,6 +55,8 @@ enum class COPRA_DLLAPI SolverFlag {
     QuadProgDense, /**< DenseMatrix version of QuadProg solver */
     // QuadProgSparse
 };
+
+#pragma GCC diagnostic pop
 
 /**
  * Helper function to get an unique pointer to a desired solver.
