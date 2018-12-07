@@ -26,7 +26,7 @@ namespace copra {
 
 QLDSolver::QLDSolver()
     : solver_(new Eigen::QLD())
-    , eps_(1e-8)
+    , eps_(1e-12)
 {
 }
 
@@ -80,8 +80,7 @@ void QLDSolver::SI_feasibilityTolerance(double tol)
     eps_ = tol;
 }
 
-const Eigen::VectorXd&
-QLDSolver::SI_result() const
+const Eigen::VectorXd& QLDSolver::SI_result() const
 {
     return solver_->result();
 }
@@ -96,7 +95,7 @@ bool QLDSolver::SI_solve(const Eigen::MatrixXd& Q, const Eigen::VectorXd& c,
     const Eigen::MatrixXd& Aineq, const Eigen::VectorXd& bineq,
     const Eigen::VectorXd& XL, const Eigen::VectorXd& XU)
 {
-    return solver_->solve(Q, c, Aeq, beq, Aineq, bineq, XL, XU, eps_);
+    return solver_->solve(Q, c, Aeq, beq, Aineq, bineq, XL, XU, false, eps_);
 }
 
 } // namespace pc

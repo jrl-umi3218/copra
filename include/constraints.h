@@ -30,9 +30,11 @@ namespace copra {
 //forward declaration
 struct PreviewSystem;
 
+#ifdef __GNUC__
 #pragma GCC diagnostic push
-// Work around GCC bug see: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=43407
+// Work around GCC (< 6) bug see: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=43407
 #pragma GCC diagnostic ignored "-Wattributes"
+#endif
 
 /**
  * Flags to identify the type of the constraints
@@ -44,7 +46,9 @@ enum class COPRA_DLLAPI ConstraintFlag {
     BoundConstraint /**< Bound constraint tag */
 };
 
+#ifdef __GNUC__
 #pragma GCC diagnostic pop
+#endif
 
 /**
  * \brief Abstract base class that represents constraints.

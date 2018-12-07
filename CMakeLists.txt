@@ -25,6 +25,7 @@ include(cmake/msvc-specific.cmake)
 set(PROJECT_NAME copra)
 set(PROJECT_DESCRIPTION "This library is an implementation of a linear model predictive control")
 set(PROJECT_URL "https://github.com/vsamy/copra")
+SET(PROJECT_DEBUG_POSTFIX "_d")
 
 # SET(CXX_DISABLE_WERROR True)
 set(DOXYGEN_USE_MATHJAX "YES")
@@ -89,14 +90,6 @@ endif()
 if(NOT WIN32)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -std=c++14 -pedantic")
 endif()
-
-# Header for define and include found c++ QP solver
-# configure_file(cmake/solverConfig.cmake.in include/${HEADER_DIR}/solverConfig.h)
-# install(FILES ${CMAKE_CURRENT_BINARY_DIR}/include/${HEADER_DIR}/solverConfig.h
-#     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${HEADER_DIR})
-
-# Include the automatically generated configuration files.
-# include_directories(${CMAKE_CURRENT_BINARY_DIR}/include/${HEADER_DIR})
 
 add_subdirectory(src)
 if(NOT ${DISABLE_TESTS})
