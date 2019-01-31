@@ -52,7 +52,6 @@ public:
     /**
      * Initialize problem variables to default and get the desired solver
      * You need to call initializeController before using the MPCTypeFull
-     * \param ps A preview system to amke a copy from.
      * \param sFlag The flag corresponding to the desired solver.
      */
     LMPC(SolverFlag sFlag = SolverFlag::DEFAULT);
