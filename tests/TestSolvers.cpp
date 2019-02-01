@@ -17,10 +17,10 @@
 
 #define BOOST_TEST_MODULE TestSolvers
 
+#include "QuadProgSolver.h"
 #include "systems.h"
 #include <Eigen/Core>
 #include <boost/test/unit_test.hpp>
-#include "QuadProgSolver.h"
 #include <iostream>
 #include <numeric>
 #ifdef EIGEN_QLD_FOUND

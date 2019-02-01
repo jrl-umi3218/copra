@@ -15,7 +15,7 @@
 // along with copra.  If not, see
 // <http://www.gnu.org/licenses/>.
 
-#define BOOST_TEST_MODULE TestPreviewControl
+#define BOOST_TEST_MODULE TestLMPC
 
 #include "systems.h"
 #include "tools.h"
