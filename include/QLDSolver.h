@@ -58,6 +58,8 @@ public:
      */
     void SI_inform() const override;
 
+    int SI_iter() const override;
+
     /**
      * Select the print level of the solver
      * QLD can only show final results or nothing
@@ -70,6 +72,8 @@ public:
      * \param tol The error tolerance
      */
     void SI_feasibilityTolerance(double tol) override;
+
+    bool SI_warmStart() const override;
 
     /**
      * Get the solver's solution.

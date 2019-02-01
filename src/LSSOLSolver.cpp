@@ -16,6 +16,7 @@
 // <http://www.gnu.org/licenses/>.
 
 #include "LSSOLSolver.h"
+#include <iostream>
 
 namespace copra {
 
@@ -38,14 +39,29 @@ int LSSOLSolver::SI_iter() const
     return solver_->iter();
 }
 
+int LSSOLSolver::SI_maxIter() const
+{
+    return solver_->optimalityMaxIter();
+}
+
+void LSSOLSolver::SI_maxIter(int maxIter)
+{
+    solver_->optimalityMaxIter(maxIter);
+}
+
 void LSSOLSolver::SI_inform() const
 {
-    solver_->inform();
+    solver_->inform(std::cout);
 }
 
 void LSSOLSolver::SI_printLevel(int pl)
 {
     solver_->printLevel(pl);
+}
+
+double LSSOLSolver::SI_feasibilityTolerance() const
+{
+    return solver_->feasibilityTol();
 }
 
 void LSSOLSolver::SI_feasibilityTolerance(double tol)

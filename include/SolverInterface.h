@@ -33,10 +33,10 @@ namespace copra {
 class COPRA_DLLAPI SolverInterface {
 public:
     /**
-   * Get information of eventual fail's solver output as define by the
-   * solver documentation.
-   * \return The fail number.
-   */
+     * Get information of eventual fail's solver output as define by the
+     * solver documentation.
+     * \return The fail number.
+     */
     virtual int SI_fail() const = 0;
 
     /**
@@ -45,31 +45,47 @@ public:
     virtual void SI_inform() const = 0;
 
     /**
-     * Get the number of needed iteration if available
+     * Get the number of needed iteration if available.
      * \return The number of iteration
      */
     virtual int SI_iter() const;
 
     /**
-     * Select the print level of the solver if available
+     * Get max number of iteration if available.
+     * \return Max number of iteration
+     */
+    virtual int SI_maxIter() const;
+
+    /**
+     * Set max number of iteration if available.
+     */
+    virtual void SI_maxIter(int maxIter);
+
+    /**
+     * Select the print level of the solver if available.
      * \param pl The print level
      */
     virtual void SI_printLevel(int pl);
 
     /**
-     * Set the maximum error tolerance of the solution if available
+     * Get the maximum error tolerance of the solution if available.
+     */
+    virtual double SI_feasibilityTolerance() const;
+
+    /**
+     * Set the maximum error tolerance of the solution if available.
      * \param tol The error tolerance
      */
     virtual void SI_feasibilityTolerance(double tol);
 
     /**
-     * Get the warm start status of the solver if available
+     * Get the warm start status of the solver if available.
      * \return True for warm start, False for cold start
      */
     virtual bool SI_warmStart() const;
 
     /**
-     * Set the warm start status of the solver if available
+     * Set the warm start status of the solver if available.
      * \param w True for warm start, False for cold start
      */
     virtual void SI_warmStart(bool w);

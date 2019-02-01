@@ -139,7 +139,7 @@ bool LMPC::solve()
 
 void LMPC::inform() const noexcept
 {
-    return sol_->SI_inform();
+    sol_->SI_inform();
 }
 
 const Eigen::VectorXd& LMPC::control() const noexcept

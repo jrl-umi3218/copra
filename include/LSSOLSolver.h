@@ -50,21 +50,9 @@ public:
      * denotes a constraint causing the conflict.
      */
     int SI_fail() const override;
-
     /**
-   * Print information on the current solver status.
-   */
-    void SI_inform() const override;
-
-    /**
-   * Get the number of needed iteration if available
-   * \return The number of iteration
-   */
-    int SI_iter() const override;
-
-    /**
-   * Select the print level of the solver if available
-   * \param pl The print level.
+     * Select the print level of the solver if available
+     * \param pl The print level.
      * \param pl =0  : Nothing is printed
      * \param pl =1  : The final solution is printed
      * \param pl =5  : One line of output for each iteration
@@ -72,45 +60,23 @@ public:
      * \param pl >20 : At each iteration, the Lagrangian multipliers, the variables x,
      * the constraints values Cx and the constraints status.
      * \param pl >30 : For an understanding of this, see the official documentation.
-   */
+     */
     void SI_printLevel(int pl) override;
 
-    /**
-   * Set the maximum error tolerance of the solution if available
-   * \param tol The error tolerance
-   */
+    void SI_inform() const override;
+    int SI_iter() const override;
+
+    int SI_maxIter() const override;
+    void SI_maxIter(int maxIter) override;
+
+    double SI_feasibilityTolerance() const override;
     void SI_feasibilityTolerance(double tol) override;
 
-    /**
-   * Get the warm start status of the solver if available
-   * \return True for warm start, False for cold start
-   */
     bool SI_warmStart() const override;
-
-    /**
-   * Set the warm start status of the solver if available
-   * \param w True for warm start, False for cold start
-   */
     void SI_warmStart(bool w) override;
 
-    /**
-     * Get the solver's solution.
-     * \return The qp solver result.
-     */
     const Eigen::VectorXd& SI_result() const override;
-
-    /**
-     * Initialize the variables of the problem to solve.
-     * \see SolverInterface::SI_problem()
-     * \return The qp solver result.
-     */
     void SI_problem(int nrVar, int nrEq, int nrInEq) override;
-
-    /**
-     * Solve the problem.
-     * \see SolverInterface::SI_solve()
-     * \return The qp solver result.
-     */
     bool SI_solve(const Eigen::MatrixXd& Q, const Eigen::VectorXd& c,
         const Eigen::MatrixXd& Aeq, const Eigen::VectorXd& beq,
         const Eigen::MatrixXd& Aineq, const Eigen::VectorXd& bineq,
