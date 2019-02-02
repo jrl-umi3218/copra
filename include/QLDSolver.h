@@ -53,27 +53,9 @@ public:
      */
     int SI_fail() const override;
 
-    /**
-     * Print an information on the current solver status.
-     */
     void SI_inform() const override;
-
-    int SI_iter() const override;
-
-    /**
-     * Select the print level of the solver
-     * QLD can only show final results or nothing
-     * \param pl 0 (hide) or else (show display)
-     */
     void SI_printLevel(int pl) override;
-
-    /**
-     * Set the maximum error tolerance of the solution
-     * \param tol The error tolerance
-     */
     void SI_feasibilityTolerance(double tol) override;
-
-    bool SI_warmStart() const override;
 
     /**
      * Get the solver's solution.

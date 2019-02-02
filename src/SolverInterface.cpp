@@ -30,12 +30,13 @@ int SolverInterface::SI_iter() const
     return 0;
 }
 
-int SI_maxIter() const
+int SolverInterface::SI_maxIter() const
 {
     std::cout << "No maxIter() function for this qp" << std::endl;
+    return -1;
 }
 
-void SI_maxIter(int maxIter)
+void SolverInterface::SI_maxIter(int maxIter)
 {
     std::cout << "No maxIter(int) function for this qp" << std::endl;
 }
@@ -49,6 +50,7 @@ void SolverInterface::SI_printLevel(int /* pl */)
 double SolverInterface::SI_feasibilityTolerance() const
 {
     std::cout << "No feasibilityTolerance() function for this qp" << std::endl;
+    return -1.;
 }
 
 void SolverInterface::SI_feasibilityTolerance(double /* tol */)

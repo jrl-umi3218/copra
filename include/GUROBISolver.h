@@ -37,47 +37,15 @@ public:
      */
     GUROBISolver();
 
-    /**
-     * Get information of eventual fail's solver output as define by the
-     * solver documentation.
-     * See the solver documentation (Need to add the doc here)
-     */
     int SI_fail() const override;
-
-    /**
-	 * Print details on the status of the solver as described in the docs.
-	 */
     void SI_inform() const override;
-
-    /**
-	 * Get the number of needed iteration if available
-	 * \return The number of iteration
-	 */
     int SI_iter() const override;
-
-    /**
-     * Display or hide (default) the output of the solver.
-     * There is no printing level. It shows everything or nothing.
-     * \param pl 0 (hide) or else (display)
-     */
     void SI_printLevel(int pl) override;
-
-    /**
-     * Set the maximum error tolerance of the solution
-     * \param tol The error tolerance
-     */
     void SI_feasibilityTolerance(double tol) override;
+    int SI_maxIter() const override;
+    void SI_maxIter(int maxIter) override;
 
-    /**
-     * Get the warm start status of the solver
-     * \return True for warm start, False for cold start
-     */
     bool SI_warmStart() const override;
-
-    /**
-     * Set the warm start status of the solver
-     * \param w True for warm start, False for cold start
-     */
     void SI_warmStart(bool w) override;
 
     /**

@@ -46,9 +46,23 @@ void GUROBISolver::SI_printLevel(int pl)
     solver_->displayOutput(pl != 0);
 }
 
+double GUROBISolver::SI_feasibilityTolerance() const
+{
+    solver_->feasibilityTolerance();
+}
+
 void GUROBISolver::SI_feasibilityTolerance(double tol)
 {
     solver_->feasibilityTolerance(tol); //primal feasible tolerance
+}
+
+int GUROBISolver::SI_maxIter() const
+{
+    solver_->optimalityTolerance();
+}
+
+void GUROBISolver::SI_maxIter(int maxIter)
+{
     solver_->optimalityTolerance(tol); //dual feasible tolerance
 }
 
