@@ -97,6 +97,11 @@ public:
     void inform() const noexcept;
 
     /**
+     * Get a reference to the solver if any.
+     * \return QP solver currently used.
+     */
+    inline SolverInterface& solver() { return *sol_; }
+    /**
      * Get the solver result.
      * \return The control vector \f$U\f$.
      */
