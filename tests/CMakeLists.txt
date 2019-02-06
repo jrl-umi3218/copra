@@ -25,7 +25,7 @@ include_directories("${PROJECT_SOURCE_DIR}/src")
 include_directories(${Boost_INCLUDE_DIRS})
 
 macro(addTest testName)
-    add_executable(${testName} ${testName}.cpp systems.h tools.h)
+    add_executable(${testName} ${testName}.cpp systems.h tools.h tools.cpp)
     if(MSVC)
       # for msvc, we let boost auto-link do the work
         target_link_libraries(${testName} ${PROJECT_NAME})

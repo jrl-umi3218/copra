@@ -18,23 +18,23 @@
 #pragma once
 
 #include <Eigen/Core>
+#include <utility>
+#include <vector>
 
-namespace {
+namespace tools {
 
-Eigen::MatrixXd spanMatrix(const Eigen::MatrixXd& m, int size, int addCols = 0)
-{
-    Eigen::MatrixXd mout = Eigen::MatrixXd::Zero(m.rows() * size, m.cols() * (size + addCols));
-    for (int i = 0; i < size; ++i)
-        mout.block(i * m.rows(), i * m.cols(), m.rows(), m.cols()) = m;
-    return mout;
-}
+using solver_timers_t = std::vector<std::pair<std::string, double>>;
 
-Eigen::VectorXd spanVector(const Eigen::VectorXd& v, int size)
-{
-    Eigen::VectorXd vout = Eigen::VectorXd::Zero(v.rows() * size);
-    for (int i = 0; i < size; ++i)
-        vout.segment(i * v.rows(), v.rows()) = v;
-    return vout;
-}
+struct SolverTimers {
+    solver_timers_t st; // solve time
+    solver_timers_t bt; // build time
+    solver_timers_t ct; // coombine time
+};
+
+Eigen::MatrixXd spanMatrix(const Eigen::MatrixXd& m, int size, int addCols = 0);
+
+Eigen::VectorXd spanVector(const Eigen::VectorXd& v, int size);
+
+void printSortedTimers(SolverTimers& solT);
 
 } // namespace

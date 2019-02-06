@@ -47,7 +47,7 @@
 
 BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
 {
-    std::vector<std::pair<std::string, double>> solveTime;
+    tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
@@ -72,7 +72,9 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
             controller.selectQPSolver(sFlag);
 
         BOOST_REQUIRE(controller.solve());
-        solveTime.emplace_back(solverName, controller.solveTime() * 1e3);
+        sTimers.st.emplace_back(solverName, controller.solveTime() * 1e3);
+        sTimers.ct.emplace_back(solverName, controller.solveAndBuildTime() * 1e3);
+        sTimers.bt.emplace_back(solverName, (controller.solveAndBuildTime() - controller.solveTime()) * 1e3);
 
         Eigen::VectorXd fullTraj = controller.trajectory();
         auto trajLen = fullTraj.rows() / 2;
@@ -106,19 +108,12 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
     pcCheck("GUROBIDense", copra::SolverFlag::GUROBIDense);
 #endif
 
-    std::sort(solveTime.begin(), solveTime.end(),
-        [](const auto& lhs, const auto& rhs) { return lhs.second < rhs.second; });
-    std::stringstream ss;
-    ss << "Solving fasteness: ";
-    for (auto sol : solveTime)
-        ss << sol.first << " (" + std::to_string(sol.second) << "ms) > ";
-
-    BOOST_TEST_MESSAGE(ss.str());
+    tools::printSortedTimers(sTimers);
 }
 
 BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
 {
-    std::vector<std::pair<std::string, double>> solveTime;
+    tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
@@ -143,7 +138,9 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS, BoundedSyste
             controller.selectQPSolver(sFlag);
 
         BOOST_REQUIRE(controller.solve());
-        solveTime.emplace_back(solverName, controller.solveTime() * 1e3);
+        sTimers.st.emplace_back(solverName, controller.solveTime() * 1e3);
+        sTimers.ct.emplace_back(solverName, controller.solveAndBuildTime() * 1e3);
+        sTimers.bt.emplace_back(solverName, (controller.solveAndBuildTime() - controller.solveTime()) * 1e3);
 
         Eigen::VectorXd fullTraj = controller.trajectory();
         auto trajLen = fullTraj.rows() / 2;
@@ -177,13 +174,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS, BoundedSyste
     pcCheck("GUROBIDense", copra::SolverFlag::GUROBIDense);
 #endif
 
-    std::sort(solveTime.begin(), solveTime.end(),
-        [](const auto& lhs, const auto& rhs) { return lhs.second < rhs.second; });
-    std::stringstream ss;
-    ss << "Solving fasteness: ";
-    for (auto sol : solveTime)
-        ss << sol.first << " (" + std::to_string(sol.second) << "ms) > ";
-    BOOST_TEST_MESSAGE(ss.str());
+    tools::printSortedTimers(sTimers);
 }
 
 BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
@@ -230,7 +221,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
 
 BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
 {
-    std::vector<std::pair<std::string, double>> solveTime;
+    tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
@@ -255,7 +246,9 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
             controller.selectQPSolver(sFlag);
 
         BOOST_REQUIRE(controller.solve());
-        solveTime.emplace_back(solverName, controller.solveTime() * 1e3);
+        sTimers.st.emplace_back(solverName, controller.solveTime() * 1e3);
+        sTimers.ct.emplace_back(solverName, controller.solveAndBuildTime() * 1e3);
+        sTimers.bt.emplace_back(solverName, (controller.solveAndBuildTime() - controller.solveTime()) * 1e3);
 
         Eigen::VectorXd fullTraj = controller.trajectory();
         auto trajLen = fullTraj.rows() / 2;
@@ -289,19 +282,12 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
     pcCheck("GUROBIDense", copra::SolverFlag::GUROBIDense);
 #endif
 
-    std::sort(solveTime.begin(), solveTime.end(),
-        [](const auto& lhs, const auto& rhs) { return lhs.second < rhs.second; });
-    std::stringstream ss;
-    ss << "Solving fasteness: ";
-    for (auto sol : solveTime)
-        ss << sol.first << " (" + std::to_string(sol.second) << "ms) > ";
-
-    BOOST_TEST_MESSAGE(ss.str());
+    tools::printSortedTimers(sTimers);
 }
 
 BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
 {
-    std::vector<std::pair<std::string, double>> solveTime;
+    tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
@@ -326,7 +312,9 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSys
             controller.selectQPSolver(sFlag);
 
         BOOST_REQUIRE(controller.solve());
-        solveTime.emplace_back(solverName, controller.solveTime() * 1e3);
+        sTimers.st.emplace_back(solverName, controller.solveTime() * 1e3);
+        sTimers.ct.emplace_back(solverName, controller.solveAndBuildTime() * 1e3);
+        sTimers.bt.emplace_back(solverName, (controller.solveAndBuildTime() - controller.solveTime()) * 1e3);
 
         Eigen::VectorXd fullTraj = controller.trajectory();
         auto trajLen = fullTraj.rows() / 2;
@@ -360,13 +348,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSys
     pcCheck("GUROBIDense", copra::SolverFlag::GUROBIDense);
 #endif
 
-    std::sort(solveTime.begin(), solveTime.end(),
-        [](const auto& lhs, const auto& rhs) { return lhs.second < rhs.second; });
-    std::stringstream ss;
-    ss << "Solving fasteness: ";
-    for (auto sol : solveTime)
-        ss << sol.first << " (" + std::to_string(sol.second) << "ms) > ";
-    BOOST_TEST_MESSAGE(ss.str());
+    tools::printSortedTimers(sTimers);
 }
 
 BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
@@ -413,7 +395,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
 
 BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
 {
-    std::vector<std::pair<std::string, double>> solveTime;
+    tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
@@ -436,7 +418,9 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
             controller.selectQPSolver(sFlag);
 
         BOOST_REQUIRE(controller.solve());
-        solveTime.emplace_back(solverName, controller.solveTime() * 1e3);
+        sTimers.st.emplace_back(solverName, controller.solveTime() * 1e3);
+        sTimers.ct.emplace_back(solverName, controller.solveAndBuildTime() * 1e3);
+        sTimers.bt.emplace_back(solverName, (controller.solveAndBuildTime() - controller.solveTime()) * 1e3);
 
         Eigen::VectorXd fullTraj = controller.trajectory();
         auto trajLen = fullTraj.rows() / 2;
@@ -473,19 +457,12 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
     pcCheck("GUROBIDense", copra::SolverFlag::GUROBIDense);
 #endif
 
-    std::sort(solveTime.begin(), solveTime.end(),
-        [](const auto& lhs, const auto& rhs) { return lhs.second < rhs.second; });
-    std::stringstream ss;
-    ss << "Solving fasteness: ";
-    for (auto sol : solveTime)
-        ss << sol.first << " (" + std::to_string(sol.second) << "ms) > ";
-
-    BOOST_TEST_MESSAGE(ss.str());
+    tools::printSortedTimers(sTimers);
 }
 
 BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
 {
-    std::vector<std::pair<std::string, double>> solveTime;
+    tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
@@ -508,7 +485,9 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
             controller.selectQPSolver(sFlag);
 
         BOOST_REQUIRE(controller.solve());
-        solveTime.emplace_back(solverName, controller.solveTime() * 1e3);
+        sTimers.st.emplace_back(solverName, controller.solveTime() * 1e3);
+        sTimers.ct.emplace_back(solverName, controller.solveAndBuildTime() * 1e3);
+        sTimers.bt.emplace_back(solverName, (controller.solveAndBuildTime() - controller.solveTime()) * 1e3);
 
         Eigen::VectorXd fullTraj = controller.trajectory();
         auto trajLen = fullTraj.rows() / 2;
@@ -545,18 +524,12 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
     pcCheck("GUROBIDense", copra::SolverFlag::GUROBIDense);
 #endif
 
-    std::sort(solveTime.begin(), solveTime.end(),
-        [](const auto& lhs, const auto& rhs) { return lhs.second < rhs.second; });
-    std::stringstream ss;
-    ss << "Solving fasteness: ";
-    for (auto sol : solveTime)
-        ss << sol.first << " (" + std::to_string(sol.second) << "ms) > ";
-    BOOST_TEST_MESSAGE(ss.str());
+    tools::printSortedTimers(sTimers);
 }
 
 BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
 {
-    std::vector<std::pair<std::string, double>> solveTime;
+    tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
@@ -601,7 +574,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
 
 BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
 {
-    std::vector<std::pair<std::string, double>> solveTime;
+    tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
@@ -624,7 +597,9 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
             controller.selectQPSolver(sFlag);
 
         BOOST_REQUIRE(controller.solve());
-        solveTime.emplace_back(solverName, controller.solveTime() * 1e3);
+        sTimers.st.emplace_back(solverName, controller.solveTime() * 1e3);
+        sTimers.ct.emplace_back(solverName, controller.solveAndBuildTime() * 1e3);
+        sTimers.bt.emplace_back(solverName, (controller.solveAndBuildTime() - controller.solveTime()) * 1e3);
 
         Eigen::VectorXd fullTraj = controller.trajectory();
         auto trajLen = fullTraj.rows() / 2;
@@ -658,19 +633,12 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
     pcCheck("GUROBIDense", copra::SolverFlag::GUROBIDense);
 #endif
 
-    std::sort(solveTime.begin(), solveTime.end(),
-        [](const auto& lhs, const auto& rhs) { return lhs.second < rhs.second; });
-    std::stringstream ss;
-    ss << "Solving fasteness: ";
-    for (auto sol : solveTime)
-        ss << sol.first << " (" + std::to_string(sol.second) << "ms) > ";
-
-    BOOST_TEST_MESSAGE(ss.str());
+    tools::printSortedTimers(sTimers);
 }
 
 BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
 {
-    std::vector<std::pair<std::string, double>> solveTime;
+    tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
@@ -693,7 +661,9 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
             controller.selectQPSolver(sFlag);
 
         BOOST_REQUIRE(controller.solve());
-        solveTime.emplace_back(solverName, controller.solveTime() * 1e3);
+        sTimers.st.emplace_back(solverName, controller.solveTime() * 1e3);
+        sTimers.ct.emplace_back(solverName, controller.solveAndBuildTime() * 1e3);
+        sTimers.bt.emplace_back(solverName, (controller.solveAndBuildTime() - controller.solveTime()) * 1e3);
 
         Eigen::VectorXd fullTraj = controller.trajectory();
         auto trajLen = fullTraj.rows() / 2;
@@ -727,13 +697,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
     pcCheck("GUROBIDense", copra::SolverFlag::GUROBIDense);
 #endif
 
-    std::sort(solveTime.begin(), solveTime.end(),
-        [](const auto& lhs, const auto& rhs) { return lhs.second < rhs.second; });
-    std::stringstream ss;
-    ss << "Solving fasteness: ";
-    for (auto sol : solveTime)
-        ss << sol.first << " (" + std::to_string(sol.second) << "ms) > ";
-    BOOST_TEST_MESSAGE(ss.str());
+    tools::printSortedTimers(sTimers);
 }
 
 BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
@@ -793,10 +757,10 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_BOUND_CONSTRAINT, Bou
         BOOST_REQUIRE_NO_THROW(controller.addConstraint(contConstr));
     };
 
-    auto fullxLower = spanVector(xLower, nbXStep);
-    auto fullxUpper = spanVector(xUpper, nbXStep);
-    auto fulluLower = spanVector(uLower, nbStep);
-    auto fulluUpper = spanVector(uUpper, nbStep);
+    auto fullxLower = tools::spanVector(xLower, nbXStep);
+    auto fullxUpper = tools::spanVector(xUpper, nbXStep);
+    auto fulluLower = tools::spanVector(uLower, nbStep);
+    auto fulluUpper = tools::spanVector(uUpper, nbStep);
 
     checkSpan(xLower, xUpper, uLower, uUpper);
     checkSpan(fullxLower, xUpper, fulluLower, uUpper);
@@ -822,10 +786,10 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_INEQUALITY_CONSTRAINT
         BOOST_REQUIRE_NO_THROW(controller.addConstraint(contConstr));
     };
 
-    auto fullE = spanMatrix(E, nbXStep);
-    auto fullf = spanVector(f, nbXStep);
-    auto fullG = spanMatrix(G, nbStep);
-    auto fullh = spanVector(h, nbStep);
+    auto fullE = tools::spanMatrix(E, nbXStep);
+    auto fullf = tools::spanVector(f, nbXStep);
+    auto fullG = tools::spanMatrix(G, nbStep);
+    auto fullh = tools::spanVector(h, nbStep);
 
     checkSpan(E, f, G, h);
     checkSpan(fullE, f, fullG, h);
@@ -846,9 +810,9 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_CONSTRAINT, Mix
         BOOST_REQUIRE_NO_THROW(controller.addConstraint(mixedConstr));
     };
 
-    auto fullE = spanMatrix(E, nbStep, 1);
-    auto fullG = spanMatrix(G, nbStep);
-    auto fullf = spanVector(f, nbStep);
+    auto fullE = tools::spanMatrix(E, nbStep, 1);
+    auto fullG = tools::spanMatrix(G, nbStep);
+    auto fullf = tools::spanVector(f, nbStep);
 
     checkSpan(E, G, f);
     checkSpan(fullE, G, f);
@@ -878,8 +842,8 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_TRAJECTORY_COST, Ineq
         BOOST_REQUIRE_NO_THROW(controller.addCost(cost));
     };
 
-    auto fullM = spanMatrix(M, nbXStep);
-    auto fullxd = spanVector(xd, nbXStep);
+    auto fullM = tools::spanMatrix(M, nbXStep);
+    auto fullxd = tools::spanVector(xd, nbXStep);
 
     checkSpan(M, xd, wx);
     checkSpan(M, fullxd, wx);
@@ -901,8 +865,8 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_CONTROL_COST, IneqSys
         BOOST_REQUIRE_NO_THROW(controller.addCost(cost));
     };
 
-    auto fullN = spanMatrix(N, nbStep);
-    auto fullud = spanVector(ud, nbStep);
+    auto fullN = tools::spanMatrix(N, nbStep);
+    auto fullud = tools::spanVector(ud, nbStep);
 
     checkSpan(N, ud, wu);
     checkSpan(N, fullud, wu);
@@ -926,13 +890,13 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_COST, IneqSyste
 
     auto MVec = std::vector<Eigen::MatrixXd>();
     MVec.push_back(M);
-    MVec.push_back(spanMatrix(M, nbStep, 1));
+    MVec.push_back(tools::spanMatrix(M, nbStep, 1));
     auto nnVec = std::vector<Eigen::MatrixXd>();
     nnVec.push_back(Eigen::MatrixXd::Ones(2, 1));
-    nnVec.push_back(spanMatrix(Eigen::MatrixXd::Ones(2, 1), nbStep));
+    nnVec.push_back(tools::spanMatrix(Eigen::MatrixXd::Ones(2, 1), nbStep));
     auto xdVec = std::vector<Eigen::VectorXd>();
     xdVec.push_back(xd);
-    xdVec.push_back(spanVector(xd, nbStep));
+    xdVec.push_back(tools::spanVector(xd, nbStep));
 
     for (auto& i : MVec)
         for (auto& j : nnVec)
