@@ -47,6 +47,7 @@
 
 BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
 {
+    BOOST_TEST_MESSAGE("MPC_TARGET_COST_WITH_BOUND_CONSTRAINTS");
     tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
@@ -65,7 +66,6 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
     controller.addConstraint(contConstr);
 
     auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver = nullptr) {
-        BOOST_TEST_MESSAGE(solverName);
         if (solver)
             controller.useSolver(std::move(solver));
         else
@@ -113,6 +113,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
 
 BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
 {
+    BOOST_TEST_MESSAGE("MPC_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS");
     tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
@@ -131,7 +132,6 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS, BoundedSyste
     controller.addConstraint(contConstr);
 
     auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver = nullptr) {
-        BOOST_TEST_MESSAGE(solverName);
         if (solver)
             controller.useSolver(std::move(solver));
         else
@@ -179,6 +179,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS, BoundedSyste
 
 BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
 {
+    BOOST_TEST_MESSAGE("MPC_MIXED_COST_WITH_BOUND_CONSTRAINTS");
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
@@ -221,6 +222,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
 
 BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
 {
+    BOOST_TEST_MESSAGE("MPC_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS");
     tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
@@ -239,7 +241,6 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
     controller.addConstraint(contConstr);
 
     auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver = nullptr) {
-        BOOST_TEST_MESSAGE(solverName);
         if (solver)
             controller.useSolver(std::move(solver));
         else
@@ -287,6 +288,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
 
 BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
 {
+    BOOST_TEST_MESSAGE("MPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS");
     tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
@@ -305,7 +307,6 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSys
     controller.addConstraint(contConstr);
 
     auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver = nullptr) {
-        BOOST_TEST_MESSAGE(solverName);
         if (solver)
             controller.useSolver(std::move(solver));
         else
@@ -353,6 +354,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSys
 
 BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
 {
+    BOOST_TEST_MESSAGE("MPC_MIXED_COST_WITH_INEQUALITY_CONSTRAINTS");
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
@@ -395,6 +397,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
 
 BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
 {
+    BOOST_TEST_MESSAGE("MPC_TARGET_COST_WITH_MIXED_CONSTRAINTS");
     tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
@@ -411,7 +414,6 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
     controller.addConstraint(mixedConstr);
 
     auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver = nullptr) {
-        BOOST_TEST_MESSAGE(solverName);
         if (solver)
             controller.useSolver(std::move(solver));
         else
@@ -462,6 +464,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
 
 BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
 {
+    BOOST_TEST_MESSAGE("MPC_TRAJECTORY_COST_WITH_MIXED_CONSTRAINTS");
     tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
@@ -478,7 +481,6 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
     controller.addConstraint(mixedConstr);
 
     auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver = nullptr) {
-        BOOST_TEST_MESSAGE(solverName);
         if (solver)
             controller.useSolver(std::move(solver));
         else
@@ -529,6 +531,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
 
 BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
 {
+    BOOST_TEST_MESSAGE("MPC_MIXED_COST_WITH_MIXED_CONSTRAINTS");
     tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
@@ -574,6 +577,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
 
 BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
 {
+    BOOST_TEST_MESSAGE("MPC_TARGET_COST_WITH_EQUALITY_CONSTRAINTS");
     tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
@@ -590,7 +594,6 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
     controller.addConstraint(trajConstr);
 
     auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver = nullptr) {
-        BOOST_TEST_MESSAGE(solverName);
         if (solver)
             controller.useSolver(std::move(solver));
         else
@@ -638,6 +641,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
 
 BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
 {
+    BOOST_TEST_MESSAGE("MPC_TRAJECTORY_COST_WITH_EQUALITY_CONSTRAINTS");
     tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
@@ -654,7 +658,6 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
     controller.addConstraint(trajConstr);
 
     auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver = nullptr) {
-        BOOST_TEST_MESSAGE(solverName);
         if (solver)
             controller.useSolver(std::move(solver));
         else
@@ -702,6 +705,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
 
 BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
 {
+    BOOST_TEST_MESSAGE("MPC_MIXED_COST_WITH_EQUALITY_CONSTRAINTS");
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
@@ -741,6 +745,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
 
 BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_BOUND_CONSTRAINT, BoundedSystem)
 {
+    BOOST_TEST_MESSAGE("CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_BOUND_CONSTRAINT");
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
@@ -770,6 +775,7 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_BOUND_CONSTRAINT, Bou
 
 BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_INEQUALITY_CONSTRAINT, IneqSystem)
 {
+    BOOST_TEST_MESSAGE("CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_INEQUALITY_CONSTRAINT");
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
@@ -799,6 +805,7 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_INEQUALITY_CONSTRAINT
 
 BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_CONSTRAINT, MixedSystem)
 {
+    BOOST_TEST_MESSAGE("CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_CONSTRAINT");
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
@@ -829,6 +836,7 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_CONSTRAINT, Mix
 
 BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_TRAJECTORY_COST, IneqSystem)
 {
+    BOOST_TEST_MESSAGE("CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_TRAJECTORY_COST");
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
@@ -853,6 +861,7 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_TRAJECTORY_COST, Ineq
 
 BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_CONTROL_COST, IneqSystem)
 {
+    BOOST_TEST_MESSAGE("CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_CONTROL_COST");
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
@@ -876,6 +885,7 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_CONTROL_COST, IneqSys
 
 BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_COST, IneqSystem)
 {
+    BOOST_TEST_MESSAGE("CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_COST");
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
@@ -910,6 +920,7 @@ BOOST_FIXTURE_TEST_CASE(CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_COST, IneqSyste
 
 BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_PREVIEW_SYSTEM, IneqSystem)
 {
+    BOOST_TEST_MESSAGE("ERROR_HANDLER_FOR_PREVIEW_SYSTEM");
     auto ps = std::make_shared<copra::PreviewSystem>();
     BOOST_REQUIRE_THROW(ps->system(Eigen::MatrixXd::Ones(5, 2), B, c, x0, nbStep), std::domain_error);
     BOOST_REQUIRE_THROW(ps->system(Eigen::MatrixXd::Ones(2, 5), B, c, x0, nbStep), std::domain_error);
@@ -920,6 +931,7 @@ BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_PREVIEW_SYSTEM, IneqSystem)
 
 BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_WEIGTHS, IneqSystem)
 {
+    BOOST_TEST_MESSAGE("ERROR_HANDLER_FOR_WEIGTHS");
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
@@ -934,6 +946,7 @@ BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_WEIGTHS, IneqSystem)
 
 BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_TRAJECTORY_COST, IneqSystem)
 {
+    BOOST_TEST_MESSAGE("ERROR_HANDLER_FOR_TRAJECTORY_COST");
     auto ps = std::make_shared<copra::PreviewSystem>(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
 
@@ -945,6 +958,7 @@ BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_TRAJECTORY_COST, IneqSystem)
 
 BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_TARGET_COST, IneqSystem)
 {
+    BOOST_TEST_MESSAGE("ERROR_HANDLER_FOR_TARGET_COST");
     auto ps = std::make_shared<copra::PreviewSystem>(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
 
@@ -956,6 +970,7 @@ BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_TARGET_COST, IneqSystem)
 
 BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_CONTROL_COST, IneqSystem)
 {
+    BOOST_TEST_MESSAGE("ERROR_HANDLER_FOR_CONTROL_COST");
     auto ps = std::make_shared<copra::PreviewSystem>(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
 
@@ -967,6 +982,7 @@ BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_CONTROL_COST, IneqSystem)
 
 BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_MIXED_COST, IneqSystem)
 {
+    BOOST_TEST_MESSAGE("ERROR_HANDLER_FOR_MIXED_COST");
     auto ps = std::make_shared<copra::PreviewSystem>(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
 
@@ -980,6 +996,7 @@ BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_MIXED_COST, IneqSystem)
 
 BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_TRAJECTORY_CONSTRAINT, IneqSystem)
 {
+    BOOST_TEST_MESSAGE("ERROR_HANDLER_FOR_TRAJECTORY_CONSTRAINT");
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
@@ -992,6 +1009,7 @@ BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_TRAJECTORY_CONSTRAINT, IneqSystem)
 
 BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_CONTROL_CONSTRAINT, IneqSystem)
 {
+    BOOST_TEST_MESSAGE("ERROR_HANDLER_FOR_CONTROL_CONSTRAINT");
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
@@ -1008,6 +1026,7 @@ BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_CONTROL_CONSTRAINT, IneqSystem)
 
 BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_MIXED_CONSTRAINT, IneqSystem)
 {
+    BOOST_TEST_MESSAGE("ERROR_HANDLER_FOR_MIXED_CONSTRAINT");
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
@@ -1022,6 +1041,7 @@ BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_MIXED_CONSTRAINT, IneqSystem)
 
 BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_TRAJECTORY_BOUND_CONSTRAINT, BoundedSystem)
 {
+    BOOST_TEST_MESSAGE("ERROR_HANDLER_FOR_TRAJECTORY_BOUND_CONSTRAINT");
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
@@ -1034,6 +1054,7 @@ BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_TRAJECTORY_BOUND_CONSTRAINT, BoundedSy
 
 BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_CONTROL_BOUND_CONSTRAINT, BoundedSystem)
 {
+    BOOST_TEST_MESSAGE("ERROR_HANDLER_FOR_CONTROL_BOUND_CONSTRAINT");
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
@@ -1054,6 +1075,7 @@ BOOST_FIXTURE_TEST_CASE(ERROR_HANDLER_FOR_CONTROL_BOUND_CONSTRAINT, BoundedSyste
 
 BOOST_FIXTURE_TEST_CASE(REMOVE_COST_AND_CONSTRAINT, IneqSystem)
 {
+    BOOST_TEST_MESSAGE("REMOVE_COST_AND_CONSTRAINT");
     auto ps = std::make_shared<copra::PreviewSystem>(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
 
