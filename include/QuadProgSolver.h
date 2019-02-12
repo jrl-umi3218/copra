@@ -22,7 +22,6 @@
 #include "SolverInterface.h"
 #include <Eigen/Core>
 #include <eigen-quadprog/QuadProg.h>
-#include <memory>
 
 namespace copra {
 
@@ -34,7 +33,7 @@ public:
     /**
      * QuadProgDenseSolver default constructor
      */
-    QuadProgDenseSolver();
+    QuadProgDenseSolver() = default;
 
     /**
      * Get information of eventual fail's solver output as define by the
@@ -80,8 +79,12 @@ public:
         const Eigen::MatrixXd& Aineq, const Eigen::VectorXd& bineq,
         const Eigen::VectorXd& XL, const Eigen::VectorXd& XU) override;
 
+    Eigen::QuadProgDense& baseSolver() noexcept { return solver_; }
+
+    QuadProgDenseSolver* clone() const override { return new QuadProgDenseSolver(*this); }
+
 private:
-    std::unique_ptr<Eigen::QuadProgDense> solver_;
+    Eigen::QuadProgDense solver_;
 };
 
 } // namespace pc

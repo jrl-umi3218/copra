@@ -22,7 +22,6 @@
 #include "SolverInterface.h"
 #include <Eigen/Core>
 #include <eigen-gurobi/Gurobi.h>
-#include <memory>
 
 namespace copra {
 
@@ -71,8 +70,12 @@ public:
         const Eigen::MatrixXd& Aineq, const Eigen::VectorXd& bineq,
         const Eigen::VectorXd& XL, const Eigen::VectorXd& XU) override;
 
+    Eigen::GurobiDense& baseSolver() noexcept { return solver_; }
+
+    GUROBISolver* clone() const override { return new GUROBISolver(*this); }
+
 private:
-    std::unique_ptr<Eigen::GurobiDense> solver_;
+    Eigen::GurobiDense solver_;
 };
 
 } // namespace pc

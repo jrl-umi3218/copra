@@ -19,10 +19,6 @@
 
 #include "QuadProgSolver.h"
 #include "systems.h"
-#include <Eigen/Core>
-#include <boost/test/unit_test.hpp>
-#include <iostream>
-#include <numeric>
 #ifdef EIGEN_QLD_FOUND
 #include "QLDSolver.h"
 #endif
@@ -32,6 +28,11 @@
 #ifdef EIGEN_GUROBI_FOUND
 #include "GUROBISolver.h"
 #endif
+
+#include <Eigen/Core>
+#include <boost/test/unit_test.hpp>
+#include <iostream>
+#include <numeric>
 
 BOOST_FIXTURE_TEST_CASE(QuadProgTest, Problem)
 {

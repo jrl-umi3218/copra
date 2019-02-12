@@ -133,6 +133,8 @@ public:
         const Eigen::MatrixXd& Aineq, const Eigen::VectorXd& bineq,
         const Eigen::VectorXd& XL, const Eigen::VectorXd& XU)
         = 0;
+
+    virtual SolverInterface* clone() const = 0; // Clone function
 };
 
 } // namespace pc

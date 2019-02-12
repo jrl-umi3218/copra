@@ -22,7 +22,6 @@
 #include "SolverInterface.h"
 #include <Eigen/Core>
 #include <eigen-qld/QLD.h>
-#include <memory>
 
 namespace copra {
 
@@ -80,8 +79,12 @@ public:
         const Eigen::MatrixXd& Aineq, const Eigen::VectorXd& bineq,
         const Eigen::VectorXd& XL, const Eigen::VectorXd& XU) override;
 
+    Eigen::QLD& baseSolver() noexcept { return solver_; }
+
+    QLDSolver* clone() const override { return new QLDSolver(*this); }
+
 private:
-    std::unique_ptr<Eigen::QLD> solver_;
+    Eigen::QLD solver_;
     double eps_;
 };
 

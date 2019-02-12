@@ -47,7 +47,7 @@
 
 BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
 {
-    BOOST_TEST_MESSAGE("MPC_TARGET_COST_WITH_BOUND_CONSTRAINTS");
+    BOOST_TEST_MESSAGE("\nMPC_TARGET_COST_WITH_BOUND_CONSTRAINTS");
     tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
@@ -98,7 +98,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
     pcCheck("Default (QuadProgDense)", copra::SolverFlag::DEFAULT);
 #ifdef EIGEN_LSSOL_FOUND
     auto solver = copra::solverFactory(copra::SolverFlag::LSSOL);
-    solver->SI_maxIter(130);
+    solver->SI_maxIter(200);
     pcCheck("LSSOL", copra::SolverFlag::LSSOL, std::move(solver));
 #endif
 #ifdef EIGEN_QLD_FOUND
@@ -113,7 +113,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
 
 BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
 {
-    BOOST_TEST_MESSAGE("MPC_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS");
+    BOOST_TEST_MESSAGE("\nMPC_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS");
     tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
@@ -164,7 +164,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS, BoundedSyste
     pcCheck("Default (QuadProgDense)", copra::SolverFlag::DEFAULT);
 #ifdef EIGEN_LSSOL_FOUND
     auto solver = copra::solverFactory(copra::SolverFlag::LSSOL);
-    solver->SI_maxIter(130);
+    solver->SI_maxIter(200);
     pcCheck("LSSOL", copra::SolverFlag::LSSOL, std::move(solver));
 #endif
 #ifdef EIGEN_QLD_FOUND
@@ -179,7 +179,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS, BoundedSyste
 
 BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
 {
-    BOOST_TEST_MESSAGE("MPC_MIXED_COST_WITH_BOUND_CONSTRAINTS");
+    BOOST_TEST_MESSAGE("\nMPC_MIXED_COST_WITH_BOUND_CONSTRAINTS");
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
@@ -222,7 +222,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
 
 BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
 {
-    BOOST_TEST_MESSAGE("MPC_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS");
+    BOOST_TEST_MESSAGE("\nMPC_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS");
     tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
@@ -273,7 +273,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
     pcCheck("Default (QuadProgDense)", copra::SolverFlag::DEFAULT);
 #ifdef EIGEN_LSSOL_FOUND
     auto solver = copra::solverFactory(copra::SolverFlag::LSSOL);
-    solver->SI_maxIter(130);
+    solver->SI_maxIter(200);
     pcCheck("LSSOL", copra::SolverFlag::LSSOL, std::move(solver));
 #endif
 #ifdef EIGEN_QLD_FOUND
@@ -288,7 +288,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
 
 BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
 {
-    BOOST_TEST_MESSAGE("MPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS");
+    BOOST_TEST_MESSAGE("\nMPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS");
     tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
@@ -339,7 +339,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSys
     pcCheck("Default (QuadProgDense)", copra::SolverFlag::DEFAULT);
 #ifdef EIGEN_LSSOL_FOUND
     auto solver = copra::solverFactory(copra::SolverFlag::LSSOL);
-    solver->SI_maxIter(130);
+    solver->SI_maxIter(200);
     pcCheck("LSSOL", copra::SolverFlag::LSSOL, std::move(solver));
 #endif
 #ifdef EIGEN_QLD_FOUND
@@ -354,7 +354,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSys
 
 BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
 {
-    BOOST_TEST_MESSAGE("MPC_MIXED_COST_WITH_INEQUALITY_CONSTRAINTS");
+    BOOST_TEST_MESSAGE("\nMPC_MIXED_COST_WITH_INEQUALITY_CONSTRAINTS");
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
@@ -397,7 +397,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
 
 BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
 {
-    BOOST_TEST_MESSAGE("MPC_TARGET_COST_WITH_MIXED_CONSTRAINTS");
+    BOOST_TEST_MESSAGE("\nMPC_TARGET_COST_WITH_MIXED_CONSTRAINTS");
     tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
@@ -449,7 +449,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
     pcCheck("Default (QuadProgDense)", copra::SolverFlag::DEFAULT);
 #ifdef EIGEN_LSSOL_FOUND
     auto solver = copra::solverFactory(copra::SolverFlag::LSSOL);
-    solver->SI_maxIter(130);
+    solver->SI_maxIter(200);
     pcCheck("LSSOL", copra::SolverFlag::LSSOL, std::move(solver));
 #endif
 #ifdef EIGEN_QLD_FOUND
@@ -464,7 +464,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
 
 BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
 {
-    BOOST_TEST_MESSAGE("MPC_TRAJECTORY_COST_WITH_MIXED_CONSTRAINTS");
+    BOOST_TEST_MESSAGE("\nMPC_TRAJECTORY_COST_WITH_MIXED_CONSTRAINTS");
     tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
@@ -516,7 +516,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
     pcCheck("Default (QuadProgDense)", copra::SolverFlag::DEFAULT);
 #ifdef EIGEN_LSSOL_FOUND
     auto solver = copra::solverFactory(copra::SolverFlag::LSSOL);
-    solver->SI_maxIter(130);
+    solver->SI_maxIter(200);
     pcCheck("LSSOL", copra::SolverFlag::LSSOL, std::move(solver));
 #endif
 #ifdef EIGEN_QLD_FOUND
@@ -531,7 +531,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
 
 BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
 {
-    BOOST_TEST_MESSAGE("MPC_MIXED_COST_WITH_MIXED_CONSTRAINTS");
+    BOOST_TEST_MESSAGE("\nMPC_MIXED_COST_WITH_MIXED_CONSTRAINTS");
     tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
@@ -577,7 +577,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
 
 BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
 {
-    BOOST_TEST_MESSAGE("MPC_TARGET_COST_WITH_EQUALITY_CONSTRAINTS");
+    BOOST_TEST_MESSAGE("\nMPC_TARGET_COST_WITH_EQUALITY_CONSTRAINTS");
     tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
@@ -625,8 +625,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
     pcCheck("Default (QuadProgDense)", copra::SolverFlag::DEFAULT);
 #ifdef EIGEN_LSSOL_FOUND
     auto solver = copra::solverFactory(copra::SolverFlag::LSSOL);
-    solver->SI_maxIter(130);
-    solver->SI_feasibilityTolerance(1e-6);
+    solver->SI_maxIter(200);
     pcCheck("LSSOL", copra::SolverFlag::LSSOL, std::move(solver));
 #endif
 #ifdef EIGEN_QLD_FOUND
@@ -641,7 +640,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
 
 BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
 {
-    BOOST_TEST_MESSAGE("MPC_TRAJECTORY_COST_WITH_EQUALITY_CONSTRAINTS");
+    BOOST_TEST_MESSAGE("\nMPC_TRAJECTORY_COST_WITH_EQUALITY_CONSTRAINTS");
     tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
@@ -689,8 +688,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
     pcCheck("Default (QuadProgDense)", copra::SolverFlag::DEFAULT);
 #ifdef EIGEN_LSSOL_FOUND
     auto solver = copra::solverFactory(copra::SolverFlag::LSSOL);
-    solver->SI_maxIter(130);
-    solver->SI_feasibilityTolerance(1e-6);
+    solver->SI_maxIter(200);
     pcCheck("LSSOL", copra::SolverFlag::LSSOL, std::move(solver));
 #endif
 #ifdef EIGEN_QLD_FOUND
@@ -705,7 +703,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
 
 BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
 {
-    BOOST_TEST_MESSAGE("MPC_MIXED_COST_WITH_EQUALITY_CONSTRAINTS");
+    BOOST_TEST_MESSAGE("\nMPC_MIXED_COST_WITH_EQUALITY_CONSTRAINTS");
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);

@@ -67,11 +67,20 @@ endif(MSVC)
 set(BOOST_REQUIRED 1.48)
 set(BOOST_COMPONENTS system timer)
 set(Eigen_REQUIRED "eigen3 >= 3.2.0")
-SEARCH_FOR_EIGEN()
 
-if(${_Eigen_VERSION} VERSION_LESS 3.3)
-  add_definitions(-DEIGEN_3_2_FOUND) # Will add Eigen::Index as in 3.3
+#########################
+# External dependencies
+if(PKG_CONFIG_FOUND)
+  search_for_eigen()
+else()
+  find_path(Eigen_INCLUDE_DIR NAMES signature_of_eigen3_matrix_library
+    PATHS
+    ${CMAKE_INSTALL_PREFIX}/include
+    PATH_SUFFIXES eigen3 eigen
+  )
+  include_directories(SYSTEM ${Eigen_INCLUDE_DIR})
 endif()
+#########################
 
 add_required_dependency("eigen-quadprog")
 add_optional_dependency("eigen-qld")

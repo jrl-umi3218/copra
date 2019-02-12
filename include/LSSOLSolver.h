@@ -22,7 +22,6 @@
 #include "SolverInterface.h"
 #include <Eigen/Core>
 #include <eigen-lssol/LSSOL_QP.h>
-#include <memory>
 
 namespace copra {
 
@@ -34,7 +33,7 @@ public:
     /**
      * LSSOLSolver default constructor
      */
-    LSSOLSolver();
+    LSSOLSolver() = default;
 
     /**
      * Get information of eventual fail's solver output as define by the
@@ -82,8 +81,12 @@ public:
         const Eigen::MatrixXd& Aineq, const Eigen::VectorXd& bineq,
         const Eigen::VectorXd& XL, const Eigen::VectorXd& XU) override;
 
+    Eigen::LSSOL_QP& baseSolver() noexcept { return solver_; }
+
+    LSSOLSolver* clone() const override { return new LSSOLSolver(*this); }
+
 private:
-    std::unique_ptr<Eigen::LSSOL_QP> solver_;
+    Eigen::LSSOL_QP solver_;
     Eigen::MatrixXd Q_;
     Eigen::MatrixXd A_;
     Eigen::VectorXd bl_;

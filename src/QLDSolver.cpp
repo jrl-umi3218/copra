@@ -25,19 +25,18 @@ namespace copra {
  */
 
 QLDSolver::QLDSolver()
-    : solver_(new Eigen::QLD())
-    , eps_(1e-12)
+    : eps_(1e-12)
 {
 }
 
 int QLDSolver::SI_fail() const
 {
-    return solver_->fail();
+    return solver_.fail();
 }
 
 void QLDSolver::SI_inform() const
 {
-    switch (solver_->fail()) {
+    switch (solver_.fail()) {
     case 0:
         std::cout << "The optimality conditions are satisfied." << std::endl;
         break;
@@ -72,7 +71,7 @@ void QLDSolver::SI_inform() const
 
 void QLDSolver::SI_printLevel(int pl)
 {
-    solver_->verbose(pl != 0);
+    solver_.verbose(pl != 0);
 }
 
 void QLDSolver::SI_feasibilityTolerance(double tol)
@@ -82,12 +81,12 @@ void QLDSolver::SI_feasibilityTolerance(double tol)
 
 const Eigen::VectorXd& QLDSolver::SI_result() const
 {
-    return solver_->result();
+    return solver_.result();
 }
 
 void QLDSolver::SI_problem(int nrVar, int nrEq, int nrInEq)
 {
-    solver_->problem(nrVar, nrEq, nrInEq);
+    solver_.problem(nrVar, nrEq, nrInEq);
 }
 
 bool QLDSolver::SI_solve(const Eigen::MatrixXd& Q, const Eigen::VectorXd& c,
@@ -95,7 +94,7 @@ bool QLDSolver::SI_solve(const Eigen::MatrixXd& Q, const Eigen::VectorXd& c,
     const Eigen::MatrixXd& Aineq, const Eigen::VectorXd& bineq,
     const Eigen::VectorXd& XL, const Eigen::VectorXd& XU)
 {
-    return solver_->solve(Q, c, Aeq, beq, Aineq, bineq, XL, XU, false, eps_);
+    return solver_.solve(Q, c, Aeq, beq, Aineq, bineq, XL, XU, false, eps_);
 }
 
 } // namespace pc

@@ -24,24 +24,19 @@ namespace copra {
  * QuadProg dense
  */
 
-QuadProgDenseSolver::QuadProgDenseSolver()
-    : solver_(new Eigen::QuadProgDense())
-{
-}
-
 int QuadProgDenseSolver::SI_fail() const
 {
-    return solver_->fail();
+    return solver_.fail();
 }
 
 int QuadProgDenseSolver::SI_iter() const
 {
-    return solver_->iter()(0);
+    return solver_.iter()(0);
 }
 
 void QuadProgDenseSolver::SI_inform() const
 {
-    switch (solver_->fail()) {
+    switch (solver_.fail()) {
     case 0:
         std::cout << "No problems" << std::endl;
         break;
@@ -57,7 +52,7 @@ void QuadProgDenseSolver::SI_inform() const
 
 const Eigen::VectorXd& QuadProgDenseSolver::SI_result() const
 {
-    return solver_->result();
+    return solver_.result();
 }
 
 void QuadProgDenseSolver::SI_problem(int nrVar, int nrEq, int nrInEq)
@@ -66,7 +61,7 @@ void QuadProgDenseSolver::SI_problem(int nrVar, int nrEq, int nrInEq)
     // They will be transformed into inequality constrains.
     // The bound limits constrain size is 2 times (upper and lower bound) the
     // number of variables
-    solver_->problem(nrVar, nrEq, nrInEq + 2 * nrVar);
+    solver_.problem(nrVar, nrEq, nrInEq + 2 * nrVar);
 }
 
 bool QuadProgDenseSolver::SI_solve(const Eigen::MatrixXd& Q, const Eigen::VectorXd& c,
@@ -86,7 +81,7 @@ bool QuadProgDenseSolver::SI_solve(const Eigen::MatrixXd& Q, const Eigen::Vector
     ineqVec.segment(ALines, nrLines) = XU;
     ineqVec.tail(nrLines) = -XL;
 
-    return solver_->solve(Q, c, Aeq, beq, ineqMat, ineqVec);
+    return solver_.solve(Q, c, Aeq, beq, ineqMat, ineqVec);
 }
 
 } // namespace pc
