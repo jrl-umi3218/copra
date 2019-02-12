@@ -36,7 +36,7 @@ int SolverInterface::SI_maxIter() const
     return -1;
 }
 
-void SolverInterface::SI_maxIter(int maxIter)
+void SolverInterface::SI_maxIter(int /* maxIter */)
 {
     std::cout << "No maxIter(int) function for this qp" << std::endl;
 }
