@@ -40,9 +40,6 @@ make -j4
 sudo make install
 ```
 
-Take a look at the ``c++11-back-compatibility`` branch if you'd rather compile
-for C++11.
-
 ### Testing
 
 C++ tests will be compiled in your build folder if you enabled the
