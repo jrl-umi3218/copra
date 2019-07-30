@@ -6,7 +6,7 @@ solvers. Python bindings are available.
 
 ## Installation
 
-Compilation has been tested on Linux (gcc/clang).
+Compilation has been tested on Linux (gcc/clang/msvc).
 
 ### Dependencies
 
@@ -28,7 +28,7 @@ Compilation has been tested on Linux (gcc/clang).
 
 ### Building from source on Linux
 
-The library assumes you are compiling C++14 by default:
+The library is written in c++14. Compiler that can not support it won't be able to compile it.
 
 ```sh
 git clone --recursive git@github.com:stephane-caron/Copra.git
