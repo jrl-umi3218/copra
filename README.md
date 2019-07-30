@@ -31,7 +31,7 @@ Compilation has been tested on Linux (gcc/clang/msvc).
 The library is written in c++14. Compiler that can not support it won't be able to compile it.
 
 ```sh
-git clone --recursive git@github.com:stephane-caron/Copra.git
+git clone --recursive git@github.com:vsamy/copra.git
 cd Copra
 mkdir build && cd build
 cmake ..
