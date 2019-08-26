@@ -21,7 +21,7 @@
 
 #include "debugUtils.h"
 #include "typedefs.h"
-#include <Eigen/Core>
+#include <eigen3/Eigen/Core>
 #include <memory>
 
 namespace copra {
@@ -70,7 +70,7 @@ public:
      * \param Weights of to set.
      * \throw Throw a std::domain_error if weights is badly dimension.
      */
-    template <typename TVec, typename = std::enable_if_t<!is_all_arithmetic<TVec>::value>>
+    template <typename TVec, typename = std::enable_if<!is_all_arithmetic<TVec>::value>>
     void weights(TVec&& weights)
     {
         if (weights.rows() == weights_.rows()) {
@@ -88,7 +88,7 @@ public:
      * Set the weights of the system. All variables are set to the same weight.
      * \param weight Weight to apply.
      */
-    template <typename T, typename = std::enable_if_t<is_all_arithmetic<T>::value>>
+    template <typename T, typename = typename std::enable_if<is_all_arithmetic<T>::value>::type>
     void weight(T weight)
     {
         weights_.setConstant(weight);
@@ -136,7 +136,7 @@ public:
      * \param M The matrix side of the cost function
      * \param p The vector side of the cost function
      */
-    template <typename TMat, typename TVec, typename = std::enable_if_t<!is_all_arithmetic<TMat, TVec>::value>>
+    template <typename TMat, typename TVec, typename = std::enable_if<!is_all_arithmetic<TMat, TVec>::value>>
     TrajectoryCost(TMat&& M, TVec&& p)
         : CostFunction("TrajectoryCost")
         , M_(std::forward<TMat>(M))
@@ -168,7 +168,7 @@ public:
      * \param M The matrix side of the cost function
      * \param p The vector side of the cost function
      */
-    template <typename TMat, typename TVec, typename = std::enable_if_t<!is_all_arithmetic<TMat, TVec>::value>>
+    template <typename TMat, typename TVec, typename = std::enable_if<!is_all_arithmetic<TMat, TVec>::value>>
     TargetCost(TMat&& M, TVec&& p)
         : CostFunction("TargetCost")
         , M_(std::forward<TMat>(M))
@@ -199,7 +199,7 @@ public:
      * \param N The matrix side of the cost function
      * \param p The vector side of the cost function
      */
-    template <typename TMat, typename TVec, typename = std::enable_if_t<!is_all_arithmetic<TMat, TVec>::value>>
+    template <typename TMat, typename TVec, typename = std::enable_if<!is_all_arithmetic<TMat, TVec>::value>>
     ControlCost(TMat&& N, TVec&& p)
         : CostFunction("ControlCost")
         , N_(std::forward<TMat>(N))
@@ -231,7 +231,7 @@ public:
      * \param N The matrix side of the cost function
      * \param p The vector side of the cost function
      */
-    template <typename TMat1, typename TMat2, typename TVec, typename = std::enable_if_t<!is_all_arithmetic<TMat1, TMat2, TVec>::value>>
+    template <typename TMat1, typename TMat2, typename TVec, typename = typename std::enable_if<!is_all_arithmetic<TMat1, TMat2, TVec>::value>>
     MixedCost(TMat1&& M, TMat2&& N, TVec&& p)
         : CostFunction("MixedCost")
         , M_(std::forward<TMat1>(M))
