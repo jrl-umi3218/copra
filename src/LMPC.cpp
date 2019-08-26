@@ -335,7 +335,6 @@ void LMPC::checkDeleteCostsAndConstraints()
             if ((*it).use_count() <= delLimit) {
                 CONSTRAINT_DELETION_WARN(useWarn, "%s%s%s", "A '", (*it)->name().c_str(),
                     "' has been destroyed.\nIt has been removed from the controller\n");
-                (void)useWarn;
                 it = sp.erase(it);
             } else {
                 ++it;
@@ -348,7 +347,6 @@ void LMPC::checkDeleteCostsAndConstraints()
             if ((*it).use_count() <= delLimit) {
                 CONSTRAINT_DELETION_WARN(useWarn, "%s%s%s", "A '", (*it)->name().c_str(),
                     "' has been destroyed.\nIt has been removed from the controller\n");
-                (void)useWarn;
                 it = sp.erase(it);
             } else {
                 ++it;
@@ -361,7 +359,6 @@ void LMPC::checkDeleteCostsAndConstraints()
             if ((*it).use_count() <= delLimit) {
                 CONSTRAINT_DELETION_WARN(useWarn, "%s%s%s", "A '", (*it)->name().c_str(),
                     "' has been destroyed.\nIt has been removed from the controller\n");
-                (void)useWarn;
                 it = sp.erase(it);
             } else {
                 ++it;
@@ -374,7 +371,6 @@ void LMPC::checkDeleteCostsAndConstraints()
             if ((*it).use_count() <= delLimit) {
                 CONSTRAINT_DELETION_WARN(useWarn, "%s%s%s", "A '", (*it)->name().c_str(),
                     "' has been destroyed.\nIt has been removed from the controller\n");
-                (void)useWarn;
                 it = sp.erase(it);
             } else {
                 ++it;
@@ -387,7 +383,6 @@ void LMPC::checkDeleteCostsAndConstraints()
             if ((*it).use_count() <= delLimit) {
                 CONSTRAINT_DELETION_WARN(useWarn, "%s%s%s", "A '", (*it)->name().c_str(),
                     "' has been destroyed.\nIt has been removed from the controller\n");
-                (void)useWarn;
                 it = sp.erase(it);
             } else {
                 ++it;

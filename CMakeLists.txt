@@ -29,32 +29,11 @@ set(PROJECT_DEBUG_POSTFIX "_d")
 
 # SET(CXX_DISABLE_WERROR True)
 set(DOXYGEN_USE_MATHJAX "YES")
+set(CMAKE_CXX_STANDARD 11)
 
 cmake_policy(VERSION ${CMAKE_VERSION})
 
 project(${PROJECT_NAME} CXX)
-set (CMAKE_CXX_STANDARD 11)
-
-
-# # Check compiler version
-# if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-#     if("${CMAKE_CXX_COMPILER_VERSION}" VERSION_LESS "5.0")
-#         message(FATAL_ERROR "Insufficient gcc version (version superior to 5.0 is required)")
-#     endif()
-# elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-#     if("${CMAKE_CXX_COMPILER_VERSION}" VERSION_LESS "3.4")
-#         message(FATAL_ERROR "Insufficient clang version (version superior to 3.4 is required)")
-#     endif()
-# elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-#     if("${CMAKE_CXX_COMPILER_VERSION}" VERSION_LESS "14.0")
-#         message(FATAL_ERROR "Insufficient msvc version (version superior to 14.0 is required)")
-#     endif()
-# endif()
-
-string(TOLOWER "${CMAKE_BUILD_TYPE}" lower_case)
-if(lower_case STREQUAL "debug")
-    set(CMAKE_CXX_FLAGS_DEBUG "-D_DEBUG")
-endif()
 
 option(PYTHON_BINDING "Generate python bindings." OFF)
 option(DISABLE_TESTS "Build unit tests." OFF)
