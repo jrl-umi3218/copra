@@ -39,14 +39,22 @@ void LMPC::Constraints::updateNr()
 {
     nrEqConstr = 0;
     nrIneqConstr = 0;
+ 
+    using eq_constr = std::vector<std::shared_ptr<EqIneqConstraint>>;
+    using ineq_constr = std::vector<std::shared_ptr<EqIneqConstraint>>;
 
-    auto countConstr = [](auto& spc, int& nreq) {
+    auto countEqConstr = [](eq_constr& spc, int& nreq) {
         for (auto& sp : spc)
             nreq += sp->nrConstr();
     };
 
-    countConstr(spEqConstr, nrEqConstr);
-    countConstr(spIneqConstr, nrIneqConstr);
+    auto countIneqConstr = [](ineq_constr& spc, int& nreq) {
+        for (auto& sp : spc)
+            nreq += sp->nrConstr();
+    };
+
+    countEqConstr(spEqConstr, nrEqConstr);
+    countIneqConstr(spIneqConstr, nrIneqConstr);
 }
 
 void LMPC::Constraints::clear()
@@ -316,7 +324,13 @@ void LMPC::makeQPForm()
 
 void LMPC::checkDeleteCostsAndConstraints()
 {
-    auto check = [](auto& sp, bool useWarn = false, int delLimit = 2) {
+    using default_constr = std::vector<std::shared_ptr<Constraint>>;
+    using eq_constr = std::vector<std::shared_ptr<EqIneqConstraint>>;
+    using ineq_constr = std::vector<std::shared_ptr<EqIneqConstraint>>;
+    using bound_constr = std::vector<std::shared_ptr<ControlBoundConstraint>>;
+    using cost_constr = std::vector<std::shared_ptr<CostFunction>>;
+
+    auto checkConstr = [](default_constr& sp, bool useWarn, int delLimit) {
         for (auto it = sp.begin(); it != sp.end();) {
             if ((*it).use_count() <= delLimit) {
                 CONSTRAINT_DELETION_WARN(useWarn, "%s%s%s", "A '", (*it)->name().c_str(),
@@ -329,11 +343,63 @@ void LMPC::checkDeleteCostsAndConstraints()
         }
     };
 
-    check(constraints_.spConstr, true);
-    check(constraints_.spEqConstr);
-    check(constraints_.spIneqConstr);
-    check(constraints_.spBoundConstr);
-    check(spCost_, true, 1);
+    auto checkEqConstr = [](eq_constr& sp, bool useWarn, int delLimit) {
+        for (auto it = sp.begin(); it != sp.end();) {
+            if ((*it).use_count() <= delLimit) {
+                CONSTRAINT_DELETION_WARN(useWarn, "%s%s%s", "A '", (*it)->name().c_str(),
+                    "' has been destroyed.\nIt has been removed from the controller\n");
+                (void)useWarn;
+                it = sp.erase(it);
+            } else {
+                ++it;
+            }
+        }
+    };
+
+    auto checkIneqConstr = [](ineq_constr& sp, bool useWarn, int delLimit) {
+        for (auto it = sp.begin(); it != sp.end();) {
+            if ((*it).use_count() <= delLimit) {
+                CONSTRAINT_DELETION_WARN(useWarn, "%s%s%s", "A '", (*it)->name().c_str(),
+                    "' has been destroyed.\nIt has been removed from the controller\n");
+                (void)useWarn;
+                it = sp.erase(it);
+            } else {
+                ++it;
+            }
+        }
+    };
+
+    auto checkBoundConstr = [](bound_constr& sp, bool useWarn, int delLimit) {
+        for (auto it = sp.begin(); it != sp.end();) {
+            if ((*it).use_count() <= delLimit) {
+                CONSTRAINT_DELETION_WARN(useWarn, "%s%s%s", "A '", (*it)->name().c_str(),
+                    "' has been destroyed.\nIt has been removed from the controller\n");
+                (void)useWarn;
+                it = sp.erase(it);
+            } else {
+                ++it;
+            }
+        }
+    };
+
+    auto checkCostConstr = [](cost_constr& sp, bool useWarn, int delLimit) {
+        for (auto it = sp.begin(); it != sp.end();) {
+            if ((*it).use_count() <= delLimit) {
+                CONSTRAINT_DELETION_WARN(useWarn, "%s%s%s", "A '", (*it)->name().c_str(),
+                    "' has been destroyed.\nIt has been removed from the controller\n");
+                (void)useWarn;
+                it = sp.erase(it);
+            } else {
+                ++it;
+            }
+        }
+    };
+
+    checkConstr(constraints_.spConstr, true, 2);
+    checkEqConstr(constraints_.spEqConstr, false, 2);
+    checkIneqConstr(constraints_.spIneqConstr, false, 2);
+    checkBoundConstr(constraints_.spBoundConstr, false, 2);
+    checkCostConstr(spCost_, true, 1);
 }
 
 } // namespace copra
