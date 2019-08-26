@@ -65,7 +65,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
     controller.addConstraint(trajConstr);
     controller.addConstraint(contConstr);
 
-    auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver = nullptr) {
+    auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver) {
         if (solver)
             controller.useSolver(std::move(solver));
         else
@@ -95,17 +95,17 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
         BOOST_REQUIRE_LE(control.maxCoeff(), uUpper(0) + 1e-6);
     };
 
-    pcCheck("Default (QuadProgDense)", copra::SolverFlag::DEFAULT);
+    pcCheck("Default (QuadProgDense)", copra::SolverFlag::DEFAULT, nullptr);
 #ifdef EIGEN_LSSOL_FOUND
     auto solver = copra::solverFactory(copra::SolverFlag::LSSOL);
     solver->SI_maxIter(200);
     pcCheck("LSSOL", copra::SolverFlag::LSSOL, std::move(solver));
 #endif
 #ifdef EIGEN_QLD_FOUND
-    pcCheck("QLD", copra::SolverFlag::QLD);
+    pcCheck("QLD", copra::SolverFlag::QLD, nullptr);
 #endif
 #ifdef EIGEN_GUROBI_FOUND
-    pcCheck("GUROBIDense", copra::SolverFlag::GUROBIDense);
+    pcCheck("GUROBIDense", copra::SolverFlag::GUROBIDense, nullptr);
 #endif
 
     tools::printSortedTimers(sTimers);
@@ -131,7 +131,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS, BoundedSyste
     controller.addConstraint(trajConstr);
     controller.addConstraint(contConstr);
 
-    auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver = nullptr) {
+    auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver) {
         if (solver)
             controller.useSolver(std::move(solver));
         else
@@ -161,17 +161,17 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS, BoundedSyste
         BOOST_REQUIRE_LE(control.maxCoeff(), uUpper(0) + 1e-6); // QuadProg allows to exceeds the constrain of a small amount.
     };
 
-    pcCheck("Default (QuadProgDense)", copra::SolverFlag::DEFAULT);
+    pcCheck("Default (QuadProgDense)", copra::SolverFlag::DEFAULT, nullptr);
 #ifdef EIGEN_LSSOL_FOUND
     auto solver = copra::solverFactory(copra::SolverFlag::LSSOL);
     solver->SI_maxIter(200);
     pcCheck("LSSOL", copra::SolverFlag::LSSOL, std::move(solver));
 #endif
 #ifdef EIGEN_QLD_FOUND
-    pcCheck("QLD", copra::SolverFlag::QLD);
+    pcCheck("QLD", copra::SolverFlag::QLD, nullptr);
 #endif
 #ifdef EIGEN_GUROBI_FOUND
-    pcCheck("GUROBIDense", copra::SolverFlag::GUROBIDense);
+    pcCheck("GUROBIDense", copra::SolverFlag::GUROBIDense, nullptr);
 #endif
 
     tools::printSortedTimers(sTimers);
@@ -240,7 +240,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
     controller.addConstraint(trajConstr);
     controller.addConstraint(contConstr);
 
-    auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver = nullptr) {
+    auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver) {
         if (solver)
             controller.useSolver(std::move(solver));
         else
@@ -270,17 +270,17 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
         BOOST_REQUIRE_LE(control.maxCoeff(), h(0) + 1e-6);
     };
 
-    pcCheck("Default (QuadProgDense)", copra::SolverFlag::DEFAULT);
+    pcCheck("Default (QuadProgDense)", copra::SolverFlag::DEFAULT, nullptr);
 #ifdef EIGEN_LSSOL_FOUND
     auto solver = copra::solverFactory(copra::SolverFlag::LSSOL);
     solver->SI_maxIter(200);
     pcCheck("LSSOL", copra::SolverFlag::LSSOL, std::move(solver));
 #endif
 #ifdef EIGEN_QLD_FOUND
-    pcCheck("QLD", copra::SolverFlag::QLD);
+    pcCheck("QLD", copra::SolverFlag::QLD, nullptr);
 #endif
 #ifdef EIGEN_GUROBI_FOUND
-    pcCheck("GUROBIDense", copra::SolverFlag::GUROBIDense);
+    pcCheck("GUROBIDense", copra::SolverFlag::GUROBIDense, nullptr);
 #endif
 
     tools::printSortedTimers(sTimers);
@@ -306,7 +306,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSys
     controller.addConstraint(trajConstr);
     controller.addConstraint(contConstr);
 
-    auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver = nullptr) {
+    auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver) {
         if (solver)
             controller.useSolver(std::move(solver));
         else
@@ -336,17 +336,17 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSys
         BOOST_REQUIRE_LE(control.maxCoeff(), h(0) + 1e-6); // QuadProg allows to exceeds the constrain of a small amount.
     };
 
-    pcCheck("Default (QuadProgDense)", copra::SolverFlag::DEFAULT);
+    pcCheck("Default (QuadProgDense)", copra::SolverFlag::DEFAULT, nullptr);
 #ifdef EIGEN_LSSOL_FOUND
     auto solver = copra::solverFactory(copra::SolverFlag::LSSOL);
     solver->SI_maxIter(200);
     pcCheck("LSSOL", copra::SolverFlag::LSSOL, std::move(solver));
 #endif
 #ifdef EIGEN_QLD_FOUND
-    pcCheck("QLD", copra::SolverFlag::QLD);
+    pcCheck("QLD", copra::SolverFlag::QLD, nullptr);
 #endif
 #ifdef EIGEN_GUROBI_FOUND
-    pcCheck("GUROBIDense", copra::SolverFlag::GUROBIDense);
+    pcCheck("GUROBIDense", copra::SolverFlag::GUROBIDense, nullptr);
 #endif
 
     tools::printSortedTimers(sTimers);
@@ -413,7 +413,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
     controller.addCost(uCost);
     controller.addConstraint(mixedConstr);
 
-    auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver = nullptr) {
+    auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver) {
         if (solver)
             controller.useSolver(std::move(solver));
         else
@@ -446,17 +446,17 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
         }
     };
 
-    pcCheck("Default (QuadProgDense)", copra::SolverFlag::DEFAULT);
+    pcCheck("Default (QuadProgDense)", copra::SolverFlag::DEFAULT, nullptr);
 #ifdef EIGEN_LSSOL_FOUND
     auto solver = copra::solverFactory(copra::SolverFlag::LSSOL);
     solver->SI_maxIter(200);
     pcCheck("LSSOL", copra::SolverFlag::LSSOL, std::move(solver));
 #endif
 #ifdef EIGEN_QLD_FOUND
-    pcCheck("QLD", copra::SolverFlag::QLD);
+    pcCheck("QLD", copra::SolverFlag::QLD, nullptr);
 #endif
 #ifdef EIGEN_GUROBI_FOUND
-    pcCheck("GUROBIDense", copra::SolverFlag::GUROBIDense);
+    pcCheck("GUROBIDense", copra::SolverFlag::GUROBIDense, nullptr);
 #endif
 
     tools::printSortedTimers(sTimers);
@@ -480,7 +480,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
     controller.addCost(uCost);
     controller.addConstraint(mixedConstr);
 
-    auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver = nullptr) {
+    auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver) {
         if (solver)
             controller.useSolver(std::move(solver));
         else
@@ -513,17 +513,17 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
         }
     };
 
-    pcCheck("Default (QuadProgDense)", copra::SolverFlag::DEFAULT);
+    pcCheck("Default (QuadProgDense)", copra::SolverFlag::DEFAULT, nullptr);
 #ifdef EIGEN_LSSOL_FOUND
     auto solver = copra::solverFactory(copra::SolverFlag::LSSOL);
     solver->SI_maxIter(200);
     pcCheck("LSSOL", copra::SolverFlag::LSSOL, std::move(solver));
 #endif
 #ifdef EIGEN_QLD_FOUND
-    pcCheck("QLD", copra::SolverFlag::QLD);
+    pcCheck("QLD", copra::SolverFlag::QLD, nullptr);
 #endif
 #ifdef EIGEN_GUROBI_FOUND
-    pcCheck("GUROBIDense", copra::SolverFlag::GUROBIDense);
+    pcCheck("GUROBIDense", copra::SolverFlag::GUROBIDense, nullptr);
 #endif
 
     tools::printSortedTimers(sTimers);
@@ -593,7 +593,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
     controller.addCost(uCost);
     controller.addConstraint(trajConstr);
 
-    auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver = nullptr) {
+    auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver) {
         if (solver)
             controller.useSolver(std::move(solver));
         else
@@ -622,17 +622,17 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
         BOOST_REQUIRE_LE(velTraj.maxCoeff(), f(0) + 1e-6);
     };
 
-    pcCheck("Default (QuadProgDense)", copra::SolverFlag::DEFAULT);
+    pcCheck("Default (QuadProgDense)", copra::SolverFlag::DEFAULT, nullptr);
 #ifdef EIGEN_LSSOL_FOUND
     auto solver = copra::solverFactory(copra::SolverFlag::LSSOL);
     solver->SI_maxIter(200);
     pcCheck("LSSOL", copra::SolverFlag::LSSOL, std::move(solver));
 #endif
 #ifdef EIGEN_QLD_FOUND
-    pcCheck("QLD", copra::SolverFlag::QLD);
+    pcCheck("QLD", copra::SolverFlag::QLD, nullptr);
 #endif
 #ifdef EIGEN_GUROBI_FOUND
-    pcCheck("GUROBIDense", copra::SolverFlag::GUROBIDense);
+    pcCheck("GUROBIDense", copra::SolverFlag::GUROBIDense, nullptr);
 #endif
 
     tools::printSortedTimers(sTimers);
@@ -656,7 +656,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
     controller.addCost(uCost);
     controller.addConstraint(trajConstr);
 
-    auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver = nullptr) {
+    auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver) {
         if (solver)
             controller.useSolver(std::move(solver));
         else
@@ -685,17 +685,17 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
         BOOST_REQUIRE_LE(velTraj.maxCoeff(), f(0) + 1e-6);
     };
 
-    pcCheck("Default (QuadProgDense)", copra::SolverFlag::DEFAULT);
+    pcCheck("Default (QuadProgDense)", copra::SolverFlag::DEFAULT, nullptr);
 #ifdef EIGEN_LSSOL_FOUND
     auto solver = copra::solverFactory(copra::SolverFlag::LSSOL);
     solver->SI_maxIter(200);
     pcCheck("LSSOL", copra::SolverFlag::LSSOL, std::move(solver));
 #endif
 #ifdef EIGEN_QLD_FOUND
-    pcCheck("QLD", copra::SolverFlag::QLD);
+    pcCheck("QLD", copra::SolverFlag::QLD, nullptr);
 #endif
 #ifdef EIGEN_GUROBI_FOUND
-    pcCheck("GUROBIDense", copra::SolverFlag::GUROBIDense);
+    pcCheck("GUROBIDense", copra::SolverFlag::GUROBIDense, nullptr);
 #endif
 
     tools::printSortedTimers(sTimers);
