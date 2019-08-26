@@ -40,6 +40,17 @@ make -j4
 sudo make install
 ```
 
+### C+11 compatible code
+A c++11 compatible is available on a specific branch.
+Although it exists, it may not be updated as often as the master branch.
+The branch is called `c++11-compatible`. To use it, before compilation and after cloning the repo, do:
+
+```sh
+git checkout c++11-compatible
+```
+
+Then follow the steps in the section just above.
+
 ### Testing
 
 C++ tests will be compiled in your build folder if you enabled the
