@@ -24,13 +24,11 @@
 #include <Eigen/Core>
 #include <iostream>
 
-#ifndef _DEBUG
-#define CONSTRAINT_DELETION_WARN(warn, format, ...)
+#ifdef NDEBUG
+#define CONSTRAINT_DELETION_WARN(warn, format, ...) (void)warn
 #else
 #define CONSTRAINT_DELETION_WARN(warn, format, ...) \
-    if ((warn)) {                                   \
-        fprintf(stderr, format, __VA_ARGS__);       \
-    }
+    if (warn) fprintf(stderr, format, __VA_ARGS__)
 #endif
 
 namespace copra {
