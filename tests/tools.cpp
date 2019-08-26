@@ -23,9 +23,10 @@ Eigen::VectorXd spanVector(const Eigen::VectorXd& v, int size)
 
 void printSortedTimers(SolverTimers& solT)
 {
-    std::sort(solT.st.begin(), solT.st.end(), [](const auto& lhs, const auto& rhs) { return lhs.second < rhs.second; });
-    std::sort(solT.bt.begin(), solT.bt.end(), [](const auto& lhs, const auto& rhs) { return lhs.second < rhs.second; });
-    std::sort(solT.ct.begin(), solT.ct.end(), [](const auto& lhs, const auto& rhs) { return lhs.second < rhs.second; });
+    using underlying_pair = std::pair<std::string, double>;
+    std::sort(solT.st.begin(), solT.st.end(), [](const underlying_pair& lhs, const underlying_pair& rhs) { return lhs.second < rhs.second; });
+    std::sort(solT.bt.begin(), solT.bt.end(), [](const underlying_pair& lhs, const underlying_pair& rhs) { return lhs.second < rhs.second; });
+    std::sort(solT.ct.begin(), solT.ct.end(), [](const underlying_pair& lhs, const underlying_pair& rhs) { return lhs.second < rhs.second; });
     std::stringstream ss;
     ss << "Solving speed: ";
     for (auto t : solT.st)
