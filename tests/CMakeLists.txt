@@ -15,34 +15,14 @@
 # along with copra.  If not, see
 # <http://www.gnu.org/licenses/>.
 
-enable_testing()
-
-set(BOOST_COMPONENTS system unit_test_framework)
-search_for_boost()
-
-add_definitions(-DBOOST_TEST_DYN_LINK)
-include_directories("${PROJECT_SOURCE_DIR}/src")
-include_directories(${Boost_INCLUDE_DIRS})
+find_package(Boost REQUIRED COMPONENTS unit_test_framework)
 
 macro(addTest testName)
     add_executable(${testName} ${testName}.cpp systems.h tools.h tools.cpp)
-    if(MSVC)
-      # for msvc, we let boost auto-link do the work
-        target_link_libraries(${testName} ${PROJECT_NAME})
-    else()
-        target_link_libraries(${testName} ${Boost_LIBRARIES} ${PROJECT_NAME})
-    endif()
-    PKG_CONFIG_USE_DEPENDENCY(${testName} eigen-quadprog)
-    if(${EIGEN_QLD_FOUND})
-        PKG_CONFIG_USE_DEPENDENCY(${testName} eigen-qld)
-    endif()
-    if(${EIGEN_LSSOL_FOUND})
-        PKG_CONFIG_USE_DEPENDENCY(${testName} eigen-lssol)
-    endif()
-    if(${EIGEN_GUROBI_FOUND})
-        PKG_CONFIG_USE_DEPENDENCY(${testName} eigen-gurobi)
-    endif()
+    target_link_libraries(${testName} PRIVATE Boost::unit_test_framework ${PROJECT_NAME})
     add_test(${testName}Unit ${testName})
+    # Adding a project configuration file (for MSVC only)
+    generate_msvc_dot_user_file(${testName} "$(SolutionDir)/src/${PROJECT_NAME}")
 endmacro(addTest)
 
 addTest(TestSolvers)

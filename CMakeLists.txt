@@ -16,11 +16,10 @@
 # <http://www.gnu.org/licenses/>.
 
 # Version minimum
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.1.3)
 include(cmake/base.cmake)
-include(cmake/eigen.cmake)
-include(cmake/boost.cmake)
 include(cmake/msvc-specific.cmake)
+include(optional_qps.cmake)
 
 set(PROJECT_NAME copra)
 set(PROJECT_DESCRIPTION "This library is an implementation of a linear model predictive control")
@@ -31,60 +30,27 @@ set(PROJECT_DEBUG_POSTFIX "_d")
 set(DOXYGEN_USE_MATHJAX "YES")
 set(CMAKE_CXX_STANDARD 14)
 
-cmake_policy(VERSION ${CMAKE_VERSION})
-
-project(${PROJECT_NAME} CXX)
-
 option(PYTHON_BINDING "Generate python bindings." OFF)
 option(DISABLE_TESTS "Build unit tests." OFF)
 
 setup_project()
+set(PROJECT_VERSION 8.0.0)
 
 if(MSVC)
     set(CMAKE_MSVCIDE_RUN_PATH "\$(SolutionDir)/src/\$(Configuration)")
-    add_compile_options("/bigobj")
+    # add_compile_options("/bigobj")
 endif(MSVC)
 
 set(BOOST_REQUIRED 1.48)
 set(BOOST_COMPONENTS system timer)
 set(Eigen_REQUIRED "eigen3 >= 3.2.0")
 
-#########################
-# External dependencies
-if(PKG_CONFIG_FOUND)
-  search_for_eigen()
-else()
-  find_path(Eigen_INCLUDE_DIR NAMES signature_of_eigen3_matrix_library
-    PATHS
-    ${CMAKE_INSTALL_PREFIX}/include
-    PATH_SUFFIXES eigen3 eigen
-  )
-  include_directories(SYSTEM ${Eigen_INCLUDE_DIR})
-endif()
-#########################
-
-add_required_dependency("eigen-quadprog" "eigen-quadprog_d")
-add_optional_dependency("eigen-qld" "eigen-qld_d")
-add_optional_dependency("eigen-lssol" "eigen-lssol_d")
-add_optional_dependency("eigen-gurobi" "eigen-gurobi_d")
-if(${EIGEN_LSSOL_FOUND})
-    add_compile_options(-DEIGEN_LSSOL_FOUND)
-    pkg_config_append_cflags(-DEIGEN_LSSOL_FOUND)
-endif()
-if(${EIGEN_GUROBI_FOUND})
-    add_compile_options(-DEIGEN_GUROBI_FOUND)
-    pkg_config_append_cflags(-DEIGEN_GUROBI_FOUND)
-    endif()
-if(${EIGEN_QLD_FOUND})
-    add_compile_options(-DEIGEN_QLD_FOUND)
-    pkg_config_append_cflags(-DEIGEN_QLD_FOUND)
-endif()
-
-if(NOT WIN32)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -std=c++14 -pedantic")
-endif()
+set(COPRA_PACKAGE_LIST Eigen3 eigen-quadprog)
+list(APPEND COPRA_PACKAGE_LIST ${OPTIONAL_EIGEN_QPS})
+add_project_dependency(${COPRA_PACKAGE_LIST} QUIET)
 
 add_subdirectory(src)
+
 if(NOT ${DISABLE_TESTS})
     add_subdirectory(tests)
 endif()
@@ -93,7 +59,5 @@ if(${PYTHON_BINDING})
     add_subdirectory(binding/python)
 endif()
 
-# Add dependency towards the library in the pkg-config file.
-pkg_config_append_libs(${PROJECT_NAME})
-
 setup_project_finalize()
+setup_project_package_finalize()
