@@ -35,6 +35,6 @@ Eigen::MatrixXd spanMatrix(const Eigen::MatrixXd& m, int size, int addCols = 0);
 
 Eigen::VectorXd spanVector(const Eigen::VectorXd& v, int size);
 
-void printSortedTimers(SolverTimers& solT);
+std::string getSortedTimers(SolverTimers& solT);
 
 } // namespace

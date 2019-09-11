@@ -1,6 +1,5 @@
 #include "tools.h"
 
-#include <boost/test/unit_test.hpp>
 #include <sstream>
 
 namespace tools {
@@ -21,7 +20,7 @@ Eigen::VectorXd spanVector(const Eigen::VectorXd& v, int size)
     return vout;
 }
 
-void printSortedTimers(SolverTimers& solT)
+std::string getSortedTimers(SolverTimers& solT)
 {
     std::sort(solT.st.begin(), solT.st.end(), [](const auto& lhs, const auto& rhs) { return lhs.second < rhs.second; });
     std::sort(solT.bt.begin(), solT.bt.end(), [](const auto& lhs, const auto& rhs) { return lhs.second < rhs.second; });
@@ -37,7 +36,7 @@ void printSortedTimers(SolverTimers& solT)
     for (auto t : solT.ct)
         ss << t.first << " (" + std::to_string(t.second) << "ms) > ";
 
-    BOOST_TEST_MESSAGE(ss.str());
+    return ss.str();
 }
 
 } // namespace tools

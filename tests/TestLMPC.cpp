@@ -15,6 +15,7 @@
 // along with copra.  If not, see
 // <http://www.gnu.org/licenses/>.
 
+#define BOOST_TEST_DYN_LINK
 #define BOOST_TEST_MODULE TestLMPC
 
 #include "systems.h"
@@ -108,7 +109,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
     pcCheck("GUROBIDense", copra::SolverFlag::GUROBIDense);
 #endif
 
-    tools::printSortedTimers(sTimers);
+    BOOST_TEST_MESSAGE(tools::getSortedTimers(sTimers));
 }
 
 BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
@@ -174,7 +175,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS, BoundedSyste
     pcCheck("GUROBIDense", copra::SolverFlag::GUROBIDense);
 #endif
 
-    tools::printSortedTimers(sTimers);
+    BOOST_TEST_MESSAGE(tools::getSortedTimers(sTimers));
 }
 
 BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_BOUND_CONSTRAINTS, BoundedSystem)
@@ -283,7 +284,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
     pcCheck("GUROBIDense", copra::SolverFlag::GUROBIDense);
 #endif
 
-    tools::printSortedTimers(sTimers);
+    BOOST_TEST_MESSAGE(tools::getSortedTimers(sTimers));
 }
 
 BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
@@ -349,7 +350,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSys
     pcCheck("GUROBIDense", copra::SolverFlag::GUROBIDense);
 #endif
 
-    tools::printSortedTimers(sTimers);
+    BOOST_TEST_MESSAGE(tools::getSortedTimers(sTimers));
 }
 
 BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_INEQUALITY_CONSTRAINTS, IneqSystem)
@@ -459,7 +460,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
     pcCheck("GUROBIDense", copra::SolverFlag::GUROBIDense);
 #endif
 
-    tools::printSortedTimers(sTimers);
+    BOOST_TEST_MESSAGE(tools::getSortedTimers(sTimers));
 }
 
 BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
@@ -526,7 +527,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
     pcCheck("GUROBIDense", copra::SolverFlag::GUROBIDense);
 #endif
 
-    tools::printSortedTimers(sTimers);
+    BOOST_TEST_MESSAGE(tools::getSortedTimers(sTimers));
 }
 
 BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_MIXED_CONSTRAINTS, MixedSystem)
@@ -635,7 +636,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TARGET_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
     pcCheck("GUROBIDense", copra::SolverFlag::GUROBIDense);
 #endif
 
-    tools::printSortedTimers(sTimers);
+    BOOST_TEST_MESSAGE(tools::getSortedTimers(sTimers));
 }
 
 BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
@@ -698,7 +699,7 @@ BOOST_FIXTURE_TEST_CASE(MPC_TRAJECTORY_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)
     pcCheck("GUROBIDense", copra::SolverFlag::GUROBIDense);
 #endif
 
-    tools::printSortedTimers(sTimers);
+    BOOST_TEST_MESSAGE(tools::getSortedTimers(sTimers));
 }
 
 BOOST_FIXTURE_TEST_CASE(MPC_MIXED_COST_WITH_EQUALITY_CONSTRAINTS, EqSystem)

@@ -31,9 +31,12 @@ set(DOXYGEN_USE_MATHJAX "YES")
 set(CMAKE_CXX_STANDARD 14)
 
 option(PYTHON_BINDING "Generate python bindings." OFF)
-option(DISABLE_TESTS "Build unit tests." OFF)
+option(BUILD_TESTING "Build unit tests." ON)
+
+project(${PROJECT_NAME} CXX)
 
 setup_project()
+set(INSTALL_GENERATED_HEADERS OFF)
 
 if(MSVC)
     set(CMAKE_MSVCIDE_RUN_PATH "\$(SolutionDir)/src/\$(Configuration)")
@@ -41,7 +44,6 @@ if(MSVC)
 endif(MSVC)
 
 set(BOOST_REQUIRED 1.48)
-set(BOOST_COMPONENTS system timer)
 set(Eigen_REQUIRED "eigen3 >= 3.2.0")
 
 set(COPRA_PACKAGE_LIST Eigen3 eigen-quadprog)
@@ -52,7 +54,7 @@ endforeach()
 
 add_subdirectory(src)
 
-if(NOT ${DISABLE_TESTS})
+if(${BUILD_TESTING})
     add_subdirectory(tests)
 endif()
 

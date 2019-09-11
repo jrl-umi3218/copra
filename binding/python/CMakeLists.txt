@@ -15,40 +15,29 @@
 # along with copra.  If not, see
 # <http://www.gnu.org/licenses/>.
 
-include(../../cmake/python.cmake)
 
 configure_file(__init__.py ${CMAKE_CURRENT_BINARY_DIR}/pyCopra/__init__.py COPYONLY)
 
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-    set(CMAKE_CXX_FLAGS "-std=c++14") # g++ fails with -Werror on boost_python for whatever reason...
-endif()
-
-findpython()
-set(BOOST_COMPONENTS system numpy)
-search_for_boost()
+find_package(Python REQUIRED COMPONENTS Development)
+find_package(Boost REQUIRED COMPONENTS system python${Python_VERSION_MAJOR}${Python_VERSION_MINOR})
 
 if(NOT PYTHON_INSTALL_PATH)
     set(PYTHON_INSTALL_PATH ${PYTHON_SITELIB})
 endif()
 
-include_directories(${Boost_INCLUDE_DIRS})
-include_directories(${PYTHON_INCLUDE_DIRS})
-
 add_library(pyCopra SHARED CopraBindings.cpp)
-target_link_libraries(pyCopra ${PROJECT_NAME} ${PYTHON_LIBRARY} ${Boost_PYTHON_LIBRARIES})
-pkg_config_use_dependency(pyCopra eigen-quadprog)
-if(${EIGEN_QLD_FOUND})
-    pkg_config_use_dependency(pyCopra eigen-qld)
-    add_compile_options(-DEIGEN_QLD_FOUND)
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    target_compile_options(pyCopra -std=c++14)
 endif()
-if(${EIGEN_LSSOL_FOUND})
-    pkg_config_use_dependency(pyCopra eigen-lssol)
-    add_compile_options(-DEIGEN_LSSOL_FOUND)
-endif()
-if(${EIGEN_GUROBI_FOUND})
-    pkg_config_use_dependency(pyCopra eigen-gurobi)
-    add_compile_options(-DEIGEN_GUROBI_FOUND)
-endif()
+target_link_libraries(pyCopra PUBLIC Python::Python)
+target_link_libraries(pyCopra PUBLIC Boost::python${Python_VERSION_MAJOR}${Python_VERSION_MINOR})
+target_link_libraries(pyCopra PUBLIC eigen-quadprog::eigen-quadprog)
+link_optional_qps(pyCopra)
+if(TARGET Eigen3::Eigen) 
+  target_link_libraries(pyCopra PUBLIC Eigen3::Eigen) 
+else() 
+  target_include_directories(pyCopra SYSTEM PUBLIC "${EIGEN3_INCLUDE_DIR}") 
+endif() 
 if(WIN32)
     set_target_properties(pyCopra PROPERTIES SUFFIX ".pyd")
 else()
@@ -56,8 +45,8 @@ else()
 endif()
 
 install(TARGETS pyCopra DESTINATION "${PYTHON_INSTALL_PATH}/pyCopra")
-python_install_build(pyCopra __init__.py "${PYTHON_INSTALL_PATH}")
+install(FILES __init__.py DESTINATION "${PYTHON_INSTALL_PATH}/__init__.py")
 
-if(NOT ${DISABLE_TESTS})
+if(${BUILD_TESTING})
     add_subdirectory(tests)
 endif()
