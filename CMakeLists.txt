@@ -34,7 +34,6 @@ option(PYTHON_BINDING "Generate python bindings." OFF)
 option(DISABLE_TESTS "Build unit tests." OFF)
 
 setup_project()
-set(PROJECT_VERSION 8.0.0)
 
 if(MSVC)
     set(CMAKE_MSVCIDE_RUN_PATH "\$(SolutionDir)/src/\$(Configuration)")
@@ -46,8 +45,10 @@ set(BOOST_COMPONENTS system timer)
 set(Eigen_REQUIRED "eigen3 >= 3.2.0")
 
 set(COPRA_PACKAGE_LIST Eigen3 eigen-quadprog)
-list(APPEND COPRA_PACKAGE_LIST ${OPTIONAL_EIGEN_QPS})
-add_project_dependency(${COPRA_PACKAGE_LIST} QUIET)
+add_optional_qps(${COPRA_PACKAGE_LIST})
+foreach(COPRA_PKG ${COPRA_PACKAGE_LIST})
+    add_project_dependency(${COPRA_PKG} REQUIRED)
+endforeach()
 
 add_subdirectory(src)
 
