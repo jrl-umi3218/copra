@@ -16,7 +16,7 @@
 # <http://www.gnu.org/licenses/>.
 
 # Version minimum
-cmake_minimum_required(VERSION 3.1.3)
+cmake_minimum_required(VERSION 3.12.4) # Facilitate everything for python and boost 
 include(cmake/base.cmake)
 include(cmake/msvc-specific.cmake)
 include(optional_qps.cmake)

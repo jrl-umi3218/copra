@@ -30,7 +30,7 @@ namespace copra {
 //forward declaration
 struct PreviewSystem;
 
-#ifdef __GNUC__
+#if defined(__GNUC__) && __GNUC__ < 6
 #pragma GCC diagnostic push
 // Work around GCC (< 6) bug see: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=43407
 #pragma GCC diagnostic ignored "-Wattributes"
@@ -46,7 +46,7 @@ enum class COPRA_DLLAPI ConstraintFlag {
     BoundConstraint /**< Bound constraint tag */
 };
 
-#ifdef __GNUC__
+#if defined(__GNUC__) && __GNUC__ < 6
 #pragma GCC diagnostic pop
 #endif
 
@@ -63,7 +63,7 @@ public:
     Constraint(std::string&& name);
 
     /**
-     * Declare virtual desturctor
+     * Declare virtual destructor
      */
     virtual ~Constraint() = default;
 
@@ -173,7 +173,7 @@ public:
     /**
      * \brief Generate the full size matrices
      * If you have create the constraint with matrix \f$E_k\f$ and vector \f$h\f$
-     * or \f$E\f$ and \f$h_k\f$ you need to call this function to redimension the matrxix/vector.
+     * or \f$E\f$ and \f$h_k\f$ you need to call this function to resize the matrix/vector.
      */
     void autoSpan() override;
 
@@ -234,7 +234,7 @@ public:
     /**
      * \brief Generate the full size matrices
      * If you have create the constraint with matrix \f$G_k\f$ and vector \f$h\f$
-     * or \f$G\f$ and \f$h_k\f$ you need to call this function to redimension the matrxix/vector.
+     * or \f$G\f$ and \f$h_k\f$ you need to call this function to resize the matrix/vector.
      */
     void autoSpan() override;
 
@@ -279,7 +279,7 @@ public:
      * As \f$U\f$ is the optimization variable, \f$Ex + Gu\leq f\f$ or \f$Ex + Gu = f\f$
      * is transformed to be \f$AU\leq b\f$ or \f$AU = b\f$.
      * Perform a move semantic if an rvalue is given (this is faster).
-     * \note Please use \see ControlConstraint and \see TrajectoryConstraint for non-mixed constraint (they are sligthly faster)
+     * \note Please use \see ControlConstraint and \see TrajectoryConstraint for non-mixed constraint (they are slightly faster)
      * \param E The matrix applied to the trajectory part of the constraint
      * \param G The matrix applied to the control part of the constraint
      * \param f The vector side of the constraint
@@ -299,7 +299,7 @@ public:
     /**
      * \brief Generate the full size matrices
      * If you have create the constraint with matrix \f$E_k\f$ \f$G_k\f$ and vector \f$h\f$
-     * or \f$E_k\f$, \f$G\f$ and \f$h_k\f$, etc... you need to call this function to redimension the matrxix/vector.
+     * or \f$E_k\f$, \f$G\f$ and \f$h_k\f$, etc... you need to call this function to resize the matrix/vector.
      */
     void autoSpan() override;
 
@@ -370,7 +370,7 @@ public:
     /**
      * \brief Generate the full size matrices
      * If you have create the constraint with vector \f$\underline{x}\f$ and vector \f$\overline{X}\f$
-     * or \f$\underline{X}\f$ and \f$\overline{x}\f$ you need to call this function to redimension the vectors.
+     * or \f$\underline{X}\f$ and \f$\overline{x}\f$ you need to call this function to resize the vectors.
      */
     void autoSpan() override;
 
@@ -430,7 +430,7 @@ public:
     /**
      * \brief Generate the full size matrices
      * If you have create the constraint with vector \f$\underline{u}\f$ and vector \f$\overline{U}\f$
-     * or \f$\underline{U}\f$ and \f$\overline{u}\f$ you need to call this function to redimension the vectors.
+     * or \f$\underline{U}\f$ and \f$\overline{u}\f$ you need to call this function to resize the vectors.
      */
     void autoSpan() override;
 
