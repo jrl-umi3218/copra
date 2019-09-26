@@ -39,23 +39,28 @@ set(HEADERS
     ../include/solverUtils.h 
     ../include/typedefs.h)
 
-if(${EIGEN_LSSOL_FOUND})
+set(COPRA_COMPILE_DEFS "")
+if(${eigen-lssol_FOUND})
+    list(APPEND COPRA_COMPILE_DEFS EIGEN_LSSOL_FOUND)
     list(APPEND SOURCES LSSOLSolver.cpp)
     list(APPEND HEADERS ../include/LSSOLSolver.h)
 endif()
 
-if(${EIGEN_GUROBI_FOUND})
+if(${eigen-gurobi_FOUND})
+    list(APPEND COPRA_COMPILE_DEFS EIGEN_GUROBI_FOUND)
     list(APPEND SOURCES GUROBISolver.cpp)
     list(APPEND HEADERS ../include/GUROBISolver.h)
 endif()
 
-if(${EIGEN_QLD_FOUND})
+if(${eigen-qld_FOUND})
+    list(APPEND COPRA_COMPILE_DEFS EIGEN_QLD_FOUND)
     list(APPEND SOURCES QLDSolver.cpp)
     list(APPEND HEADERS ../include/QLDSolver.h)
 endif()
 
 add_library(${PROJECT_NAME} SHARED ${SOURCES} ${HEADERS})
 set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-Dcopra_EXPORTS")
+target_compile_definitions(${PROJECT_NAME} PUBLIC ${COPRA_COMPILE_DEFS})
 target_include_directories(${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> $<INSTALL_INTERFACE:include>)
 target_link_libraries(${PROJECT_NAME} PUBLIC eigen-quadprog::eigen-quadprog)
 link_optional_qps(${PROJECT_NAME})
