@@ -16,7 +16,7 @@
 # <http://www.gnu.org/licenses/>.
 
 # Version minimum
-cmake_minimum_required(VERSION 3.12.4) # Facilitate everything for python and boost 
+cmake_minimum_required(VERSION 3.1.3)
 include(cmake/base.cmake)
 include(cmake/msvc-specific.cmake)
 include(optional_qps.cmake)
@@ -40,16 +40,15 @@ set(INSTALL_GENERATED_HEADERS OFF)
 
 if(MSVC)
     set(CMAKE_MSVCIDE_RUN_PATH "\$(SolutionDir)/src/\$(Configuration)")
-    # add_compile_options("/bigobj")
 endif(MSVC)
 
 set(BOOST_REQUIRED 1.48)
 set(Eigen_REQUIRED "eigen3 >= 3.2.0")
 
-set(COPRA_PACKAGE_LIST Eigen3 eigen-quadprog)
-add_optional_qps(${COPRA_PACKAGE_LIST})
+add_project_dependency(eigen-quadprog REQUIRED)
+add_optional_qps(COPRA_PACKAGE_LIST)
 foreach(COPRA_PKG ${COPRA_PACKAGE_LIST})
-    add_project_dependency(${COPRA_PKG} REQUIRED)
+    list(APPEND _PACKAGE_CONFIG_DEPENDENCIES "find_package(${COPRA_PKG} REQUIRED)")
 endforeach()
 
 add_subdirectory(src)
