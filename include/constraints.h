@@ -30,9 +30,10 @@ namespace copra {
 //forward declaration
 struct PreviewSystem;
 
-#if defined(__GNUC__) && __GNUC__ < 6
+#if defined(__GNUC__)
 #pragma GCC diagnostic push
 // Work around GCC (< 6) bug see: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=43407
+// The error still exist for GCC 7.4.0
 #pragma GCC diagnostic ignored "-Wattributes"
 #endif
 
@@ -46,7 +47,7 @@ enum class COPRA_DLLAPI ConstraintFlag {
     BoundConstraint /**< Bound constraint tag */
 };
 
-#if defined(__GNUC__) && __GNUC__ < 6
+#if defined(__GNUC__)
 #pragma GCC diagnostic pop
 #endif
 
