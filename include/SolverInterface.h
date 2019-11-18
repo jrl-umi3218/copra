@@ -33,6 +33,10 @@ namespace copra {
 class COPRA_DLLAPI SolverInterface {
 public:
     /**
+     * Default virtual destructor.
+     */
+    virtual ~SolverInterface() = default;
+    /**
      * Get information of eventual fail's solver output as define by the
      * solver documentation.
      * \return The fail number.
