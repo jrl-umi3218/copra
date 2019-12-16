@@ -20,6 +20,7 @@ Compilation has been tested on Linux (gcc/clang/msvc).
 
 #### Optional
 
+* [Catch2](https://github.com/catchorg/Catch2): for tests
 * [Boost](http://www.boost.org/doc/libs/1_58_0/more/getting_started/unix-variants.html) >= 1.58: for Python bindings and unit tests
 * [GUROBI](http://www.gurobi.com/) >= 4.0: optional QP solver
 * [eigen-gurobi](https://github.com/vsamy/eigen-gurobi): bindings for GUROBI
