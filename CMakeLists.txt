@@ -17,14 +17,16 @@
 
 # Version minimum
 cmake_minimum_required(VERSION 3.1.3)
-include(cmake/base.cmake)
-include(cmake/msvc-specific.cmake)
-include(optional_qps.cmake)
 
 set(PROJECT_NAME copra)
 set(PROJECT_DESCRIPTION "This library is an implementation of a linear model predictive control")
 set(PROJECT_URL "https://github.com/vsamy/copra")
 set(PROJECT_DEBUG_POSTFIX "_d")
+set(PROJECT_VERSION 1.2.1)
+
+include(cmake/base.cmake)
+include(cmake/msvc-specific.cmake)
+include(optional_qps.cmake)
 
 # SET(CXX_DISABLE_WERROR True)
 set(DOXYGEN_USE_MATHJAX "YES")
@@ -33,9 +35,8 @@ set(CMAKE_CXX_STANDARD 14)
 option(PYTHON_BINDING "Generate python bindings." OFF)
 option(BUILD_TESTING "Build unit tests." ON)
 
-project(${PROJECT_NAME} CXX)
+project(${PROJECT_NAME} LANGUAGES CXX VERSION ${PROJECT_VERSION})
 
-setup_project()
 set(INSTALL_GENERATED_HEADERS OFF)
 
 if(MSVC)
