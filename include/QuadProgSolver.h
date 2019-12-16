@@ -81,8 +81,6 @@ public:
 
     Eigen::QuadProgDense& baseSolver() noexcept { return solver_; }
 
-    QuadProgDenseSolver* clone() const override { return new QuadProgDenseSolver(*this); }
-
 private:
     Eigen::QuadProgDense solver_;
 };

@@ -72,8 +72,6 @@ public:
 
     Eigen::GurobiDense& baseSolver() noexcept { return solver_; }
 
-    GUROBISolver* clone() const override { return new GUROBISolver(*this); }
-
 private:
     Eigen::GurobiDense solver_;
 };

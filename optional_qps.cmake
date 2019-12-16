@@ -2,6 +2,7 @@ set(OPTIONAL_EIGEN_QPS
     eigen-qld
     eigen-lssol
     eigen-gurobi
+    eigen-osqp
 )
 
 macro(add_optional_qps PACKAGE_LIST)

@@ -34,6 +34,10 @@ std::unique_ptr<SolverInterface> solverFactory(SolverFlag flag)
     case SolverFlag::QLD:
         return std::unique_ptr<QLDSolver>(new QLDSolver());
 #endif
+#ifdef EIGEN_OSQP_FOUND
+    case SolverFlag::OSQP:
+        return std::unique_ptr<OSQPSolver>(new OSQPSolver());
+#endif
     // case SolverFlag::QuadProgSparse:
     //    return std::make_unique<QuadProgSparseSolver>();
     case SolverFlag::QuadProgDense:
@@ -56,6 +60,10 @@ SolverInterface* pythonSolverFactory(SolverFlag flag)
 #ifdef EIGEN_QLD_FOUND
     case SolverFlag::QLD:
         return new QLDSolver;
+#endif
+#ifdef EIGEN_OSQP_FOUND
+    case SolverFlag::OSQP:
+        return new OSQPSolver();
 #endif
     case SolverFlag::QuadProgDense:
     default:
