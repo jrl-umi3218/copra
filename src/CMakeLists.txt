@@ -60,6 +60,7 @@ endif()
 
 add_library(${PROJECT_NAME} SHARED ${SOURCES} ${HEADERS})
 set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-Dcopra_EXPORTS")
+set_target_properties(${PROJECT_NAME} PROPERTIES SOVERSION ${PROJECT_VERSION_MAJOR} VERSION ${PROJECT_VERSION})
 target_compile_definitions(${PROJECT_NAME} PUBLIC ${COPRA_COMPILE_DEFS})
 target_include_directories(${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}> $<INSTALL_INTERFACE:include>)
 target_link_libraries(${PROJECT_NAME} PUBLIC eigen-quadprog::eigen-quadprog)
