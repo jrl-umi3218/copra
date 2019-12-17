@@ -36,6 +36,9 @@
 #ifdef EIGEN_GUROBI_FOUND
 #include "GUROBISolver.h"
 #endif
+#ifdef EIGEN_OSQP_FOUND
+#include "OSQPSolver.h"
+#endif
 #include <catch2/catch.hpp>
 #include <memory>
 #include <numeric>
@@ -43,7 +46,7 @@
 
 // Some helpers
 #define CHECK_SMALL(v, eps) CHECK(std::abs(v) < eps)
-#define REQUIRE_LE(a, b) REQUIRE((a) < (b))
+#define REQUIRE_LE(a, b) REQUIRE((a) <= (b))
 
 /********************************************************************************************************
  *                               Check Bound constraint                                                 *

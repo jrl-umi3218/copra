@@ -31,7 +31,7 @@ OSQPSolver::OSQPSolver()
 
 int OSQPSolver::SI_fail() const
 {
-    return solver_.status();
+    return static_cast<int>(solver_.status());
 }
 
 void OSQPSolver::SI_inform() const
