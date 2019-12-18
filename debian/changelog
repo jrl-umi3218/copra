@@ -1,3 +1,9 @@
+copra (1.2.2-1ubuntu2) unstable; urgency=medium
+
+  * Release 1.2.2
+
+ -- Pierre Gergondet <pierre.gergondet+ppa@gmail.com>  Wed, 18 Dec 2019 13:19:42 +0800
+
 copra (1.2.0-1ubuntu1) unstable; urgency=medium
 
   * Initial release
