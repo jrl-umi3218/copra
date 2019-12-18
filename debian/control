@@ -1,0 +1,58 @@
+Source: copra
+Priority: optional
+Maintainer: Pierre Gergondet <pierre.gergondet+ppa@gmail.com>
+Standards-Version: 3.9.5
+Section: libs
+Homepage: http://github.com/jrl-umi3218/copra
+Vcs-Git: git://github.com/jrl-umi3218/copra
+Vcs-Browser: http://github.com/jrl-umi3218/copra
+Build-Depends: debhelper (>= 9),
+               pkg-config,
+               cmake,
+               doxygen,
+               libboost-chrono-dev,
+               libboost-system-dev,
+               libboost-test-dev,
+               libboost-timer-dev,
+               libeigen3-dev (>= 3.2),
+               libeigen-qld-dev,
+               libeigen-quadprog-dev
+
+Package: libcopra-dev
+Section: libdevel
+Architecture: any
+Depends: pkg-config,
+         libeigen3-dev (>= 3.2),
+         libeigen-qld-dev,
+         libeigen-quadprog-dev,
+         libcopra1 (= ${binary:Version}),
+         ${misc:Depends}
+Suggests: libcopra-doc
+Description: copra - development files
+ Copra (Control & preview algorithms) is a C++ library implementing linear
+ model predictive control. It relies on quadratic programming (QP) solvers.
+ .
+ This package contains development files (headers and shared library
+ symbolic link).
+
+
+Package: libcopra1
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends},
+         ${misc:Depends}
+Description: copra - model predictive control
+ Copra (Control & preview algorithms) is a C++ library implementing linear
+ model predictive control. It relies on quadratic programming (QP) solvers.
+
+Package: libcopra-doc
+Section: doc
+Architecture: all
+Depends: ${misc:Depends}
+Multi-Arch: foreign
+Suggests: libcopra-dev
+Description: copra API documentation
+ Copra (Control & preview algorithms) is a C++ library implementing linear
+ model predictive control. It relies on quadratic programming (QP) solvers.
+ .
+ This package provides the complete API documentation in HTML format.
