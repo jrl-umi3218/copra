@@ -1,26 +1,13 @@
-# This file is part of copra.
-
-# copra is free software: you can redistribute it and/or
-# modify
-# it under the terms of the GNU Lesser General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
 #
-# copra is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Lesser General Public License for more details.
+# Copyright 2016-2019 CNRS-UM LIRMM, CNRS-AIST JRL
 #
-# You should have received a copy of the GNU Lesser General Public License
-# along with copra.  If not, see
-# <http://www.gnu.org/licenses/>.
 
 # Version minimum
 cmake_minimum_required(VERSION 3.1.3)
 
 set(PROJECT_NAME copra)
 set(PROJECT_DESCRIPTION "This library is an implementation of a linear model predictive control")
-set(PROJECT_URL "https://github.com/vsamy/copra")
+set(PROJECT_URL "https://github.com/jrl-umi3218/copra")
 set(PROJECT_DEBUG_POSTFIX "_d")
 set(PROJECT_VERSION 1.2.1)
 

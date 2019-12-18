@@ -1,26 +1,32 @@
 # Copra
 
+[![License](https://img.shields.io/badge/License-BSD%202--Clause-green.svg)](https://opensource.org/licenses/BSD-2-Clause)
+[![CI](https://github.com/jrl-umi3218/copra/workflows/CI%20of%20copra/badge.svg?branch=master)](https://github.com/jrl-umi3218/copra/actions?query=workflow%3A%22CI+of+copra%22)
+[![Documentation](https://img.shields.io/badge/doxygen-online-brightgreen?logo=read-the-docs&style=flat)](http://jrl-umi3218.github.io/copra/doxygen/HEAD/index.html)
+
 Copra (**Co**ntrol & **pr**eview **a**lgorithms) is a C++ library implementing
 linear model predictive control. It relies on quadratic programming (QP)
 solvers. Python bindings are available.
 
+This work was originally made by [Vincent Samy](https://github.com/vsamy).
+
+Copra is licensed under the [BSD-2-Clause](https://opensource.org/licenses/BSD-2-Clause). However, its default QP solver (eigen-quadprog) is licensed under the LGPL-2 and this cannot be changed. Please be aware of the related restrictions if you plan to work with copra. At a later date, we might switch copra default QP solver to one with a less restrictive license.
+
 ## Installation
 
-Compilation has been tested on Linux (gcc/clang/msvc).
+Copra should compiles and is tested on Linux, macOS and Windows.
 
 ### Dependencies
 
-* Any compiler with C++14 support
+* C++ compiler with C++14 support (see below for C++11 support)
 * [CMake](https://cmake.org) >= 2.8
-* [Doxygen](http://www.stack.nl/~dimitri/doxygen/): to generate documentation
+* [Doxygen](http://www.stack.nl/~dimitri/doxygen/): to generate documentation (optional)
 * [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) >= 3.2
-* [Git](https://git-scm.com/)
-* [pkg-config](https://www.freedesktop.org/wiki/Software/pkg-config/)
 * [eigen-quadprog](https://github.com/vsamy/eigen-quadprog)
 
 #### Optional
 
-* [Boost](http://www.boost.org/doc/libs/1_58_0/more/getting_started/unix-variants.html) >= 1.58: for Python bindings and unit tests
+* [Boost](http://www.boost.org/doc/libs/1_58_0/more/getting_started/unix-variants.html) for Python bindings (>= 1.58) and unit tests
 * [GUROBI](http://www.gurobi.com/) >= 4.0: optional QP solver
 * [eigen-gurobi](https://github.com/vsamy/eigen-gurobi): bindings for GUROBI
 * [eigen-qld](https://github.com/jrl-umi3218/eigen-qld.git): optional QP solver
@@ -31,11 +37,11 @@ Compilation has been tested on Linux (gcc/clang/msvc).
 The library is written in c++14. Compiler that can not support it won't be able to compile it.
 
 ```sh
-git clone --recursive git@github.com:vsamy/copra.git
+git clone --recursive git@github.com:jrl-umi3218/copra.git
 cd Copra
 mkdir build && cd build
 cmake ..
-ccmake .  # configure e.g. PYTHON_BINDINGS or BUILD_CXX_TESTS
+ccmake .  # configure e.g. PYTHON_BINDING or BUILD_TESTING
 make -j4
 sudo make install
 ```
@@ -54,7 +60,7 @@ Then follow the steps in the section just above.
 ### Testing
 
 C++ tests will be compiled in your build folder if you enabled the
-``BUILD_CXX_TESTS`` option:
+``BUILD_TESTING`` option:
 
 ```sh
 cd build/tests
@@ -71,10 +77,9 @@ python TestMPController.py
 
 ## Documentation
 
-Doxygen files will be compiled into
-``<install_path>/share/doc/mpc/doxygen-html/``. Open the `index.html` file in
-your web browser. You can also check out unit tests, as well as the following
-two examples:
+Doxygen documentation is available [online](http://jrl-umi3218.github.io/copra/doxygen/HEAD/index.html)
+
+You can also check out unit tests, as well as the following two examples:
 
 - [C++ example of Copra](https://vsamy.github.io/en/blog/copra-example-cpp)
 - [Python example of Copra](https://vsamy.github.io/en/blog/copra-example-python)

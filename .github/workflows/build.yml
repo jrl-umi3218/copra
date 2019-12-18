@@ -1,4 +1,4 @@
-name: CI of Tasks
+name: CI of copra
 
 on:
   push:
