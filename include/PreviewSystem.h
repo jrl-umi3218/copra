@@ -18,7 +18,7 @@ namespace copra {
  * \f$X = \Phi x_{0} + \Psi U + \Xi\f$.
  * \note \f$X = [x_0^T x_1^T ... x_N^T]^T\f$ and \f$U = [u_0^T u_1^T ... u_{N-1}^T]^T\f$
  * where \f$N\f$ is the dimension of the system (the number of steps).\n
- * So, \f$X\f$ dimension is \f$N+1\f$ and \f$U\f$ dimension is \f$N\f%.
+ * So, \f$X\f$ dimension is \f$N+1\f$ and \f$U\f$ dimension is \f$N\f$.
  */
 struct COPRA_DLLAPI PreviewSystem {
     /**
@@ -30,10 +30,9 @@ struct COPRA_DLLAPI PreviewSystem {
      * Constructor of the class.
      * \param state The state matrix of the system.
      * \param control The control matrix of the system.
+     * \param bias The bias vector of the system.
      * \param xInit The initial state.
-     * \param xTraj The desired trajectory or final point.
      * \param numberOfSteps The number of step to perform.
-     * \param sFlag The solver to use.
      * \throw std::domain_error if the dimension of the matrices mismatch.
      */
     PreviewSystem(const Eigen::MatrixXd& state, const Eigen::MatrixXd& control,
@@ -43,10 +42,9 @@ struct COPRA_DLLAPI PreviewSystem {
      * Create the system.
      * \param state The state matrix of the system.
      * \param control The control matrix of the system.
+     * \param bias The bias vector of the system.
      * \param xInit The initial state.
-     * \param xTraj The desired trajectory or final point.
      * \param numberOfSteps The number of step to perform.
-     * \param sFlag The solver to use.
      * \throw std::domain_error if the dimension of the matrices mismatch.
      */
     void system(const Eigen::MatrixXd& state, const Eigen::MatrixXd& control,

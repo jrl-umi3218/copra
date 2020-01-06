@@ -54,7 +54,7 @@ public:
     /**
      * Set the weights of the system.
      * Perform a move semantic if a fullsize vector is given as rvalue (this is faster).
-     * \param Weights of to set.
+     * \param weights of to set.
      * \throw Throw a std::domain_error if weights is badly dimension.
      */
     template <typename TVec, typename = std::enable_if_t<!is_all_arithmetic<TVec>::value>>
@@ -215,7 +215,8 @@ public:
      * \brief Constructor of the mixed cost function.
      * Create a cost function of type \f$(MX+NU-p)^TW_M(MX+NU-p)\f$.
      * Perform a move semantic if an rvalue is given.
-     * \param N The matrix side of the cost function
+     * \param M The matrix side of the trajectory cost function
+     * \param N The matrix side of the control cost function
      * \param p The vector side of the cost function
      */
     template <typename TMat1, typename TMat2, typename TVec, typename = std::enable_if_t<!is_all_arithmetic<TMat1, TMat2, TVec>::value>>

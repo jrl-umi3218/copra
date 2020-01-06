@@ -111,7 +111,7 @@ public:
 
     /**
      * Add a cost function to the system.
-     * \param constr A cost type \see TrajectoryCost \see TargetCost
+     * \param costFun A cost type \see TrajectoryCost \see TargetCost
      * \see ControlCost \see MixedTrajectoryCost \see MixedTargetCost
      */
     void addCost(const std::shared_ptr<CostFunction>& costFun);
@@ -152,7 +152,6 @@ protected:
 
     /**
      * Update the system and its constraints.
-     * \param ps The preview system
      * Fill A, b in Constraints
      */
     void updateSystem();

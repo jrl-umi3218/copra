@@ -110,11 +110,11 @@ public:
       \right.
      \f]
      * \param Q An N-by-N symmetric positive definite dense matrix.
-     * \param C An N-by-1 dense vector.
+     * \param c An N-by-1 dense vector.
      * \param Aeq Equality constrain. An M-by-N dense matrix.
      * \param beq Equality constrain. An M-by-1 dense vector.
      * \param Aineq Inequality constrain. An P-by-N dense matrix.
-     * \param Bineq Inequality constrain. An P-by-1 dense vector.
+     * \param bineq Inequality constrain. An P-by-1 dense vector.
      * \param XL Lower bound of the decision vector. An N-by-1 dense vector.
      * \param XU Upper bound of the decision vector. An N-by-1 dense vector.
      * \return The qp solver result.
