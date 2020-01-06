@@ -114,6 +114,6 @@ TEST_CASE_FIXTURE(Problem, "OSQPOnQuadProgTest")
     Eigen::VectorXd resQuadProg = qpQuadProg.SI_result();
     Eigen::VectorXd resOSQP = osqp.SI_result();
     CHECK(resOSQP.isApprox(resQuadProg, 1e-6));
-    REQUIRE_EQ(osqp.SI_fail(), 0);
+    REQUIRE_EQ(osqp.SI_fail(), 1);
 }
 #endif
