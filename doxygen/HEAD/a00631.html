@@ -108,10 +108,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a11998e49d547c3e6e70b221a38fbcef7"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00631.html#a11998e49d547c3e6e70b221a38fbcef7">autoSpan</a> ()=0</td></tr>
 <tr class="memdesc:a11998e49d547c3e6e70b221a38fbcef7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate the full size matrices This allows one to give a constraint constant matrix/vector for one step and another constraint matrix/vector with the full horizon.  <a href="#a11998e49d547c3e6e70b221a38fbcef7">More...</a><br /></td></tr>
 <tr class="separator:a11998e49d547c3e6e70b221a38fbcef7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa619d1b0446450a496d1f1077600bc07"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00631.html#aa619d1b0446450a496d1f1077600bc07">initializeConstraint</a> (const PreviewSystem &amp;ps)=0</td></tr>
+<tr class="memitem:aa619d1b0446450a496d1f1077600bc07"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00631.html#aa619d1b0446450a496d1f1077600bc07">initializeConstraint</a> (const <a class="el" href="a00699.html">PreviewSystem</a> &amp;ps)=0</td></tr>
 <tr class="memdesc:aa619d1b0446450a496d1f1077600bc07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialization of the constraint.  <a href="#aa619d1b0446450a496d1f1077600bc07">More...</a><br /></td></tr>
 <tr class="separator:aa619d1b0446450a496d1f1077600bc07"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aae0f78b14981a50d29a7f7cf923b57fb"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00631.html#aae0f78b14981a50d29a7f7cf923b57fb">update</a> (const PreviewSystem &amp;ps)=0</td></tr>
+<tr class="memitem:aae0f78b14981a50d29a7f7cf923b57fb"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00631.html#aae0f78b14981a50d29a7f7cf923b57fb">update</a> (const <a class="el" href="a00699.html">PreviewSystem</a> &amp;ps)=0</td></tr>
 <tr class="memdesc:aae0f78b14981a50d29a7f7cf923b57fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the constraint.  <a href="#aae0f78b14981a50d29a7f7cf923b57fb">More...</a><br /></td></tr>
 <tr class="separator:aae0f78b14981a50d29a7f7cf923b57fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab68a9317a9cb40b847ea8f51be3c7065"><td class="memItemLeft" align="right" valign="top">virtual ConstraintFlag&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00631.html#ab68a9317a9cb40b847ea8f51be3c7065">constraintType</a> () const noexcept=0</td></tr>
@@ -266,7 +266,7 @@ Protected Attributes</h2></td></tr>
         <tr>
           <td class="memname">virtual void copra::Constraint::initializeConstraint </td>
           <td>(</td>
-          <td class="paramtype">const PreviewSystem &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="a00699.html">PreviewSystem</a> &amp;&#160;</td>
           <td class="paramname"><em>ps</em></td><td>)</td>
           <td></td>
         </tr>
@@ -281,7 +281,7 @@ Protected Attributes</h2></td></tr>
 <p>Initialization of the constraint. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">ps</td><td>The PreviewSystem. </td></tr>
+    <tr><td class="paramname">ps</td><td>The <a class="el" href="a00699.html" title="Structure representing all variables of a system for performing preview control. ">PreviewSystem</a>. </td></tr>
   </table>
   </dd>
 </dl>
@@ -358,7 +358,7 @@ Protected Attributes</h2></td></tr>
         <tr>
           <td class="memname">virtual void copra::Constraint::update </td>
           <td>(</td>
-          <td class="paramtype">const PreviewSystem &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="a00699.html">PreviewSystem</a> &amp;&#160;</td>
           <td class="paramname"><em>ps</em></td><td>)</td>
           <td></td>
         </tr>
@@ -373,7 +373,7 @@ Protected Attributes</h2></td></tr>
 <p>Update the constraint. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">ps</td><td>The PreviewSystem. </td></tr>
+    <tr><td class="paramname">ps</td><td>The <a class="el" href="a00699.html" title="Structure representing all variables of a system for performing preview control. ">PreviewSystem</a>. </td></tr>
   </table>
   </dd>
 </dl>
@@ -478,7 +478,7 @@ Protected Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="a00069.html">copra</a></li><li class="navelem"><a class="el" href="a00631.html">Constraint</a></li>
-    <li class="footer">Generated on Mon Jan 6 2020 07:40:39 for copra by
+    <li class="footer">Generated on Mon Jan 6 2020 08:13:27 for copra by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

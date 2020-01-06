@@ -100,10 +100,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a90b55e5ff6f60adebe5388511a8864a0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00655.html#a90b55e5ff6f60adebe5388511a8864a0">autoSpan</a> () override</td></tr>
 <tr class="memdesc:a90b55e5ff6f60adebe5388511a8864a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate the full size matrices If you have create the constraint with vector \(\underline{u}\) and vector \(\overline{U}\) or \(\underline{U}\) and \(\overline{u}\) you need to call this function to resize the vectors.  <a href="#a90b55e5ff6f60adebe5388511a8864a0">More...</a><br /></td></tr>
 <tr class="separator:a90b55e5ff6f60adebe5388511a8864a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6b8e3f0e61355f79b3d02901eddf7659"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00655.html#a6b8e3f0e61355f79b3d02901eddf7659">initializeConstraint</a> (const PreviewSystem &amp;ps) override</td></tr>
+<tr class="memitem:a6b8e3f0e61355f79b3d02901eddf7659"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00655.html#a6b8e3f0e61355f79b3d02901eddf7659">initializeConstraint</a> (const <a class="el" href="a00699.html">PreviewSystem</a> &amp;ps) override</td></tr>
 <tr class="memdesc:a6b8e3f0e61355f79b3d02901eddf7659"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the constraint.  <a href="#a6b8e3f0e61355f79b3d02901eddf7659">More...</a><br /></td></tr>
 <tr class="separator:a6b8e3f0e61355f79b3d02901eddf7659"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a016249d73d1b645fa9cf548ec0df1303"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00655.html#a016249d73d1b645fa9cf548ec0df1303">update</a> (const PreviewSystem &amp;ps) override</td></tr>
+<tr class="memitem:a016249d73d1b645fa9cf548ec0df1303"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00655.html#a016249d73d1b645fa9cf548ec0df1303">update</a> (const <a class="el" href="a00699.html">PreviewSystem</a> &amp;ps) override</td></tr>
 <tr class="memdesc:a016249d73d1b645fa9cf548ec0df1303"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute \(\underline{U}\) and \(\overline{U}\) from \(\underline{u}\), \(\overline{u}\) and the preview system.  <a href="#a016249d73d1b645fa9cf548ec0df1303">More...</a><br /></td></tr>
 <tr class="separator:a016249d73d1b645fa9cf548ec0df1303"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6155702e23c2028b30146a5a9d16349"><td class="memItemLeft" align="right" valign="top">ConstraintFlag&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00655.html#ae6155702e23c2028b30146a5a9d16349">constraintType</a> () const noexcept override</td></tr>
@@ -272,7 +272,7 @@ As \(U\) is the optimization variable, \(\underline{u}\leq u\leq\overline{u}\) i
         <tr>
           <td class="memname">void copra::ControlBoundConstraint::initializeConstraint </td>
           <td>(</td>
-          <td class="paramtype">const PreviewSystem &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="a00699.html">PreviewSystem</a> &amp;&#160;</td>
           <td class="paramname"><em>ps</em></td><td>)</td>
           <td></td>
         </tr>
@@ -342,7 +342,7 @@ As \(U\) is the optimization variable, \(\underline{u}\leq u\leq\overline{u}\) i
         <tr>
           <td class="memname">void copra::ControlBoundConstraint::update </td>
           <td>(</td>
-          <td class="paramtype">const PreviewSystem &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="a00699.html">PreviewSystem</a> &amp;&#160;</td>
           <td class="paramname"><em>ps</em></td><td>)</td>
           <td></td>
         </tr>
@@ -401,7 +401,7 @@ As \(U\) is the optimization variable, \(\underline{u}\leq u\leq\overline{u}\) i
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="a00069.html">copra</a></li><li class="navelem"><a class="el" href="a00655.html">ControlBoundConstraint</a></li>
-    <li class="footer">Generated on Mon Jan 6 2020 07:40:39 for copra by
+    <li class="footer">Generated on Mon Jan 6 2020 08:13:27 for copra by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

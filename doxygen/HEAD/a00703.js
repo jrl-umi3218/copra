@@ -1,11 +1,12 @@
 var a00703 =
 [
-    [ "QuadProgDenseSolver", "a00703.html#ad6057a80df22b38caca1edad7c64d77e", null ],
-    [ "baseSolver", "a00703.html#a0e00056ac7cbef847004d8f3644dddbd", null ],
-    [ "SI_fail", "a00703.html#a551f9e7b9e0709a8eb6cd63210ea9602", null ],
-    [ "SI_inform", "a00703.html#afa996946e5283e64a2d4318d16a2c6c8", null ],
-    [ "SI_iter", "a00703.html#a0945e985698497220ffe10f972ce95c8", null ],
-    [ "SI_problem", "a00703.html#afc3ef4e2a4ffc69580b7df8ee40b68fe", null ],
-    [ "SI_result", "a00703.html#ae2a587c79166174a91c36f41e08f5e4f", null ],
-    [ "SI_solve", "a00703.html#a77f978f8e9bf5f978a948e8526598373", null ]
+    [ "QLDSolver", "a00703.html#a688cb21805a5f3b7158692a07cc43e0a", null ],
+    [ "baseSolver", "a00703.html#ad50d8efd6b5b6da7c4dc818e5a5e2a90", null ],
+    [ "SI_fail", "a00703.html#a00097765892d390ba7b2026bea7aba91", null ],
+    [ "SI_feasibilityTolerance", "a00703.html#a5fc6b3f47d3f843fb3562bb014aa4c3d", null ],
+    [ "SI_inform", "a00703.html#a20844a0ae6de92ecdaf7e5cd37043a1f", null ],
+    [ "SI_printLevel", "a00703.html#aef27be9c0d4a3bb4e3d7b1bdce4edc46", null ],
+    [ "SI_problem", "a00703.html#adfe2dcf7ef9e1a7447e5adf96b029f5a", null ],
+    [ "SI_result", "a00703.html#a642543229e555d7828b4cca898e81013", null ],
+    [ "SI_solve", "a00703.html#a9ff43fc4342b2be57848f799b8e36d13", null ]
 ];

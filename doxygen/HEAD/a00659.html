@@ -106,10 +106,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aee898961a7e3f9a98ecb1a0c1c5a82c5"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00659.html#aee898961a7e3f9a98ecb1a0c1c5a82c5">autoSpan</a> ()</td></tr>
 <tr class="memdesc:aee898961a7e3f9a98ecb1a0c1c5a82c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate the full size matrices This allows one to give a cost constant matrix/vector for one step and another cost matrix/vector with the full horizon.  <a href="#aee898961a7e3f9a98ecb1a0c1c5a82c5">More...</a><br /></td></tr>
 <tr class="separator:aee898961a7e3f9a98ecb1a0c1c5a82c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a26446ddca57f112e8caddaac0463f31b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00659.html#a26446ddca57f112e8caddaac0463f31b">initializeCost</a> (const PreviewSystem &amp;ps)</td></tr>
+<tr class="memitem:a26446ddca57f112e8caddaac0463f31b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00659.html#a26446ddca57f112e8caddaac0463f31b">initializeCost</a> (const <a class="el" href="a00699.html">PreviewSystem</a> &amp;ps)</td></tr>
 <tr class="memdesc:a26446ddca57f112e8caddaac0463f31b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the cost function.  <a href="#a26446ddca57f112e8caddaac0463f31b">More...</a><br /></td></tr>
 <tr class="separator:a26446ddca57f112e8caddaac0463f31b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b86c3c64cefd847dcdc20e2133ad652"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00659.html#a7b86c3c64cefd847dcdc20e2133ad652">update</a> (const PreviewSystem &amp;ps)=0</td></tr>
+<tr class="memitem:a7b86c3c64cefd847dcdc20e2133ad652"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00659.html#a7b86c3c64cefd847dcdc20e2133ad652">update</a> (const <a class="el" href="a00699.html">PreviewSystem</a> &amp;ps)=0</td></tr>
 <tr class="memdesc:a7b86c3c64cefd847dcdc20e2133ad652"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute \(Q\) and \(c\).  <a href="#a7b86c3c64cefd847dcdc20e2133ad652">More...</a><br /></td></tr>
 <tr class="separator:a7b86c3c64cefd847dcdc20e2133ad652"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeb4d0fff5319b62ce980a5b88ffd7350"><td class="memTemplParams" colspan="2">template&lt;typename TVec , typename  = std::enable_if_t&lt;!is_all_arithmetic&lt;TVec&gt;::value&gt;&gt; </td></tr>
@@ -271,7 +271,7 @@ Protected Attributes</h2></td></tr>
         <tr>
           <td class="memname">virtual void copra::CostFunction::initializeCost </td>
           <td>(</td>
-          <td class="paramtype">const PreviewSystem &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="a00699.html">PreviewSystem</a> &amp;&#160;</td>
           <td class="paramname"><em>ps</em></td><td>)</td>
           <td></td>
         </tr>
@@ -369,7 +369,7 @@ Protected Attributes</h2></td></tr>
         <tr>
           <td class="memname">virtual void copra::CostFunction::update </td>
           <td>(</td>
-          <td class="paramtype">const PreviewSystem &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="a00699.html">PreviewSystem</a> &amp;&#160;</td>
           <td class="paramname"><em>ps</em></td><td>)</td>
           <td></td>
         </tr>
@@ -458,7 +458,7 @@ template&lt;typename TVec , typename  = std::enable_if_t&lt;!is_all_arithmetic&l
 <p>Set the weights of the system. </p>
 <p>Perform a move semantic if a fullsize vector is given as rvalue (this is faster). </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">Weights</td><td>of to set. </td></tr>
+    <tr><td class="paramname">weights</td><td>of to set. </td></tr>
   </table>
   </dd>
 </dl>
@@ -591,7 +591,7 @@ template&lt;typename TVec , typename  = std::enable_if_t&lt;!is_all_arithmetic&l
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="a00069.html">copra</a></li><li class="navelem"><a class="el" href="a00659.html">CostFunction</a></li>
-    <li class="footer">Generated on Mon Jan 6 2020 07:40:39 for copra by
+    <li class="footer">Generated on Mon Jan 6 2020 08:13:27 for copra by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

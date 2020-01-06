@@ -272,6 +272,7 @@
     <path>/home/runner/work/copra/copra/include/</path>
     <filename>a00029</filename>
     <includes id="a00002" name="api.h" local="yes" imported="no">api.h</includes>
+    <class kind="struct">copra::PreviewSystem</class>
     <namespace>copra</namespace>
   </compound>
   <compound kind="file">
@@ -915,42 +916,42 @@
   </compound>
   <compound kind="struct">
     <name>copra::is_all_arithmetic</name>
-    <filename>a00711.html</filename>
+    <filename>a00715.html</filename>
     <templarg>T1</templarg>
     <templarg>T2</templarg>
     <templarg>T3</templarg>
   </compound>
   <compound kind="struct">
     <name>copra::is_all_arithmetic&lt; std::false_type, T2, T3 &gt;</name>
-    <filename>a00715.html</filename>
+    <filename>a00719.html</filename>
     <templarg></templarg>
     <templarg></templarg>
     <member kind="variable" static="yes">
       <type>static const bool</type>
       <name>value</name>
-      <anchorfile>a00715.html</anchorfile>
+      <anchorfile>a00719.html</anchorfile>
       <anchor>a3623ea5e8a528e8c42806cbdc3999f3a</anchor>
       <arglist></arglist>
     </member>
   </compound>
   <compound kind="class">
     <name>is_all_arithmetic&lt; std::is_arithmetic&lt; std::decay_t&lt; T2 &gt; &gt;::type, T3, std::true_type &gt;</name>
-    <filename>a00711.html</filename>
+    <filename>a00715.html</filename>
   </compound>
   <compound kind="struct">
     <name>copra::is_all_arithmetic&lt; std::true_type, std::true_type, std::true_type &gt;</name>
-    <filename>a00723.html</filename>
+    <filename>a00727.html</filename>
     <member kind="variable" static="yes">
       <type>static const bool</type>
       <name>value</name>
-      <anchorfile>a00723.html</anchorfile>
+      <anchorfile>a00727.html</anchorfile>
       <anchor>a365795a4643a7668032f1022b7a16314</anchor>
       <arglist></arglist>
     </member>
   </compound>
   <compound kind="struct">
     <name>copra::is_all_arithmetic&lt; std::true_type, T2, T3 &gt;</name>
-    <filename>a00719.html</filename>
+    <filename>a00723.html</filename>
     <templarg></templarg>
     <templarg></templarg>
     <base>is_all_arithmetic&lt; std::is_arithmetic&lt; std::decay_t&lt; T2 &gt; &gt;::type, T3, std::true_type &gt;</base>
@@ -1498,233 +1499,370 @@
       <arglist>() noexcept</arglist>
     </member>
   </compound>
+  <compound kind="struct">
+    <name>copra::PreviewSystem</name>
+    <filename>a00699.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>PreviewSystem</name>
+      <anchorfile>a00699.html</anchorfile>
+      <anchor>af91ccd60f0d803b250cd2a8f81c24be0</anchor>
+      <arglist>()</arglist>
+    </member>
+    <member kind="function">
+      <type></type>
+      <name>PreviewSystem</name>
+      <anchorfile>a00699.html</anchorfile>
+      <anchor>a99f68fdf2bcf075767973ba9121d24f4</anchor>
+      <arglist>(const Eigen::MatrixXd &amp;state, const Eigen::MatrixXd &amp;control, const Eigen::VectorXd &amp;bias, const Eigen::VectorXd &amp;xInit, int numberOfSteps)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>system</name>
+      <anchorfile>a00699.html</anchorfile>
+      <anchor>a3d6dc4b05be38ecb5e4e0f255c0e7b24</anchor>
+      <arglist>(const Eigen::MatrixXd &amp;state, const Eigen::MatrixXd &amp;control, const Eigen::VectorXd &amp;bias, const Eigen::VectorXd &amp;xInit, int numberOfSteps)</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>updateSystem</name>
+      <anchorfile>a00699.html</anchorfile>
+      <anchor>a38c98fae0a979a7a98bfe672ca20a318</anchor>
+      <arglist>() noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>xInit</name>
+      <anchorfile>a00699.html</anchorfile>
+      <anchor>abb5c2270240ace3cdea7758b8092dc21</anchor>
+      <arglist>(const Eigen::VectorXd &amp;xInit)</arglist>
+    </member>
+    <member kind="variable">
+      <type>bool</type>
+      <name>isUpdated</name>
+      <anchorfile>a00699.html</anchorfile>
+      <anchor>a51f9d927d790121a8d2028861ec3179c</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>int</type>
+      <name>nrUStep</name>
+      <anchorfile>a00699.html</anchorfile>
+      <anchor>af53eacf49ddceb1c21d6340a344e45e8</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>int</type>
+      <name>nrXStep</name>
+      <anchorfile>a00699.html</anchorfile>
+      <anchor>a011872ac5fe21273a81789ea9a33f4a4</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>int</type>
+      <name>xDim</name>
+      <anchorfile>a00699.html</anchorfile>
+      <anchor>a9ab092fcc9dd0fd39ea9d8484dd72131</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>int</type>
+      <name>uDim</name>
+      <anchorfile>a00699.html</anchorfile>
+      <anchor>a4df70e0a6a669e1f68e2d26341e05acf</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>int</type>
+      <name>fullXDim</name>
+      <anchorfile>a00699.html</anchorfile>
+      <anchor>a62c4524c1cadfe71f241bb84bd12cc37</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>int</type>
+      <name>fullUDim</name>
+      <anchorfile>a00699.html</anchorfile>
+      <anchor>aa67206d576c45ac1e1a12530b45701e0</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>Eigen::VectorXd</type>
+      <name>x0</name>
+      <anchorfile>a00699.html</anchorfile>
+      <anchor>a981ad30a07a08c5dc5dbc71a2b3fc0ff</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>Eigen::MatrixXd</type>
+      <name>A</name>
+      <anchorfile>a00699.html</anchorfile>
+      <anchor>ab704f2d6a731aa0d55a2d15562fe244d</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>Eigen::MatrixXd</type>
+      <name>B</name>
+      <anchorfile>a00699.html</anchorfile>
+      <anchor>a51765adc683045a12f8dd7a0218f3510</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>Eigen::VectorXd</type>
+      <name>d</name>
+      <anchorfile>a00699.html</anchorfile>
+      <anchor>a3a2aa81800b44e3253c3aa9c6ed35a95</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>Eigen::MatrixXd</type>
+      <name>Phi</name>
+      <anchorfile>a00699.html</anchorfile>
+      <anchor>a902da5a586a676fe634bca01464e6531</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>Eigen::MatrixXd</type>
+      <name>Psi</name>
+      <anchorfile>a00699.html</anchorfile>
+      <anchor>a0fa054e26f0dbe6688f1b06827935e85</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable">
+      <type>Eigen::VectorXd</type>
+      <name>xi</name>
+      <anchorfile>a00699.html</anchorfile>
+      <anchor>ade48db75f1290f5d89d8200b38e7c198</anchor>
+      <arglist></arglist>
+    </member>
+  </compound>
   <compound kind="class">
     <name>copra::QLDSolver</name>
-    <filename>a00699.html</filename>
+    <filename>a00703.html</filename>
     <base>copra::SolverInterface</base>
     <member kind="function">
       <type></type>
       <name>QLDSolver</name>
-      <anchorfile>a00699.html</anchorfile>
+      <anchorfile>a00703.html</anchorfile>
       <anchor>a688cb21805a5f3b7158692a07cc43e0a</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>SI_fail</name>
-      <anchorfile>a00699.html</anchorfile>
+      <anchorfile>a00703.html</anchorfile>
       <anchor>a00097765892d390ba7b2026bea7aba91</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>SI_inform</name>
-      <anchorfile>a00699.html</anchorfile>
+      <anchorfile>a00703.html</anchorfile>
       <anchor>a20844a0ae6de92ecdaf7e5cd37043a1f</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>SI_printLevel</name>
-      <anchorfile>a00699.html</anchorfile>
+      <anchorfile>a00703.html</anchorfile>
       <anchor>aef27be9c0d4a3bb4e3d7b1bdce4edc46</anchor>
       <arglist>(int pl) override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>SI_feasibilityTolerance</name>
-      <anchorfile>a00699.html</anchorfile>
+      <anchorfile>a00703.html</anchorfile>
       <anchor>a5fc6b3f47d3f843fb3562bb014aa4c3d</anchor>
       <arglist>(double tol) override</arglist>
     </member>
     <member kind="function">
       <type>const Eigen::VectorXd &amp;</type>
       <name>SI_result</name>
-      <anchorfile>a00699.html</anchorfile>
+      <anchorfile>a00703.html</anchorfile>
       <anchor>a642543229e555d7828b4cca898e81013</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>SI_problem</name>
-      <anchorfile>a00699.html</anchorfile>
+      <anchorfile>a00703.html</anchorfile>
       <anchor>adfe2dcf7ef9e1a7447e5adf96b029f5a</anchor>
       <arglist>(int nrVar, int nrEq, int nrInEq) override</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
       <name>SI_solve</name>
-      <anchorfile>a00699.html</anchorfile>
+      <anchorfile>a00703.html</anchorfile>
       <anchor>a9ff43fc4342b2be57848f799b8e36d13</anchor>
       <arglist>(const Eigen::MatrixXd &amp;Q, const Eigen::VectorXd &amp;c, const Eigen::MatrixXd &amp;Aeq, const Eigen::VectorXd &amp;beq, const Eigen::MatrixXd &amp;Aineq, const Eigen::VectorXd &amp;bineq, const Eigen::VectorXd &amp;XL, const Eigen::VectorXd &amp;XU) override</arglist>
     </member>
     <member kind="function">
       <type>Eigen::QLD &amp;</type>
       <name>baseSolver</name>
-      <anchorfile>a00699.html</anchorfile>
+      <anchorfile>a00703.html</anchorfile>
       <anchor>ad50d8efd6b5b6da7c4dc818e5a5e2a90</anchor>
       <arglist>() noexcept</arglist>
     </member>
   </compound>
   <compound kind="class">
     <name>copra::QuadProgDenseSolver</name>
-    <filename>a00703.html</filename>
+    <filename>a00707.html</filename>
     <base>copra::SolverInterface</base>
     <member kind="function">
       <type></type>
       <name>QuadProgDenseSolver</name>
-      <anchorfile>a00703.html</anchorfile>
+      <anchorfile>a00707.html</anchorfile>
       <anchor>ad6057a80df22b38caca1edad7c64d77e</anchor>
       <arglist>()=default</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>SI_fail</name>
-      <anchorfile>a00703.html</anchorfile>
+      <anchorfile>a00707.html</anchorfile>
       <anchor>a551f9e7b9e0709a8eb6cd63210ea9602</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>SI_iter</name>
-      <anchorfile>a00703.html</anchorfile>
+      <anchorfile>a00707.html</anchorfile>
       <anchor>a0945e985698497220ffe10f972ce95c8</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>SI_inform</name>
-      <anchorfile>a00703.html</anchorfile>
+      <anchorfile>a00707.html</anchorfile>
       <anchor>afa996946e5283e64a2d4318d16a2c6c8</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>const Eigen::VectorXd &amp;</type>
       <name>SI_result</name>
-      <anchorfile>a00703.html</anchorfile>
+      <anchorfile>a00707.html</anchorfile>
       <anchor>ae2a587c79166174a91c36f41e08f5e4f</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>SI_problem</name>
-      <anchorfile>a00703.html</anchorfile>
+      <anchorfile>a00707.html</anchorfile>
       <anchor>afc3ef4e2a4ffc69580b7df8ee40b68fe</anchor>
       <arglist>(int nrVar, int nrEq, int nrInEq) override</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
       <name>SI_solve</name>
-      <anchorfile>a00703.html</anchorfile>
+      <anchorfile>a00707.html</anchorfile>
       <anchor>a77f978f8e9bf5f978a948e8526598373</anchor>
       <arglist>(const Eigen::MatrixXd &amp;Q, const Eigen::VectorXd &amp;c, const Eigen::MatrixXd &amp;Aeq, const Eigen::VectorXd &amp;beq, const Eigen::MatrixXd &amp;Aineq, const Eigen::VectorXd &amp;bineq, const Eigen::VectorXd &amp;XL, const Eigen::VectorXd &amp;XU) override</arglist>
     </member>
     <member kind="function">
       <type>Eigen::QuadProgDense &amp;</type>
       <name>baseSolver</name>
-      <anchorfile>a00703.html</anchorfile>
+      <anchorfile>a00707.html</anchorfile>
       <anchor>a0e00056ac7cbef847004d8f3644dddbd</anchor>
       <arglist>() noexcept</arglist>
     </member>
   </compound>
   <compound kind="class">
     <name>copra::SolverInterface</name>
-    <filename>a00707.html</filename>
+    <filename>a00711.html</filename>
     <member kind="function" virtualness="virtual">
       <type>virtual</type>
       <name>~SolverInterface</name>
-      <anchorfile>a00707.html</anchorfile>
+      <anchorfile>a00711.html</anchorfile>
       <anchor>a16ede69f5f2c07f99f740fec0be831a6</anchor>
       <arglist>()=default</arglist>
     </member>
     <member kind="function" virtualness="pure">
       <type>virtual int</type>
       <name>SI_fail</name>
-      <anchorfile>a00707.html</anchorfile>
+      <anchorfile>a00711.html</anchorfile>
       <anchor>a25b0116f4c27637dc86d4e88ee34f4d6</anchor>
       <arglist>() const =0</arglist>
     </member>
     <member kind="function" virtualness="pure">
       <type>virtual void</type>
       <name>SI_inform</name>
-      <anchorfile>a00707.html</anchorfile>
+      <anchorfile>a00711.html</anchorfile>
       <anchor>a5168431efa5e3be1a96eb086d543b293</anchor>
       <arglist>() const =0</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual int</type>
       <name>SI_iter</name>
-      <anchorfile>a00707.html</anchorfile>
+      <anchorfile>a00711.html</anchorfile>
       <anchor>af10d9a8eeb279e1c2cdd19e4144e3de6</anchor>
       <arglist>() const</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual int</type>
       <name>SI_maxIter</name>
-      <anchorfile>a00707.html</anchorfile>
+      <anchorfile>a00711.html</anchorfile>
       <anchor>a89ca9ac5cfd37e577f7ca46b22b83194</anchor>
       <arglist>() const</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual void</type>
       <name>SI_maxIter</name>
-      <anchorfile>a00707.html</anchorfile>
+      <anchorfile>a00711.html</anchorfile>
       <anchor>a6492a721fe8fa8ee015c7370e149a55e</anchor>
       <arglist>(int maxIter)</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual void</type>
       <name>SI_printLevel</name>
-      <anchorfile>a00707.html</anchorfile>
+      <anchorfile>a00711.html</anchorfile>
       <anchor>a0c8a27e93392eac8a164e9bf872d8cc2</anchor>
       <arglist>(int pl)</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual double</type>
       <name>SI_feasibilityTolerance</name>
-      <anchorfile>a00707.html</anchorfile>
+      <anchorfile>a00711.html</anchorfile>
       <anchor>a75e5f6caa56b31c74dd20f9ce65b6637</anchor>
       <arglist>() const</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual void</type>
       <name>SI_feasibilityTolerance</name>
-      <anchorfile>a00707.html</anchorfile>
+      <anchorfile>a00711.html</anchorfile>
       <anchor>ae2f60c44ad6cf57592f7cb0e1ceb148b</anchor>
       <arglist>(double tol)</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual bool</type>
       <name>SI_warmStart</name>
-      <anchorfile>a00707.html</anchorfile>
+      <anchorfile>a00711.html</anchorfile>
       <anchor>aeb240e55210ed82f3fc0a96d3da22877</anchor>
       <arglist>() const</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual void</type>
       <name>SI_warmStart</name>
-      <anchorfile>a00707.html</anchorfile>
+      <anchorfile>a00711.html</anchorfile>
       <anchor>a64c21aae89c733a54f1314ccaf056fba</anchor>
       <arglist>(bool w)</arglist>
     </member>
     <member kind="function" virtualness="pure">
       <type>virtual const Eigen::VectorXd &amp;</type>
       <name>SI_result</name>
-      <anchorfile>a00707.html</anchorfile>
+      <anchorfile>a00711.html</anchorfile>
       <anchor>aa036dad4f90e0dc511f9ce25302b3718</anchor>
       <arglist>() const =0</arglist>
     </member>
     <member kind="function" virtualness="pure">
       <type>virtual void</type>
       <name>SI_problem</name>
-      <anchorfile>a00707.html</anchorfile>
+      <anchorfile>a00711.html</anchorfile>
       <anchor>a61005f340bc0d422fe560970abf3bb15</anchor>
       <arglist>(int nrVar, int nrEq, int nrInEq)=0</arglist>
     </member>
     <member kind="function" virtualness="pure">
       <type>virtual bool</type>
       <name>SI_solve</name>
-      <anchorfile>a00707.html</anchorfile>
+      <anchorfile>a00711.html</anchorfile>
       <anchor>a47e3bbae2b21bd640f5f3d916fd4ca00</anchor>
       <arglist>(const Eigen::MatrixXd &amp;Q, const Eigen::VectorXd &amp;c, const Eigen::MatrixXd &amp;Aeq, const Eigen::VectorXd &amp;beq, const Eigen::MatrixXd &amp;Aineq, const Eigen::VectorXd &amp;bineq, const Eigen::VectorXd &amp;XL, const Eigen::VectorXd &amp;XU)=0</arglist>
     </member>
@@ -1888,6 +2026,7 @@
     <class kind="class">copra::MixedConstraint</class>
     <class kind="class">copra::MixedCost</class>
     <class kind="class">copra::OSQPSolver</class>
+    <class kind="struct">copra::PreviewSystem</class>
     <class kind="class">copra::QLDSolver</class>
     <class kind="class">copra::QuadProgDenseSolver</class>
     <class kind="class">copra::SolverInterface</class>

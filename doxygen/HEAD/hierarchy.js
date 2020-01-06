@@ -17,18 +17,19 @@ var hierarchy =
       [ "copra::TargetCost", "a00667.html", null ],
       [ "copra::TrajectoryCost", "a00663.html", null ]
     ] ],
-    [ "copra::is_all_arithmetic< T1, T2, T3 >", "a00711.html", null ],
-    [ "copra::is_all_arithmetic< std::false_type, T2, T3 >", "a00715.html", null ],
-    [ "copra::is_all_arithmetic< std::is_arithmetic< std::decay_t< T2 > >::type, T3, std::true_type >", "a00711.html", [
-      [ "copra::is_all_arithmetic< std::true_type, T2, T3 >", "a00719.html", null ]
+    [ "copra::is_all_arithmetic< T1, T2, T3 >", "a00715.html", null ],
+    [ "copra::is_all_arithmetic< std::false_type, T2, T3 >", "a00719.html", null ],
+    [ "copra::is_all_arithmetic< std::is_arithmetic< std::decay_t< T2 > >::type, T3, std::true_type >", "a00715.html", [
+      [ "copra::is_all_arithmetic< std::true_type, T2, T3 >", "a00723.html", null ]
     ] ],
-    [ "copra::is_all_arithmetic< std::true_type, std::true_type, std::true_type >", "a00723.html", null ],
+    [ "copra::is_all_arithmetic< std::true_type, std::true_type, std::true_type >", "a00727.html", null ],
     [ "copra::LMPC", "a00683.html", null ],
-    [ "copra::SolverInterface", "a00707.html", [
+    [ "copra::PreviewSystem", "a00699.html", null ],
+    [ "copra::SolverInterface", "a00711.html", [
       [ "copra::GUROBISolver", "a00679.html", null ],
       [ "copra::LSSOLSolver", "a00691.html", null ],
       [ "copra::OSQPSolver", "a00695.html", null ],
-      [ "copra::QLDSolver", "a00699.html", null ],
-      [ "copra::QuadProgDenseSolver", "a00703.html", null ]
+      [ "copra::QLDSolver", "a00703.html", null ],
+      [ "copra::QuadProgDenseSolver", "a00707.html", null ]
     ] ]
 ];

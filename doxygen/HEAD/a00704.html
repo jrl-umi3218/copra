@@ -70,33 +70,35 @@ $(document).ready(function(){initNavTree('a00707.html','');});
 
 <div class="header">
   <div class="headertitle">
-<div class="title">copra::SolverInterface Member List</div>  </div>
+<div class="title">copra::QuadProgDenseSolver Member List</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>This is the complete list of members for <a class="el" href="a00707.html">copra::SolverInterface</a>, including all inherited members.</p>
+<p>This is the complete list of members for <a class="el" href="a00707.html">copra::QuadProgDenseSolver</a>, including all inherited members.</p>
 <table class="directory">
-  <tr class="even"><td class="entry"><a class="el" href="a00707.html#a25b0116f4c27637dc86d4e88ee34f4d6">SI_fail</a>() const =0</td><td class="entry"><a class="el" href="a00707.html">copra::SolverInterface</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="a00707.html#a75e5f6caa56b31c74dd20f9ce65b6637">SI_feasibilityTolerance</a>() const</td><td class="entry"><a class="el" href="a00707.html">copra::SolverInterface</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="a00707.html#ae2f60c44ad6cf57592f7cb0e1ceb148b">SI_feasibilityTolerance</a>(double tol)</td><td class="entry"><a class="el" href="a00707.html">copra::SolverInterface</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="a00707.html#a5168431efa5e3be1a96eb086d543b293">SI_inform</a>() const =0</td><td class="entry"><a class="el" href="a00707.html">copra::SolverInterface</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="a00707.html#af10d9a8eeb279e1c2cdd19e4144e3de6">SI_iter</a>() const</td><td class="entry"><a class="el" href="a00707.html">copra::SolverInterface</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="a00707.html#a89ca9ac5cfd37e577f7ca46b22b83194">SI_maxIter</a>() const</td><td class="entry"><a class="el" href="a00707.html">copra::SolverInterface</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="a00707.html#a6492a721fe8fa8ee015c7370e149a55e">SI_maxIter</a>(int maxIter)</td><td class="entry"><a class="el" href="a00707.html">copra::SolverInterface</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="a00707.html#a0c8a27e93392eac8a164e9bf872d8cc2">SI_printLevel</a>(int pl)</td><td class="entry"><a class="el" href="a00707.html">copra::SolverInterface</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="a00707.html#a61005f340bc0d422fe560970abf3bb15">SI_problem</a>(int nrVar, int nrEq, int nrInEq)=0</td><td class="entry"><a class="el" href="a00707.html">copra::SolverInterface</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="a00707.html#aa036dad4f90e0dc511f9ce25302b3718">SI_result</a>() const =0</td><td class="entry"><a class="el" href="a00707.html">copra::SolverInterface</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="a00707.html#a47e3bbae2b21bd640f5f3d916fd4ca00">SI_solve</a>(const Eigen::MatrixXd &amp;Q, const Eigen::VectorXd &amp;c, const Eigen::MatrixXd &amp;Aeq, const Eigen::VectorXd &amp;beq, const Eigen::MatrixXd &amp;Aineq, const Eigen::VectorXd &amp;bineq, const Eigen::VectorXd &amp;XL, const Eigen::VectorXd &amp;XU)=0</td><td class="entry"><a class="el" href="a00707.html">copra::SolverInterface</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="a00707.html#aeb240e55210ed82f3fc0a96d3da22877">SI_warmStart</a>() const</td><td class="entry"><a class="el" href="a00707.html">copra::SolverInterface</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="a00707.html#a64c21aae89c733a54f1314ccaf056fba">SI_warmStart</a>(bool w)</td><td class="entry"><a class="el" href="a00707.html">copra::SolverInterface</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="a00707.html#a16ede69f5f2c07f99f740fec0be831a6">~SolverInterface</a>()=default</td><td class="entry"><a class="el" href="a00707.html">copra::SolverInterface</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00707.html#a0e00056ac7cbef847004d8f3644dddbd">baseSolver</a>() noexcept</td><td class="entry"><a class="el" href="a00707.html">copra::QuadProgDenseSolver</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00707.html#ad6057a80df22b38caca1edad7c64d77e">QuadProgDenseSolver</a>()=default</td><td class="entry"><a class="el" href="a00707.html">copra::QuadProgDenseSolver</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00707.html#a551f9e7b9e0709a8eb6cd63210ea9602">SI_fail</a>() const override</td><td class="entry"><a class="el" href="a00707.html">copra::QuadProgDenseSolver</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00711.html#a75e5f6caa56b31c74dd20f9ce65b6637">SI_feasibilityTolerance</a>() const</td><td class="entry"><a class="el" href="a00711.html">copra::SolverInterface</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00711.html#ae2f60c44ad6cf57592f7cb0e1ceb148b">SI_feasibilityTolerance</a>(double tol)</td><td class="entry"><a class="el" href="a00711.html">copra::SolverInterface</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00707.html#afa996946e5283e64a2d4318d16a2c6c8">SI_inform</a>() const override</td><td class="entry"><a class="el" href="a00707.html">copra::QuadProgDenseSolver</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00707.html#a0945e985698497220ffe10f972ce95c8">SI_iter</a>() const override</td><td class="entry"><a class="el" href="a00707.html">copra::QuadProgDenseSolver</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00711.html#a89ca9ac5cfd37e577f7ca46b22b83194">SI_maxIter</a>() const</td><td class="entry"><a class="el" href="a00711.html">copra::SolverInterface</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00711.html#a6492a721fe8fa8ee015c7370e149a55e">SI_maxIter</a>(int maxIter)</td><td class="entry"><a class="el" href="a00711.html">copra::SolverInterface</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00711.html#a0c8a27e93392eac8a164e9bf872d8cc2">SI_printLevel</a>(int pl)</td><td class="entry"><a class="el" href="a00711.html">copra::SolverInterface</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00707.html#afc3ef4e2a4ffc69580b7df8ee40b68fe">SI_problem</a>(int nrVar, int nrEq, int nrInEq) override</td><td class="entry"><a class="el" href="a00707.html">copra::QuadProgDenseSolver</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00707.html#ae2a587c79166174a91c36f41e08f5e4f">SI_result</a>() const override</td><td class="entry"><a class="el" href="a00707.html">copra::QuadProgDenseSolver</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00707.html#a77f978f8e9bf5f978a948e8526598373">SI_solve</a>(const Eigen::MatrixXd &amp;Q, const Eigen::VectorXd &amp;c, const Eigen::MatrixXd &amp;Aeq, const Eigen::VectorXd &amp;beq, const Eigen::MatrixXd &amp;Aineq, const Eigen::VectorXd &amp;bineq, const Eigen::VectorXd &amp;XL, const Eigen::VectorXd &amp;XU) override</td><td class="entry"><a class="el" href="a00707.html">copra::QuadProgDenseSolver</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00711.html#aeb240e55210ed82f3fc0a96d3da22877">SI_warmStart</a>() const</td><td class="entry"><a class="el" href="a00711.html">copra::SolverInterface</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00711.html#a64c21aae89c733a54f1314ccaf056fba">SI_warmStart</a>(bool w)</td><td class="entry"><a class="el" href="a00711.html">copra::SolverInterface</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00711.html#a16ede69f5f2c07f99f740fec0be831a6">~SolverInterface</a>()=default</td><td class="entry"><a class="el" href="a00711.html">copra::SolverInterface</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
 </table></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.6-->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Mon Jan 6 2020 07:40:39 for copra by
+    <li class="footer">Generated on Mon Jan 6 2020 08:13:27 for copra by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>
