@@ -1,8 +1,18 @@
 var searchData=
 [
-  ['update',['update',['../a00625.html#aae0f78b14981a50d29a7f7cf923b57fb',1,'copra::Constraint::update()'],['../a00633.html#aefe106e4cf27c5338b9554762bdcd0ed',1,'copra::TrajectoryConstraint::update()'],['../a00637.html#a667c5244518e6f68095502cdfd98dfee',1,'copra::ControlConstraint::update()'],['../a00641.html#a01a901c11eea5e254801877f3656a66a',1,'copra::MixedConstraint::update()'],['../a00645.html#a08836519ae862f218e2af33f1980f046',1,'copra::TrajectoryBoundConstraint::update()'],['../a00649.html#a016249d73d1b645fa9cf548ec0df1303',1,'copra::ControlBoundConstraint::update()'],['../a00653.html#a7b86c3c64cefd847dcdc20e2133ad652',1,'copra::CostFunction::update()'],['../a00657.html#af11df78939692839ef832c1574a4b4c7',1,'copra::TrajectoryCost::update()'],['../a00661.html#aced35acf66be3b9d570f683128be4378',1,'copra::TargetCost::update()'],['../a00665.html#a429e123a6364d185409818bb3acbf858',1,'copra::ControlCost::update()'],['../a00669.html#a874d9561bf10922869b710fcc5d3795d',1,'copra::MixedCost::update()']]],
-  ['updatenr',['updateNr',['../a00681.html#a908cc2607518d7403b36334d26dc8e33',1,'copra::LMPC::Constraints']]],
-  ['updatesystem',['updateSystem',['../a00677.html#a86ffaee72eeaa9451e1143ecbc5fbf84',1,'copra::LMPC']]],
-  ['upper',['upper',['../a00649.html#a3a02604a8ab5ea9b3e35d0fbe4dddfd8',1,'copra::ControlBoundConstraint']]],
-  ['usesolver',['useSolver',['../a00677.html#a221f5092f2ad3760416268f5ae7eb767',1,'copra::LMPC::useSolver(std::unique_ptr&lt; SolverInterface &gt; &amp;&amp;solver)'],['../a00677.html#a25063f11066694bbac3152e836cd29b1',1,'copra::LMPC::useSolver(SolverInterface &amp;&amp;solver)']]]
+  ['targetcost',['TargetCost',['../a00667.html#adbcaf02a942b733b9f1973e68702ff5c',1,'copra::TargetCost']]],
+  ['throwmsgonbadnewdim',['throwMsgOnBadNewDim',['../a00069.html#a69647427ef0587056e4747091cb7fb60',1,'copra']]],
+  ['throwmsgoncolsonpsudim',['throwMsgOnColsOnPSUDim',['../a00069.html#a73d47a9cea6cd29bf43686c3bd2284e1',1,'copra']]],
+  ['throwmsgoncolsonpsxdim',['throwMsgOnColsOnPSXDim',['../a00069.html#a754ebcb651f8e7c92d340c6a8a414254',1,'copra']]],
+  ['throwmsgoncolsonpsxudim',['throwMsgOnColsOnPSXUDim',['../a00069.html#a3c18fa9d551f8fac45a8ac217c4d9d6f',1,'copra::throwMsgOnColsOnPSXUDim(const char *mat1Name, const char *mat2Name, const Eigen::MatrixXd &amp;mat1, const Eigen::MatrixXd &amp;mat2, const PreviewSystem *ps)'],['../a00069.html#a70e0c0fcb5150d526ffe406b9dc5f5c4',1,'copra::throwMsgOnColsOnPSxuDim(const char *mat1Name, const char *mat2Name, const Eigen::MatrixXd &amp;mat1, const Eigen::MatrixXd &amp;mat2, const PreviewSystem *ps)']]],
+  ['throwmsgonrows',['throwMsgOnRows',['../a00069.html#a2dd349b87894ca53152eaeefc669187c',1,'copra']]],
+  ['throwmsgonrowsaskautospan',['throwMsgOnRowsAskAutoSpan',['../a00069.html#af6ee4a04b048051b14e755175363d9c3',1,'copra']]],
+  ['throwmsgonrowsondim',['throwMsgOnRowsOnDim',['../a00069.html#a55b8499e93dfd6bf47c4fdd75c7ecf19',1,'copra']]],
+  ['throwmsgonrowsonpsudim',['throwMsgOnRowsOnPSUDim',['../a00069.html#a5076504e70112feddcdf1ae6aa004730',1,'copra']]],
+  ['throwmsgonrowsonpsxdim',['throwMsgOnRowsOnPSXDim',['../a00069.html#ad9588afa8536a77d9d41ded1ea6ed82b',1,'copra::throwMsgOnRowsOnPSXDim(const char *matName, const Eigen::MatrixXd &amp;mat, const PreviewSystem *ps)'],['../a00069.html#a3b423fae04c63c08d415900bc19daa3f',1,'copra::throwMsgOnRowsOnPSxDim(const char *matName, const Eigen::MatrixXd &amp;mat, const PreviewSystem *ps)']]],
+  ['throwmsgonsquaremat',['throwMsgOnSquareMat',['../a00069.html#a8397402c8d9243290d84dcf60e91cff7',1,'copra']]],
+  ['trajectory',['trajectory',['../a00683.html#a527660646f1be65838b8a8a5ad4968ec',1,'copra::LMPC']]],
+  ['trajectoryboundconstraint',['TrajectoryBoundConstraint',['../a00651.html#a5869dd80ee8edbce7d5c049c6dbe242b',1,'copra::TrajectoryBoundConstraint']]],
+  ['trajectoryconstraint',['TrajectoryConstraint',['../a00639.html#a11fc64735cf72454a890738f58cbe5c2',1,'copra::TrajectoryConstraint']]],
+  ['trajectorycost',['TrajectoryCost',['../a00663.html#afa167debb3f44bdd63ca8ad8bab80461',1,'copra::TrajectoryCost']]]
 ];

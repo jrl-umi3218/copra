@@ -1,7 +1,4 @@
 var searchData=
 [
-  ['weight',['weight',['../a00653.html#a504fabd9aef49e5cef64f471a610a579',1,'copra::CostFunction']]],
-  ['weights',['weights',['../a00653.html#aeb4d0fff5319b62ce980a5b88ffd7350',1,'copra::CostFunction']]],
-  ['weights_5f',['weights_',['../a00653.html#a6d31944a622d5ddf49dda76792e9d6af',1,'copra::CostFunction']]],
-  ['work_5f',['work_',['https://jrl-umi3218.github.io/eigen-quadprog/doxygen/HEAD//a00563.html#a57f15a96f84d1e74303eaa18771dc6dc',1,'Eigen::QuadProgCommon']]]
+  ['value',['value',['../a00715.html#a3623ea5e8a528e8c42806cbdc3999f3a',1,'copra::is_all_arithmetic&lt; std::false_type, T2, T3 &gt;::value()'],['../a00723.html#a365795a4643a7668032f1022b7a16314',1,'copra::is_all_arithmetic&lt; std::true_type, std::true_type, std::true_type &gt;::value()']]]
 ];

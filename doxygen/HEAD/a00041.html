@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<title>typedefs.h File Reference</title>
+<title>solverUtils.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css">
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 <script type="text/x-mathjax-config">
@@ -70,40 +70,82 @@ $(document).ready(function(){initNavTree('a00041.html','');});
 
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a>  </div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
-<div class="title">typedefs.h File Reference</div>  </div>
+<div class="title">solverUtils.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;Eigen/Core&gt;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="a00002.html">api.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="a00035.html">QuadProgSolver.h</a>&quot;</code><br />
+<code>#include &lt;memory&gt;</code><br />
+<code>#include &lt;utility&gt;</code><br />
 </div><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00701.html">copra::is_all_arithmetic&lt; T1, T2, T3 &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00705.html">copra::is_all_arithmetic&lt; std::false_type, T2, T3 &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00709.html">copra::is_all_arithmetic&lt; std::true_type, T2, T3 &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00713.html">copra::is_all_arithmetic&lt; std::true_type, std::true_type, std::true_type &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:a00064"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00064.html">Eigen</a></td></tr>
+<tr class="memitem:a00069"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00069.html">copra</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00063"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00063.html">copra</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a3b6b8555392998bd20c0a7dbe6305623"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00002.html#a317a8f7b36f8c630019f4b01688cb50b">COPRA_DLLAPI</a> std::unique_ptr&lt; SolverInterface &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00069.html#a3b6b8555392998bd20c0a7dbe6305623">copra::solverFactory</a> (SolverFlag flag)</td></tr>
+<tr class="memdesc:a3b6b8555392998bd20c0a7dbe6305623"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function to get an unique pointer to a desired solver.  <a href="a00069.html#a3b6b8555392998bd20c0a7dbe6305623">More...</a><br /></td></tr>
+<tr class="separator:a3b6b8555392998bd20c0a7dbe6305623"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11ad5b78f8b35292eeb62aff2c29afc1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00002.html#a317a8f7b36f8c630019f4b01688cb50b">COPRA_DLLAPI</a> SolverInterface *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00069.html#a11ad5b78f8b35292eeb62aff2c29afc1">copra::pythonSolverFactory</a> (SolverFlag flag)</td></tr>
+<tr class="memdesc:a11ad5b78f8b35292eeb62aff2c29afc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function to get a desired solver.  <a href="a00069.html#a11ad5b78f8b35292eeb62aff2c29afc1">More...</a><br /></td></tr>
+<tr class="separator:a11ad5b78f8b35292eeb62aff2c29afc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:ad20935afa9af8d1f162c113cfbbf111d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00041.html#ad20935afa9af8d1f162c113cfbbf111d">DEFAULT</a></td></tr>
+<tr class="memdesc:ad20935afa9af8d1f162c113cfbbf111d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default solver (QuadProgDense solver)  <a href="#ad20935afa9af8d1f162c113cfbbf111d">More...</a><br /></td></tr>
+<tr class="separator:ad20935afa9af8d1f162c113cfbbf111d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ed5551a07839c562e3aadc1c837573d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00041.html#a6ed5551a07839c562e3aadc1c837573d">QuadProgDense</a></td></tr>
+<tr class="memdesc:a6ed5551a07839c562e3aadc1c837573d"><td class="mdescLeft">&#160;</td><td class="mdescRight">DenseMatrix version of QuadProg solver.  <a href="#a6ed5551a07839c562e3aadc1c837573d">More...</a><br /></td></tr>
+<tr class="separator:a6ed5551a07839c562e3aadc1c837573d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Variable Documentation</h2>
+<a id="ad20935afa9af8d1f162c113cfbbf111d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad20935afa9af8d1f162c113cfbbf111d">&#9670;&nbsp;</a></span>DEFAULT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">DEFAULT</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Default solver (QuadProgDense solver) </p>
+
+</div>
+</div>
+<a id="a6ed5551a07839c562e3aadc1c837573d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ed5551a07839c562e3aadc1c837573d">&#9670;&nbsp;</a></span>QuadProgDense</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QuadProgDense</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>DenseMatrix version of QuadProg solver. </p>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.6-->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="a00041.html">typedefs.h</a></li>
-    <li class="footer">Generated on Wed Dec 18 2019 05:24:39 for copra by
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="a00041.html">solverUtils.h</a></li>
+    <li class="footer">Generated on Mon Jan 6 2020 07:40:39 for copra by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>
