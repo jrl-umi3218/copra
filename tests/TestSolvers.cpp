@@ -15,6 +15,7 @@
 // along with copra.  If not, see
 // <http://www.gnu.org/licenses/>.
 
+#include "doctest.h"
 #include "QuadProgSolver.h"
 #include "systems.h"
 #ifdef EIGEN_QLD_FOUND
@@ -30,25 +31,22 @@
 #include "OSQPSolver.h"
 #endif
 
-#include <catch2/catch.hpp>
 #include <Eigen/Core>
 #include <iostream>
 #include <numeric>
 
-#define REQUIRE_EQUAL(a, b) REQUIRE((a) == (b))
-
-TEST_CASE_METHOD(Problem, "QuadProgTest", "[dense]")
+TEST_CASE_FIXTURE(Problem, "QuadProgTest")
 {
     copra::QuadProgDenseSolver qpQuadProg;
 
     qpQuadProg.SI_problem(nrvars, nreqs, nrineqs);
     REQUIRE(qpQuadProg.SI_solve(Q, c, Aeq, beq, Aineq, bineq, XL, XU));
 
-    REQUIRE_EQUAL(qpQuadProg.SI_fail(), 0);
+    REQUIRE_EQ(qpQuadProg.SI_fail(), 0);
 }
 
 #ifdef EIGEN_QLD_FOUND
-TEST_CASE_METHOD(Problem, "QLDOnQuadProgTest", "[dense]")
+TEST_CASE_FIXTURE(Problem, "QLDOnQuadProgTest")
 {
     copra::QLDSolver qpQLD;
     copra::QuadProgDenseSolver qpQuadProg;
@@ -61,13 +59,13 @@ TEST_CASE_METHOD(Problem, "QLDOnQuadProgTest", "[dense]")
     Eigen::VectorXd resQLD = qpQLD.SI_result();
     Eigen::VectorXd resQuadProg = qpQuadProg.SI_result();
     CHECK(resQuadProg.isApprox(resQLD));
-    REQUIRE_EQUAL(qpQLD.SI_fail(), 0);
-    REQUIRE_EQUAL(qpQuadProg.SI_fail(), 0);
+    REQUIRE_EQ(qpQLD.SI_fail(), 0);
+    REQUIRE_EQ(qpQuadProg.SI_fail(), 0);
 }
 #endif
 
 #ifdef EIGEN_LSSOL_FOUND
-TEST_CASE_METHOD(Problem, "LSSOLOnQuadProgTest", "[dense]")
+TEST_CASE_FIXTURE(Problem, "LSSOLOnQuadProgTest")
 {
     copra::QuadProgDenseSolver qpQuadProg;
     copra::LSSOLSolver qpLSSOL;
@@ -80,12 +78,12 @@ TEST_CASE_METHOD(Problem, "LSSOLOnQuadProgTest", "[dense]")
     Eigen::VectorXd resQuadProg = qpQuadProg.SI_result();
     Eigen::VectorXd resLSSOL = qpLSSOL.SI_result();
     CHECK(resLSSOL.isApprox(resQuadProg));
-    REQUIRE_EQUAL(qpLSSOL.SI_fail(), 0);
+    REQUIRE_EQ(qpLSSOL.SI_fail(), 0);
 }
 #endif
 
 #ifdef EIGEN_GUROBI_FOUND
-TEST_CASE_METHOD(Problem, "GUROBIOnQuadProgTest", "[dense]")
+TEST_CASE_FIXTURE(Problem, "GUROBIOnQuadProgTest")
 {
     copra::QuadProgDenseSolver qpQuadProg;
     copra::GUROBISolver qpGUROBI;
@@ -98,12 +96,12 @@ TEST_CASE_METHOD(Problem, "GUROBIOnQuadProgTest", "[dense]")
     Eigen::VectorXd resQuadProg = qpQuadProg.SI_result();
     Eigen::VectorXd resGUROBI = qpGUROBI.SI_result();
     CHECK(resGUROBI.isApprox(resQuadProg, 1e-6));
-    REQUIRE_EQUAL(qpGUROBI.SI_fail(), GRB_OPTIMAL);
+    REQUIRE_EQ(qpGUROBI.SI_fail(), GRB_OPTIMAL);
 }
 #endif
 
 #ifdef EIGEN_OSQP_FOUND
-TEST_CASE_METHOD(Problem, "OSQPOnQuadProgTest", "[dense]")
+TEST_CASE_FIXTURE(Problem, "OSQPOnQuadProgTest")
 {
     copra::QuadProgDenseSolver qpQuadProg;
     copra::OSQPSolver osqp;
@@ -116,6 +114,6 @@ TEST_CASE_METHOD(Problem, "OSQPOnQuadProgTest", "[dense]")
     Eigen::VectorXd resQuadProg = qpQuadProg.SI_result();
     Eigen::VectorXd resOSQP = osqp.SI_result();
     CHECK(resOSQP.isApprox(resQuadProg, 1e-6));
-    REQUIRE_EQUAL(osqp.SI_fail(), 0);
+    REQUIRE_EQ(osqp.SI_fail(), 0);
 }
 #endif

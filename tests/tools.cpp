@@ -29,12 +29,16 @@ std::string getSortedTimers(SolverTimers& solT)
     ss << "Solving speed: ";
     for (auto t : solT.st)
         ss << t.first << " (" + std::to_string(t.second) << "ms) > ";
+    ss.seekp(-2, std::ios_base::end);
     ss << "\nBuild speed:";
     for (auto t : solT.bt)
         ss << t.first << " (" + std::to_string(t.second) << "ms) > ";
+    ss.seekp(-2, std::ios_base::end);
     ss << "\nOverall speed:";
     for (auto t : solT.ct)
         ss << t.first << " (" + std::to_string(t.second) << "ms) > ";
+    ss.seekp(-2, std::ios_base::end);
+    ss.put(' ');
 
     return ss.str();
 }

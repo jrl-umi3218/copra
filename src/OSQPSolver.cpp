@@ -39,6 +39,31 @@ void OSQPSolver::SI_inform() const
     solver_.inform(std::cout);
 }
 
+int OSQPSolver::SI_iter() const
+{
+    return static_cast<int>(solver_.iter());
+}
+
+int OSQPSolver::SI_maxIter() const
+{
+    return static_cast<int>(solver_.maxIter());
+}
+
+void OSQPSolver::SI_maxIter(int maxIter)
+{
+    solver_.maxIter(maxIter);
+}
+
+bool OSQPSolver::SI_warmStart() const
+{
+    return solver_.warmStart();
+}
+
+void OSQPSolver::SI_warmStart(bool w)
+{
+    solver_.warmStart(w);
+}
+
 void OSQPSolver::SI_printLevel(int pl)
 {
     solver_.verbose(pl != 0);

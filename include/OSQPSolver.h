@@ -26,7 +26,7 @@
 namespace copra {
 
 /**
- * QLD solver for both dense matrix.
+ * OSQP solver for dense matrix.
  */
 
 // TODO: Enable sparse matrix
@@ -53,27 +53,18 @@ public:
     int SI_fail() const override;
 
     void SI_inform() const override;
+    int SI_iter() const override;
+    int SI_maxIter() const override;
+    void SI_maxIter(int maxIter) override;
     void SI_printLevel(int pl) override;
     void SI_feasibilityTolerance(double tol) override;
+    bool SI_warmStart() const override;
+    void SI_warmStart(bool w) override;
 
-    /**
-     * Get the solver's solution.
-     * \return The qp solver result.
-     */
     const Eigen::VectorXd& SI_result() const override;
-
-    /**
-     * Initialize the variables of the problem to solve.
-     * \see SolverInterface::SI_problem()
-     * \return The qp solver result.
-     */
     void SI_problem(int nrVar, int nrEq, int nrInEq) override;
 
-    /**
-     * Solve the problem.
-     * \see SolverInterface::SI_solve()
-     * \return The qp solver result.
-     */
+
     bool SI_solve(const Eigen::MatrixXd& Q, const Eigen::VectorXd& c,
         const Eigen::MatrixXd& Aeq, const Eigen::VectorXd& beq,
         const Eigen::MatrixXd& Aineq, const Eigen::VectorXd& bineq,

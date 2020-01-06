@@ -35,6 +35,9 @@ static const std::vector<std::pair<std::string, copra::SolverFlag>> Solvers = {
 #ifdef EIGEN_GUROBI_FOUND
     { "GUROBIDense", copra::SolverFlag::GUROBIDense },
 #endif
+#ifdef EIGEN_OSQP_FOUND
+    { "OSQP", copra::SolverFlag::OSQP },
+#endif
 };
 
 using solver_timers_t = std::vector<std::pair<std::string, double>>;

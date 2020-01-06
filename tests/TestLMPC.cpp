@@ -15,9 +15,7 @@
 // along with copra.  If not, see
 // <http://www.gnu.org/licenses/>.
 
-#define DYN_LINK
-#define MODULE TestLMPC
-
+#include "doctest.h"
 #include "systems.h"
 #include "tools.h"
 #include <Eigen/Core>
@@ -39,22 +37,17 @@
 #ifdef EIGEN_OSQP_FOUND
 #include "OSQPSolver.h"
 #endif
-#include <catch2/catch.hpp>
+
 #include <memory>
 #include <numeric>
 #include <vector>
-
-// Some helpers
-#define CHECK_SMALL(v, eps) CHECK(std::abs(v) < eps)
-#define REQUIRE_LE(a, b) REQUIRE((a) <= (b))
 
 /********************************************************************************************************
  *                               Check Bound constraint                                                 *
  ********************************************************************************************************/
 
-TEST_CASE_METHOD(BoundedSystem, "MPC_TARGET_COST_WITH_BOUND_CONSTRAINTS", "[bound]")
+TEST_CASE_FIXTURE(BoundedSystem, "MPC_TARGET_COST_WITH_BOUND_CONSTRAINTS")
 {
-    INFO("\nMPC_TARGET_COST_WITH_BOUND_CONSTRAINTS");
     tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
@@ -94,7 +87,7 @@ TEST_CASE_METHOD(BoundedSystem, "MPC_TARGET_COST_WITH_BOUND_CONSTRAINTS", "[boun
         Eigen::VectorXd control = controller.control();
 
         // Check result
-        CHECK_SMALL(xd(1) - velTraj.tail(1)(0), 0.001);
+        CHECK_LE(std::abs(xd(1) - velTraj.tail(1)(0)), 0.001);
 
         // Check constrains
         REQUIRE_LE(posTraj.maxCoeff(), x0(0));
@@ -113,12 +106,11 @@ TEST_CASE_METHOD(BoundedSystem, "MPC_TARGET_COST_WITH_BOUND_CONSTRAINTS", "[boun
         pcCheck(s.first, s.second, std::move(solver));
     }
 
-    INFO(tools::getSortedTimers(sTimers));
+    MESSAGE(tools::getSortedTimers(sTimers));
 }
 
-TEST_CASE_METHOD(BoundedSystem, "MPC_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS", "[bound]")
+TEST_CASE_FIXTURE(BoundedSystem, "MPC_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS")
 {
-    INFO("\nMPC_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS");
     tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
@@ -142,6 +134,18 @@ TEST_CASE_METHOD(BoundedSystem, "MPC_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS", "[
         else
             controller.selectQPSolver(sFlag);
 
+#ifdef EIGEN_OSQP_FOUND
+    // Increase precision
+    if (sFlag == copra::SolverFlag::OSQP) {
+        auto& bs = static_cast<copra::OSQPSolver&>(controller.solver()).baseSolver();
+        bs.scalingIter(0);
+        bs.absConvergenceTol(1e-6);
+        bs.relConvergenceTol(1e-6);
+        bs.primalInfeasibilityTol(1e-7);
+        bs.dualInfeasibilityTol(1e-7);
+    }
+#endif
+
         REQUIRE(controller.solve());
         sTimers.st.emplace_back(solverName, controller.solveTime() * 1e3);
         sTimers.ct.emplace_back(solverName, controller.solveAndBuildTime() * 1e3);
@@ -158,7 +162,7 @@ TEST_CASE_METHOD(BoundedSystem, "MPC_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS", "[
         Eigen::VectorXd control = controller.control();
 
         // Check result
-        CHECK_SMALL(xd(1) - velTraj.tail(1)(0), 0.001);
+        CHECK_LE(std::abs(xd(1) - velTraj.tail(1)(0)), 0.001);
 
         // Check constrains
         REQUIRE_LE(posTraj.maxCoeff(), x0(0));
@@ -177,12 +181,11 @@ TEST_CASE_METHOD(BoundedSystem, "MPC_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS", "[
         pcCheck(s.first, s.second, std::move(solver));
     }
 
-    INFO(tools::getSortedTimers(sTimers));
+    MESSAGE(tools::getSortedTimers(sTimers));
 }
 
-TEST_CASE_METHOD(BoundedSystem, "MPC_MIXED_COST_WITH_BOUND_CONSTRAINTS", "[bound]")
+TEST_CASE_FIXTURE(BoundedSystem, "MPC_MIXED_COST_WITH_BOUND_CONSTRAINTS")
 {
-    INFO("\nMPC_MIXED_COST_WITH_BOUND_CONSTRAINTS");
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
@@ -211,7 +214,7 @@ TEST_CASE_METHOD(BoundedSystem, "MPC_MIXED_COST_WITH_BOUND_CONSTRAINTS", "[bound
     Eigen::VectorXd control = controller.control();
 
     // Check result
-    CHECK_SMALL(xd(1) - velTraj.tail(3)(0), 0.001); // Check X_{N-1} for mixed cost because X_N is not evaluated.
+    CHECK_LE(std::abs(xd(1) - velTraj.tail(3)(0)), 0.001); // Check X_{N-1} for mixed cost because X_N is not evaluated.
 
     // Check constrains
     REQUIRE_LE(posTraj.maxCoeff(), x0(0));
@@ -223,9 +226,8 @@ TEST_CASE_METHOD(BoundedSystem, "MPC_MIXED_COST_WITH_BOUND_CONSTRAINTS", "[bound
  *                            Check inequality constraint                                               *
  ********************************************************************************************************/
 
-TEST_CASE_METHOD(IneqSystem, "MPC_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS", "[ineq]")
+TEST_CASE_FIXTURE(IneqSystem, "MPC_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS")
 {
-    INFO("\nMPC_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS");
     tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
@@ -233,7 +235,7 @@ TEST_CASE_METHOD(IneqSystem, "MPC_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS", "[in
     auto controller = copra::LMPC(ps);
     auto xCost = std::make_shared<copra::TargetCost>(M, xd);
     auto uCost = std::make_shared<copra::ControlCost>(N, ud);
-    auto trajConstr = std::make_shared<copra::TrajectoryConstraint>(E, f);
+    auto trajConstr = std::make_shared<copra::TrajectoryConstraint>(E, p);
     auto contConstr = std::make_shared<copra::ControlConstraint>(G, h);
     xCost->weights(wx);
     uCost->weights(wu);
@@ -248,6 +250,20 @@ TEST_CASE_METHOD(IneqSystem, "MPC_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS", "[in
             controller.useSolver(std::move(solver));
         else
             controller.selectQPSolver(sFlag);
+
+#ifdef EIGEN_OSQP_FOUND
+    // Increase precision
+    if (sFlag == copra::SolverFlag::OSQP) {
+        auto& bs = static_cast<copra::OSQPSolver&>(controller.solver()).baseSolver();
+        bs.scalingIter(0);
+        bs.absConvergenceTol(1e-6);
+        bs.relConvergenceTol(1e-6);
+        bs.primalInfeasibilityTol(1e-7);
+        bs.dualInfeasibilityTol(1e-7);
+        bs.relaxationParam(1);
+        bs.maxIter(6000);
+    }
+#endif
 
         REQUIRE(controller.solve());
         sTimers.st.emplace_back(solverName, controller.solveTime() * 1e3);
@@ -265,11 +281,11 @@ TEST_CASE_METHOD(IneqSystem, "MPC_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS", "[in
         Eigen::VectorXd control = controller.control();
 
         // Check result
-        CHECK_SMALL(xd(1) - velTraj.tail(1)(0), 0.001);
+        CHECK_LE(std::abs(xd(1) - velTraj.tail(1)(0)), 0.001);
 
         // Check constrains
         REQUIRE_LE(posTraj.maxCoeff(), x0(0));
-        REQUIRE_LE(velTraj.maxCoeff(), f(0) + 1e-6);
+        REQUIRE_LE(velTraj.maxCoeff(), p(0) + 1e-6);
         REQUIRE_LE(control.maxCoeff(), h(0) + 1e-6);
     };
 
@@ -284,12 +300,11 @@ TEST_CASE_METHOD(IneqSystem, "MPC_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS", "[in
         pcCheck(s.first, s.second, std::move(solver));
     }
 
-    INFO(tools::getSortedTimers(sTimers));
+    MESSAGE(tools::getSortedTimers(sTimers));
 }
 
-TEST_CASE_METHOD(IneqSystem, "MPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS", "[ineq]")
+TEST_CASE_FIXTURE(IneqSystem, "MPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS")
 {
-    INFO("\nMPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS");
     tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
@@ -297,7 +312,7 @@ TEST_CASE_METHOD(IneqSystem, "MPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS", 
     auto controller = copra::LMPC(ps);
     auto xCost = std::make_shared<copra::TrajectoryCost>(M, xd);
     auto uCost = std::make_shared<copra::ControlCost>(N, ud);
-    auto trajConstr = std::make_shared<copra::TrajectoryConstraint>(E, f);
+    auto trajConstr = std::make_shared<copra::TrajectoryConstraint>(E, p);
     auto contConstr = std::make_shared<copra::ControlConstraint>(G, h);
     xCost->weights(wx);
     uCost->weights(wu);
@@ -312,6 +327,18 @@ TEST_CASE_METHOD(IneqSystem, "MPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS", 
             controller.useSolver(std::move(solver));
         else
             controller.selectQPSolver(sFlag);
+
+#ifdef EIGEN_OSQP_FOUND
+    // Increase precision
+    if (sFlag == copra::SolverFlag::OSQP) {
+        auto& bs = static_cast<copra::OSQPSolver&>(controller.solver()).baseSolver();
+        bs.scalingIter(0);
+        bs.absConvergenceTol(1e-6);
+        bs.relConvergenceTol(1e-6);
+        bs.primalInfeasibilityTol(1e-7);
+        bs.dualInfeasibilityTol(1e-7);
+    }
+#endif
 
         REQUIRE(controller.solve());
         sTimers.st.emplace_back(solverName, controller.solveTime() * 1e3);
@@ -329,11 +356,11 @@ TEST_CASE_METHOD(IneqSystem, "MPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS", 
         Eigen::VectorXd control = controller.control();
 
         // Check result
-        CHECK_SMALL(xd(1) - velTraj.tail(1)(0), 0.001);
+        CHECK_LE(std::abs(xd(1) - velTraj.tail(1)(0)), 0.001);
 
         // Check constrains
         REQUIRE_LE(posTraj.maxCoeff(), x0(0));
-        REQUIRE_LE(velTraj.maxCoeff(), f(0) + 1e-6);
+        REQUIRE_LE(velTraj.maxCoeff(), p(0) + 1e-6);
         REQUIRE_LE(control.maxCoeff(), h(0) + 1e-6); // QuadProg allows to exceeds the constrain of a small amount.
     };
 
@@ -348,18 +375,17 @@ TEST_CASE_METHOD(IneqSystem, "MPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS", 
         pcCheck(s.first, s.second, std::move(solver));
     }
 
-    INFO(tools::getSortedTimers(sTimers));
+    MESSAGE(tools::getSortedTimers(sTimers));
 }
 
-TEST_CASE_METHOD(IneqSystem, "MPC_MIXED_COST_WITH_INEQUALITY_CONSTRAINTS", "[ineq]")
+TEST_CASE_FIXTURE(IneqSystem, "MPC_MIXED_COST_WITH_INEQUALITY_CONSTRAINTS")
 {
-    INFO("\nMPC_MIXED_COST_WITH_INEQUALITY_CONSTRAINTS");
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
     auto xCost = std::make_shared<copra::MixedCost>(M, Eigen::MatrixXd::Zero(2, 1), xd);
     auto uCost = std::make_shared<copra::MixedCost>(Eigen::MatrixXd::Zero(1, 2), N, ud);
-    auto trajConstr = std::make_shared<copra::TrajectoryConstraint>(E, f);
+    auto trajConstr = std::make_shared<copra::TrajectoryConstraint>(E, p);
     auto contConstr = std::make_shared<copra::ControlConstraint>(G, h);
     xCost->weights(wx);
     uCost->weights(wu);
@@ -382,11 +408,11 @@ TEST_CASE_METHOD(IneqSystem, "MPC_MIXED_COST_WITH_INEQUALITY_CONSTRAINTS", "[ine
     Eigen::VectorXd control = controller.control();
 
     // Check result
-    CHECK_SMALL(xd(1) - velTraj.tail(3)(0), 0.001); // Check X_{N-1} for mixed cost because X_N is not evaluated.
+    CHECK_LE(std::abs(xd(1) - velTraj.tail(3)(0)), 0.001); // Check X_{N-1} for mixed cost because X_N is not evaluated.
 
     // Check constrains
     REQUIRE_LE(posTraj.maxCoeff(), x0(0));
-    REQUIRE_LE(velTraj.maxCoeff(), f(0) + 1e-6);
+    REQUIRE_LE(velTraj.maxCoeff(), p(0) + 1e-6);
     REQUIRE_LE(control.maxCoeff(), h(0) + 1e-6); // QuadProg allows to exceeds the constrain of a small amount.
 }
 
@@ -394,9 +420,8 @@ TEST_CASE_METHOD(IneqSystem, "MPC_MIXED_COST_WITH_INEQUALITY_CONSTRAINTS", "[ine
  *                               Check Mixed constraint                                                 *
  ********************************************************************************************************/
 
-TEST_CASE_METHOD(MixedSystem, "MPC_TARGET_COST_WITH_MIXED_CONSTRAINTS", "[mixed]")
+TEST_CASE_FIXTURE(MixedSystem, "MPC_TARGET_COST_WITH_MIXED_CONSTRAINTS")
 {
-    INFO("\nMPC_TARGET_COST_WITH_MIXED_CONSTRAINTS");
     tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
@@ -404,7 +429,7 @@ TEST_CASE_METHOD(MixedSystem, "MPC_TARGET_COST_WITH_MIXED_CONSTRAINTS", "[mixed]
     auto controller = copra::LMPC(ps);
     auto xCost = std::make_shared<copra::TargetCost>(M, xd);
     auto uCost = std::make_shared<copra::ControlCost>(N, ud);
-    auto mixedConstr = std::make_shared<copra::MixedConstraint>(E, G, f);
+    auto mixedConstr = std::make_shared<copra::MixedConstraint>(E, G, p);
     xCost->weights(wx);
     uCost->weights(wu);
 
@@ -434,16 +459,14 @@ TEST_CASE_METHOD(MixedSystem, "MPC_TARGET_COST_WITH_MIXED_CONSTRAINTS", "[mixed]
         Eigen::VectorXd control = controller.control();
 
         // Check result
-        CHECK_SMALL(xd(1) - velTraj.tail(1)(0), 0.001);
+        CHECK_LE(std::abs(xd(1) - velTraj.tail(1)(0)), 0.001);
 
         // Check constrains
         REQUIRE_LE(posTraj.maxCoeff(), x0(0));
         for (int i = 0; i < nbStep; ++i) {
             auto res = E * fullTraj.segment(i * E.cols(), E.cols()) + G * control.segment(i * G.cols(), G.cols());
-            if (!(res(0) <= f(0) + 1e-6)) {
-                INFO("Mixed constraint violated!");
-                REQUIRE(false);
-            }
+            if (!(res(0) <= p(0) + 1e-6))
+                FAIL("Mixed constraint violated!");
         }
     };
 
@@ -458,12 +481,11 @@ TEST_CASE_METHOD(MixedSystem, "MPC_TARGET_COST_WITH_MIXED_CONSTRAINTS", "[mixed]
         pcCheck(s.first, s.second, std::move(solver));
     }
 
-    INFO(tools::getSortedTimers(sTimers));
+    MESSAGE(tools::getSortedTimers(sTimers));
 }
 
-TEST_CASE_METHOD(MixedSystem, "MPC_TRAJECTORY_COST_WITH_MIXED_CONSTRAINTS", "[mixed]")
+TEST_CASE_FIXTURE(MixedSystem, "MPC_TRAJECTORY_COST_WITH_MIXED_CONSTRAINTS")
 {
-    INFO("\nMPC_TRAJECTORY_COST_WITH_MIXED_CONSTRAINTS");
     tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
@@ -471,7 +493,7 @@ TEST_CASE_METHOD(MixedSystem, "MPC_TRAJECTORY_COST_WITH_MIXED_CONSTRAINTS", "[mi
     auto controller = copra::LMPC(ps);
     auto xCost = std::make_shared<copra::TrajectoryCost>(M, xd);
     auto uCost = std::make_shared<copra::ControlCost>(N, ud);
-    auto mixedConstr = std::make_shared<copra::MixedConstraint>(E, G, f);
+    auto mixedConstr = std::make_shared<copra::MixedConstraint>(E, G, p);
     xCost->weights(wx);
     uCost->weights(wu);
 
@@ -501,16 +523,14 @@ TEST_CASE_METHOD(MixedSystem, "MPC_TRAJECTORY_COST_WITH_MIXED_CONSTRAINTS", "[mi
         Eigen::VectorXd control = controller.control();
 
         // Check result
-        CHECK_SMALL(xd(1) - velTraj.tail(1)(0), 0.001);
+        CHECK_LE(std::abs(xd(1) - velTraj.tail(1)(0)), 0.001);
 
         // Check constrains
         REQUIRE_LE(posTraj.maxCoeff(), x0(0));
         for (int i = 0; i < nbStep; ++i) {
             auto res = E * fullTraj.segment(i * E.cols(), E.cols()) + G * control.segment(i * G.cols(), G.cols());
-            if (!(res(0) <= f(0) + 1e-6)) {
-                INFO("Mixed constraint violated!");
-                REQUIRE(false);
-            }
+            if (!(res(0) <= p(0) + 1e-6))
+                FAIL("Mixed constraint violated!");
         }
     };
 
@@ -525,12 +545,11 @@ TEST_CASE_METHOD(MixedSystem, "MPC_TRAJECTORY_COST_WITH_MIXED_CONSTRAINTS", "[mi
         pcCheck(s.first, s.second, std::move(solver));
     }
 
-    INFO(tools::getSortedTimers(sTimers));
+    MESSAGE(tools::getSortedTimers(sTimers));
 }
 
-TEST_CASE_METHOD(MixedSystem, "MPC_MIXED_COST_WITH_MIXED_CONSTRAINTS", "[mixed]")
+TEST_CASE_FIXTURE(MixedSystem, "MPC_MIXED_COST_WITH_MIXED_CONSTRAINTS")
 {
-    INFO("\nMPC_MIXED_COST_WITH_MIXED_CONSTRAINTS");
     tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
@@ -538,7 +557,7 @@ TEST_CASE_METHOD(MixedSystem, "MPC_MIXED_COST_WITH_MIXED_CONSTRAINTS", "[mixed]"
     auto controller = copra::LMPC(ps);
     auto xCost = std::make_shared<copra::MixedCost>(M, Eigen::MatrixXd::Zero(2, 1), xd);
     auto uCost = std::make_shared<copra::MixedCost>(Eigen::MatrixXd::Zero(1, 2), N, ud);
-    auto mixedConstr = std::make_shared<copra::MixedConstraint>(E, G, f);
+    auto mixedConstr = std::make_shared<copra::MixedConstraint>(E, G, p);
     xCost->weights(wx);
     uCost->weights(wu);
 
@@ -559,16 +578,14 @@ TEST_CASE_METHOD(MixedSystem, "MPC_MIXED_COST_WITH_MIXED_CONSTRAINTS", "[mixed]"
     Eigen::VectorXd control = controller.control();
 
     // Check result
-    CHECK_SMALL(xd(1) - velTraj.tail(3)(0), 0.001); // Check X_{N-1} for mixed cost because X_N is not evaluated.
+    CHECK_LE(std::abs(xd(1) - velTraj.tail(3)(0)), 0.001); // Check X_{N-1} for mixed cost because X_N is not evaluated.
 
     // Check constrains
     REQUIRE_LE(posTraj.maxCoeff(), x0(0));
     for (int i = 0; i < nbStep; ++i) {
         auto res = E * fullTraj.segment(i * E.cols(), E.cols()) + G * control.segment(i * G.cols(), G.cols());
-        if (!(res(0) <= f(0) + 1e-6)) {
-                INFO("Mixed constraint violated!");
-                REQUIRE(false);
-            }
+        if (!(res(0) <= p(0) + 1e-6))
+            FAIL("Mixed constraint violated!");
     }
 }
 
@@ -576,9 +593,8 @@ TEST_CASE_METHOD(MixedSystem, "MPC_MIXED_COST_WITH_MIXED_CONSTRAINTS", "[mixed]"
  *                              Check Equality constraint                                               *
  ********************************************************************************************************/
 
-TEST_CASE_METHOD(EqSystem, "MPC_TARGET_COST_WITH_EQUALITY_CONSTRAINTS", "[eq]")
+TEST_CASE_FIXTURE(EqSystem, "MPC_TARGET_COST_WITH_EQUALITY_CONSTRAINTS")
 {
-    INFO("\nMPC_TARGET_COST_WITH_EQUALITY_CONSTRAINTS");
     tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
@@ -586,7 +602,7 @@ TEST_CASE_METHOD(EqSystem, "MPC_TARGET_COST_WITH_EQUALITY_CONSTRAINTS", "[eq]")
     auto controller = copra::LMPC(ps);
     auto xCost = std::make_shared<copra::TargetCost>(M, xd);
     auto uCost = std::make_shared<copra::ControlCost>(N, ud);
-    auto trajConstr = std::make_shared<copra::TrajectoryConstraint>(E, f, false);
+    auto trajConstr = std::make_shared<copra::TrajectoryConstraint>(E, p, false);
     xCost->weights(wx);
     uCost->weights(wu);
 
@@ -599,6 +615,19 @@ TEST_CASE_METHOD(EqSystem, "MPC_TARGET_COST_WITH_EQUALITY_CONSTRAINTS", "[eq]")
             controller.useSolver(std::move(solver));
         else
             controller.selectQPSolver(sFlag);
+
+#ifdef EIGEN_OSQP_FOUND
+    // Increase precision
+    if (sFlag == copra::SolverFlag::OSQP) {
+        auto& bs = static_cast<copra::OSQPSolver&>(controller.solver()).baseSolver();
+        bs.scalingIter(0);
+        bs.absConvergenceTol(1e-7);
+        bs.relConvergenceTol(1e-7);
+        bs.primalInfeasibilityTol(1e-8);
+        bs.dualInfeasibilityTol(1e-8);
+        bs.relaxationParam(0.01);
+    }
+#endif
 
         REQUIRE(controller.solve());
         sTimers.st.emplace_back(solverName, controller.solveTime() * 1e3);
@@ -616,11 +645,16 @@ TEST_CASE_METHOD(EqSystem, "MPC_TARGET_COST_WITH_EQUALITY_CONSTRAINTS", "[eq]")
         Eigen::VectorXd control = controller.control();
 
         // Check result
-        CHECK_SMALL(xd(1) - velTraj.tail(1)(0), 0.001);
+        CHECK_LE(std::abs(xd(1) - velTraj.tail(1)(0)), 0.001);
 
         // Check constrains
         REQUIRE_LE(posTraj.maxCoeff(), x0(0) + 1e-6);
-        REQUIRE_LE(velTraj.maxCoeff(), f(0) + 1e-6);
+#ifdef EIGEN_OSQP_FOUND
+        if (sFlag == copra::SolverFlag::OSQP)
+            REQUIRE_LE(velTraj.maxCoeff(), p(0) + 1e-4); // I could not get a better precision...
+        else
+#endif
+        REQUIRE_LE(velTraj.maxCoeff(), p(0) + 1e-6);
     };
 
     for (auto s : tools::Solvers) {
@@ -634,12 +668,11 @@ TEST_CASE_METHOD(EqSystem, "MPC_TARGET_COST_WITH_EQUALITY_CONSTRAINTS", "[eq]")
         pcCheck(s.first, s.second, std::move(solver));
     }
 
-    INFO(tools::getSortedTimers(sTimers));
+    MESSAGE(tools::getSortedTimers(sTimers));
 }
 
-TEST_CASE_METHOD(EqSystem, "MPC_TRAJECTORY_COST_WITH_EQUALITY_CONSTRAINTS", "[eq]")
+TEST_CASE_FIXTURE(EqSystem, "MPC_TRAJECTORY_COST_WITH_EQUALITY_CONSTRAINTS")
 {
-    INFO("\nMPC_TRAJECTORY_COST_WITH_EQUALITY_CONSTRAINTS");
     tools::SolverTimers sTimers;
 
     auto ps = std::make_shared<copra::PreviewSystem>();
@@ -647,7 +680,7 @@ TEST_CASE_METHOD(EqSystem, "MPC_TRAJECTORY_COST_WITH_EQUALITY_CONSTRAINTS", "[eq
     auto controller = copra::LMPC(ps);
     auto xCost = std::make_shared<copra::TrajectoryCost>(M, xd);
     auto uCost = std::make_shared<copra::ControlCost>(N, ud);
-    auto trajConstr = std::make_shared<copra::TrajectoryConstraint>(E, f, false);
+    auto trajConstr = std::make_shared<copra::TrajectoryConstraint>(E, p, false);
     xCost->weights(wx);
     uCost->weights(wu);
 
@@ -677,11 +710,16 @@ TEST_CASE_METHOD(EqSystem, "MPC_TRAJECTORY_COST_WITH_EQUALITY_CONSTRAINTS", "[eq
         Eigen::VectorXd control = controller.control();
 
         // Check result
-        CHECK_SMALL(xd(1) - velTraj.tail(1)(0), 0.001);
+        CHECK_LE(std::abs(xd(1) - velTraj.tail(1)(0)), 0.001);
 
         // Check constrains
         REQUIRE_LE(posTraj.maxCoeff(), x0(0) + 1e-6);
-        REQUIRE_LE(velTraj.maxCoeff(), f(0) + 1e-6);
+#ifdef EIGEN_OSQP_FOUND
+        if (sFlag == copra::SolverFlag::OSQP)
+            REQUIRE_LE(velTraj.maxCoeff(), p(0) + 1e-4); // I could not get a better precision...
+        else
+#endif
+        REQUIRE_LE(velTraj.maxCoeff(), p(0) + 1e-6);
     };
 
     for (auto s : tools::Solvers) {
@@ -695,18 +733,17 @@ TEST_CASE_METHOD(EqSystem, "MPC_TRAJECTORY_COST_WITH_EQUALITY_CONSTRAINTS", "[eq
         pcCheck(s.first, s.second, std::move(solver));
     }
 
-    INFO(tools::getSortedTimers(sTimers));
+    MESSAGE(tools::getSortedTimers(sTimers));
 }
 
-TEST_CASE_METHOD(EqSystem, "MPC_MIXED_COST_WITH_EQUALITY_CONSTRAINTS", "[eq]")
+TEST_CASE_FIXTURE(EqSystem, "MPC_MIXED_COST_WITH_EQUALITY_CONSTRAINTS")
 {
-    INFO("\nMPC_MIXED_COST_WITH_EQUALITY_CONSTRAINTS");
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
     auto xCost = std::make_shared<copra::MixedCost>(M, Eigen::MatrixXd::Zero(2, 1), xd);
     auto uCost = std::make_shared<copra::MixedCost>(Eigen::MatrixXd::Zero(1, 2), N, ud);
-    auto trajConstr = std::make_shared<copra::TrajectoryConstraint>(E, f, false);
+    auto trajConstr = std::make_shared<copra::TrajectoryConstraint>(E, p, false);
     xCost->weights(wx);
     uCost->weights(wu);
 
@@ -727,20 +764,19 @@ TEST_CASE_METHOD(EqSystem, "MPC_MIXED_COST_WITH_EQUALITY_CONSTRAINTS", "[eq]")
     Eigen::VectorXd control = controller.control();
 
     // Check result
-    CHECK_SMALL(xd(1) - velTraj.tail(3)(0), 0.001); // Check X_{N-1} for mixed cost because X_N is not evaluated.
+    CHECK_LE(std::abs(xd(1) - velTraj.tail(3)(0)), 0.001); // Check X_{N-1} for mixed cost because X_N is not evaluated.
 
     // Check constrains
     REQUIRE_LE(posTraj.maxCoeff(), x0(0) + 1e-6);
-    REQUIRE_LE(velTraj.maxCoeff(), f(0) + 1e-6);
+    REQUIRE_LE(velTraj.maxCoeff(), p(0) + 1e-6);
 }
 
 /********************************************************************************************************
  *                                   Check Autospan                                                     *
  ********************************************************************************************************/
 
-TEST_CASE_METHOD(BoundedSystem, "CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_BOUND_CONSTRAINT", "[bound]")
+TEST_CASE_FIXTURE(BoundedSystem, "CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_BOUND_CONSTRAINT")
 {
-    INFO("CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_BOUND_CONSTRAINT");
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
@@ -768,16 +804,15 @@ TEST_CASE_METHOD(BoundedSystem, "CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_BOUND_CONSTR
     checkSpan(fullxLower, fullxUpper, fulluLower, fulluUpper);
 }
 
-TEST_CASE_METHOD(IneqSystem, "CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_INEQUALITY_CONSTRAINT", "[ineq]")
+TEST_CASE_FIXTURE(IneqSystem, "CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_INEQUALITY_CONSTRAINT")
 {
-    INFO("CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_INEQUALITY_CONSTRAINT");
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
     int nbXStep = nbStep + 1;
 
-    auto checkSpan = [&](const Eigen::MatrixXd& E, const Eigen::VectorXd& f, const Eigen::MatrixXd& G, const Eigen::VectorXd& h) {
-        auto trajConstr = std::make_shared<copra::TrajectoryConstraint>(E, f);
+    auto checkSpan = [&](const Eigen::MatrixXd& E, const Eigen::VectorXd& p, const Eigen::MatrixXd& G, const Eigen::VectorXd& h) {
+        auto trajConstr = std::make_shared<copra::TrajectoryConstraint>(E, p);
         trajConstr->autoSpan();
 
         auto contConstr = std::make_shared<copra::ControlConstraint>(G, h);
@@ -788,25 +823,24 @@ TEST_CASE_METHOD(IneqSystem, "CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_INEQUALITY_CONS
     };
 
     auto fullE = tools::spanMatrix(E, nbXStep);
-    auto fullf = tools::spanVector(f, nbXStep);
+    auto fullf = tools::spanVector(p, nbXStep);
     auto fullG = tools::spanMatrix(G, nbStep);
     auto fullh = tools::spanVector(h, nbStep);
 
-    checkSpan(E, f, G, h);
-    checkSpan(fullE, f, fullG, h);
+    checkSpan(E, p, G, h);
+    checkSpan(fullE, p, fullG, h);
     checkSpan(E, fullf, G, fullh);
     checkSpan(fullE, fullf, fullG, fullh);
 }
 
-TEST_CASE_METHOD(MixedSystem, "CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_CONSTRAINT", "[mixed]")
+TEST_CASE_FIXTURE(MixedSystem, "CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_CONSTRAINT")
 {
-    INFO("CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_CONSTRAINT");
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
 
-    auto checkSpan = [&](const Eigen::MatrixXd& E, const Eigen::MatrixXd& G, const Eigen::VectorXd& f) {
-        auto mixedConstr = std::make_shared<copra::MixedConstraint>(E, G, f);
+    auto checkSpan = [&](const Eigen::MatrixXd& E, const Eigen::MatrixXd& G, const Eigen::VectorXd& p) {
+        auto mixedConstr = std::make_shared<copra::MixedConstraint>(E, G, p);
         mixedConstr->autoSpan();
 
         REQUIRE_NOTHROW(controller.addConstraint(mixedConstr));
@@ -814,14 +848,14 @@ TEST_CASE_METHOD(MixedSystem, "CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_CONSTRAI
 
     auto fullE = tools::spanMatrix(E, nbStep, 1);
     auto fullG = tools::spanMatrix(G, nbStep);
-    auto fullf = tools::spanVector(f, nbStep);
+    auto fullf = tools::spanVector(p, nbStep);
 
-    checkSpan(E, G, f);
-    checkSpan(fullE, G, f);
-    checkSpan(fullE, fullG, f);
+    checkSpan(E, G, p);
+    checkSpan(fullE, G, p);
+    checkSpan(fullE, fullG, p);
     checkSpan(fullE, G, fullf);
-    checkSpan(E, fullG, f);
-    checkSpan(fullE, fullG, f);
+    checkSpan(E, fullG, p);
+    checkSpan(fullE, fullG, p);
     checkSpan(E, fullG, fullf);
     checkSpan(E, G, fullf);
     checkSpan(fullE, G, fullf);
@@ -829,9 +863,8 @@ TEST_CASE_METHOD(MixedSystem, "CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_CONSTRAI
     checkSpan(fullE, fullG, fullf);
 }
 
-TEST_CASE_METHOD(IneqSystem, "CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_TRAJECTORY_COST", "[ineq]")
+TEST_CASE_FIXTURE(IneqSystem, "CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_TRAJECTORY_COST")
 {
-    INFO("CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_TRAJECTORY_COST");
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
@@ -854,9 +887,8 @@ TEST_CASE_METHOD(IneqSystem, "CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_TRAJECTORY_COST
     checkSpan(fullM, fullxd, wx);
 }
 
-TEST_CASE_METHOD(IneqSystem, "CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_CONTROL_COST", "[ineq]")
+TEST_CASE_FIXTURE(IneqSystem, "CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_CONTROL_COST")
 {
-    INFO("CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_CONTROL_COST");
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
@@ -878,9 +910,8 @@ TEST_CASE_METHOD(IneqSystem, "CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_CONTROL_COST", 
     checkSpan(fullN, fullud, wu);
 }
 
-TEST_CASE_METHOD(IneqSystem, "CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_COST", "[ineq]")
+TEST_CASE_FIXTURE(IneqSystem, "CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_COST")
 {
-    INFO("CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_COST");
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
@@ -913,9 +944,8 @@ TEST_CASE_METHOD(IneqSystem, "CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_COST", "[
  *                                Check Error Messages                                                  *
  ********************************************************************************************************/
 
-TEST_CASE_METHOD(IneqSystem, "ERROR_HANDLER_FOR_PREVIEW_SYSTEM", "[ineq]")
+TEST_CASE_FIXTURE(IneqSystem, "ERROR_HANDLER_FOR_PREVIEW_SYSTEM")
 {
-    INFO("ERROR_HANDLER_FOR_PREVIEW_SYSTEM");
     auto ps = std::make_shared<copra::PreviewSystem>();
     REQUIRE_THROWS_AS(ps->system(Eigen::MatrixXd::Ones(5, 2), B, c, x0, nbStep), std::domain_error);
     REQUIRE_THROWS_AS(ps->system(Eigen::MatrixXd::Ones(2, 5), B, c, x0, nbStep), std::domain_error);
@@ -924,9 +954,8 @@ TEST_CASE_METHOD(IneqSystem, "ERROR_HANDLER_FOR_PREVIEW_SYSTEM", "[ineq]")
     REQUIRE_THROWS_AS(ps->system(A, B, c, x0, -1), std::domain_error);
 }
 
-TEST_CASE_METHOD(IneqSystem, "ERROR_HANDLER_FOR_WEIGTHS", "[ineq]")
+TEST_CASE_FIXTURE(IneqSystem, "ERROR_HANDLER_FOR_WEIGTHS")
 {
-    INFO("ERROR_HANDLER_FOR_WEIGTHS");
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
@@ -939,9 +968,8 @@ TEST_CASE_METHOD(IneqSystem, "ERROR_HANDLER_FOR_WEIGTHS", "[ineq]")
     REQUIRE_NOTHROW(cost->weights(Eigen::VectorXd::Ones(2)));
 }
 
-TEST_CASE_METHOD(IneqSystem, "ERROR_HANDLER_FOR_TRAJECTORY_COST", "[ineq]")
+TEST_CASE_FIXTURE(IneqSystem, "ERROR_HANDLER_FOR_TRAJECTORY_COST")
 {
-    INFO("ERROR_HANDLER_FOR_TRAJECTORY_COST");
     auto ps = std::make_shared<copra::PreviewSystem>(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
 
@@ -951,9 +979,8 @@ TEST_CASE_METHOD(IneqSystem, "ERROR_HANDLER_FOR_TRAJECTORY_COST", "[ineq]")
     REQUIRE_THROWS_AS(controller.addCost(badCost2), std::domain_error);
 }
 
-TEST_CASE_METHOD(IneqSystem, "ERROR_HANDLER_FOR_TARGET_COST", "[ineq]")
+TEST_CASE_FIXTURE(IneqSystem, "ERROR_HANDLER_FOR_TARGET_COST")
 {
-    INFO("ERROR_HANDLER_FOR_TARGET_COST");
     auto ps = std::make_shared<copra::PreviewSystem>(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
 
@@ -963,9 +990,8 @@ TEST_CASE_METHOD(IneqSystem, "ERROR_HANDLER_FOR_TARGET_COST", "[ineq]")
     REQUIRE_THROWS_AS(controller.addCost(badCost2), std::domain_error);
 }
 
-TEST_CASE_METHOD(IneqSystem, "ERROR_HANDLER_FOR_CONTROL_COST", "[ineq]")
+TEST_CASE_FIXTURE(IneqSystem, "ERROR_HANDLER_FOR_CONTROL_COST")
 {
-    INFO("ERROR_HANDLER_FOR_CONTROL_COST");
     auto ps = std::make_shared<copra::PreviewSystem>(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
 
@@ -975,9 +1001,8 @@ TEST_CASE_METHOD(IneqSystem, "ERROR_HANDLER_FOR_CONTROL_COST", "[ineq]")
     REQUIRE_THROWS_AS(controller.addCost(badCost2), std::domain_error);
 }
 
-TEST_CASE_METHOD(IneqSystem, "ERROR_HANDLER_FOR_MIXED_COST", "[ineq]")
+TEST_CASE_FIXTURE(IneqSystem, "ERROR_HANDLER_FOR_MIXED_COST")
 {
-    INFO("ERROR_HANDLER_FOR_MIXED_COST");
     auto ps = std::make_shared<copra::PreviewSystem>(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
 
@@ -989,9 +1014,8 @@ TEST_CASE_METHOD(IneqSystem, "ERROR_HANDLER_FOR_MIXED_COST", "[ineq]")
     REQUIRE_THROWS_AS(controller.addCost(badCost3), std::domain_error);
 }
 
-TEST_CASE_METHOD(IneqSystem, "ERROR_HANDLER_FOR_TRAJECTORY_CONSTRAINT", "[ineq]")
+TEST_CASE_FIXTURE(IneqSystem, "ERROR_HANDLER_FOR_TRAJECTORY_CONSTRAINT")
 {
-    INFO("ERROR_HANDLER_FOR_TRAJECTORY_CONSTRAINT");
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
@@ -1002,9 +1026,8 @@ TEST_CASE_METHOD(IneqSystem, "ERROR_HANDLER_FOR_TRAJECTORY_CONSTRAINT", "[ineq]"
     REQUIRE_THROWS_AS(controller.addConstraint(trajConstr), std::domain_error);
 }
 
-TEST_CASE_METHOD(IneqSystem, "ERROR_HANDLER_FOR_CONTROL_CONSTRAINT", "[ineq]")
+TEST_CASE_FIXTURE(IneqSystem, "ERROR_HANDLER_FOR_CONTROL_CONSTRAINT")
 {
-    INFO("ERROR_HANDLER_FOR_CONTROL_CONSTRAINT");
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
@@ -1019,9 +1042,8 @@ TEST_CASE_METHOD(IneqSystem, "ERROR_HANDLER_FOR_CONTROL_CONSTRAINT", "[ineq]")
     REQUIRE_THROWS_AS(controller.addConstraint(goodConstr), std::runtime_error);
 }
 
-TEST_CASE_METHOD(IneqSystem, "ERROR_HANDLER_FOR_MIXED_CONSTRAINT", "[ineq]")
+TEST_CASE_FIXTURE(IneqSystem, "ERROR_HANDLER_FOR_MIXED_CONSTRAINT")
 {
-    INFO("ERROR_HANDLER_FOR_MIXED_CONSTRAINT");
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
@@ -1034,9 +1056,8 @@ TEST_CASE_METHOD(IneqSystem, "ERROR_HANDLER_FOR_MIXED_CONSTRAINT", "[ineq]")
     REQUIRE_THROWS_AS(controller.addConstraint(badConstr3), std::domain_error);
 }
 
-TEST_CASE_METHOD(BoundedSystem, "ERROR_HANDLER_FOR_TRAJECTORY_BOUND_CONSTRAINT", "[bound]")
+TEST_CASE_FIXTURE(BoundedSystem, "ERROR_HANDLER_FOR_TRAJECTORY_BOUND_CONSTRAINT")
 {
-    INFO("ERROR_HANDLER_FOR_TRAJECTORY_BOUND_CONSTRAINT");
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
@@ -1047,9 +1068,8 @@ TEST_CASE_METHOD(BoundedSystem, "ERROR_HANDLER_FOR_TRAJECTORY_BOUND_CONSTRAINT",
     REQUIRE_THROWS_AS(controller.addConstraint(tbConstr), std::domain_error);
 }
 
-TEST_CASE_METHOD(BoundedSystem, "ERROR_HANDLER_FOR_CONTROL_BOUND_CONSTRAINT", "[bound]")
+TEST_CASE_FIXTURE(BoundedSystem, "ERROR_HANDLER_FOR_CONTROL_BOUND_CONSTRAINT")
 {
-    INFO("ERROR_HANDLER_FOR_CONTROL_BOUND_CONSTRAINT");
     auto ps = std::make_shared<copra::PreviewSystem>();
     ps->system(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
@@ -1068,16 +1088,15 @@ TEST_CASE_METHOD(BoundedSystem, "ERROR_HANDLER_FOR_CONTROL_BOUND_CONSTRAINT", "[
  *                               Check remove functions                                                 *
  ********************************************************************************************************/
 
-TEST_CASE_METHOD(IneqSystem, "REMOVE_COST_AND_CONSTRAINT", "[ineq]")
+TEST_CASE_FIXTURE(IneqSystem, "REMOVE_COST_AND_CONSTRAINT")
 {
-    INFO("REMOVE_COST_AND_CONSTRAINT");
     auto ps = std::make_shared<copra::PreviewSystem>(A, B, c, x0, nbStep);
     auto controller = copra::LMPC(ps);
 
     {
         auto xCost = std::make_shared<copra::TargetCost>(M, xd);
         auto uCost = std::make_shared<copra::ControlCost>(N, ud);
-        auto trajConstr = std::make_shared<copra::TrajectoryConstraint>(E, f);
+        auto trajConstr = std::make_shared<copra::TrajectoryConstraint>(E, p);
         auto contConstr = std::make_shared<copra::ControlConstraint>(G, h);
 
         controller.addCost(xCost);
@@ -1091,7 +1110,7 @@ TEST_CASE_METHOD(IneqSystem, "REMOVE_COST_AND_CONSTRAINT", "[ineq]")
         controller.removeConstraint(contConstr);
     }
 
-    INFO("\nIn DEBUG mode, if a message appears between this line\n*******");
+    MESSAGE("\nIn DEBUG mode, if a message appears between this line\n*******");
     controller.solve();
-    INFO("*******\nand this line, the remove methods have failed!");
+    MESSAGE("*******\nand this line, the remove methods have failed!");
 }

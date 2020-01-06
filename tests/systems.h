@@ -117,7 +117,7 @@ struct IneqSystem {
         , N(1, 1)
         , c(2)
         , h(1)
-        , f(1)
+        , p(1)
         , x0(2)
         , xd(2)
         , ud(1)
@@ -131,7 +131,7 @@ struct IneqSystem {
         G << 1;
         h << 200; // The force can't be superior to 200
         E << 0, 1;
-        f << 0; // The velocity can't be positive
+        p << 0; // The velocity can't be positive
         x0 << 0, -5;
         wx << 10, 10000;
         wu << 1e-4;
@@ -146,7 +146,7 @@ struct IneqSystem {
     double T, mass;
     int nbStep;
     Eigen::MatrixXd A, B, G, E, M, N;
-    Eigen::VectorXd c, h, f, x0, xd, ud, wx, wu;
+    Eigen::VectorXd c, h, p, x0, xd, ud, wx, wu;
 };
 
 // The final point of the trajectory should be [val, 0] where val can be any value inferior to 0 (same as previous one)
@@ -163,7 +163,7 @@ struct MixedSystem {
         , M(2, 2)
         , N(1, 1)
         , c(2)
-        , f(1)
+        , p(1)
         , x0(2)
         , xd(2)
         , ud(1)
@@ -176,7 +176,7 @@ struct MixedSystem {
         c << (-9.81 / 2.) * T * T, -9.81 * T;
         G << 1;
         E << 0, 1;
-        f << 200;
+        p << 200;
         x0 << 0, -5;
         wx << 10, 10000;
         wu << 1e-4;
@@ -191,7 +191,7 @@ struct MixedSystem {
     double T, mass;
     int nbStep;
     Eigen::MatrixXd A, B, G, E, M, N;
-    Eigen::VectorXd c, f, x0, xd, ud, wx, wu;
+    Eigen::VectorXd c, p, x0, xd, ud, wx, wu;
 };
 
 // Search forces that let the system immobile (should be equal to gravity * tiemstep)
@@ -208,7 +208,7 @@ struct EqSystem {
         , M(2, 2)
         , N(1, 1)
         , c(2)
-        , f(2)
+        , p(2)
         , x0(2)
         , xd(2)
         , ud(1)
@@ -232,11 +232,11 @@ struct EqSystem {
         // Trajectory equality constraint
         E.setZero();
         E(0, 0) = 1;
-        f = x0;
+        p = x0;
     }
 
     double T, mass;
     int nbStep;
     Eigen::MatrixXd A, B, E, M, N;
-    Eigen::VectorXd c, f, x0, xd, ud, wx, wu;
+    Eigen::VectorXd c, p, x0, xd, ud, wx, wu;
 };
