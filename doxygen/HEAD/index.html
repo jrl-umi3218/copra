@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<title>Main Page</title>
+<title>Copra</title>
 <link href="tabs.css" rel="stylesheet" type="text/css">
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 <script type="text/x-mathjax-config">
@@ -70,16 +70,60 @@ $(document).ready(function(){initNavTree('index.html','');});
 
 <div class="header">
   <div class="headertitle">
-<div class="title">copra Documentation</div>  </div>
+<div class="title">Copra </div>  </div>
 </div><!--header-->
 <div class="contents">
-</div><!-- contents -->
+<div class="textblock"><p><a href="https://opensource.org/licenses/BSD-2-Clause"></a> <a href="https://github.com/jrl-umi3218/copra/actions?query=workflow%3A%22CI+of+copra%22"></a> <a href="http://jrl-umi3218.github.io/copra/doxygen/HEAD/index.html"></a></p>
+<p>Copra (**Co**ntrol &amp; **pr**eview **a**lgorithms) is a C++ library implementing linear model predictive control. It relies on quadratic programming (QP) solvers. Python bindings are available.</p>
+<div class="image">
+<img src="walkgen-com.png" alt="walkgen-com.png"/>
+<div class="caption">
+main image</div></div>
+<p><em> Caron</em></p>
+<p>This work was originally made by <a href="https://github.com/vsamy">Vincent Samy</a>.</p>
+<p>Copra is licensed under the <a href="https://opensource.org/licenses/BSD-2-Clause">BSD-2-Clause</a>. However, its default QP solver (eigen-quadprog) is licensed under the LGPL-2 and this cannot be changed. Please be aware of the related restrictions if you plan to work with copra. At a later date, we might switch copra default QP solver to one with a less restrictive license.</p>
+<h2>Installation</h2>
+<p>Copra should compiles and is tested on Linux, macOS and Windows.</p>
+<h3>Ubuntu LTS (16.04, 18.04, 20.04)</h3>
+<div class="fragment"><div class="line"># Make sure you have required tools</div><div class="line">sudo apt install apt-transport-https lsb-release ca-certificates gnupg</div><div class="line"># Add our key</div><div class="line">sudo apt-key adv --keyserver &#39;hkp://keyserver.ubuntu.com:80&#39; --recv-key 892EA6EE273707C6495A6FB6220D644C64666806</div><div class="line"># Add our repository (stable versions)</div><div class="line">sudo sh -c &#39;echo &quot;deb https://dl.bintray.com/gergondet/multi-contact-release $(lsb_release -sc) main&quot; | sudo tee /etc/apt/sources.list.d/multi-contact.list&#39;</div><div class="line"># Use this to setup the HEAD version</div><div class="line"># sudo sh -c &#39;echo &quot;deb https://dl.bintray.com/gergondet/multi-contact-head $(lsb_release -sc) main&quot; | sudo tee /etc/apt/sources.list.d/multi-contact.list&#39;</div><div class="line"># Update packages list</div><div class="line">sudo apt update</div><div class="line"># Install packages</div><div class="line">sudo apt install libcopra-dev</div></div><!-- fragment --><h3>Dependencies</h3>
+<ul>
+<li>C++ compiler with C++14 support (see below for C++11 support)</li>
+<li><a href="https://cmake.org">CMake</a> &gt;= 2.8</li>
+<li><a href="http://www.stack.nl/~dimitri/doxygen/">Doxygen</a>: to generate documentation (optional)</li>
+<li><a href="http://eigen.tuxfamily.org/index.php?title=Main_Page">Eigen</a> &gt;= 3.2</li>
+<li><a href="https://github.com/vsamy/eigen-quadprog">eigen-quadprog</a></li>
+</ul>
+<h4>Optional</h4>
+<ul>
+<li><a href="http://www.boost.org/doc/libs/1_58_0/more/getting_started/unix-variants.html">Boost</a> for Python bindings (&gt;= 1.58) and unit tests</li>
+<li><a href="http://www.gurobi.com/">GUROBI</a> &gt;= 4.0: optional QP solver</li>
+<li><a href="https://github.com/vsamy/eigen-gurobi">eigen-gurobi</a>: bindings for GUROBI</li>
+<li><a href="https://github.com/jrl-umi3218/eigen-qld.git">eigen-qld</a>: optional QP solver</li>
+<li><a href="https://github.com/jrl-umi3218/eigen-osqp.git">eigen-osqp</a>: optional QP solver</li>
+<li><a href="https://github.com/vsamy/pygen-converter">pygen-converter</a>: for python bindings</li>
+</ul>
+<h3>Building from source on Linux</h3>
+<p>The library is written in c++14. Compiler that can not support it won't be able to compile it.</p>
+<div class="fragment"><div class="line">git clone --recursive git@github.com:jrl-umi3218/copra.git</div><div class="line">cd Copra</div><div class="line">mkdir build &amp;&amp; cd build</div><div class="line">cmake ..</div><div class="line">ccmake .  # configure e.g. PYTHON_BINDING or BUILD_TESTING</div><div class="line">make -j4</div><div class="line">sudo make install</div></div><!-- fragment --><h3>C+11 compatible code</h3>
+<p>A c++11 compatible is available on a specific branch. Although it exists, it may not be updated as often as the master branch. The branch is called <code>c++11-compatible</code>. To use it, before compilation and after cloning the repo, do:</p>
+<div class="fragment"><div class="line">git checkout c++11-compatible</div></div><!-- fragment --><p>Then follow the steps in the section just above.</p>
+<h3>Testing</h3>
+<p>C++ tests will be compiled in your build folder if you enabled the <code>BUILD_TESTING</code> option:</p>
+<div class="fragment"><div class="line">cd build/tests</div><div class="line">./TestSolvers --log_level=all</div><div class="line">./TestLMPC --log_level=all</div></div><!-- fragment --><p>Once Python bindings are installed, you can check them with:</p>
+<div class="fragment"><div class="line">cd binding/python/tests</div><div class="line">python TestMPController.py</div></div><!-- fragment --><h2>Documentation</h2>
+<p>Doxygen documentation is available <a href="http://jrl-umi3218.github.io/copra/doxygen/HEAD/index.html">online</a></p>
+<p>You can also check out unit tests, as well as the following two examples:</p>
+<ul>
+<li><a href="https://vsamy.github.io/en/blog/copra-example-cpp">C++ example of Copra</a></li>
+<li><a href="https://vsamy.github.io/en/blog/copra-example-python">Python example of Copra</a> </li>
+</ul>
+</div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.6-->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Mon Jan 6 2020 08:13:27 for copra by
+    <li class="footer">Generated on Mon Jan 6 2020 09:09:36 for copra by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>
