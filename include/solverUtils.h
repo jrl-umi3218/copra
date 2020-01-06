@@ -16,6 +16,9 @@
 #ifdef EIGEN_GUROBI_FOUND
 #include "GUROBISolver.h"
 #endif
+#ifdef EIGEN_OSQP_FOUND
+#include "OSQPSolver.h"
+#endif
 #include <memory>
 #include <utility>
 
@@ -40,6 +43,9 @@ enum class COPRA_DLLAPI SolverFlag {
 #endif
 #ifdef EIGEN_QLD_FOUND
     QLD, /**< Scilab QLD solver */
+#endif
+#ifdef EIGEN_OSQP_FOUND
+    OSQP,
 #endif
     QuadProgDense, /**< DenseMatrix version of QuadProg solver */
     // QuadProgSparse

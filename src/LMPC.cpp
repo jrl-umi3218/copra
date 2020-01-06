@@ -96,11 +96,6 @@ void LMPC::useSolver(std::unique_ptr<SolverInterface>&& solver)
     sol_ = std::move(solver);
 }
 
-void LMPC::useSolver(SolverInterface&& solver)
-{
-    sol_.reset(solver.clone());
-}
-
 void LMPC::initializeController(const std::shared_ptr<PreviewSystem>& ps)
 {
     ps_ = ps;

@@ -47,6 +47,7 @@ sudo apt install libcopra-dev
 * [GUROBI](http://www.gurobi.com/) >= 4.0: optional QP solver
 * [eigen-gurobi](https://github.com/vsamy/eigen-gurobi): bindings for GUROBI
 * [eigen-qld](https://github.com/jrl-umi3218/eigen-qld.git): optional QP solver
+* [eigen-osqp](https://github.com/jrl-umi3218/eigen-osqp.git): optional QP solver
 * [pygen-converter](https://github.com/vsamy/pygen-converter): for python bindings
 
 ### Building from source on Linux
@@ -64,6 +65,7 @@ sudo make install
 ```
 
 ### C+11 compatible code
+
 A c++11 compatible is available on a specific branch.
 Although it exists, it may not be updated as often as the master branch.
 The branch is called `c++11-compatible`. To use it, before compilation and after cloning the repo, do:
@@ -98,5 +100,5 @@ Doxygen documentation is available [online](http://jrl-umi3218.github.io/copra/d
 
 You can also check out unit tests, as well as the following two examples:
 
-- [C++ example of Copra](https://vsamy.github.io/en/blog/copra-example-cpp)
-- [Python example of Copra](https://vsamy.github.io/en/blog/copra-example-python)
+* [C++ example of Copra](https://vsamy.github.io/en/blog/copra-example-cpp)
+* [Python example of Copra](https://vsamy.github.io/en/blog/copra-example-python)

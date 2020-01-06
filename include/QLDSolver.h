@@ -68,8 +68,6 @@ public:
 
     Eigen::QLD& baseSolver() noexcept { return solver_; }
 
-    QLDSolver* clone() const override { return new QLDSolver(*this); }
-
 private:
     Eigen::QLD solver_;
     double eps_;

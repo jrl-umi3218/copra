@@ -64,12 +64,6 @@ public:
     void useSolver(std::unique_ptr<SolverInterface>&& solver);
 
     /**
-     * Make the MPC uses a user-defined qp solver.
-     * \param solver The user-defined solver. It must inheritate from the SolverInterface.
-     */
-    void useSolver(SolverInterface&& solver);
-
-    /**
      * Initialize the controller with regard to the preview system.
      * This function needs to be called each time the system dimension changes.
      * \param ps The preview system

@@ -4,11 +4,28 @@
 
 #pragma once
 
+#include "solverUtils.h"
 #include <Eigen/Core>
 #include <utility>
 #include <vector>
 
 namespace tools {
+
+static const std::vector<std::pair<std::string, copra::SolverFlag>> Solvers = {
+    { "Default (QuadProgDense)", copra::SolverFlag::DEFAULT },
+#ifdef EIGEN_LSSOL_FOUND
+    { "LSSOL", copra::SolverFlag::LSSOL },
+#endif
+#ifdef EIGEN_QLD_FOUND
+    { "QLD", copra::SolverFlag::QLD },
+#endif
+#ifdef EIGEN_GUROBI_FOUND
+    { "GUROBIDense", copra::SolverFlag::GUROBIDense },
+#endif
+#ifdef EIGEN_OSQP_FOUND
+    { "OSQP", copra::SolverFlag::OSQP },
+#endif
+};
 
 using solver_timers_t = std::vector<std::pair<std::string, double>>;
 

@@ -11,7 +11,8 @@ set(SOURCES
     constraints.cpp
     debugUtils.cpp
     LMPC.cpp
-    solverUtils.cpp)
+    solverUtils.cpp
+)
 
 set(HEADERS 
     ../include/api.h
@@ -24,7 +25,8 @@ set(HEADERS
     ../include/debugUtils.h
     ../include/LMPC.h 
     ../include/solverUtils.h 
-    ../include/typedefs.h)
+    ../include/typedefs.h
+)
 
 set(COPRA_COMPILE_DEFS "")
 if(${eigen-lssol_FOUND})
@@ -45,7 +47,16 @@ if(${eigen-qld_FOUND})
     list(APPEND HEADERS ../include/QLDSolver.h)
 endif()
 
+if(${eigen-osqp_FOUND})
+    list(APPEND COPRA_COMPILE_DEFS EIGEN_OSQP_FOUND)
+    list(APPEND SOURCES OSQPSolver.cpp)
+    list(APPEND HEADERS ../include/OSQPSolver.h)
+endif()
+
 add_library(${PROJECT_NAME} SHARED ${SOURCES} ${HEADERS})
+if (MSVC)
+  target_compile_definitions(${PROJECT_NAME} PUBLIC NOMINMAX)
+endif()
 set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-Dcopra_EXPORTS")
 set_target_properties(${PROJECT_NAME} PROPERTIES SOVERSION ${PROJECT_VERSION_MAJOR} VERSION ${PROJECT_VERSION})
 target_compile_definitions(${PROJECT_NAME} PUBLIC ${COPRA_COMPILE_DEFS})
