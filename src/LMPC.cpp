@@ -111,6 +111,8 @@ bool LMPC::solve()
     auto sabTime = high_resolution_clock::now();
 
     updateSystem();
+    // TODO: Need to be rewrite to minimize building time accross the solvers.
+    // It will be better to directly build all matrices in the solvers.
     makeQPForm();
     sol_->SI_problem(ps_->fullUDim, constraints_.nrEqConstr, constraints_.nrIneqConstr);
 

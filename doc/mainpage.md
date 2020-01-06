@@ -1,4 +1,4 @@
-# Copra
+# Copra {#mainpage}
 
 [![License](https://img.shields.io/badge/License-BSD%202--Clause-green.svg)](https://opensource.org/licenses/BSD-2-Clause)
 [![CI](https://github.com/jrl-umi3218/copra/workflows/CI%20of%20copra/badge.svg?branch=master)](https://github.com/jrl-umi3218/copra/actions?query=workflow%3A%22CI+of+copra%22)
