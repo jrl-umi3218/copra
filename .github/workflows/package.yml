@@ -128,7 +128,7 @@ jobs:
     - uses: actions/upload-artifact@v1
       with:
         name: packages-${{ matrix.dist }}-${{ matrix.arch }}
-        path: "${{ env.PACKAGES_OUT }}"
+        path: "/tmp/packages-${{ matrix.dist }}-${{ matrix.arch }}/"
       if: env.PACKAGE_UPLOAD == 'true'
   upload-packages:
     needs: build-packages
