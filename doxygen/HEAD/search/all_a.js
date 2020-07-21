@@ -1,7 +1,7 @@
 var searchData=
 [
   ['mainpage_2emd',['mainpage.md',['../a00071.html',1,'']]],
-  ['makeqpform',['makeQPForm',['../a00689.html#aa8f7bf60c6f97ddbf42668ef7a41f4e8',1,'copra::LMPC']]],
-  ['mixedconstraint',['MixedConstraint',['../a00653.html',1,'copra::MixedConstraint'],['../a00653.html#abc261b7d0527fb762f0df1f590817fd9',1,'copra::MixedConstraint::MixedConstraint()']]],
-  ['mixedcost',['MixedCost',['../a00681.html',1,'copra::MixedCost'],['../a00681.html#a41e58217b35a75b47320447525aa4c6d',1,'copra::MixedCost::MixedCost()']]]
+  ['makeqpform',['makeQPForm',['../a00680.html#aa8f7bf60c6f97ddbf42668ef7a41f4e8',1,'copra::LMPC']]],
+  ['mixedconstraint',['MixedConstraint',['../a00644.html',1,'copra::MixedConstraint'],['../a00644.html#abc261b7d0527fb762f0df1f590817fd9',1,'copra::MixedConstraint::MixedConstraint()']]],
+  ['mixedcost',['MixedCost',['../a00672.html',1,'copra::MixedCost'],['../a00672.html#a41e58217b35a75b47320447525aa4c6d',1,'copra::MixedCost::MixedCost()']]]
 ];

@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<title>copra::AutoSpan Struct Reference</title>
+<title>Member List</title>
 <link href="tabs.css" rel="stylesheet" type="text/css">
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 <script type="text/x-mathjax-config">
@@ -51,7 +51,7 @@ $(function() {
   </div>
 </div>
 <script type="text/javascript">
-$(document).ready(function(){initNavTree('a00633.html','');});
+$(document).ready(function(){initNavTree('a00636.html','');});
 </script>
 <div id="doc-content">
 <!-- window showing the filter options -->
@@ -69,183 +69,39 @@ $(document).ready(function(){initNavTree('a00633.html','');});
 </div>
 
 <div class="header">
-  <div class="summary">
-<a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="a00630.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">copra::AutoSpan Struct Reference</div>  </div>
+<div class="title">copra::TrajectoryConstraint Member List</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>A class made of static helper function.  
- <a href="a00633.html#details">More...</a></p>
-
-<p><code>#include &lt;AutoSpan.h&gt;</code></p>
-<table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
-Public Member Functions</h2></td></tr>
-<tr class="memitem:a2d27f2b3e87c20f8936423e6117c2eff"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00633.html#a2d27f2b3e87c20f8936423e6117c2eff">AutoSpan</a> ()=delete</td></tr>
-<tr class="separator:a2d27f2b3e87c20f8936423e6117c2eff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
-Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a77ba7800ebf240388e1a1da98fa79326"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00633.html#a77ba7800ebf240388e1a1da98fa79326">spanMatrix</a> (Eigen::MatrixXd &amp;mat, Eigen::Index new_dim, int addCols=0)</td></tr>
-<tr class="memdesc:a77ba7800ebf240388e1a1da98fa79326"><td class="mdescLeft">&#160;</td><td class="mdescRight">Repeat a matrix until it has new_dim rows.  <a href="#a77ba7800ebf240388e1a1da98fa79326">More...</a><br /></td></tr>
-<tr class="separator:a77ba7800ebf240388e1a1da98fa79326"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aff3cb8dbdd1f84b3b6819af287b6b621"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00633.html#aff3cb8dbdd1f84b3b6819af287b6b621">spanVector</a> (Eigen::VectorXd &amp;vec, Eigen::Index new_dim)</td></tr>
-<tr class="memdesc:aff3cb8dbdd1f84b3b6819af287b6b621"><td class="mdescLeft">&#160;</td><td class="mdescRight">Repeat a vector until its size is new_dim.  <a href="#aff3cb8dbdd1f84b3b6819af287b6b621">More...</a><br /></td></tr>
-<tr class="separator:aff3cb8dbdd1f84b3b6819af287b6b621"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table>
-<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>A class made of static helper function. </p>
-<p>It can't be instantiated. This class has helper functions for automatically extending a matrix to a given dimension. The result is a block diagonal matrix. </p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a2d27f2b3e87c20f8936423e6117c2eff"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2d27f2b3e87c20f8936423e6117c2eff">&#9670;&nbsp;</a></span>AutoSpan()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">copra::AutoSpan::AutoSpan </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="a77ba7800ebf240388e1a1da98fa79326"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a77ba7800ebf240388e1a1da98fa79326">&#9670;&nbsp;</a></span>spanMatrix()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void copra::AutoSpan::spanMatrix </td>
-          <td>(</td>
-          <td class="paramtype">Eigen::MatrixXd &amp;&#160;</td>
-          <td class="paramname"><em>mat</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Eigen::Index&#160;</td>
-          <td class="paramname"><em>new_dim</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>addCols</em> = <code>0</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Repeat a matrix until it has new_dim rows. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">mat</td><td>The matrix to extend. The result is stock in this parameter. </td></tr>
-    <tr><td class="paramname">new_dim</td><td>The new dimension of the matrix. Must be a multiple of mat.rows(). </td></tr>
-    <tr><td class="paramname">addCols</td><td>Additional zero columns to add at the end of the matrix: the number of columns added is addCols * mat.cols(). </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">std::domain_error</td><td>if new_dim is not a multiple of mat.rows() </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section note"><dt>Note</dt><dd>Does nothing if mat.rows() == new_dim </dd></dl>
-
-</div>
-</div>
-<a id="aff3cb8dbdd1f84b3b6819af287b6b621"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aff3cb8dbdd1f84b3b6819af287b6b621">&#9670;&nbsp;</a></span>spanVector()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void copra::AutoSpan::spanVector </td>
-          <td>(</td>
-          <td class="paramtype">Eigen::VectorXd &amp;&#160;</td>
-          <td class="paramname"><em>vec</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Eigen::Index&#160;</td>
-          <td class="paramname"><em>new_dim</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Repeat a vector until its size is new_dim. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">vec</td><td>The vector to extend. The result is stock in this parameter. </td></tr>
-    <tr><td class="paramname">new_dim</td><td>The new dimension of the vector. Must be a multiple of vec.size(). </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">std::domain_error</td><td>if new_dim is not a multiple of vec.rows() </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section note"><dt>Note</dt><dd>Does nothing if mat.rows() == new_dim </dd></dl>
-
-</div>
-</div>
-</div><!-- contents -->
+<p>This is the complete list of members for <a class="el" href="a00636.html">copra::TrajectoryConstraint</a>, including all inherited members.</p>
+<table class="directory">
+  <tr class="even"><td class="entry"><a class="el" href="a00632.html#a5b3ccfa2fa29a6c929a37e39c09ca774">A</a>() const noexcept</td><td class="entry"><a class="el" href="a00632.html">copra::EqIneqConstraint</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00632.html#ab7b8d89b45ed8a673480ff103f706499">A_</a></td><td class="entry"><a class="el" href="a00632.html">copra::EqIneqConstraint</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00636.html#a5f94a5b0d8a9df124337197cc41d0db4">autoSpan</a>() override</td><td class="entry"><a class="el" href="a00636.html">copra::TrajectoryConstraint</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00632.html#a8ac6947c7200cf594b807b42a7cd55a1">b</a>() const noexcept</td><td class="entry"><a class="el" href="a00632.html">copra::EqIneqConstraint</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00632.html#a0b8e9726a0d62b7a2d24418cf94387b8">b_</a></td><td class="entry"><a class="el" href="a00632.html">copra::EqIneqConstraint</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00628.html#af11566da4a71dff6d270d15371737525">Constraint</a>(std::string &amp;&amp;name)</td><td class="entry"><a class="el" href="a00628.html">copra::Constraint</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00636.html#a84021f7fb9f14abfa54d7d2f1b7d4f3f">constraintType</a>() const noexcept override</td><td class="entry"><a class="el" href="a00636.html">copra::TrajectoryConstraint</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00632.html#a3b5bcd61e94799deff648241ba30bd04">EqIneqConstraint</a>(const std::string &amp;name, bool isInequalityConstraint)</td><td class="entry"><a class="el" href="a00632.html">copra::EqIneqConstraint</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00628.html#a6f2be9de38949dfaea1003ac68c84048">fullSizeEntry_</a></td><td class="entry"><a class="el" href="a00628.html">copra::Constraint</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00628.html#a3528b957c39ecda07c0115310445b4f1">hasBeenInitialized_</a></td><td class="entry"><a class="el" href="a00628.html">copra::Constraint</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00636.html#a622b42be05a11d403b9155e1cf6dde96">initializeConstraint</a>(const PreviewSystem &amp;ps) override</td><td class="entry"><a class="el" href="a00636.html">copra::TrajectoryConstraint</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00632.html#af7de439d9cb797132e7cc4f0a2705edb">isIneq_</a></td><td class="entry"><a class="el" href="a00632.html">copra::EqIneqConstraint</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00628.html#a410a8822ba65980ac22454ea48e5da30">name</a>() const noexcept</td><td class="entry"><a class="el" href="a00628.html">copra::Constraint</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00628.html#a5d7e164538a2bd275de6fde97957b097">name_</a></td><td class="entry"><a class="el" href="a00628.html">copra::Constraint</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00628.html#a238e05f0ae0cffb775a75b56b7fc4d17">nrConstr</a>() noexcept</td><td class="entry"><a class="el" href="a00628.html">copra::Constraint</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00628.html#a31244fd4460da871a2d05391405b935e">nrConstr_</a></td><td class="entry"><a class="el" href="a00628.html">copra::Constraint</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00636.html#a11fc64735cf72454a890738f58cbe5c2">TrajectoryConstraint</a>(TMat &amp;&amp;E, TVec &amp;&amp;f, bool isInequalityConstraint=true)</td><td class="entry"><a class="el" href="a00636.html">copra::TrajectoryConstraint</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="a00636.html#aefe106e4cf27c5338b9554762bdcd0ed">update</a>(const PreviewSystem &amp;ps) override</td><td class="entry"><a class="el" href="a00636.html">copra::TrajectoryConstraint</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00628.html#a4de97e2ac0982f144a27c3534a7df505">~Constraint</a>()=default</td><td class="entry"><a class="el" href="a00628.html">copra::Constraint</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+</table></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.6-->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="a00075.html">copra</a></li><li class="navelem"><a class="el" href="a00633.html">AutoSpan</a></li>
-    <li class="footer">Generated on Mon Jan 6 2020 09:09:36 for copra by
+    <li class="footer">Generated on Tue Jul 21 2020 02:51:55 for copra by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

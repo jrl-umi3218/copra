@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<title>copra::MixedCost Class Reference</title>
+<title>Member List</title>
 <link href="tabs.css" rel="stylesheet" type="text/css">
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 <script type="text/x-mathjax-config">
@@ -51,7 +51,7 @@ $(function() {
   </div>
 </div>
 <script type="text/javascript">
-$(document).ready(function(){initNavTree('a00681.html','');});
+$(document).ready(function(){initNavTree('a00684.html','');});
 </script>
 <div id="doc-content">
 <!-- window showing the filter options -->
@@ -69,257 +69,29 @@ $(document).ready(function(){initNavTree('a00681.html','');});
 </div>
 
 <div class="header">
-  <div class="summary">
-<a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="a00678.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">copra::MixedCost Class Reference<span class="mlabels"><span class="mlabel">final</span></span></div>  </div>
+<div class="title">copra::LMPC::Constraints Member List</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Mixed cost function class.  
- <a href="a00681.html#details">More...</a></p>
-
-<p><code>#include &lt;costFunctions.h&gt;</code></p>
-<div class="dynheader">
-Inheritance diagram for copra::MixedCost:</div>
-<div class="dyncontent">
- <div class="center">
-  <img src="a00681.png" usemap="#copra::MixedCost_map" alt=""/>
-  <map id="copra::MixedCost_map" name="copra::MixedCost_map">
-<area href="a00665.html" title="Abstract base class that represents cost functions. " alt="copra::CostFunction" shape="rect" coords="0,0,125,24"/>
-</map>
- </div></div>
-<table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
-Public Member Functions</h2></td></tr>
-<tr class="memitem:a41e58217b35a75b47320447525aa4c6d"><td class="memTemplParams" colspan="2">template&lt;typename TMat1 , typename TMat2 , typename TVec , typename  = std::enable_if_t&lt;!is_all_arithmetic&lt;TMat1, TMat2, TVec&gt;::value&gt;&gt; </td></tr>
-<tr class="memitem:a41e58217b35a75b47320447525aa4c6d"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="a00681.html#a41e58217b35a75b47320447525aa4c6d">MixedCost</a> (TMat1 &amp;&amp;M, TMat2 &amp;&amp;N, TVec &amp;&amp;p)</td></tr>
-<tr class="memdesc:a41e58217b35a75b47320447525aa4c6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor of the mixed cost function.  <a href="#a41e58217b35a75b47320447525aa4c6d">More...</a><br /></td></tr>
-<tr class="separator:a41e58217b35a75b47320447525aa4c6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c7d22386d28596cb3adbaadaac1a9a4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00681.html#a8c7d22386d28596cb3adbaadaac1a9a4">autoSpan</a> () override</td></tr>
-<tr class="memdesc:a8c7d22386d28596cb3adbaadaac1a9a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate the full size matrices This allows one to give a cost constant matrix/vector for one step and another cost matrix/vector with the full horizon.  <a href="#a8c7d22386d28596cb3adbaadaac1a9a4">More...</a><br /></td></tr>
-<tr class="separator:a8c7d22386d28596cb3adbaadaac1a9a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a874d9561bf10922869b710fcc5d3795d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00681.html#a874d9561bf10922869b710fcc5d3795d">update</a> (const <a class="el" href="a00705.html">PreviewSystem</a> &amp;ps) override</td></tr>
-<tr class="memdesc:a874d9561bf10922869b710fcc5d3795d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute \(Q\) and \(c\).  <a href="#a874d9561bf10922869b710fcc5d3795d">More...</a><br /></td></tr>
-<tr class="separator:a874d9561bf10922869b710fcc5d3795d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba927948a228df13a9c450a6a3f4df46"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00681.html#aba927948a228df13a9c450a6a3f4df46">initializeCost</a> (const <a class="el" href="a00705.html">PreviewSystem</a> &amp;ps) override</td></tr>
-<tr class="memdesc:aba927948a228df13a9c450a6a3f4df46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the cost function.  <a href="#aba927948a228df13a9c450a6a3f4df46">More...</a><br /></td></tr>
-<tr class="separator:aba927948a228df13a9c450a6a3f4df46"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_a00665"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_a00665')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="a00665.html">copra::CostFunction</a></td></tr>
-<tr class="memitem:ac10ca4ef5e8724a253e347d18ac6c016 inherit pub_methods_a00665"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00665.html#ac10ca4ef5e8724a253e347d18ac6c016">CostFunction</a> (std::string &amp;&amp;<a class="el" href="a00665.html#a5eaa5c47c009da6a690cd71556c102d4">name</a>)</td></tr>
-<tr class="memdesc:ac10ca4ef5e8724a253e347d18ac6c016 inherit pub_methods_a00665"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor of a cost function.  <a href="a00665.html#ac10ca4ef5e8724a253e347d18ac6c016">More...</a><br /></td></tr>
-<tr class="separator:ac10ca4ef5e8724a253e347d18ac6c016 inherit pub_methods_a00665"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6f7a4c91d63b5e179f3a610f71fa6962 inherit pub_methods_a00665"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00665.html#a6f7a4c91d63b5e179f3a610f71fa6962">~CostFunction</a> ()=default</td></tr>
-<tr class="memdesc:a6f7a4c91d63b5e179f3a610f71fa6962 inherit pub_methods_a00665"><td class="mdescLeft">&#160;</td><td class="mdescRight">Declare virtual desturctor.  <a href="a00665.html#a6f7a4c91d63b5e179f3a610f71fa6962">More...</a><br /></td></tr>
-<tr class="separator:a6f7a4c91d63b5e179f3a610f71fa6962 inherit pub_methods_a00665"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeb4d0fff5319b62ce980a5b88ffd7350 inherit pub_methods_a00665"><td class="memTemplParams" colspan="2">template&lt;typename TVec , typename  = std::enable_if_t&lt;!is_all_arithmetic&lt;TVec&gt;::value&gt;&gt; </td></tr>
-<tr class="memitem:aeb4d0fff5319b62ce980a5b88ffd7350 inherit pub_methods_a00665"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="a00665.html#aeb4d0fff5319b62ce980a5b88ffd7350">weights</a> (TVec &amp;&amp;weights)</td></tr>
-<tr class="memdesc:aeb4d0fff5319b62ce980a5b88ffd7350 inherit pub_methods_a00665"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the weights of the system.  <a href="a00665.html#aeb4d0fff5319b62ce980a5b88ffd7350">More...</a><br /></td></tr>
-<tr class="separator:aeb4d0fff5319b62ce980a5b88ffd7350 inherit pub_methods_a00665"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a504fabd9aef49e5cef64f471a610a579 inherit pub_methods_a00665"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = std::enable_if_t&lt;is_all_arithmetic&lt;T&gt;::value&gt;&gt; </td></tr>
-<tr class="memitem:a504fabd9aef49e5cef64f471a610a579 inherit pub_methods_a00665"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="a00665.html#a504fabd9aef49e5cef64f471a610a579">weight</a> (T weight)</td></tr>
-<tr class="memdesc:a504fabd9aef49e5cef64f471a610a579 inherit pub_methods_a00665"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the weights of the system.  <a href="a00665.html#a504fabd9aef49e5cef64f471a610a579">More...</a><br /></td></tr>
-<tr class="separator:a504fabd9aef49e5cef64f471a610a579 inherit pub_methods_a00665"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5eaa5c47c009da6a690cd71556c102d4 inherit pub_methods_a00665"><td class="memItemLeft" align="right" valign="top">const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00665.html#a5eaa5c47c009da6a690cd71556c102d4">name</a> () const noexcept</td></tr>
-<tr class="memdesc:a5eaa5c47c009da6a690cd71556c102d4 inherit pub_methods_a00665"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function that return the name of the cost function.  <a href="a00665.html#a5eaa5c47c009da6a690cd71556c102d4">More...</a><br /></td></tr>
-<tr class="separator:a5eaa5c47c009da6a690cd71556c102d4 inherit pub_methods_a00665"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afaf5c0657a03ce01365e06adcd99c911 inherit pub_methods_a00665"><td class="memItemLeft" align="right" valign="top">const Eigen::MatrixXd &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00665.html#afaf5c0657a03ce01365e06adcd99c911">Q</a> () const noexcept</td></tr>
-<tr class="memdesc:afaf5c0657a03ce01365e06adcd99c911 inherit pub_methods_a00665"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function that return the Q matrix of the cost function A cost function is written \( \frac{1}{2} x^T Q x + c^T x\).  <a href="a00665.html#afaf5c0657a03ce01365e06adcd99c911">More...</a><br /></td></tr>
-<tr class="separator:afaf5c0657a03ce01365e06adcd99c911 inherit pub_methods_a00665"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a42aa3eb4b7fa7d4802647adeaa5905a1 inherit pub_methods_a00665"><td class="memItemLeft" align="right" valign="top">const Eigen::VectorXd &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00665.html#a42aa3eb4b7fa7d4802647adeaa5905a1">c</a> () const noexcept</td></tr>
-<tr class="memdesc:a42aa3eb4b7fa7d4802647adeaa5905a1 inherit pub_methods_a00665"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function that return the c vector of the cost function A cost function is written \( \frac{1}{2} x^T Q x + c^T x\).  <a href="a00665.html#a42aa3eb4b7fa7d4802647adeaa5905a1">More...</a><br /></td></tr>
-<tr class="separator:a42aa3eb4b7fa7d4802647adeaa5905a1 inherit pub_methods_a00665"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pro_attribs_a00665"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_a00665')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="a00665.html">copra::CostFunction</a></td></tr>
-<tr class="memitem:a5d298dc1e459e273edabf06a4dd774fd inherit pro_attribs_a00665"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00665.html#a5d298dc1e459e273edabf06a4dd774fd">name_</a></td></tr>
-<tr class="separator:a5d298dc1e459e273edabf06a4dd774fd inherit pro_attribs_a00665"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9f5c9e7c0d80493c98d47bef7f758526 inherit pro_attribs_a00665"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00665.html#a9f5c9e7c0d80493c98d47bef7f758526">fullSizeEntry_</a></td></tr>
-<tr class="separator:a9f5c9e7c0d80493c98d47bef7f758526 inherit pro_attribs_a00665"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4c0067736d9dd5f904aee153baf63f30 inherit pro_attribs_a00665"><td class="memItemLeft" align="right" valign="top">Eigen::MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00665.html#a4c0067736d9dd5f904aee153baf63f30">Q_</a></td></tr>
-<tr class="separator:a4c0067736d9dd5f904aee153baf63f30 inherit pro_attribs_a00665"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a26b4a77bbbd0ad6f132c45b2e4fd27 inherit pro_attribs_a00665"><td class="memItemLeft" align="right" valign="top">Eigen::VectorXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00665.html#a0a26b4a77bbbd0ad6f132c45b2e4fd27">c_</a></td></tr>
-<tr class="separator:a0a26b4a77bbbd0ad6f132c45b2e4fd27 inherit pro_attribs_a00665"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6d31944a622d5ddf49dda76792e9d6af inherit pro_attribs_a00665"><td class="memItemLeft" align="right" valign="top">Eigen::VectorXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00665.html#a6d31944a622d5ddf49dda76792e9d6af">weights_</a></td></tr>
-<tr class="separator:a6d31944a622d5ddf49dda76792e9d6af inherit pro_attribs_a00665"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table>
-<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Mixed cost function class. </p>
-<p>This cost function looks for a minimization of a linear combination of trajectory and control. Mathematically, it is \((MX+NU-p)^TW_M(MX+NU-p) \Leftrightarrow sum_k w_m\|Mx_k+Nu_k-p\|^2\). </p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a41e58217b35a75b47320447525aa4c6d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a41e58217b35a75b47320447525aa4c6d">&#9670;&nbsp;</a></span>MixedCost()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename TMat1 , typename TMat2 , typename TVec , typename  = std::enable_if_t&lt;!is_all_arithmetic&lt;TMat1, TMat2, TVec&gt;::value&gt;&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">copra::MixedCost::MixedCost </td>
-          <td>(</td>
-          <td class="paramtype">TMat1 &amp;&amp;&#160;</td>
-          <td class="paramname"><em>M</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">TMat2 &amp;&amp;&#160;</td>
-          <td class="paramname"><em>N</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">TVec &amp;&amp;&#160;</td>
-          <td class="paramname"><em>p</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Constructor of the mixed cost function. </p>
-<p>Create a cost function of type \((MX+NU-p)^TW_M(MX+NU-p)\). Perform a move semantic if an rvalue is given. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">M</td><td>The matrix side of the trajectory cost function </td></tr>
-    <tr><td class="paramname">N</td><td>The matrix side of the control cost function </td></tr>
-    <tr><td class="paramname">p</td><td>The vector side of the cost function </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="a8c7d22386d28596cb3adbaadaac1a9a4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8c7d22386d28596cb3adbaadaac1a9a4">&#9670;&nbsp;</a></span>autoSpan()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void copra::MixedCost::autoSpan </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Generate the full size matrices This allows one to give a cost constant matrix/vector for one step and another cost matrix/vector with the full horizon. </p>
-<p>It will expand the first matrix/vector to fit the full horizon. </p>
-
-<p>Reimplemented from <a class="el" href="a00665.html#aee898961a7e3f9a98ecb1a0c1c5a82c5">copra::CostFunction</a>.</p>
-
-</div>
-</div>
-<a id="aba927948a228df13a9c450a6a3f4df46"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aba927948a228df13a9c450a6a3f4df46">&#9670;&nbsp;</a></span>initializeCost()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void copra::MixedCost::initializeCost </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="a00705.html">PreviewSystem</a> &amp;&#160;</td>
-          <td class="paramname"><em>ps</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Initialize the cost function. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">ps</td><td>The preview system. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="exception"><dt>Exceptions</dt><dd>
-  <table class="exception">
-    <tr><td class="paramname">Throw</td><td>an std::domain_error if M, N or p is of bad dimension. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Reimplemented from <a class="el" href="a00665.html#a26446ddca57f112e8caddaac0463f31b">copra::CostFunction</a>.</p>
-
-</div>
-</div>
-<a id="a874d9561bf10922869b710fcc5d3795d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a874d9561bf10922869b710fcc5d3795d">&#9670;&nbsp;</a></span>update()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void copra::MixedCost::update </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="a00705.html">PreviewSystem</a> &amp;&#160;</td>
-          <td class="paramname"><em>ps</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Compute \(Q\) and \(c\). </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">ps</td><td>The preview system. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Implements <a class="el" href="a00665.html#a7b86c3c64cefd847dcdc20e2133ad652">copra::CostFunction</a>.</p>
-
-</div>
-</div>
-</div><!-- contents -->
+<p>This is the complete list of members for <a class="el" href="a00684.html">copra::LMPC::Constraints</a>, including all inherited members.</p>
+<table class="directory">
+  <tr class="even"><td class="entry"><a class="el" href="a00684.html#a34f65f0d9b783b58ea944c7f1cdb20c5">clear</a>()</td><td class="entry"><a class="el" href="a00684.html">copra::LMPC::Constraints</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="a00684.html#aaa04ed30d033306ed3cfa1216c48d826">Constraints</a>()</td><td class="entry"><a class="el" href="a00684.html">copra::LMPC::Constraints</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00684.html#a9d631e01287c3f391b20af3f2b736469">nrEqConstr</a></td><td class="entry"><a class="el" href="a00684.html">copra::LMPC::Constraints</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="a00684.html#a3379c2b14e0cc200de4849fcd52f82ee">nrIneqConstr</a></td><td class="entry"><a class="el" href="a00684.html">copra::LMPC::Constraints</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00684.html#aebabe9657b16549a37df2df1646745fb">spBoundConstr</a></td><td class="entry"><a class="el" href="a00684.html">copra::LMPC::Constraints</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="a00684.html#a931fbce0e0879c3d04b2ddfc74a4d296">spConstr</a></td><td class="entry"><a class="el" href="a00684.html">copra::LMPC::Constraints</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00684.html#ae36f17512a87cad8136791572608c28c">spEqConstr</a></td><td class="entry"><a class="el" href="a00684.html">copra::LMPC::Constraints</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="a00684.html#a788737b9608f6ef81cb33075d9e884ce">spIneqConstr</a></td><td class="entry"><a class="el" href="a00684.html">copra::LMPC::Constraints</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="a00684.html#a908cc2607518d7403b36334d26dc8e33">updateNr</a>()</td><td class="entry"><a class="el" href="a00684.html">copra::LMPC::Constraints</a></td><td class="entry"></td></tr>
+</table></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- HTML footer for doxygen 1.8.6-->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="a00075.html">copra</a></li><li class="navelem"><a class="el" href="a00681.html">MixedCost</a></li>
-    <li class="footer">Generated on Mon Jan 6 2020 09:09:36 for copra by
+    <li class="footer">Generated on Tue Jul 21 2020 02:51:55 for copra by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

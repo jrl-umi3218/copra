@@ -355,1658 +355,1658 @@
   </compound>
   <compound kind="struct">
     <name>copra::AutoSpan</name>
-    <filename>a00633.html</filename>
+    <filename>a00624.html</filename>
     <member kind="function">
       <type></type>
       <name>AutoSpan</name>
-      <anchorfile>a00633.html</anchorfile>
+      <anchorfile>a00624.html</anchorfile>
       <anchor>a2d27f2b3e87c20f8936423e6117c2eff</anchor>
       <arglist>()=delete</arglist>
     </member>
     <member kind="function" static="yes">
       <type>static void</type>
       <name>spanMatrix</name>
-      <anchorfile>a00633.html</anchorfile>
+      <anchorfile>a00624.html</anchorfile>
       <anchor>a77ba7800ebf240388e1a1da98fa79326</anchor>
       <arglist>(Eigen::MatrixXd &amp;mat, Eigen::Index new_dim, int addCols=0)</arglist>
     </member>
     <member kind="function" static="yes">
       <type>static void</type>
       <name>spanVector</name>
-      <anchorfile>a00633.html</anchorfile>
+      <anchorfile>a00624.html</anchorfile>
       <anchor>aff3cb8dbdd1f84b3b6819af287b6b621</anchor>
       <arglist>(Eigen::VectorXd &amp;vec, Eigen::Index new_dim)</arglist>
     </member>
   </compound>
   <compound kind="class">
     <name>copra::Constraint</name>
-    <filename>a00637.html</filename>
+    <filename>a00628.html</filename>
     <member kind="function">
       <type></type>
       <name>Constraint</name>
-      <anchorfile>a00637.html</anchorfile>
+      <anchorfile>a00628.html</anchorfile>
       <anchor>af11566da4a71dff6d270d15371737525</anchor>
       <arglist>(std::string &amp;&amp;name)</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual</type>
       <name>~Constraint</name>
-      <anchorfile>a00637.html</anchorfile>
+      <anchorfile>a00628.html</anchorfile>
       <anchor>a4de97e2ac0982f144a27c3534a7df505</anchor>
       <arglist>()=default</arglist>
     </member>
     <member kind="function" virtualness="pure">
       <type>virtual void</type>
       <name>autoSpan</name>
-      <anchorfile>a00637.html</anchorfile>
+      <anchorfile>a00628.html</anchorfile>
       <anchor>a11998e49d547c3e6e70b221a38fbcef7</anchor>
       <arglist>()=0</arglist>
     </member>
     <member kind="function" virtualness="pure">
       <type>virtual void</type>
       <name>initializeConstraint</name>
-      <anchorfile>a00637.html</anchorfile>
+      <anchorfile>a00628.html</anchorfile>
       <anchor>aa619d1b0446450a496d1f1077600bc07</anchor>
       <arglist>(const PreviewSystem &amp;ps)=0</arglist>
     </member>
     <member kind="function" virtualness="pure">
       <type>virtual void</type>
       <name>update</name>
-      <anchorfile>a00637.html</anchorfile>
+      <anchorfile>a00628.html</anchorfile>
       <anchor>aae0f78b14981a50d29a7f7cf923b57fb</anchor>
       <arglist>(const PreviewSystem &amp;ps)=0</arglist>
     </member>
     <member kind="function" virtualness="pure">
       <type>virtual ConstraintFlag</type>
       <name>constraintType</name>
-      <anchorfile>a00637.html</anchorfile>
+      <anchorfile>a00628.html</anchorfile>
       <anchor>ab68a9317a9cb40b847ea8f51be3c7065</anchor>
       <arglist>() const noexcept=0</arglist>
     </member>
     <member kind="function">
       <type>const std::string &amp;</type>
       <name>name</name>
-      <anchorfile>a00637.html</anchorfile>
+      <anchorfile>a00628.html</anchorfile>
       <anchor>a410a8822ba65980ac22454ea48e5da30</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>nrConstr</name>
-      <anchorfile>a00637.html</anchorfile>
+      <anchorfile>a00628.html</anchorfile>
       <anchor>a238e05f0ae0cffb775a75b56b7fc4d17</anchor>
       <arglist>() noexcept</arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>std::string</type>
       <name>name_</name>
-      <anchorfile>a00637.html</anchorfile>
+      <anchorfile>a00628.html</anchorfile>
       <anchor>a5d7e164538a2bd275de6fde97957b097</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>int</type>
       <name>nrConstr_</name>
-      <anchorfile>a00637.html</anchorfile>
+      <anchorfile>a00628.html</anchorfile>
       <anchor>a31244fd4460da871a2d05391405b935e</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>bool</type>
       <name>fullSizeEntry_</name>
-      <anchorfile>a00637.html</anchorfile>
+      <anchorfile>a00628.html</anchorfile>
       <anchor>a6f2be9de38949dfaea1003ac68c84048</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>bool</type>
       <name>hasBeenInitialized_</name>
-      <anchorfile>a00637.html</anchorfile>
+      <anchorfile>a00628.html</anchorfile>
       <anchor>a3528b957c39ecda07c0115310445b4f1</anchor>
       <arglist></arglist>
     </member>
   </compound>
   <compound kind="struct">
     <name>copra::LMPC::Constraints</name>
-    <filename>a00693.html</filename>
+    <filename>a00684.html</filename>
     <member kind="function">
       <type></type>
       <name>Constraints</name>
-      <anchorfile>a00693.html</anchorfile>
+      <anchorfile>a00684.html</anchorfile>
       <anchor>aaa04ed30d033306ed3cfa1216c48d826</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>clear</name>
-      <anchorfile>a00693.html</anchorfile>
+      <anchorfile>a00684.html</anchorfile>
       <anchor>a34f65f0d9b783b58ea944c7f1cdb20c5</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>updateNr</name>
-      <anchorfile>a00693.html</anchorfile>
+      <anchorfile>a00684.html</anchorfile>
       <anchor>a908cc2607518d7403b36334d26dc8e33</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="variable">
       <type>int</type>
       <name>nrEqConstr</name>
-      <anchorfile>a00693.html</anchorfile>
+      <anchorfile>a00684.html</anchorfile>
       <anchor>a9d631e01287c3f391b20af3f2b736469</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>int</type>
       <name>nrIneqConstr</name>
-      <anchorfile>a00693.html</anchorfile>
+      <anchorfile>a00684.html</anchorfile>
       <anchor>a3379c2b14e0cc200de4849fcd52f82ee</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>std::vector&lt; std::shared_ptr&lt; Constraint &gt; &gt;</type>
       <name>spConstr</name>
-      <anchorfile>a00693.html</anchorfile>
+      <anchorfile>a00684.html</anchorfile>
       <anchor>a931fbce0e0879c3d04b2ddfc74a4d296</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>std::vector&lt; std::shared_ptr&lt; EqIneqConstraint &gt; &gt;</type>
       <name>spEqConstr</name>
-      <anchorfile>a00693.html</anchorfile>
+      <anchorfile>a00684.html</anchorfile>
       <anchor>ae36f17512a87cad8136791572608c28c</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>std::vector&lt; std::shared_ptr&lt; EqIneqConstraint &gt; &gt;</type>
       <name>spIneqConstr</name>
-      <anchorfile>a00693.html</anchorfile>
+      <anchorfile>a00684.html</anchorfile>
       <anchor>a788737b9608f6ef81cb33075d9e884ce</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>std::vector&lt; std::shared_ptr&lt; ControlBoundConstraint &gt; &gt;</type>
       <name>spBoundConstr</name>
-      <anchorfile>a00693.html</anchorfile>
+      <anchorfile>a00684.html</anchorfile>
       <anchor>aebabe9657b16549a37df2df1646745fb</anchor>
       <arglist></arglist>
     </member>
   </compound>
   <compound kind="class">
     <name>copra::ControlBoundConstraint</name>
-    <filename>a00661.html</filename>
+    <filename>a00652.html</filename>
     <base>copra::Constraint</base>
     <member kind="function">
       <type></type>
       <name>ControlBoundConstraint</name>
-      <anchorfile>a00661.html</anchorfile>
+      <anchorfile>a00652.html</anchorfile>
       <anchor>a1346094c073c60e077e3baa284cbbd51</anchor>
       <arglist>(TVec1 &amp;&amp;lower, TVec2 &amp;&amp;upper)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>autoSpan</name>
-      <anchorfile>a00661.html</anchorfile>
+      <anchorfile>a00652.html</anchorfile>
       <anchor>a90b55e5ff6f60adebe5388511a8864a0</anchor>
       <arglist>() override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>initializeConstraint</name>
-      <anchorfile>a00661.html</anchorfile>
+      <anchorfile>a00652.html</anchorfile>
       <anchor>a6b8e3f0e61355f79b3d02901eddf7659</anchor>
       <arglist>(const PreviewSystem &amp;ps) override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>update</name>
-      <anchorfile>a00661.html</anchorfile>
+      <anchorfile>a00652.html</anchorfile>
       <anchor>a016249d73d1b645fa9cf548ec0df1303</anchor>
       <arglist>(const PreviewSystem &amp;ps) override</arglist>
     </member>
     <member kind="function">
       <type>ConstraintFlag</type>
       <name>constraintType</name>
-      <anchorfile>a00661.html</anchorfile>
+      <anchorfile>a00652.html</anchorfile>
       <anchor>ae6155702e23c2028b30146a5a9d16349</anchor>
       <arglist>() const noexcept override</arglist>
     </member>
     <member kind="function">
       <type>const Eigen::VectorXd &amp;</type>
       <name>lower</name>
-      <anchorfile>a00661.html</anchorfile>
+      <anchorfile>a00652.html</anchorfile>
       <anchor>a834c5b62ca26e9b1d851f3e6a749a8d6</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
       <type>const Eigen::VectorXd &amp;</type>
       <name>upper</name>
-      <anchorfile>a00661.html</anchorfile>
+      <anchorfile>a00652.html</anchorfile>
       <anchor>a3a02604a8ab5ea9b3e35d0fbe4dddfd8</anchor>
       <arglist>()</arglist>
     </member>
   </compound>
   <compound kind="class">
     <name>copra::ControlConstraint</name>
-    <filename>a00649.html</filename>
+    <filename>a00640.html</filename>
     <base>copra::EqIneqConstraint</base>
     <member kind="function">
       <type></type>
       <name>ControlConstraint</name>
-      <anchorfile>a00649.html</anchorfile>
+      <anchorfile>a00640.html</anchorfile>
       <anchor>ae65a187e20ea57e4d1a6afdc86049561</anchor>
       <arglist>(TMat &amp;&amp;G, TVec &amp;&amp;f, bool isInequalityConstraint=true)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>autoSpan</name>
-      <anchorfile>a00649.html</anchorfile>
+      <anchorfile>a00640.html</anchorfile>
       <anchor>a2a68841fc81a57332b62b02da2a020b9</anchor>
       <arglist>() override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>initializeConstraint</name>
-      <anchorfile>a00649.html</anchorfile>
+      <anchorfile>a00640.html</anchorfile>
       <anchor>abe6716f92290ba6c169c9d0a9307c61a</anchor>
       <arglist>(const PreviewSystem &amp;ps) override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>update</name>
-      <anchorfile>a00649.html</anchorfile>
+      <anchorfile>a00640.html</anchorfile>
       <anchor>a667c5244518e6f68095502cdfd98dfee</anchor>
       <arglist>(const PreviewSystem &amp;ps) override</arglist>
     </member>
     <member kind="function">
       <type>ConstraintFlag</type>
       <name>constraintType</name>
-      <anchorfile>a00649.html</anchorfile>
+      <anchorfile>a00640.html</anchorfile>
       <anchor>a51178475967231c313583201a6bb8346</anchor>
       <arglist>() const noexcept override</arglist>
     </member>
   </compound>
   <compound kind="class">
     <name>copra::ControlCost</name>
-    <filename>a00677.html</filename>
+    <filename>a00668.html</filename>
     <base>copra::CostFunction</base>
     <member kind="function">
       <type></type>
       <name>ControlCost</name>
-      <anchorfile>a00677.html</anchorfile>
+      <anchorfile>a00668.html</anchorfile>
       <anchor>ab5880a9c3662255b42c1db9b02b6bef0</anchor>
       <arglist>(TMat &amp;&amp;N, TVec &amp;&amp;p)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>autoSpan</name>
-      <anchorfile>a00677.html</anchorfile>
+      <anchorfile>a00668.html</anchorfile>
       <anchor>ae14141c7e3faca8990deabf89465d9f2</anchor>
       <arglist>() override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>update</name>
-      <anchorfile>a00677.html</anchorfile>
+      <anchorfile>a00668.html</anchorfile>
       <anchor>a429e123a6364d185409818bb3acbf858</anchor>
       <arglist>(const PreviewSystem &amp;ps) override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>initializeCost</name>
-      <anchorfile>a00677.html</anchorfile>
+      <anchorfile>a00668.html</anchorfile>
       <anchor>a1bf486b29b693e358480b8a9fe3d013c</anchor>
       <arglist>(const PreviewSystem &amp;ps) override</arglist>
     </member>
   </compound>
   <compound kind="class">
     <name>copra::CostFunction</name>
-    <filename>a00665.html</filename>
+    <filename>a00656.html</filename>
     <member kind="function">
       <type></type>
       <name>CostFunction</name>
-      <anchorfile>a00665.html</anchorfile>
+      <anchorfile>a00656.html</anchorfile>
       <anchor>ac10ca4ef5e8724a253e347d18ac6c016</anchor>
       <arglist>(std::string &amp;&amp;name)</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual</type>
       <name>~CostFunction</name>
-      <anchorfile>a00665.html</anchorfile>
+      <anchorfile>a00656.html</anchorfile>
       <anchor>a6f7a4c91d63b5e179f3a610f71fa6962</anchor>
       <arglist>()=default</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual void</type>
       <name>autoSpan</name>
-      <anchorfile>a00665.html</anchorfile>
+      <anchorfile>a00656.html</anchorfile>
       <anchor>aee898961a7e3f9a98ecb1a0c1c5a82c5</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual void</type>
       <name>initializeCost</name>
-      <anchorfile>a00665.html</anchorfile>
+      <anchorfile>a00656.html</anchorfile>
       <anchor>a26446ddca57f112e8caddaac0463f31b</anchor>
       <arglist>(const PreviewSystem &amp;ps)</arglist>
     </member>
     <member kind="function" virtualness="pure">
       <type>virtual void</type>
       <name>update</name>
-      <anchorfile>a00665.html</anchorfile>
+      <anchorfile>a00656.html</anchorfile>
       <anchor>a7b86c3c64cefd847dcdc20e2133ad652</anchor>
       <arglist>(const PreviewSystem &amp;ps)=0</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>weights</name>
-      <anchorfile>a00665.html</anchorfile>
+      <anchorfile>a00656.html</anchorfile>
       <anchor>aeb4d0fff5319b62ce980a5b88ffd7350</anchor>
       <arglist>(TVec &amp;&amp;weights)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>weight</name>
-      <anchorfile>a00665.html</anchorfile>
+      <anchorfile>a00656.html</anchorfile>
       <anchor>a504fabd9aef49e5cef64f471a610a579</anchor>
       <arglist>(T weight)</arglist>
     </member>
     <member kind="function">
       <type>const std::string &amp;</type>
       <name>name</name>
-      <anchorfile>a00665.html</anchorfile>
+      <anchorfile>a00656.html</anchorfile>
       <anchor>a5eaa5c47c009da6a690cd71556c102d4</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
       <type>const Eigen::MatrixXd &amp;</type>
       <name>Q</name>
-      <anchorfile>a00665.html</anchorfile>
+      <anchorfile>a00656.html</anchorfile>
       <anchor>afaf5c0657a03ce01365e06adcd99c911</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
       <type>const Eigen::VectorXd &amp;</type>
       <name>c</name>
-      <anchorfile>a00665.html</anchorfile>
+      <anchorfile>a00656.html</anchorfile>
       <anchor>a42aa3eb4b7fa7d4802647adeaa5905a1</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>std::string</type>
       <name>name_</name>
-      <anchorfile>a00665.html</anchorfile>
+      <anchorfile>a00656.html</anchorfile>
       <anchor>a5d298dc1e459e273edabf06a4dd774fd</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>bool</type>
       <name>fullSizeEntry_</name>
-      <anchorfile>a00665.html</anchorfile>
+      <anchorfile>a00656.html</anchorfile>
       <anchor>a9f5c9e7c0d80493c98d47bef7f758526</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>Eigen::MatrixXd</type>
       <name>Q_</name>
-      <anchorfile>a00665.html</anchorfile>
+      <anchorfile>a00656.html</anchorfile>
       <anchor>a4c0067736d9dd5f904aee153baf63f30</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>Eigen::VectorXd</type>
       <name>c_</name>
-      <anchorfile>a00665.html</anchorfile>
+      <anchorfile>a00656.html</anchorfile>
       <anchor>a0a26b4a77bbbd0ad6f132c45b2e4fd27</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>Eigen::VectorXd</type>
       <name>weights_</name>
-      <anchorfile>a00665.html</anchorfile>
+      <anchorfile>a00656.html</anchorfile>
       <anchor>a6d31944a622d5ddf49dda76792e9d6af</anchor>
       <arglist></arglist>
     </member>
   </compound>
   <compound kind="class">
     <name>copra::EqIneqConstraint</name>
-    <filename>a00641.html</filename>
+    <filename>a00632.html</filename>
     <base>copra::Constraint</base>
     <member kind="function">
       <type></type>
       <name>EqIneqConstraint</name>
-      <anchorfile>a00641.html</anchorfile>
+      <anchorfile>a00632.html</anchorfile>
       <anchor>a3b5bcd61e94799deff648241ba30bd04</anchor>
       <arglist>(const std::string &amp;name, bool isInequalityConstraint)</arglist>
     </member>
     <member kind="function">
       <type>const Eigen::MatrixXd &amp;</type>
       <name>A</name>
-      <anchorfile>a00641.html</anchorfile>
+      <anchorfile>a00632.html</anchorfile>
       <anchor>a5b3ccfa2fa29a6c929a37e39c09ca774</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
       <type>const Eigen::VectorXd &amp;</type>
       <name>b</name>
-      <anchorfile>a00641.html</anchorfile>
+      <anchorfile>a00632.html</anchorfile>
       <anchor>a8ac6947c7200cf594b807b42a7cd55a1</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>Eigen::MatrixXd</type>
       <name>A_</name>
-      <anchorfile>a00641.html</anchorfile>
+      <anchorfile>a00632.html</anchorfile>
       <anchor>ab7b8d89b45ed8a673480ff103f706499</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>Eigen::VectorXd</type>
       <name>b_</name>
-      <anchorfile>a00641.html</anchorfile>
+      <anchorfile>a00632.html</anchorfile>
       <anchor>a0b8e9726a0d62b7a2d24418cf94387b8</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>bool</type>
       <name>isIneq_</name>
-      <anchorfile>a00641.html</anchorfile>
+      <anchorfile>a00632.html</anchorfile>
       <anchor>af7de439d9cb797132e7cc4f0a2705edb</anchor>
       <arglist></arglist>
     </member>
   </compound>
   <compound kind="class">
     <name>copra::GUROBISolver</name>
-    <filename>a00685.html</filename>
+    <filename>a00676.html</filename>
     <base>copra::SolverInterface</base>
     <member kind="function">
       <type></type>
       <name>GUROBISolver</name>
-      <anchorfile>a00685.html</anchorfile>
+      <anchorfile>a00676.html</anchorfile>
       <anchor>ad092208ffa4c4ecb22f0c44806996546</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>SI_fail</name>
-      <anchorfile>a00685.html</anchorfile>
+      <anchorfile>a00676.html</anchorfile>
       <anchor>abb4a9e9c011e2083c4426c34eb74708e</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>SI_inform</name>
-      <anchorfile>a00685.html</anchorfile>
+      <anchorfile>a00676.html</anchorfile>
       <anchor>a06a794c4db4032ed4a7e962d2263200e</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>SI_iter</name>
-      <anchorfile>a00685.html</anchorfile>
+      <anchorfile>a00676.html</anchorfile>
       <anchor>a9b61352c5a4dfd3f3400e667b2a33380</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>SI_printLevel</name>
-      <anchorfile>a00685.html</anchorfile>
+      <anchorfile>a00676.html</anchorfile>
       <anchor>a79d35aac8e069dcc31694fe1967a698f</anchor>
       <arglist>(int pl) override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>SI_feasibilityTolerance</name>
-      <anchorfile>a00685.html</anchorfile>
+      <anchorfile>a00676.html</anchorfile>
       <anchor>a9960c710d8ffeb67e7a052c7c9874f7f</anchor>
       <arglist>(double tol) override</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>SI_maxIter</name>
-      <anchorfile>a00685.html</anchorfile>
+      <anchorfile>a00676.html</anchorfile>
       <anchor>a9c4cb47a70ddaf6c9d06a335f2e84658</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>SI_maxIter</name>
-      <anchorfile>a00685.html</anchorfile>
+      <anchorfile>a00676.html</anchorfile>
       <anchor>a0e0ce11b768ab0980ba99322e65a7f83</anchor>
       <arglist>(int maxIter) override</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
       <name>SI_warmStart</name>
-      <anchorfile>a00685.html</anchorfile>
+      <anchorfile>a00676.html</anchorfile>
       <anchor>af49f7af102ff8020224133e168bdcea3</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>SI_warmStart</name>
-      <anchorfile>a00685.html</anchorfile>
+      <anchorfile>a00676.html</anchorfile>
       <anchor>a915400ec2aeff01d9f725c0690238b68</anchor>
       <arglist>(bool w) override</arglist>
     </member>
     <member kind="function">
       <type>const Eigen::VectorXd &amp;</type>
       <name>SI_result</name>
-      <anchorfile>a00685.html</anchorfile>
+      <anchorfile>a00676.html</anchorfile>
       <anchor>ad92b028e03399863b6b859b07b2cdf80</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>SI_problem</name>
-      <anchorfile>a00685.html</anchorfile>
+      <anchorfile>a00676.html</anchorfile>
       <anchor>a5cd83d50b0c17df661fa314b5a93f19c</anchor>
       <arglist>(int nrVar, int nrEq, int nrInEq) override</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
       <name>SI_solve</name>
-      <anchorfile>a00685.html</anchorfile>
+      <anchorfile>a00676.html</anchorfile>
       <anchor>aecebf178ee6d97bead9527f9851ae1fe</anchor>
       <arglist>(const Eigen::MatrixXd &amp;Q, const Eigen::VectorXd &amp;c, const Eigen::MatrixXd &amp;Aeq, const Eigen::VectorXd &amp;beq, const Eigen::MatrixXd &amp;Aineq, const Eigen::VectorXd &amp;bineq, const Eigen::VectorXd &amp;XL, const Eigen::VectorXd &amp;XU) override</arglist>
     </member>
     <member kind="function">
       <type>Eigen::GurobiDense &amp;</type>
       <name>baseSolver</name>
-      <anchorfile>a00685.html</anchorfile>
+      <anchorfile>a00676.html</anchorfile>
       <anchor>a520b1773b7b253074e35cbfb8fbd7e6e</anchor>
       <arglist>() noexcept</arglist>
     </member>
   </compound>
   <compound kind="struct">
     <name>copra::is_all_arithmetic</name>
-    <filename>a00721.html</filename>
+    <filename>a00712.html</filename>
     <templarg>T1</templarg>
     <templarg>T2</templarg>
     <templarg>T3</templarg>
   </compound>
   <compound kind="struct">
     <name>copra::is_all_arithmetic&lt; std::false_type, T2, T3 &gt;</name>
-    <filename>a00725.html</filename>
+    <filename>a00716.html</filename>
     <templarg></templarg>
     <templarg></templarg>
     <member kind="variable" static="yes">
       <type>static const bool</type>
       <name>value</name>
-      <anchorfile>a00725.html</anchorfile>
+      <anchorfile>a00716.html</anchorfile>
       <anchor>a3623ea5e8a528e8c42806cbdc3999f3a</anchor>
       <arglist></arglist>
     </member>
   </compound>
   <compound kind="class">
     <name>is_all_arithmetic&lt; std::is_arithmetic&lt; std::decay_t&lt; T2 &gt; &gt;::type, T3, std::true_type &gt;</name>
-    <filename>a00721.html</filename>
+    <filename>a00712.html</filename>
   </compound>
   <compound kind="struct">
     <name>copra::is_all_arithmetic&lt; std::true_type, std::true_type, std::true_type &gt;</name>
-    <filename>a00733.html</filename>
+    <filename>a00724.html</filename>
     <member kind="variable" static="yes">
       <type>static const bool</type>
       <name>value</name>
-      <anchorfile>a00733.html</anchorfile>
+      <anchorfile>a00724.html</anchorfile>
       <anchor>a365795a4643a7668032f1022b7a16314</anchor>
       <arglist></arglist>
     </member>
   </compound>
   <compound kind="struct">
     <name>copra::is_all_arithmetic&lt; std::true_type, T2, T3 &gt;</name>
-    <filename>a00729.html</filename>
+    <filename>a00720.html</filename>
     <templarg></templarg>
     <templarg></templarg>
     <base>is_all_arithmetic&lt; std::is_arithmetic&lt; std::decay_t&lt; T2 &gt; &gt;::type, T3, std::true_type &gt;</base>
   </compound>
   <compound kind="class">
     <name>copra::LMPC</name>
-    <filename>a00689.html</filename>
+    <filename>a00680.html</filename>
     <class kind="struct">copra::LMPC::Constraints</class>
     <member kind="function">
       <type></type>
       <name>LMPC</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>ac6241f9877b9bbb21ae159949831120f</anchor>
       <arglist>(SolverFlag sFlag=SolverFlag::DEFAULT)</arglist>
     </member>
     <member kind="function">
       <type></type>
       <name>LMPC</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>a8a0cdcb0a20480afb30358307a146c09</anchor>
       <arglist>(const std::shared_ptr&lt; PreviewSystem &gt; &amp;ps, SolverFlag sFlag=SolverFlag::DEFAULT)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>selectQPSolver</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>ad11655a50a8d784f8c17ae9e1bc3c850</anchor>
       <arglist>(SolverFlag flag)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>useSolver</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>a221f5092f2ad3760416268f5ae7eb767</anchor>
       <arglist>(std::unique_ptr&lt; SolverInterface &gt; &amp;&amp;solver)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>initializeController</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>a4c7fcffb55415fc491a95b851f56397d</anchor>
       <arglist>(const std::shared_ptr&lt; PreviewSystem &gt; &amp;ps)</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
       <name>solve</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>a6741dab4d91e7c9c844317f19df30da6</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>inform</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>a9eb24ba9b41a3176e3ef5f82b76b67a6</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
       <type>SolverInterface &amp;</type>
       <name>solver</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>ac238e44de1f7e192d56deee19b3ea8d5</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
       <type>const Eigen::VectorXd &amp;</type>
       <name>control</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>a065ef18363713c239ee06e0e05943da7</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
       <type>Eigen::VectorXd</type>
       <name>trajectory</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>a527660646f1be65838b8a8a5ad4968ec</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
       <type>double</type>
       <name>solveTime</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>a0a20b1cf9dfd431657cea004a6d6cb7b</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
       <type>double</type>
       <name>solveAndBuildTime</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>ac509b9a718cbb8e3ae1151fc1cc43ebe</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>addCost</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>a070d0a4d570b9cd5cd38e268eeac2a08</anchor>
       <arglist>(const std::shared_ptr&lt; CostFunction &gt; &amp;costFun)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>addConstraint</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>a8486f78f9bf6eb8a5c51f86e93a55ee7</anchor>
       <arglist>(const std::shared_ptr&lt; Constraint &gt; &amp;constr)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>resetConstraints</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>adb77833aac37af535172b40ad3902f92</anchor>
       <arglist>() noexcept</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>removeCost</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>ab9e9cbf1c221a2c6b05393c6048042a8</anchor>
       <arglist>(const std::shared_ptr&lt; CostFunction &gt; &amp;costFun)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>removeConstraint</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>ae41339e73c920550c801f12361db57c9</anchor>
       <arglist>(const std::shared_ptr&lt; Constraint &gt; &amp;constr)</arglist>
     </member>
     <member kind="function" protection="protected">
       <type>void</type>
       <name>addConstraintByType</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>a1e11aa3124bd310f32353fc524ee94dd</anchor>
       <arglist>(const std::shared_ptr&lt; Constraint &gt; &amp;constr)</arglist>
     </member>
     <member kind="function" protection="protected">
       <type>void</type>
       <name>clearConstraintMatrices</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>ae3ed6980cac5ead0e461bb96cf7df340</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function" protection="protected">
       <type>void</type>
       <name>updateSystem</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>a86ffaee72eeaa9451e1143ecbc5fbf84</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function" protection="protected">
       <type>void</type>
       <name>makeQPForm</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>aa8f7bf60c6f97ddbf42668ef7a41f4e8</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function" protection="protected">
       <type>void</type>
       <name>checkDeleteCostsAndConstraints</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>aa831df0b79b97a9787fa1bec2e4cc05e</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>std::shared_ptr&lt; PreviewSystem &gt;</type>
       <name>ps_</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>afa357443f1b9ccf5ba3d4f86af9e4db4</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>std::unique_ptr&lt; SolverInterface &gt;</type>
       <name>sol_</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>a54cb31bdf8dd5337ed3afc7690fb2338</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>std::vector&lt; std::shared_ptr&lt; CostFunction &gt; &gt;</type>
       <name>spCost_</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>a0157fa7a52ef3a1fb533acfadf3a2ced</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>Constraints</type>
       <name>constraints_</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>a72e454e97d3c03fb995e5abf10bcee52</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>Eigen::MatrixXd</type>
       <name>Q_</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>ab4499d3aebccad832902933b631072a0</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>Eigen::MatrixXd</type>
       <name>Aineq_</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>a7b6ea878ca1a95e70f36a3eafd7e12bb</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>Eigen::MatrixXd</type>
       <name>Aeq_</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>a6e1ecf4d0e6ad6279f6d27e13e256786</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>Eigen::VectorXd</type>
       <name>c_</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>a80bb90c8d9ffe8892a71d05c6a2dc221</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>Eigen::VectorXd</type>
       <name>bineq_</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>a30230364f4355dee2d743402028f5482</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>Eigen::VectorXd</type>
       <name>beq_</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>a9729cade0a1a7dafef47f56eadb2b921</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>Eigen::VectorXd</type>
       <name>lb_</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>a92ff5a4365ae1c3257edbb9380a2acf6</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>Eigen::VectorXd</type>
       <name>ub_</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>ae1031c267c293dbb02c9e7d128aa157e</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>std::chrono::duration&lt; double &gt;</type>
       <name>solveTime_</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>ad48afc8605ae37f45f0adba34b8cde25</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>std::chrono::duration&lt; double &gt;</type>
       <name>solveAndBuildTime_</name>
-      <anchorfile>a00689.html</anchorfile>
+      <anchorfile>a00680.html</anchorfile>
       <anchor>a98c81c0ffc95f4ec4b473618f1b74743</anchor>
       <arglist></arglist>
     </member>
   </compound>
   <compound kind="class">
     <name>copra::LSSOLSolver</name>
-    <filename>a00697.html</filename>
+    <filename>a00688.html</filename>
     <base>copra::SolverInterface</base>
     <member kind="function">
       <type></type>
       <name>LSSOLSolver</name>
-      <anchorfile>a00697.html</anchorfile>
+      <anchorfile>a00688.html</anchorfile>
       <anchor>acedb4d32fb8bb88966d6bbea36e52a1e</anchor>
       <arglist>()=default</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>SI_fail</name>
-      <anchorfile>a00697.html</anchorfile>
+      <anchorfile>a00688.html</anchorfile>
       <anchor>a681b5b3ba0b439922d267070725ea710</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>SI_printLevel</name>
-      <anchorfile>a00697.html</anchorfile>
+      <anchorfile>a00688.html</anchorfile>
       <anchor>af081a42c7e79610159f7443b70a42057</anchor>
       <arglist>(int pl) override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>SI_inform</name>
-      <anchorfile>a00697.html</anchorfile>
+      <anchorfile>a00688.html</anchorfile>
       <anchor>ab380e7a964a7d1f63b49bff32da6b555</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>SI_iter</name>
-      <anchorfile>a00697.html</anchorfile>
+      <anchorfile>a00688.html</anchorfile>
       <anchor>a5c61d6f44c20c62ac652ed66d68d1e6f</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>SI_maxIter</name>
-      <anchorfile>a00697.html</anchorfile>
+      <anchorfile>a00688.html</anchorfile>
       <anchor>a9694f997e04558d3642d62c63bb6772a</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>SI_maxIter</name>
-      <anchorfile>a00697.html</anchorfile>
+      <anchorfile>a00688.html</anchorfile>
       <anchor>aec023ad64baaea0c2ad543e165dd69ae</anchor>
       <arglist>(int maxIter) override</arglist>
     </member>
     <member kind="function">
       <type>double</type>
       <name>SI_feasibilityTolerance</name>
-      <anchorfile>a00697.html</anchorfile>
+      <anchorfile>a00688.html</anchorfile>
       <anchor>a36946607efd81bdb982ccdb4cd284291</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>SI_feasibilityTolerance</name>
-      <anchorfile>a00697.html</anchorfile>
+      <anchorfile>a00688.html</anchorfile>
       <anchor>a96e5671a5f41a01d9a6e473e24109b71</anchor>
       <arglist>(double tol) override</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
       <name>SI_warmStart</name>
-      <anchorfile>a00697.html</anchorfile>
+      <anchorfile>a00688.html</anchorfile>
       <anchor>aabba2aeb1014ed7803e23c6ca46285f3</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>SI_warmStart</name>
-      <anchorfile>a00697.html</anchorfile>
+      <anchorfile>a00688.html</anchorfile>
       <anchor>a0dd936abfa86ca50e81bcc2e7bd3ca29</anchor>
       <arglist>(bool w) override</arglist>
     </member>
     <member kind="function">
       <type>const Eigen::VectorXd &amp;</type>
       <name>SI_result</name>
-      <anchorfile>a00697.html</anchorfile>
+      <anchorfile>a00688.html</anchorfile>
       <anchor>a048bcf3e46320dcf31b0340ff3499e19</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>SI_problem</name>
-      <anchorfile>a00697.html</anchorfile>
+      <anchorfile>a00688.html</anchorfile>
       <anchor>aa24cf6d982ebfb0f503328457e89e2a1</anchor>
       <arglist>(int nrVar, int nrEq, int nrInEq) override</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
       <name>SI_solve</name>
-      <anchorfile>a00697.html</anchorfile>
+      <anchorfile>a00688.html</anchorfile>
       <anchor>adb30a48fe1247ed9962486a1d8c55b99</anchor>
       <arglist>(const Eigen::MatrixXd &amp;Q, const Eigen::VectorXd &amp;c, const Eigen::MatrixXd &amp;Aeq, const Eigen::VectorXd &amp;beq, const Eigen::MatrixXd &amp;Aineq, const Eigen::VectorXd &amp;bineq, const Eigen::VectorXd &amp;XL, const Eigen::VectorXd &amp;XU) override</arglist>
     </member>
     <member kind="function">
       <type>Eigen::LSSOL_QP &amp;</type>
       <name>baseSolver</name>
-      <anchorfile>a00697.html</anchorfile>
+      <anchorfile>a00688.html</anchorfile>
       <anchor>ae927054cfc17b6032951c9f3167c9590</anchor>
       <arglist>() noexcept</arglist>
     </member>
   </compound>
   <compound kind="class">
     <name>copra::MixedConstraint</name>
-    <filename>a00653.html</filename>
+    <filename>a00644.html</filename>
     <base>copra::EqIneqConstraint</base>
     <member kind="function">
       <type></type>
       <name>MixedConstraint</name>
-      <anchorfile>a00653.html</anchorfile>
+      <anchorfile>a00644.html</anchorfile>
       <anchor>abc261b7d0527fb762f0df1f590817fd9</anchor>
       <arglist>(TMat1 &amp;&amp;E, TMat2 &amp;&amp;G, TVec &amp;&amp;f, bool isInequalityConstraint=true)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>autoSpan</name>
-      <anchorfile>a00653.html</anchorfile>
+      <anchorfile>a00644.html</anchorfile>
       <anchor>a28d1e4713204dac1d61ef7c5548607a0</anchor>
       <arglist>() override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>initializeConstraint</name>
-      <anchorfile>a00653.html</anchorfile>
+      <anchorfile>a00644.html</anchorfile>
       <anchor>a48d81551fc7cb94c44bfdbc819d93eac</anchor>
       <arglist>(const PreviewSystem &amp;ps) override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>update</name>
-      <anchorfile>a00653.html</anchorfile>
+      <anchorfile>a00644.html</anchorfile>
       <anchor>a01a901c11eea5e254801877f3656a66a</anchor>
       <arglist>(const PreviewSystem &amp;ps) override</arglist>
     </member>
     <member kind="function">
       <type>ConstraintFlag</type>
       <name>constraintType</name>
-      <anchorfile>a00653.html</anchorfile>
+      <anchorfile>a00644.html</anchorfile>
       <anchor>aa7b479af8bffdc5f0a846c8e6788774e</anchor>
       <arglist>() const noexcept override</arglist>
     </member>
   </compound>
   <compound kind="class">
     <name>copra::MixedCost</name>
-    <filename>a00681.html</filename>
+    <filename>a00672.html</filename>
     <base>copra::CostFunction</base>
     <member kind="function">
       <type></type>
       <name>MixedCost</name>
-      <anchorfile>a00681.html</anchorfile>
+      <anchorfile>a00672.html</anchorfile>
       <anchor>a41e58217b35a75b47320447525aa4c6d</anchor>
       <arglist>(TMat1 &amp;&amp;M, TMat2 &amp;&amp;N, TVec &amp;&amp;p)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>autoSpan</name>
-      <anchorfile>a00681.html</anchorfile>
+      <anchorfile>a00672.html</anchorfile>
       <anchor>a8c7d22386d28596cb3adbaadaac1a9a4</anchor>
       <arglist>() override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>update</name>
-      <anchorfile>a00681.html</anchorfile>
+      <anchorfile>a00672.html</anchorfile>
       <anchor>a874d9561bf10922869b710fcc5d3795d</anchor>
       <arglist>(const PreviewSystem &amp;ps) override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>initializeCost</name>
-      <anchorfile>a00681.html</anchorfile>
+      <anchorfile>a00672.html</anchorfile>
       <anchor>aba927948a228df13a9c450a6a3f4df46</anchor>
       <arglist>(const PreviewSystem &amp;ps) override</arglist>
     </member>
   </compound>
   <compound kind="class">
     <name>copra::OSQPSolver</name>
-    <filename>a00701.html</filename>
+    <filename>a00692.html</filename>
     <base>copra::SolverInterface</base>
     <member kind="function">
       <type></type>
       <name>OSQPSolver</name>
-      <anchorfile>a00701.html</anchorfile>
+      <anchorfile>a00692.html</anchorfile>
       <anchor>a78bcda512a2edcb88b9c7a6ab6db2fba</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>SI_fail</name>
-      <anchorfile>a00701.html</anchorfile>
+      <anchorfile>a00692.html</anchorfile>
       <anchor>a22102cef730a3b91ac204b5fef7659f3</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>SI_inform</name>
-      <anchorfile>a00701.html</anchorfile>
+      <anchorfile>a00692.html</anchorfile>
       <anchor>a4c02c4edc8258ffacc891b536bb54298</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>SI_iter</name>
-      <anchorfile>a00701.html</anchorfile>
+      <anchorfile>a00692.html</anchorfile>
       <anchor>ac5fa16a1b68739091aad48888a66a359</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>SI_maxIter</name>
-      <anchorfile>a00701.html</anchorfile>
+      <anchorfile>a00692.html</anchorfile>
       <anchor>a4152a4a3bd1d4029bd30dcd807c81550</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>SI_maxIter</name>
-      <anchorfile>a00701.html</anchorfile>
+      <anchorfile>a00692.html</anchorfile>
       <anchor>a8ccd0b3042cc006422c36c0fed21e633</anchor>
       <arglist>(int maxIter) override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>SI_printLevel</name>
-      <anchorfile>a00701.html</anchorfile>
+      <anchorfile>a00692.html</anchorfile>
       <anchor>af2c548f2ce6fae72b3106bd18918a53c</anchor>
       <arglist>(int pl) override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>SI_feasibilityTolerance</name>
-      <anchorfile>a00701.html</anchorfile>
+      <anchorfile>a00692.html</anchorfile>
       <anchor>aef360d0c8c7b0cd480ffa1ab6f8c5b2d</anchor>
       <arglist>(double tol) override</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
       <name>SI_warmStart</name>
-      <anchorfile>a00701.html</anchorfile>
+      <anchorfile>a00692.html</anchorfile>
       <anchor>a927d6ba829eddc6780d82c699bd6b44c</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>SI_warmStart</name>
-      <anchorfile>a00701.html</anchorfile>
+      <anchorfile>a00692.html</anchorfile>
       <anchor>a95d3614390e0536f2110998a173feacb</anchor>
       <arglist>(bool w) override</arglist>
     </member>
     <member kind="function">
       <type>const Eigen::VectorXd &amp;</type>
       <name>SI_result</name>
-      <anchorfile>a00701.html</anchorfile>
+      <anchorfile>a00692.html</anchorfile>
       <anchor>a8b37cfca613e4aa2f8778d5477faffaf</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>SI_problem</name>
-      <anchorfile>a00701.html</anchorfile>
+      <anchorfile>a00692.html</anchorfile>
       <anchor>a72fdd1506ba521c68f537b47b63efd50</anchor>
       <arglist>(int nrVar, int nrEq, int nrInEq) override</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
       <name>SI_solve</name>
-      <anchorfile>a00701.html</anchorfile>
+      <anchorfile>a00692.html</anchorfile>
       <anchor>a69bb049e1f53e7ea4910056e27e2e70a</anchor>
       <arglist>(const Eigen::MatrixXd &amp;Q, const Eigen::VectorXd &amp;c, const Eigen::MatrixXd &amp;Aeq, const Eigen::VectorXd &amp;beq, const Eigen::MatrixXd &amp;Aineq, const Eigen::VectorXd &amp;bineq, const Eigen::VectorXd &amp;XL, const Eigen::VectorXd &amp;XU) override</arglist>
     </member>
     <member kind="function">
       <type>Eigen::OSQP &amp;</type>
       <name>baseSolver</name>
-      <anchorfile>a00701.html</anchorfile>
+      <anchorfile>a00692.html</anchorfile>
       <anchor>ad50a69ab778eed290f71df89d0ced564</anchor>
       <arglist>() noexcept</arglist>
     </member>
   </compound>
   <compound kind="struct">
     <name>copra::PreviewSystem</name>
-    <filename>a00705.html</filename>
+    <filename>a00696.html</filename>
     <member kind="function">
       <type></type>
       <name>PreviewSystem</name>
-      <anchorfile>a00705.html</anchorfile>
+      <anchorfile>a00696.html</anchorfile>
       <anchor>af91ccd60f0d803b250cd2a8f81c24be0</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
       <type></type>
       <name>PreviewSystem</name>
-      <anchorfile>a00705.html</anchorfile>
+      <anchorfile>a00696.html</anchorfile>
       <anchor>a99f68fdf2bcf075767973ba9121d24f4</anchor>
       <arglist>(const Eigen::MatrixXd &amp;state, const Eigen::MatrixXd &amp;control, const Eigen::VectorXd &amp;bias, const Eigen::VectorXd &amp;xInit, int numberOfSteps)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>system</name>
-      <anchorfile>a00705.html</anchorfile>
+      <anchorfile>a00696.html</anchorfile>
       <anchor>a3d6dc4b05be38ecb5e4e0f255c0e7b24</anchor>
       <arglist>(const Eigen::MatrixXd &amp;state, const Eigen::MatrixXd &amp;control, const Eigen::VectorXd &amp;bias, const Eigen::VectorXd &amp;xInit, int numberOfSteps)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>updateSystem</name>
-      <anchorfile>a00705.html</anchorfile>
+      <anchorfile>a00696.html</anchorfile>
       <anchor>a38c98fae0a979a7a98bfe672ca20a318</anchor>
       <arglist>() noexcept</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>xInit</name>
-      <anchorfile>a00705.html</anchorfile>
+      <anchorfile>a00696.html</anchorfile>
       <anchor>abb5c2270240ace3cdea7758b8092dc21</anchor>
       <arglist>(const Eigen::VectorXd &amp;xInit)</arglist>
     </member>
     <member kind="variable">
       <type>bool</type>
       <name>isUpdated</name>
-      <anchorfile>a00705.html</anchorfile>
+      <anchorfile>a00696.html</anchorfile>
       <anchor>a51f9d927d790121a8d2028861ec3179c</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>int</type>
       <name>nrUStep</name>
-      <anchorfile>a00705.html</anchorfile>
+      <anchorfile>a00696.html</anchorfile>
       <anchor>af53eacf49ddceb1c21d6340a344e45e8</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>int</type>
       <name>nrXStep</name>
-      <anchorfile>a00705.html</anchorfile>
+      <anchorfile>a00696.html</anchorfile>
       <anchor>a011872ac5fe21273a81789ea9a33f4a4</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>int</type>
       <name>xDim</name>
-      <anchorfile>a00705.html</anchorfile>
+      <anchorfile>a00696.html</anchorfile>
       <anchor>a9ab092fcc9dd0fd39ea9d8484dd72131</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>int</type>
       <name>uDim</name>
-      <anchorfile>a00705.html</anchorfile>
+      <anchorfile>a00696.html</anchorfile>
       <anchor>a4df70e0a6a669e1f68e2d26341e05acf</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>int</type>
       <name>fullXDim</name>
-      <anchorfile>a00705.html</anchorfile>
+      <anchorfile>a00696.html</anchorfile>
       <anchor>a62c4524c1cadfe71f241bb84bd12cc37</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>int</type>
       <name>fullUDim</name>
-      <anchorfile>a00705.html</anchorfile>
+      <anchorfile>a00696.html</anchorfile>
       <anchor>aa67206d576c45ac1e1a12530b45701e0</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>Eigen::VectorXd</type>
       <name>x0</name>
-      <anchorfile>a00705.html</anchorfile>
+      <anchorfile>a00696.html</anchorfile>
       <anchor>a981ad30a07a08c5dc5dbc71a2b3fc0ff</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>Eigen::MatrixXd</type>
       <name>A</name>
-      <anchorfile>a00705.html</anchorfile>
+      <anchorfile>a00696.html</anchorfile>
       <anchor>ab704f2d6a731aa0d55a2d15562fe244d</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>Eigen::MatrixXd</type>
       <name>B</name>
-      <anchorfile>a00705.html</anchorfile>
+      <anchorfile>a00696.html</anchorfile>
       <anchor>a51765adc683045a12f8dd7a0218f3510</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>Eigen::VectorXd</type>
       <name>d</name>
-      <anchorfile>a00705.html</anchorfile>
+      <anchorfile>a00696.html</anchorfile>
       <anchor>a3a2aa81800b44e3253c3aa9c6ed35a95</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>Eigen::MatrixXd</type>
       <name>Phi</name>
-      <anchorfile>a00705.html</anchorfile>
+      <anchorfile>a00696.html</anchorfile>
       <anchor>a902da5a586a676fe634bca01464e6531</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>Eigen::MatrixXd</type>
       <name>Psi</name>
-      <anchorfile>a00705.html</anchorfile>
+      <anchorfile>a00696.html</anchorfile>
       <anchor>a0fa054e26f0dbe6688f1b06827935e85</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable">
       <type>Eigen::VectorXd</type>
       <name>xi</name>
-      <anchorfile>a00705.html</anchorfile>
+      <anchorfile>a00696.html</anchorfile>
       <anchor>ade48db75f1290f5d89d8200b38e7c198</anchor>
       <arglist></arglist>
     </member>
   </compound>
   <compound kind="class">
     <name>copra::QLDSolver</name>
-    <filename>a00709.html</filename>
+    <filename>a00700.html</filename>
     <base>copra::SolverInterface</base>
     <member kind="function">
       <type></type>
       <name>QLDSolver</name>
-      <anchorfile>a00709.html</anchorfile>
+      <anchorfile>a00700.html</anchorfile>
       <anchor>a688cb21805a5f3b7158692a07cc43e0a</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>SI_fail</name>
-      <anchorfile>a00709.html</anchorfile>
+      <anchorfile>a00700.html</anchorfile>
       <anchor>a00097765892d390ba7b2026bea7aba91</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>SI_inform</name>
-      <anchorfile>a00709.html</anchorfile>
+      <anchorfile>a00700.html</anchorfile>
       <anchor>a20844a0ae6de92ecdaf7e5cd37043a1f</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>SI_printLevel</name>
-      <anchorfile>a00709.html</anchorfile>
+      <anchorfile>a00700.html</anchorfile>
       <anchor>aef27be9c0d4a3bb4e3d7b1bdce4edc46</anchor>
       <arglist>(int pl) override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>SI_feasibilityTolerance</name>
-      <anchorfile>a00709.html</anchorfile>
+      <anchorfile>a00700.html</anchorfile>
       <anchor>a5fc6b3f47d3f843fb3562bb014aa4c3d</anchor>
       <arglist>(double tol) override</arglist>
     </member>
     <member kind="function">
       <type>const Eigen::VectorXd &amp;</type>
       <name>SI_result</name>
-      <anchorfile>a00709.html</anchorfile>
+      <anchorfile>a00700.html</anchorfile>
       <anchor>a642543229e555d7828b4cca898e81013</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>SI_problem</name>
-      <anchorfile>a00709.html</anchorfile>
+      <anchorfile>a00700.html</anchorfile>
       <anchor>adfe2dcf7ef9e1a7447e5adf96b029f5a</anchor>
       <arglist>(int nrVar, int nrEq, int nrInEq) override</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
       <name>SI_solve</name>
-      <anchorfile>a00709.html</anchorfile>
+      <anchorfile>a00700.html</anchorfile>
       <anchor>a9ff43fc4342b2be57848f799b8e36d13</anchor>
       <arglist>(const Eigen::MatrixXd &amp;Q, const Eigen::VectorXd &amp;c, const Eigen::MatrixXd &amp;Aeq, const Eigen::VectorXd &amp;beq, const Eigen::MatrixXd &amp;Aineq, const Eigen::VectorXd &amp;bineq, const Eigen::VectorXd &amp;XL, const Eigen::VectorXd &amp;XU) override</arglist>
     </member>
     <member kind="function">
       <type>Eigen::QLD &amp;</type>
       <name>baseSolver</name>
-      <anchorfile>a00709.html</anchorfile>
+      <anchorfile>a00700.html</anchorfile>
       <anchor>ad50d8efd6b5b6da7c4dc818e5a5e2a90</anchor>
       <arglist>() noexcept</arglist>
     </member>
   </compound>
   <compound kind="class">
     <name>copra::QuadProgDenseSolver</name>
-    <filename>a00713.html</filename>
+    <filename>a00704.html</filename>
     <base>copra::SolverInterface</base>
     <member kind="function">
       <type></type>
       <name>QuadProgDenseSolver</name>
-      <anchorfile>a00713.html</anchorfile>
+      <anchorfile>a00704.html</anchorfile>
       <anchor>ad6057a80df22b38caca1edad7c64d77e</anchor>
       <arglist>()=default</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>SI_fail</name>
-      <anchorfile>a00713.html</anchorfile>
+      <anchorfile>a00704.html</anchorfile>
       <anchor>a551f9e7b9e0709a8eb6cd63210ea9602</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>int</type>
       <name>SI_iter</name>
-      <anchorfile>a00713.html</anchorfile>
+      <anchorfile>a00704.html</anchorfile>
       <anchor>a0945e985698497220ffe10f972ce95c8</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>SI_inform</name>
-      <anchorfile>a00713.html</anchorfile>
+      <anchorfile>a00704.html</anchorfile>
       <anchor>afa996946e5283e64a2d4318d16a2c6c8</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>const Eigen::VectorXd &amp;</type>
       <name>SI_result</name>
-      <anchorfile>a00713.html</anchorfile>
+      <anchorfile>a00704.html</anchorfile>
       <anchor>ae2a587c79166174a91c36f41e08f5e4f</anchor>
       <arglist>() const override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>SI_problem</name>
-      <anchorfile>a00713.html</anchorfile>
+      <anchorfile>a00704.html</anchorfile>
       <anchor>afc3ef4e2a4ffc69580b7df8ee40b68fe</anchor>
       <arglist>(int nrVar, int nrEq, int nrInEq) override</arglist>
     </member>
     <member kind="function">
       <type>bool</type>
       <name>SI_solve</name>
-      <anchorfile>a00713.html</anchorfile>
+      <anchorfile>a00704.html</anchorfile>
       <anchor>a77f978f8e9bf5f978a948e8526598373</anchor>
       <arglist>(const Eigen::MatrixXd &amp;Q, const Eigen::VectorXd &amp;c, const Eigen::MatrixXd &amp;Aeq, const Eigen::VectorXd &amp;beq, const Eigen::MatrixXd &amp;Aineq, const Eigen::VectorXd &amp;bineq, const Eigen::VectorXd &amp;XL, const Eigen::VectorXd &amp;XU) override</arglist>
     </member>
     <member kind="function">
       <type>Eigen::QuadProgDense &amp;</type>
       <name>baseSolver</name>
-      <anchorfile>a00713.html</anchorfile>
+      <anchorfile>a00704.html</anchorfile>
       <anchor>a0e00056ac7cbef847004d8f3644dddbd</anchor>
       <arglist>() noexcept</arglist>
     </member>
   </compound>
   <compound kind="class">
     <name>copra::SolverInterface</name>
-    <filename>a00717.html</filename>
+    <filename>a00708.html</filename>
     <member kind="function" virtualness="virtual">
       <type>virtual</type>
       <name>~SolverInterface</name>
-      <anchorfile>a00717.html</anchorfile>
+      <anchorfile>a00708.html</anchorfile>
       <anchor>a16ede69f5f2c07f99f740fec0be831a6</anchor>
       <arglist>()=default</arglist>
     </member>
     <member kind="function" virtualness="pure">
       <type>virtual int</type>
       <name>SI_fail</name>
-      <anchorfile>a00717.html</anchorfile>
+      <anchorfile>a00708.html</anchorfile>
       <anchor>a25b0116f4c27637dc86d4e88ee34f4d6</anchor>
       <arglist>() const =0</arglist>
     </member>
     <member kind="function" virtualness="pure">
       <type>virtual void</type>
       <name>SI_inform</name>
-      <anchorfile>a00717.html</anchorfile>
+      <anchorfile>a00708.html</anchorfile>
       <anchor>a5168431efa5e3be1a96eb086d543b293</anchor>
       <arglist>() const =0</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual int</type>
       <name>SI_iter</name>
-      <anchorfile>a00717.html</anchorfile>
+      <anchorfile>a00708.html</anchorfile>
       <anchor>af10d9a8eeb279e1c2cdd19e4144e3de6</anchor>
       <arglist>() const</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual int</type>
       <name>SI_maxIter</name>
-      <anchorfile>a00717.html</anchorfile>
+      <anchorfile>a00708.html</anchorfile>
       <anchor>a89ca9ac5cfd37e577f7ca46b22b83194</anchor>
       <arglist>() const</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual void</type>
       <name>SI_maxIter</name>
-      <anchorfile>a00717.html</anchorfile>
+      <anchorfile>a00708.html</anchorfile>
       <anchor>a6492a721fe8fa8ee015c7370e149a55e</anchor>
       <arglist>(int maxIter)</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual void</type>
       <name>SI_printLevel</name>
-      <anchorfile>a00717.html</anchorfile>
+      <anchorfile>a00708.html</anchorfile>
       <anchor>a0c8a27e93392eac8a164e9bf872d8cc2</anchor>
       <arglist>(int pl)</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual double</type>
       <name>SI_feasibilityTolerance</name>
-      <anchorfile>a00717.html</anchorfile>
+      <anchorfile>a00708.html</anchorfile>
       <anchor>a75e5f6caa56b31c74dd20f9ce65b6637</anchor>
       <arglist>() const</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual void</type>
       <name>SI_feasibilityTolerance</name>
-      <anchorfile>a00717.html</anchorfile>
+      <anchorfile>a00708.html</anchorfile>
       <anchor>ae2f60c44ad6cf57592f7cb0e1ceb148b</anchor>
       <arglist>(double tol)</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual bool</type>
       <name>SI_warmStart</name>
-      <anchorfile>a00717.html</anchorfile>
+      <anchorfile>a00708.html</anchorfile>
       <anchor>aeb240e55210ed82f3fc0a96d3da22877</anchor>
       <arglist>() const</arglist>
     </member>
     <member kind="function" virtualness="virtual">
       <type>virtual void</type>
       <name>SI_warmStart</name>
-      <anchorfile>a00717.html</anchorfile>
+      <anchorfile>a00708.html</anchorfile>
       <anchor>a64c21aae89c733a54f1314ccaf056fba</anchor>
       <arglist>(bool w)</arglist>
     </member>
     <member kind="function" virtualness="pure">
       <type>virtual const Eigen::VectorXd &amp;</type>
       <name>SI_result</name>
-      <anchorfile>a00717.html</anchorfile>
+      <anchorfile>a00708.html</anchorfile>
       <anchor>aa036dad4f90e0dc511f9ce25302b3718</anchor>
       <arglist>() const =0</arglist>
     </member>
     <member kind="function" virtualness="pure">
       <type>virtual void</type>
       <name>SI_problem</name>
-      <anchorfile>a00717.html</anchorfile>
+      <anchorfile>a00708.html</anchorfile>
       <anchor>a61005f340bc0d422fe560970abf3bb15</anchor>
       <arglist>(int nrVar, int nrEq, int nrInEq)=0</arglist>
     </member>
     <member kind="function" virtualness="pure">
       <type>virtual bool</type>
       <name>SI_solve</name>
-      <anchorfile>a00717.html</anchorfile>
+      <anchorfile>a00708.html</anchorfile>
       <anchor>a47e3bbae2b21bd640f5f3d916fd4ca00</anchor>
       <arglist>(const Eigen::MatrixXd &amp;Q, const Eigen::VectorXd &amp;c, const Eigen::MatrixXd &amp;Aeq, const Eigen::VectorXd &amp;beq, const Eigen::MatrixXd &amp;Aineq, const Eigen::VectorXd &amp;bineq, const Eigen::VectorXd &amp;XL, const Eigen::VectorXd &amp;XU)=0</arglist>
     </member>
   </compound>
   <compound kind="class">
     <name>copra::TargetCost</name>
-    <filename>a00673.html</filename>
+    <filename>a00664.html</filename>
     <base>copra::CostFunction</base>
     <member kind="function">
       <type></type>
       <name>TargetCost</name>
-      <anchorfile>a00673.html</anchorfile>
+      <anchorfile>a00664.html</anchorfile>
       <anchor>adbcaf02a942b733b9f1973e68702ff5c</anchor>
       <arglist>(TMat &amp;&amp;M, TVec &amp;&amp;p)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>initializeCost</name>
-      <anchorfile>a00673.html</anchorfile>
+      <anchorfile>a00664.html</anchorfile>
       <anchor>a6298d22a17e442b1c3421323c53b8687</anchor>
       <arglist>(const PreviewSystem &amp;ps) override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>update</name>
-      <anchorfile>a00673.html</anchorfile>
+      <anchorfile>a00664.html</anchorfile>
       <anchor>aced35acf66be3b9d570f683128be4378</anchor>
       <arglist>(const PreviewSystem &amp;ps) override</arglist>
     </member>
   </compound>
   <compound kind="class">
     <name>copra::TrajectoryBoundConstraint</name>
-    <filename>a00657.html</filename>
+    <filename>a00648.html</filename>
     <base>copra::EqIneqConstraint</base>
     <member kind="function">
       <type></type>
       <name>TrajectoryBoundConstraint</name>
-      <anchorfile>a00657.html</anchorfile>
+      <anchorfile>a00648.html</anchorfile>
       <anchor>a5869dd80ee8edbce7d5c049c6dbe242b</anchor>
       <arglist>(TVec1 &amp;&amp;lower, TVec2 &amp;&amp;upper)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>autoSpan</name>
-      <anchorfile>a00657.html</anchorfile>
+      <anchorfile>a00648.html</anchorfile>
       <anchor>a853de588f832acf065356e58d8daf415</anchor>
       <arglist>() override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>initializeConstraint</name>
-      <anchorfile>a00657.html</anchorfile>
+      <anchorfile>a00648.html</anchorfile>
       <anchor>a24be8b4b6e794247c0f1ba30dd3aaea7</anchor>
       <arglist>(const PreviewSystem &amp;ps) override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>update</name>
-      <anchorfile>a00657.html</anchorfile>
+      <anchorfile>a00648.html</anchorfile>
       <anchor>a08836519ae862f218e2af33f1980f046</anchor>
       <arglist>(const PreviewSystem &amp;ps) override</arglist>
     </member>
     <member kind="function">
       <type>ConstraintFlag</type>
       <name>constraintType</name>
-      <anchorfile>a00657.html</anchorfile>
+      <anchorfile>a00648.html</anchorfile>
       <anchor>a7352e3259db1c1164db912e827d85c1d</anchor>
       <arglist>() const noexcept override</arglist>
     </member>
   </compound>
   <compound kind="class">
     <name>copra::TrajectoryConstraint</name>
-    <filename>a00645.html</filename>
+    <filename>a00636.html</filename>
     <base>copra::EqIneqConstraint</base>
     <member kind="function">
       <type></type>
       <name>TrajectoryConstraint</name>
-      <anchorfile>a00645.html</anchorfile>
+      <anchorfile>a00636.html</anchorfile>
       <anchor>a11fc64735cf72454a890738f58cbe5c2</anchor>
       <arglist>(TMat &amp;&amp;E, TVec &amp;&amp;f, bool isInequalityConstraint=true)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>autoSpan</name>
-      <anchorfile>a00645.html</anchorfile>
+      <anchorfile>a00636.html</anchorfile>
       <anchor>a5f94a5b0d8a9df124337197cc41d0db4</anchor>
       <arglist>() override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>initializeConstraint</name>
-      <anchorfile>a00645.html</anchorfile>
+      <anchorfile>a00636.html</anchorfile>
       <anchor>a622b42be05a11d403b9155e1cf6dde96</anchor>
       <arglist>(const PreviewSystem &amp;ps) override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>update</name>
-      <anchorfile>a00645.html</anchorfile>
+      <anchorfile>a00636.html</anchorfile>
       <anchor>aefe106e4cf27c5338b9554762bdcd0ed</anchor>
       <arglist>(const PreviewSystem &amp;ps) override</arglist>
     </member>
     <member kind="function">
       <type>ConstraintFlag</type>
       <name>constraintType</name>
-      <anchorfile>a00645.html</anchorfile>
+      <anchorfile>a00636.html</anchorfile>
       <anchor>a84021f7fb9f14abfa54d7d2f1b7d4f3f</anchor>
       <arglist>() const noexcept override</arglist>
     </member>
   </compound>
   <compound kind="class">
     <name>copra::TrajectoryCost</name>
-    <filename>a00669.html</filename>
+    <filename>a00660.html</filename>
     <base>copra::CostFunction</base>
     <member kind="function">
       <type></type>
       <name>TrajectoryCost</name>
-      <anchorfile>a00669.html</anchorfile>
+      <anchorfile>a00660.html</anchorfile>
       <anchor>afa167debb3f44bdd63ca8ad8bab80461</anchor>
       <arglist>(TMat &amp;&amp;M, TVec &amp;&amp;p)</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>autoSpan</name>
-      <anchorfile>a00669.html</anchorfile>
+      <anchorfile>a00660.html</anchorfile>
       <anchor>a295f8e575e5817cad58d7ad4950c88d8</anchor>
       <arglist>() override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>initializeCost</name>
-      <anchorfile>a00669.html</anchorfile>
+      <anchorfile>a00660.html</anchorfile>
       <anchor>ab85678638832ba60c630014bb8e4a9b6</anchor>
       <arglist>(const PreviewSystem &amp;ps) override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
       <name>update</name>
-      <anchorfile>a00669.html</anchorfile>
+      <anchorfile>a00660.html</anchorfile>
       <anchor>af11df78939692839ef832c1574a4b4c7</anchor>
       <arglist>(const PreviewSystem &amp;ps) override</arglist>
     </member>
