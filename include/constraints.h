@@ -125,9 +125,23 @@ public:
      */
     const Eigen::VectorXd& b() const noexcept { return b_; }
 
-protected:
+    /**
+     * Get the 'Y' matrix of the Equality/Inequality (\f$Ax\leq b\f$, \f$Ax = b\f$)
+     * \return The 'Y' matrix of the constraint
+     */
+    const Eigen::MatrixXd& Y() const noexcept { return Y_; }
+
+    /**
+     * Get the 'z' vector of the Equality/Inequality (\f$Ax\leq b\f$, \f$Ax = b\f$)
+     * \return The 'z' vector of the constraint
+     */
+    const Eigen::VectorXd& z() const noexcept { return z_; }
+
+public: //protected:
     Eigen::MatrixXd A_;
     Eigen::VectorXd b_;
+    Eigen::MatrixXd Y_;
+    Eigen::VectorXd z_;
     bool isIneq_;
 };
 

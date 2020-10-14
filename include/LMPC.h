@@ -138,7 +138,7 @@ public:
      */
     void removeConstraint(const std::shared_ptr<Constraint>& constr);
 
-protected:
+public: //protected:
     /**
      * Add constraints into constraints_ \see Constraints
      * \param constr The constraint to add
@@ -168,7 +168,7 @@ protected:
      */
     void checkDeleteCostsAndConstraints();
 
-protected:
+public: //protected:
     struct Constraints {
         Constraints();
         void clear();
@@ -182,7 +182,7 @@ protected:
         std::vector<std::shared_ptr<ControlBoundConstraint>> spBoundConstr;
     };
 
-protected:
+public: //protected:
     std::shared_ptr<PreviewSystem> ps_;
     std::unique_ptr<SolverInterface> sol_;
     std::vector<std::shared_ptr<CostFunction>> spCost_;
