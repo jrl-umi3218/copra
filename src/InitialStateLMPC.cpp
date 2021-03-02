@@ -67,8 +67,16 @@ void InitialStateLMPC::initializeController(const std::shared_ptr<PreviewSystem>
 {
     LMPC::initializeController(ps);
 
+    R_.resize(ps_->xDim,ps_->xDim);
+    r_.resize(ps_->xDim);
+    E_.resize(ps_->xDim, ps_->fullUDim);
+    f_.resize(ps_->fullUDim);
+    l_.resize(ps_->xDim);
+    u_.resize(ps_->xDim);
     newQ_.resize(ps_->xDim+ps_->fullUDim, ps_->xDim+ps_->fullUDim);
     newc_.resize(ps_->xDim+ps_->fullUDim);
+    newlb_.resize(ps_->xDim+ps_->fullUDim);
+    newub_.resize(ps_->xDim+ps_->fullUDim);
 }
 
 bool InitialStateLMPC::solve()
@@ -96,7 +104,7 @@ bool InitialStateLMPC::solve()
 
 Eigen::VectorXd InitialStateLMPC::initialState() const noexcept
 {
-    return sol_->SI_result().tail(ps_->xDim);
+    return sol_->SI_result().head(ps_->xDim);
 }
 
 Eigen::VectorXd InitialStateLMPC::control() const noexcept
@@ -132,14 +140,14 @@ void InitialStateLMPC::clearConstraintMatrices()
 {
     LMPC::clearConstraintMatrices();
 
-    Yineq_.resize(0, ps_->xDim);
-    Yeq_.resize(0, ps_->xDim);
-    zineq_.resize(0);
-    zeq_.resize(0);
     l_.resize(ps_->xDim);
     u_.resize(ps_->xDim);
     l_.setConstant(-std::numeric_limits<double>::max());
     u_.setConstant(std::numeric_limits<double>::max());
+    Yeq_.resize(0, ps_->xDim);
+    zeq_.resize(0);
+    Yineq_.resize(0, ps_->xDim);
+    zineq_.resize(0);
     newAineq_.resize(0, ps_->xDim+ps_->fullUDim);
     newAeq_.resize(0, ps_->xDim+ps_->fullUDim);
     newbineq_.resize(0);
@@ -175,7 +183,8 @@ void InitialStateLMPC::updateSystem()
 void InitialStateLMPC::makeQPForm()
 {
     //don't call the function makeQPForm() of the base-class!
-
+    
+    // Get Costs
     for (auto& cost : spCost_) {
         Q_ += cost->Q();
         // c_ += cost->c(); //not required!

@@ -93,8 +93,6 @@ protected:
     void makeQPForm();
 
 protected:
-    std::unique_ptr<SolverInterface> sol_;
-
     Eigen::MatrixXd R_;
     Eigen::VectorXd r_;
     Eigen::MatrixXd E_;
