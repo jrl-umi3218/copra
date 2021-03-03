@@ -99,7 +99,7 @@ TEST_CASE_FIXTURE(BoundedSystem, "INITIAL_STATE_LMPC")
 
     lmpc.addCost(tc);
     lmpc.addCost(tac);
-    // lmpc.addCost(cc);
+    lmpc.addCost(cc);
     lmpc.addCost(mc);
     lmpc.addConstraint(tcstr);
     lmpc.addConstraint(ccstr);
@@ -111,7 +111,7 @@ TEST_CASE_FIXTURE(BoundedSystem, "INITIAL_STATE_LMPC")
 
     lmpc.removeCost(tc);
     lmpc.removeCost(tac);
-    // lmpc.removeCost(cc);
+    lmpc.removeCost(cc);
     lmpc.removeCost(mc);
     lmpc.removeConstraint(tcstr);
     lmpc.removeConstraint(ccstr);

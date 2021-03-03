@@ -147,7 +147,7 @@ void ControlCost::update(const PreviewSystem& ps)
         for (int i = 0; i < ps.nrUStep; ++i) {
             Q_.block(i * ps.uDim, i * ps.uDim, ps.uDim, ps.uDim) = mat;
             // c_.segment(i * ps.uDim, ps.uDim) = vec;
-            E_.block(i * ps.uDim, i * ps.uDim, ps.uDim, ps.uDim).setZero();
+            E_.block(0, i * ps.uDim, ps.xDim, ps.uDim).setZero();
             f_.segment(i * ps.uDim, ps.uDim) = vec;
             c_.segment(i * ps.uDim, ps.uDim) = f_.segment(i * ps.uDim, ps.uDim);
         }
