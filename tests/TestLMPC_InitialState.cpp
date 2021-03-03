@@ -29,7 +29,6 @@
 #include <memory>
 #include <numeric>
 #include <vector>
-#include <unsupported/Eigen/MatrixFunctions> // for matrix exponential
 
 TEST_CASE_FIXTURE(BoundedSystem, "INITIAL_STATE_LMPC")
 {
@@ -90,19 +89,13 @@ TEST_CASE_FIXTURE(BoundedSystem, "INITIAL_STATE_LMPC")
     previewSystem_ = std::make_shared<copra::PreviewSystem>();
     copra::InitialStateLMPC lmpc = copra::InitialStateLMPC(previewSystem_, solverFlag);
     // copra::LMPC lmpc = copra::LMPC(previewSystem_, solverFlag); //for comparison
+    Eigen::MatrixXd combi = Eigen::MatrixXd::Random(s_dim+u_dim,s_dim+u_dim);
+    Eigen::VectorXd biasVector = Eigen::VectorXd::Zero(s_dim);
+    Eigen::VectorXd s_init = Eigen::VectorXd::Random(s_dim);
     const int nbSteps_ = 10;
-    const double dt = 0.001;
-    Eigen::MatrixXd combi_c = Eigen::MatrixXd::Zero(s_dim+u_dim,s_dim+u_dim);
-    Eigen::MatrixXd combi_d = Eigen::MatrixXd::Zero(s_dim+u_dim,s_dim+u_dim);
-    combi_c.topRightCorner(s_dim,s_dim).setIdentity();
-    combi_d = (combi_c*dt).exp(); //matrix exponential
-    Eigen::VectorXd biasVector2;
-    biasVector2 = Eigen::VectorXd::Zero(s_dim);
-    Eigen::VectorXd s_init;
-    s_init = Eigen::VectorXd::Random(s_dim);
-    previewSystem_->system( combi_d.topLeftCorner(s_dim, s_dim), 
-                            combi_d.topRightCorner(s_dim, u_dim), 
-                            biasVector2, s_init, nbSteps_ );
+    previewSystem_->system( combi.topLeftCorner(s_dim, s_dim), 
+                            combi.topRightCorner(s_dim, u_dim), 
+                            biasVector, s_init, nbSteps_ );
 
     //specify and solve lmpc
     lmpc.initializeController(previewSystem_);
