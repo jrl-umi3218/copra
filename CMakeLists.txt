@@ -18,6 +18,7 @@ include(optional_qps.cmake)
 # SET(CXX_DISABLE_WERROR True)
 set(DOXYGEN_USE_MATHJAX "YES")
 set(CMAKE_CXX_STANDARD 14)
+set(EIGEN_MPL2_ONLY 1)
 
 option(PYTHON_BINDING "Generate python bindings." OFF)
 option(BUILD_TESTING "Build unit tests." ON)

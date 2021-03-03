@@ -4,10 +4,6 @@
 
 #include "doctest.h"
 #include "systems.h"
-#include "tools.h"
-#include <Eigen/Core>
-#include <algorithm>
-#include "LMPC.h"
 #include "InitialStateLMPC.h"
 #include "PreviewSystem.h"
 #include "constraints.h"
