@@ -137,7 +137,7 @@ public:
      */
     const Eigen::VectorXd& z() const noexcept { return z_; }
 
-public: //protected:
+protected:
     Eigen::MatrixXd A_;
     Eigen::VectorXd b_;
     Eigen::MatrixXd Y_;

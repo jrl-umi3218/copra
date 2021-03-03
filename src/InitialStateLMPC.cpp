@@ -77,6 +77,12 @@ void InitialStateLMPC::initializeController(const std::shared_ptr<PreviewSystem>
     newc_.resize(ps_->xDim+ps_->fullUDim);
     newlb_.resize(ps_->xDim+ps_->fullUDim);
     newub_.resize(ps_->xDim+ps_->fullUDim);
+
+    Eigen::VectorXd xInit = ps->xInit();
+    resetInitialStateBounds(xInit,xInit); //this basically prevents optimization of the initial state
+    Eigen::MatrixXd R = (1e-6)*Eigen::MatrixXd::Identity(ps_->xDim,ps_->xDim); // ensure that R is positive definite
+    Eigen::VectorXd r = Eigen::VectorXd::Zero(ps_->xDim);
+    resetInitialStateCost(R, r);
 }
 
 bool InitialStateLMPC::solve()
@@ -164,9 +170,6 @@ void InitialStateLMPC::updateSystem()
 
     E_.setZero();
     f_.setZero();
-    R_.setIdentity();
-    R_ *= 1e-6; // Ensure that R is positive definite if no cost functions are used
-    r_.setZero();
     newQ_.setIdentity();
     newQ_ *= 1e-6; // Ensure that newQ is positive definite if no cost functions are used
     newc_.setZero();
@@ -187,7 +190,7 @@ void InitialStateLMPC::makeQPForm()
     // Get Costs
     for (auto& cost : spCost_) {
         Q_ += cost->Q();
-        // c_ += cost->c(); //not required!
+        c_ += cost->c();
         E_ += cost->E();
         f_ += cost->f();
     }
@@ -197,7 +200,7 @@ void InitialStateLMPC::makeQPForm()
     nrLines = 0;
     for (auto& cstr : constraints_.spEqConstr) {
         Aeq_.block(nrLines, 0, cstr->nrConstr(), ps_->fullUDim) = cstr->A();
-        // beq_.segment(nrLines, cstr->nrConstr()) = cstr->b(); //not required!
+        beq_.segment(nrLines, cstr->nrConstr()) = cstr->b();
         Yeq_.block(nrLines, 0, cstr->nrConstr(), ps_->xDim) = cstr->Y();
         zeq_.segment(nrLines, cstr->nrConstr()) = cstr->z();
         nrLines += cstr->nrConstr();
@@ -206,7 +209,7 @@ void InitialStateLMPC::makeQPForm()
     nrLines = 0;
     for (auto& cstr : constraints_.spIneqConstr) {
         Aineq_.block(nrLines, 0, cstr->nrConstr(), ps_->fullUDim) = cstr->A();
-        // bineq_.segment(nrLines, cstr->nrConstr()) = cstr->b(); //not required!
+        bineq_.segment(nrLines, cstr->nrConstr()) = cstr->b();
         Yineq_.block(nrLines, 0, cstr->nrConstr(), ps_->xDim) = cstr->Y();
         zineq_.segment(nrLines, cstr->nrConstr()) = cstr->z();
         nrLines += cstr->nrConstr();

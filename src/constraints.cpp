@@ -298,7 +298,7 @@ void TrajectoryBoundConstraint::update(const PreviewSystem& ps)
             // b_(nrLines) = upper_(line) - delta(line + ps.xDim * step);
             Y_.row(nrLines) = ps.Phi.row(line + ps.xDim * step);
             z_(nrLines) = upper_(line) - ps.xi(line + ps.xDim * step);
-            b_(nrLines) = upper_(line) - Y_.row(nrLines) * ps.x0;
+            b_(nrLines) = z_(nrLines) - Y_.row(nrLines) * ps.x0;
             ++nrLines;
         }
         if (fullSizeEntry_)

@@ -97,8 +97,8 @@ protected:
     Eigen::VectorXd r_;
     Eigen::MatrixXd E_;
     Eigen::VectorXd f_;
-    Eigen::VectorXd l_;
-    Eigen::VectorXd u_;
+    Eigen::VectorXd l_; //initial state lower bound
+    Eigen::VectorXd u_; //initial state upper bound
 
     Eigen::MatrixXd Yeq_;
     Eigen::VectorXd zeq_;

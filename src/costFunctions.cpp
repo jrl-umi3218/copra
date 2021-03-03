@@ -75,8 +75,8 @@ void TrajectoryCost::update(const PreviewSystem& ps)
             // c_.noalias() += (M_ * (ps.Phi.block(i * ps.xDim, 0, ps.xDim, ps.xDim) * ps.x0 + ps.xi.segment(i * ps.xDim, ps.xDim)) - p_).transpose() * weights_.asDiagonal() * tmp;
             E_.noalias() += (M_ * ps.Phi.block(i * ps.xDim, 0, ps.xDim, ps.xDim)).transpose() * weights_.asDiagonal() * tmp;
             f_.noalias() += (M_ * ps.xi.segment(i * ps.xDim, ps.xDim) - p_).transpose() * weights_.asDiagonal() * tmp;
-            c_.noalias() += E_.transpose() * ps.x0 + f_;
         }
+        c_.noalias() = E_.transpose() * ps.x0 + f_;
     }
 }
 
@@ -204,8 +204,8 @@ void MixedCost::update(const PreviewSystem& ps)
             // c_.noalias() += (M_ * (ps.Phi.block(i * ps.xDim, 0, ps.xDim, ps.xDim) * ps.x0 + ps.xi.segment(i * ps.xDim, ps.xDim)) - p_).transpose() * weights_.asDiagonal() * tmp;
             E_.noalias() += (M_ * ps.Phi.block(i * ps.xDim, 0, ps.xDim, ps.xDim)).transpose() * weights_.asDiagonal() * tmp;
             f_.noalias() += (M_ * ps.xi.segment(i * ps.xDim, ps.xDim) - p_).transpose() * weights_.asDiagonal() * tmp;
-            c_.noalias() += E_.transpose() * ps.x0 + f_;
         }
+        c_.noalias() += E_.transpose() * ps.x0 + f_;
     }
 }
 
