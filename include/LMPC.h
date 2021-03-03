@@ -138,6 +138,20 @@ public:
      */
     void removeConstraint(const std::shared_ptr<Constraint>& constr);
 
+    /**
+     * Getter Functions
+     */
+    inline int get_nrEqConstr() { return constraints_.nrEqConstr; }
+    inline int get_nrIneqConstr() { return constraints_.nrIneqConstr; }
+    inline Eigen::MatrixXd& get_Q() { return Q_; }
+    inline Eigen::MatrixXd& get_Aineq() { return Aineq_; }
+    inline Eigen::MatrixXd& get_Aeq() { return Aeq_; }
+    inline Eigen::VectorXd& get_c() { return c_; }
+    inline Eigen::VectorXd& get_bineq() { return bineq_; }
+    inline Eigen::VectorXd& get_beq() { return beq_; }
+    inline Eigen::VectorXd& get_lb() { return lb_; }
+    inline Eigen::VectorXd& get_ub() { return ub_; }
+
 protected:
     /**
      * Add constraints into constraints_ \see Constraints
