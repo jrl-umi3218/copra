@@ -37,7 +37,7 @@ public:
      * This function needs to be called each time the system dimension changes.
      * \param ps The preview system
      */
-    void initializeController(const std::shared_ptr<PreviewSystem>& ps);
+    void initializeController(const std::shared_ptr<PreviewSystem>& ps) override;
 
     /**
      * Solve the system.
@@ -45,7 +45,7 @@ public:
      * Fill Phi, Psi, xi in PreviewSystem
      * Fill A, b in Constraints
      */
-    bool solve();
+    bool solve() override;
 
     /**
      * Get the solver result.
@@ -57,13 +57,13 @@ public:
      * Get the solver result.
      * \return The control vector \f$U\f$.
      */
-    Eigen::VectorXd control() const noexcept;
+    const Eigen::VectorXd& control() const noexcept override;
 
     /**
      * Get the preview trajectory.
      * \return The trajectory vector \f$X\f$.
      */
-    Eigen::VectorXd trajectory() const noexcept;
+    Eigen::VectorXd trajectory() const noexcept override;
 
     /**
      * Add a cost related to the initial state
@@ -80,17 +80,17 @@ protected:
     /**
      * Resize internal matrices and vectors to default.
      */
-    void clearConstraintMatrices();
+    void clearConstraintMatrices() override;
 
     /**
      * Update the system and its constraints.
      */
-    void updateSystem();
+    void updateSystem() override;
 
     /**
      * QP-like format.
      */
-    void makeQPForm();
+    void makeQPForm() override;
 
 protected:
     Eigen::MatrixXd R_;
@@ -114,6 +114,8 @@ protected:
     Eigen::VectorXd newbeq_;
     Eigen::MatrixXd newAineq_;
     Eigen::VectorXd newbineq_;
+
+    Eigen::VectorXd control_;
 };
 
 } // namespace pc

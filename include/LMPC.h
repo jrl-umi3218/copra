@@ -45,10 +45,20 @@ public:
     /**
      * Initialize problem variables w.r.t. the PreviewSystem and get the desired
      * solver
-     * \param ps A preview system to amke a copy from.
+     * \param ps A preview system to make a copy from.
      * \param sFlag The flag corresponding to the desired solver.
      */
     LMPC(const std::shared_ptr<PreviewSystem>& ps, SolverFlag sFlag = SolverFlag::DEFAULT);
+
+    /**
+     * Virtual destructor
+     */
+    virtual ~LMPC() = default; 
+    
+    LMPC(const LMPC&) = default;
+    LMPC(LMPC&&) = default;
+    LMPC& operator=(const LMPC&) = default;
+    LMPC& operator=(LMPC&&) = default;
 
     /**
      * Select a solver. It will load a solver with default values.
@@ -68,7 +78,7 @@ public:
      * This function needs to be called each time the system dimension changes.
      * \param ps The preview system
      */
-    void initializeController(const std::shared_ptr<PreviewSystem>& ps);
+    virtual void initializeController(const std::shared_ptr<PreviewSystem>& ps);
 
     /**
      * Solve the system.
@@ -76,7 +86,7 @@ public:
      * Fill Phi, Psi, xi in PreviewSystem
      * Fill A, b in Constraints
      */
-    bool solve();
+    virtual bool solve();
 
     /**
      * Print information on the QP solver status.
@@ -92,12 +102,12 @@ public:
      * Get the solver result.
      * \return The control vector \f$U\f$.
      */
-    const Eigen::VectorXd& control() const noexcept;
+    virtual const Eigen::VectorXd& control() const noexcept;
     /**
      * Get the preview trajectory.
      * \return The trajectory vector \f$X\f$.
      */
-    Eigen::VectorXd trajectory() const noexcept;
+    virtual Eigen::VectorXd trajectory() const noexcept;
     /**
      * The time needed to solve the qp problem.
      * \return The elapsed time (in s) for solving.
@@ -143,14 +153,14 @@ public:
      */
     inline int get_nrEqConstr() { return constraints_.nrEqConstr; }
     inline int get_nrIneqConstr() { return constraints_.nrIneqConstr; }
-    inline Eigen::MatrixXd& get_Q() { return Q_; }
-    inline Eigen::MatrixXd& get_Aineq() { return Aineq_; }
-    inline Eigen::MatrixXd& get_Aeq() { return Aeq_; }
-    inline Eigen::VectorXd& get_c() { return c_; }
-    inline Eigen::VectorXd& get_bineq() { return bineq_; }
-    inline Eigen::VectorXd& get_beq() { return beq_; }
-    inline Eigen::VectorXd& get_lb() { return lb_; }
-    inline Eigen::VectorXd& get_ub() { return ub_; }
+    inline Eigen::MatrixXd get_Q() { return Q_; }
+    inline Eigen::MatrixXd get_Aineq() { return Aineq_; }
+    inline Eigen::MatrixXd get_Aeq() { return Aeq_; }
+    inline Eigen::VectorXd get_c() { return c_; }
+    inline Eigen::VectorXd get_bineq() { return bineq_; }
+    inline Eigen::VectorXd get_beq() { return beq_; }
+    inline Eigen::VectorXd get_lb() { return lb_; }
+    inline Eigen::VectorXd get_ub() { return ub_; }
 
 protected:
     /**
@@ -162,18 +172,18 @@ protected:
     /**
      * Resize Aeq, beq, Aineq, bineq, ub, lb to default.
      */
-    void clearConstraintMatrices();
+    virtual void clearConstraintMatrices();
 
     /**
      * Update the system and its constraints.
      * Fill A, b in Constraints
      */
-    void updateSystem();
+    virtual void updateSystem();
 
     /**
      * QP-like format.
      */
-    void makeQPForm();
+    virtual void makeQPForm();
 
     /**
      * Check if a cost or a constraint still exist.

@@ -31,7 +31,8 @@ InitialStateLMPC::InitialStateLMPC(SolverFlag sFlag)
     newAeq_(),
     newbeq_(),
     newAineq_(),
-    newbineq_()
+    newbineq_(),
+    control_()
 {
 }
 
@@ -54,7 +55,8 @@ InitialStateLMPC::InitialStateLMPC(const std::shared_ptr<PreviewSystem>& ps, Sol
     newAeq_(),
     newbeq_(),
     newAineq_(),
-    newbineq_()
+    newbineq_(),
+    control_(ps_->fullUDim)
 {
     l_.setConstant(-std::numeric_limits<double>::max());
     u_.setConstant(std::numeric_limits<double>::max());
@@ -77,6 +79,7 @@ void InitialStateLMPC::initializeController(const std::shared_ptr<PreviewSystem>
     newc_.resize(ps_->xDim+ps_->fullUDim);
     newlb_.resize(ps_->xDim+ps_->fullUDim);
     newub_.resize(ps_->xDim+ps_->fullUDim);
+    control_.resize(ps_->fullUDim);
 
     Eigen::VectorXd xInit = ps->xInit();
     resetInitialStateBounds(xInit,xInit); //this basically prevents optimization of the initial state
@@ -105,6 +108,7 @@ bool InitialStateLMPC::solve()
     checkDeleteCostsAndConstraints();
 
     solveAndBuildTime_ = duration_cast<duration<double>>(high_resolution_clock::now() - sabTime);
+    control_ = sol_->SI_result().tail(ps_->fullUDim); //needed here, because of constant function control()
     return success;
 }
 
@@ -113,9 +117,9 @@ Eigen::VectorXd InitialStateLMPC::initialState() const noexcept
     return sol_->SI_result().head(ps_->xDim);
 }
 
-Eigen::VectorXd InitialStateLMPC::control() const noexcept
+const Eigen::VectorXd& InitialStateLMPC::control() const noexcept
 {
-    return sol_->SI_result().tail(ps_->fullUDim);
+    return control_;
 }
 
 Eigen::VectorXd InitialStateLMPC::trajectory() const noexcept
