@@ -11,7 +11,7 @@ solvers. Python bindings are available.
 ![main image](doc/pictures/walkgen-com.png "Computation of the CoM preview using the MPC")
 *@Stephane Caron*
 
-This work was originally made by [Vincent Samy](https://github.com/vsamy).
+This work was originally made by [Vincent Samy](https://github.com/vsamy) and extended by [Niels Dehio](https://github.com/ndehio).
 
 Copra is licensed under the [BSD-2-Clause](https://opensource.org/licenses/BSD-2-Clause). However, its default QP solver (eigen-quadprog) is licensed under the LGPL-2 and this cannot be changed. Please be aware of the related restrictions if you plan to work with copra. At a later date, we might switch copra default QP solver to one with a less restrictive license.
 
@@ -105,3 +105,22 @@ You can also check out unit tests, as well as the following two examples:
 
 * [C++ example of Copra](https://vsamy.github.io/en/blog/copra-example-cpp)
 * [Python example of Copra](https://vsamy.github.io/en/blog/copra-example-python)
+
+### Reference
+
+Linear model predictive control including optimization of the initial state employing COPRA has been described in
+
+```
+@unpublished{Dehio2021ICRA,
+  title = {Safe Impacts with Soft Contacts Based on Learned Deformations},
+  author = {Dehio, Niels and Kheddar, Abderrahmane},
+  booktitle={IEEE Int. Conf. on Robotics and Automation},
+  pdf = {https://hal.archives-ouvertes.fr/hal-02973947/document},
+  url = {https://hal.archives-ouvertes.fr/hal-02973947},
+  year = {2021}
+}
+```
+
+Writing code takes time.
+If this implementation is useful for your research, please cite the related publication.
+
