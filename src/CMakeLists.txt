@@ -11,6 +11,7 @@ set(SOURCES
     constraints.cpp
     debugUtils.cpp
     LMPC.cpp
+    InitialStateLMPC.cpp
     solverUtils.cpp
 )
 
@@ -24,6 +25,7 @@ set(HEADERS
     ../include/constraints.h
     ../include/debugUtils.h
     ../include/LMPC.h 
+    ../include/InitialStateLMPC.h 
     ../include/solverUtils.h 
     ../include/typedefs.h
 )

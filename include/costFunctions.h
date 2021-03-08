@@ -101,11 +101,27 @@ public:
      */
     const Eigen::VectorXd& c() const noexcept { return c_; }
 
+    /**
+     * \brief Function that return the E matrix of the cost function
+     * A cost function is written \f$ \frac{1}{2} x^T Q x + c^T x\f$.
+     * \return The Q matrix
+     */
+    const Eigen::MatrixXd& E() const noexcept { return E_; }
+
+    /**
+     * \brief Function that return the f vector of the cost function
+     * A cost function is written \f$ \frac{1}{2} x^T Q x + c^T x\f$.
+     * \return The c vector matrix
+     */
+    const Eigen::VectorXd& f() const noexcept { return f_; }
+
 protected:
     std::string name_;
     bool fullSizeEntry_;
     Eigen::MatrixXd Q_;
     Eigen::VectorXd c_;
+    Eigen::MatrixXd E_;
+    Eigen::VectorXd f_;
     Eigen::VectorXd weights_;
 };
 

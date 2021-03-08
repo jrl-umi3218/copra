@@ -13,3 +13,4 @@ endmacro(addTest)
 
 addTest(TestSolvers)
 addTest(TestLMPC)
+addTest(TestLMPC_InitialState)
