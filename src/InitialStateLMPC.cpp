@@ -129,15 +129,15 @@ Eigen::VectorXd InitialStateLMPC::trajectory() const noexcept
 
 void InitialStateLMPC::resetInitialStateCost(const Eigen::MatrixXd& R, const Eigen::VectorXd& r)
 {
-    //assert matrix R is positive definite
-    //assert correct sizes
+    assert(R_.cols() == R.cols() && R_.rows() == R.rows() && "Matrix size mismatch");
+    //R must be positive definite!
     R_ = R;
     r_ = r;
 }
 
 void InitialStateLMPC::resetInitialStateBounds(const Eigen::VectorXd& l, const Eigen::VectorXd& u)
 {
-    //assert correct sizes
+    assert(l.rows() == ps_->xDim && u.rows() == ps_->xDim && "Vector size mismatch");
     l_ = l;
     u_ = u;
 }
