@@ -55,9 +55,7 @@ public:
      */
     virtual ~LMPC() = default; 
     
-    LMPC(const LMPC&) = default;
     LMPC(LMPC&&) = default;
-    LMPC& operator=(const LMPC&) = default;
     LMPC& operator=(LMPC&&) = default;
 
     /**
