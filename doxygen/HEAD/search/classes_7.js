@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['osqpsolver',['OSQPSolver',['../a00692.html',1,'copra']]]
+  ['osqpsolver',['OSQPSolver',['../a00702.html',1,'copra']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['previewsystem_2eh',['PreviewSystem.h',['../a00029.html',1,'']]]
+  ['osqpsolver_2eh',['OSQPSolver.h',['../a00029.html',1,'']]]
 ];

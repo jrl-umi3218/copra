@@ -2,47 +2,50 @@ var files =
 [
     [ "api.h", "a00002.html", "a00002" ],
     [ "AutoSpan.h", "a00005.html", [
-      [ "AutoSpan", "a00624.html", "a00624" ]
+      [ "AutoSpan", "a00630.html", "a00630" ]
     ] ],
     [ "constraints.h", "a00008.html", "a00008" ],
     [ "costFunctions.h", "a00011.html", [
-      [ "CostFunction", "a00656.html", "a00656" ],
-      [ "TrajectoryCost", "a00660.html", "a00660" ],
-      [ "TargetCost", "a00664.html", "a00664" ],
-      [ "ControlCost", "a00668.html", "a00668" ],
-      [ "MixedCost", "a00672.html", "a00672" ]
+      [ "CostFunction", "a00662.html", "a00662" ],
+      [ "TrajectoryCost", "a00666.html", "a00666" ],
+      [ "TargetCost", "a00670.html", "a00670" ],
+      [ "ControlCost", "a00674.html", "a00674" ],
+      [ "MixedCost", "a00678.html", "a00678" ]
     ] ],
     [ "debugUtils.h", "a00014.html", "a00014" ],
     [ "GUROBISolver.h", "a00017.html", [
-      [ "GUROBISolver", "a00676.html", "a00676" ]
+      [ "GUROBISolver", "a00682.html", "a00682" ]
     ] ],
-    [ "LMPC.h", "a00020.html", [
-      [ "LMPC", "a00680.html", "a00680" ],
-      [ "Constraints", "a00684.html", "a00684" ]
+    [ "InitialStateLMPC.h", "a00020.html", [
+      [ "InitialStateLMPC", "a00686.html", "a00686" ]
     ] ],
-    [ "LSSOLSolver.h", "a00023.html", [
-      [ "LSSOLSolver", "a00688.html", "a00688" ]
+    [ "LMPC.h", "a00023.html", [
+      [ "LMPC", "a00690.html", "a00690" ],
+      [ "Constraints", "a00694.html", "a00694" ]
     ] ],
-    [ "OSQPSolver.h", "a00026.html", [
-      [ "OSQPSolver", "a00692.html", "a00692" ]
+    [ "LSSOLSolver.h", "a00026.html", [
+      [ "LSSOLSolver", "a00698.html", "a00698" ]
     ] ],
-    [ "PreviewSystem.h", "a00029.html", [
-      [ "PreviewSystem", "a00696.html", "a00696" ]
+    [ "OSQPSolver.h", "a00029.html", [
+      [ "OSQPSolver", "a00702.html", "a00702" ]
     ] ],
-    [ "QLDSolver.h", "a00032.html", [
-      [ "QLDSolver", "a00700.html", "a00700" ]
+    [ "PreviewSystem.h", "a00032.html", [
+      [ "PreviewSystem", "a00706.html", "a00706" ]
     ] ],
-    [ "QuadProgSolver.h", "a00035.html", [
-      [ "QuadProgDenseSolver", "a00704.html", "a00704" ]
+    [ "QLDSolver.h", "a00035.html", [
+      [ "QLDSolver", "a00710.html", "a00710" ]
     ] ],
-    [ "SolverInterface.h", "a00038.html", [
-      [ "SolverInterface", "a00708.html", "a00708" ]
+    [ "QuadProgSolver.h", "a00038.html", [
+      [ "QuadProgDenseSolver", "a00714.html", "a00714" ]
     ] ],
-    [ "solverUtils.h", "a00041.html", "a00041" ],
-    [ "typedefs.h", "a00044.html", [
-      [ "is_all_arithmetic", "a00712.html", null ],
-      [ "is_all_arithmetic< std::false_type, T2, T3 >", "a00716.html", "a00716" ],
-      [ "is_all_arithmetic< std::true_type, T2, T3 >", "a00720.html", null ],
-      [ "is_all_arithmetic< std::true_type, std::true_type, std::true_type >", "a00724.html", "a00724" ]
+    [ "SolverInterface.h", "a00041.html", [
+      [ "SolverInterface", "a00718.html", "a00718" ]
+    ] ],
+    [ "solverUtils.h", "a00044.html", "a00044" ],
+    [ "typedefs.h", "a00047.html", [
+      [ "is_all_arithmetic", "a00722.html", null ],
+      [ "is_all_arithmetic< std::false_type, T2, T3 >", "a00726.html", "a00726" ],
+      [ "is_all_arithmetic< std::true_type, T2, T3 >", "a00730.html", null ],
+      [ "is_all_arithmetic< std::true_type, std::true_type, std::true_type >", "a00734.html", "a00734" ]
     ] ]
 ];

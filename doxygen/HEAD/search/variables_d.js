@@ -1,5 +1,11 @@
 var searchData=
 [
-  ['ub_5f',['ub_',['../a00680.html#ae1031c267c293dbb02c9e7d128aa157e',1,'copra::LMPC']]],
-  ['udim',['uDim',['../a00696.html#a4df70e0a6a669e1f68e2d26341e05acf',1,'copra::PreviewSystem']]]
+  ['sol_5f',['sol_',['../a00690.html#a54cb31bdf8dd5337ed3afc7690fb2338',1,'copra::LMPC']]],
+  ['solveandbuildtime_5f',['solveAndBuildTime_',['../a00690.html#a98c81c0ffc95f4ec4b473618f1b74743',1,'copra::LMPC']]],
+  ['solvetime_5f',['solveTime_',['../a00690.html#ad48afc8605ae37f45f0adba34b8cde25',1,'copra::LMPC']]],
+  ['spboundconstr',['spBoundConstr',['../a00694.html#aebabe9657b16549a37df2df1646745fb',1,'copra::LMPC::Constraints']]],
+  ['spconstr',['spConstr',['../a00694.html#a931fbce0e0879c3d04b2ddfc74a4d296',1,'copra::LMPC::Constraints']]],
+  ['spcost_5f',['spCost_',['../a00690.html#a0157fa7a52ef3a1fb533acfadf3a2ced',1,'copra::LMPC']]],
+  ['speqconstr',['spEqConstr',['../a00694.html#ae36f17512a87cad8136791572608c28c',1,'copra::LMPC::Constraints']]],
+  ['spineqconstr',['spIneqConstr',['../a00694.html#a788737b9608f6ef81cb33075d9e884ce',1,'copra::LMPC::Constraints']]]
 ];

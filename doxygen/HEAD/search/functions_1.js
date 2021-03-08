@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['b',['b',['../a00632.html#a8ac6947c7200cf594b807b42a7cd55a1',1,'copra::EqIneqConstraint']]],
-  ['basesolver',['baseSolver',['../a00676.html#a520b1773b7b253074e35cbfb8fbd7e6e',1,'copra::GUROBISolver::baseSolver()'],['../a00688.html#ae927054cfc17b6032951c9f3167c9590',1,'copra::LSSOLSolver::baseSolver()'],['../a00692.html#ad50a69ab778eed290f71df89d0ced564',1,'copra::OSQPSolver::baseSolver()'],['../a00700.html#ad50d8efd6b5b6da7c4dc818e5a5e2a90',1,'copra::QLDSolver::baseSolver()'],['../a00704.html#a0e00056ac7cbef847004d8f3644dddbd',1,'copra::QuadProgDenseSolver::baseSolver()']]]
+  ['b',['b',['../a00638.html#a8ac6947c7200cf594b807b42a7cd55a1',1,'copra::EqIneqConstraint']]],
+  ['basesolver',['baseSolver',['../a00682.html#a520b1773b7b253074e35cbfb8fbd7e6e',1,'copra::GUROBISolver::baseSolver()'],['../a00698.html#ae927054cfc17b6032951c9f3167c9590',1,'copra::LSSOLSolver::baseSolver()'],['../a00702.html#ad50a69ab778eed290f71df89d0ced564',1,'copra::OSQPSolver::baseSolver()'],['../a00710.html#ad50d8efd6b5b6da7c4dc818e5a5e2a90',1,'copra::QLDSolver::baseSolver()'],['../a00714.html#a0e00056ac7cbef847004d8f3644dddbd',1,'copra::QuadProgDenseSolver::baseSolver()']]]
 ];
