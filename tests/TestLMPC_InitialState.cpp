@@ -190,23 +190,24 @@ void run_comparison_test(const bool fullSizeEntry)
     lmpcB.removeConstraint(tbcstrB);
     lmpcB.removeConstraint(cbcstrB);
 
-    Eigen::MatrixXd lmpcA_Q = lmpcA.Q();
-    Eigen::MatrixXd lmpcA_Aineq = lmpcA.Aineq();
-    Eigen::MatrixXd lmpcA_Aeq = lmpcA.Aeq();
-    Eigen::VectorXd lmpcA_c = lmpcA.c();
-    Eigen::VectorXd lmpcA_bineq = lmpcA.bineq();
-    Eigen::VectorXd lmpcA_beq = lmpcA.beq();
-    Eigen::VectorXd lmpcA_lb = lmpcA.lb();
-    Eigen::VectorXd lmpcA_ub = lmpcA.ub();
+    const Eigen::MatrixXd& lmpcA_Q = lmpcA.Q();
+    const Eigen::MatrixXd& lmpcA_Aineq = lmpcA.Aineq();
+    const Eigen::MatrixXd& lmpcA_Aeq = lmpcA.Aeq();
+    const Eigen::VectorXd& lmpcA_c = lmpcA.c();
+    const Eigen::VectorXd& lmpcA_bineq = lmpcA.bineq();
+    const Eigen::VectorXd& lmpcA_beq = lmpcA.beq();
+    const Eigen::VectorXd& lmpcA_lb = lmpcA.lb();
+    const Eigen::VectorXd& lmpcA_ub = lmpcA.ub();
 
-    Eigen::MatrixXd lmpcB_Q = lmpcB.Q();
-    Eigen::MatrixXd lmpcB_Aineq = lmpcB.Aineq();
-    Eigen::MatrixXd lmpcB_Aeq = lmpcB.Aeq();
-    Eigen::VectorXd lmpcB_c = lmpcB.c();
+    int fullUDim = previewSystem->fullUDim;
+    Eigen::MatrixXd lmpcB_Q = lmpcB.Q().bottomRightCorner(fullUDim, fullUDim);
+    Eigen::MatrixXd lmpcB_Aineq = lmpcB.Aineq().rightCols(fullUDim);
+    Eigen::MatrixXd lmpcB_Aeq = lmpcB.Aeq().rightCols(fullUDim);
+    Eigen::VectorXd lmpcB_c = lmpcB.c().tail(fullUDim);
     Eigen::VectorXd lmpcB_bineq = lmpcB.bineq();
     Eigen::VectorXd lmpcB_beq = lmpcB.beq();
-    Eigen::VectorXd lmpcB_lb = lmpcB.lb();
-    Eigen::VectorXd lmpcB_ub = lmpcB.ub();
+    Eigen::VectorXd lmpcB_lb = lmpcB.lb().tail(fullUDim);
+    Eigen::VectorXd lmpcB_ub = lmpcB.ub().tail(fullUDim);
 
     REQUIRE_EQ(lmpcA.nrEqConstr(), lmpcB.nrEqConstr());
     REQUIRE_EQ(lmpcA.nrIneqConstr(), lmpcB.nrIneqConstr());
@@ -215,11 +216,11 @@ void run_comparison_test(const bool fullSizeEntry)
     REQUIRE_LE((lmpcA_c - lmpcB_c).cwiseAbs().maxCoeff(), 1e-6);
     REQUIRE_LE((lmpcA_lb - lmpcB_lb).cwiseAbs().maxCoeff(), 1e-6);
     REQUIRE_LE((lmpcA_ub - lmpcB_ub).cwiseAbs().maxCoeff(), 1e-6);
-    if (lmpcA.nrEqConstr()) {
+    if (lmpcA.nrEqConstr() > 0) {
         REQUIRE_LE((lmpcA_Aeq - lmpcB_Aeq).cwiseAbs().maxCoeff(), 1e-6);
         REQUIRE_LE((lmpcA_beq - lmpcB_beq).cwiseAbs().maxCoeff(), 1e-6);
     }
-    if (lmpcA.nrEqConstr()) {
+    if (lmpcA.nrIneqConstr() > 0) {
         REQUIRE_LE((lmpcA_Aineq - lmpcB_Aineq).cwiseAbs().maxCoeff(), 1e-6);
         REQUIRE_LE((lmpcA_bineq - lmpcB_bineq).cwiseAbs().maxCoeff(), 1e-6);
     }
@@ -230,12 +231,12 @@ void run_comparison_test(const bool fullSizeEntry)
     const Eigen::VectorXd commandsB = lmpcB.control();
     const Eigen::VectorXd statesB = lmpcB.trajectory();
     const Eigen::VectorXd initialStateB = statesB.head(xDim);
-    std::cout << "commandsA: \n " << commandsA.transpose() << std::endl;
-    std::cout << "commandsB: \n " << commandsB.transpose() << std::endl;
-    std::cout << "statesA: \n " << statesA.transpose() << std::endl;
-    std::cout << "statesB: \n " << statesB.transpose() << std::endl;
-    std::cout << "initialStateA: \n " << initialStateA.transpose() << std::endl;
-    std::cout << "initialStateB: \n " << initialStateB.transpose() << std::endl;
+    MESSAGE("commandsA: " << commandsA.transpose());
+    MESSAGE("commandsB: \n " << commandsB.transpose());
+    MESSAGE("statesA: \n " << statesA.transpose());
+    MESSAGE("statesB: \n " << statesB.transpose());
+    MESSAGE("initialStateA: \n " << initialStateA.transpose());
+    MESSAGE("initialStateB: \n " << initialStateB.transpose());
 
     //check if initial state is within its bounds
     for (auto i = 0; i < xDim; ++i) {
@@ -381,9 +382,9 @@ void run_optimization_test(const bool fullSizeEntry)
     const Eigen::VectorXd commands = lmpc.control();
     const Eigen::VectorXd states = lmpc.trajectory();
     const Eigen::VectorXd initialState = states.head(xDim);
-    std::cout << "commands: \n " << commands.transpose() << std::endl;
-    std::cout << "states: \n " << states.transpose() << std::endl;
-    std::cout << "initialState: \n " << initialState.transpose() << std::endl;
+    MESSAGE("commands: \n " << commands.transpose());
+    MESSAGE("states: \n " << states.transpose());
+    MESSAGE("initialState: \n " << initialState.transpose());
 
     //check if initial state is within its bounds
     for (auto i = 0; i < xDim; ++i) {
