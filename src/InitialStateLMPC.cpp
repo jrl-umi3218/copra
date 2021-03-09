@@ -201,10 +201,10 @@ void InitialStateLMPC::makeQPForm()
 
     // Update last part of Q
     {
-        Eigen::MatrixXd E = Q_.topRightCorner(ps_->xDim, ps_->fullUDim); // Carefull! Temporary Eigen Proxy class
-        Eigen::MatrixXd Q = Q_.bottomRightCorner(ps_->fullUDim, ps_->fullUDim); // Carefull! Temporary Eigen Proxy class
+        auto E = Q_.topRightCorner(ps_->xDim, ps_->fullUDim); // Carefull! Temporary Eigen Proxy class
+        auto Q = Q_.bottomRightCorner(ps_->fullUDim, ps_->fullUDim); // Carefull! Temporary Eigen Proxy class
         Q_.bottomLeftCorner(ps_->fullUDim, ps_->xDim) = E.transpose();
-        Q_.topLeftCorner(ps_->xDim, ps_->xDim).noalias() = R_ + E * Q.inverse() * E.transpose();
+        Q_.topLeftCorner(ps_->xDim, ps_->xDim).noalias() = R_ + E * Q.inverse() * E.transpose(); //TODO we may want to use another method to compute the inverse of Q
     }
     c_.head(ps_->xDim) = r_;
     lb_.head(ps_->xDim) = x0lb_;
