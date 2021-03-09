@@ -27,10 +27,6 @@ Constraint::Constraint(std::string&& name)
 
 EqIneqConstraint::EqIneqConstraint(const std::string& constrQualifier, bool isInequalityConstraint)
     : Constraint(constrQualifier + (isInequalityConstraint ? " inequality constraint" : " equality constraint"))
-    , A_()
-    , b_()
-    , Y_()
-    , z_()
     , isIneq_(isInequalityConstraint)
 {
 }
@@ -48,12 +44,12 @@ void TrajectoryConstraint::autoSpan()
 
 void TrajectoryConstraint::initializeConstraint(const PreviewSystem& ps)
 {
-    if (E_.rows() != f_.rows())
+    if (E_.rows() != f_.rows()) {
         DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsAskAutoSpan("E", "f", E_, f_));
+    }
 
     if (E_.cols() == ps.xDim) {
         nrConstr_ = static_cast<int>(E_.rows()) * ps.nrXStep;
-
     } else if (E_.cols() == ps.fullXDim) {
         fullSizeEntry_ = true;
         nrConstr_ = static_cast<int>(E_.rows());
@@ -89,10 +85,11 @@ void TrajectoryConstraint::update(const PreviewSystem& ps)
 
 ConstraintFlag TrajectoryConstraint::constraintType() const noexcept
 {
-    if (isIneq_)
+    if (isIneq_) {
         return ConstraintFlag::InequalityConstraint;
-    else
+    } else {
         return ConstraintFlag::EqualityConstraint;
+    }
 }
 
 /*************************************************************************************************
@@ -108,11 +105,13 @@ void ControlConstraint::autoSpan()
 
 void ControlConstraint::initializeConstraint(const PreviewSystem& ps)
 {
-    if (hasBeenInitialized_)
+    if (hasBeenInitialized_) {
         RUNTIME_ERROR_EXCEPTION("You have initialized a ControlConstraint twice. As move semantics are used, you can't do so.");
+    }
 
-    if (G_.rows() != f_.rows())
+    if (G_.rows() != f_.rows()) {
         DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsAskAutoSpan("G", "f", G_, f_));
+    }
 
     if (G_.cols() == ps.uDim) {
         nrConstr_ = static_cast<int>(G_.rows()) * ps.nrUStep;
@@ -150,10 +149,11 @@ void ControlConstraint::update(const PreviewSystem& ps)
 
 ConstraintFlag ControlConstraint::constraintType() const noexcept
 {
-    if (isIneq_)
+    if (isIneq_) {
         return ConstraintFlag::InequalityConstraint;
-    else
+    } else {
         return ConstraintFlag::EqualityConstraint;
+    }
 }
 
 /*************************************************************************************************
@@ -170,10 +170,12 @@ void MixedConstraint::autoSpan()
 
 void MixedConstraint::initializeConstraint(const PreviewSystem& ps)
 {
-    if (E_.rows() != f_.rows())
+    if (E_.rows() != f_.rows()) {
         DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsAskAutoSpan("E", "f", E_, f_));
-    if (G_.rows() != f_.rows())
+    }
+    if (G_.rows() != f_.rows()) {
         DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsAskAutoSpan("G", "f", G_, f_));
+    }
 
     if (E_.cols() == ps.xDim && G_.cols() == ps.uDim) {
         nrConstr_ = static_cast<int>(E_.rows()) * ps.nrUStep;
@@ -212,8 +214,9 @@ void MixedConstraint::update(const PreviewSystem& ps)
         for (int i = 1; i < ps.nrUStep; ++i) {
             A_.block(i * nrLines, 0, nrLines, uDim) = E_ * ps.Psi.block(i * xDim, 0, xDim, uDim);
             Y_.block(i * nrLines, 0, nrLines, xDim) = E_ * ps.Phi.block(i * xDim, 0, xDim, xDim);
-            for (int j = 1; j <= i; ++j)
+            for (int j = 1; j <= i; ++j) {
                 A_.block(i * nrLines, j * uDim, nrLines, uDim) = A_.block((i - 1) * nrLines, (j - 1) * uDim, nrLines, uDim);
+            }
 
             // b_.segment(i * nrLines, nrLines) = f_ - E_ * (ps.Phi.block(i * xDim, 0, xDim, xDim) * ps.x0 + ps.xi.segment(i * xDim, xDim));
             z_.segment(i * nrLines, nrLines) = f_ - E_ * ps.xi.segment(i * xDim, xDim);
@@ -224,10 +227,11 @@ void MixedConstraint::update(const PreviewSystem& ps)
 
 ConstraintFlag MixedConstraint::constraintType() const noexcept
 {
-    if (isIneq_)
+    if (isIneq_) {
         return ConstraintFlag::InequalityConstraint;
-    else
+    } else {
         return ConstraintFlag::EqualityConstraint;
+    }
 }
 
 /*************************************************************************************************
@@ -249,16 +253,18 @@ void TrajectoryBoundConstraint::autoSpan()
     if (upper_.rows() != max_dim) {
         upperLines_.clear();
         for (auto line = 0; line < upper_.rows(); ++line) {
-            if (upper_(line) != std::numeric_limits<double>::infinity())
+            if (upper_(line) != std::numeric_limits<double>::infinity()) {
                 upperLines_.push_back(line);
+            }
         }
     }
 }
 
 void TrajectoryBoundConstraint::initializeConstraint(const PreviewSystem& ps)
 {
-    if (lower_.rows() != upper_.rows())
+    if (lower_.rows() != upper_.rows()) {
         DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsAskAutoSpan("lower", "upper", lower_, upper_));
+    }
 
     if (lower_.rows() == ps.xDim) {
         nrConstr_ = static_cast<int>((lowerLines_.size() + upperLines_.size())) * ps.nrXStep;
@@ -288,8 +294,9 @@ void TrajectoryBoundConstraint::update(const PreviewSystem& ps)
             b_(nrLines) = z_(nrLines) - Y_.row(nrLines) * ps.x0;
             ++nrLines;
         }
-        if (fullSizeEntry_)
+        if (fullSizeEntry_) {
             break;
+        }
     }
 
     for (auto step = 0; step < ps.nrXStep; ++step) {
@@ -301,8 +308,9 @@ void TrajectoryBoundConstraint::update(const PreviewSystem& ps)
             b_(nrLines) = z_(nrLines) - Y_.row(nrLines) * ps.x0;
             ++nrLines;
         }
-        if (fullSizeEntry_)
+        if (fullSizeEntry_) {
             break;
+        }
     }
 }
 
@@ -324,11 +332,13 @@ void ControlBoundConstraint::autoSpan()
 
 void ControlBoundConstraint::initializeConstraint(const PreviewSystem& ps)
 {
-    if (hasBeenInitialized_)
+    if (hasBeenInitialized_) {
         RUNTIME_ERROR_EXCEPTION("You have initialized a ControlBoundConstraint twice. As move semantics are used, you can't do so.");
+    }
 
-    if (lower_.rows() != upper_.rows())
+    if (lower_.rows() != upper_.rows()) {
         DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsAskAutoSpan("lower", "upper", lower_, upper_));
+    }
 
     if (lower_.rows() == ps.uDim) {
         nrConstr_ = ps.fullUDim;

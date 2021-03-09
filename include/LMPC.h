@@ -49,12 +49,10 @@ public:
      * \param sFlag The flag corresponding to the desired solver.
      */
     LMPC(const std::shared_ptr<PreviewSystem>& ps, SolverFlag sFlag = SolverFlag::DEFAULT);
-
     /**
      * Virtual destructor
      */
     virtual ~LMPC() = default;
-
     LMPC(LMPC&&) = default;
     LMPC& operator=(LMPC&&) = default;
 
@@ -149,16 +147,16 @@ public:
     /**
      * Getter Functions
      */
-    inline int get_nrEqConstr() { return constraints_.nrEqConstr; }
-    inline int get_nrIneqConstr() { return constraints_.nrIneqConstr; }
-    inline Eigen::MatrixXd get_Q() { return Q_; }
-    inline Eigen::MatrixXd get_Aineq() { return Aineq_; }
-    inline Eigen::MatrixXd get_Aeq() { return Aeq_; }
-    inline Eigen::VectorXd get_c() { return c_; }
-    inline Eigen::VectorXd get_bineq() { return bineq_; }
-    inline Eigen::VectorXd get_beq() { return beq_; }
-    inline Eigen::VectorXd get_lb() { return lb_; }
-    inline Eigen::VectorXd get_ub() { return ub_; }
+    inline int nrEqConstr() { return constraints_.nrEqConstr; }
+    inline int nrIneqConstr() { return constraints_.nrIneqConstr; }
+    inline const Eigen::MatrixXd& Q() { return Q_; }
+    inline const Eigen::MatrixXd& Aineq() { return Aineq_; }
+    inline const Eigen::MatrixXd& Aeq() { return Aeq_; }
+    inline const Eigen::VectorXd& c() { return c_; }
+    inline const Eigen::VectorXd& bineq() { return bineq_; }
+    inline const Eigen::VectorXd& beq() { return beq_; }
+    inline const Eigen::VectorXd& lb() { return lb_; }
+    inline const Eigen::VectorXd& ub() { return ub_; }
 
 protected:
     /**

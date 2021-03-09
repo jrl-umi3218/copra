@@ -13,25 +13,6 @@ namespace copra {
  *************************************************************************************************/
 InitialStateLMPC::InitialStateLMPC(SolverFlag sFlag)
     : LMPC(sFlag)
-    , R_()
-    , r_()
-    , E_()
-    , f_()
-    , l_()
-    , u_()
-    , Yeq_()
-    , zeq_()
-    , Yineq_()
-    , zineq_()
-    , newQ_()
-    , newc_()
-    , newlb_()
-    , newub_()
-    , newAeq_()
-    , newbeq_()
-    , newAineq_()
-    , newbineq_()
-    , control_()
 {
 }
 
@@ -43,18 +24,10 @@ InitialStateLMPC::InitialStateLMPC(const std::shared_ptr<PreviewSystem>& ps, Sol
     , f_(ps_->fullUDim)
     , l_(ps_->xDim)
     , u_(ps_->xDim)
-    , Yeq_()
-    , zeq_()
-    , Yineq_()
-    , zineq_()
     , newQ_(ps_->xDim + ps_->fullUDim, ps_->xDim + ps_->fullUDim)
     , newc_(ps_->xDim + ps_->fullUDim)
     , newlb_(ps_->xDim + ps_->fullUDim)
     , newub_(ps_->xDim + ps_->fullUDim)
-    , newAeq_()
-    , newbeq_()
-    , newAineq_()
-    , newbineq_()
     , control_(ps_->fullUDim)
 {
     l_.setConstant(-std::numeric_limits<double>::max());
@@ -79,17 +52,16 @@ void InitialStateLMPC::initializeController(const std::shared_ptr<PreviewSystem>
     newub_.resize(ps_->xDim + ps_->fullUDim);
     control_.resize(ps_->fullUDim);
 
-    Eigen::VectorXd xInit = ps->xInit();
+    Eigen::VectorXd xInit = ps->x0;
     resetInitialStateBounds(xInit, xInit); //this basically prevents optimization of the initial state
-    Eigen::MatrixXd R = (1e-6) * Eigen::MatrixXd::Identity(ps_->xDim, ps_->xDim); // ensure that R is positive definite
+    Eigen::MatrixXd R = Eigen::MatrixXd::Identity(ps_->xDim, ps_->xDim) * 1e-6; // ensure that R is positive definite
     Eigen::VectorXd r = Eigen::VectorXd::Zero(ps_->xDim);
     resetInitialStateCost(R, r);
 }
 
+// TODO: Better split base class function (the SI_Solve) to not have redundant code
 bool InitialStateLMPC::solve()
 {
-    //don't call the function solve() of the base-class!
-
     using namespace std::chrono;
     auto sabTime = high_resolution_clock::now();
 
@@ -135,7 +107,8 @@ void InitialStateLMPC::resetInitialStateCost(const Eigen::MatrixXd& R, const Eig
 
 void InitialStateLMPC::resetInitialStateBounds(const Eigen::VectorXd& l, const Eigen::VectorXd& u)
 {
-    assert(l.rows() == ps_->xDim && u.rows() == ps_->xDim && "Vector size mismatch");
+    assert(l.rows() == ps_->xDim && "Vector size mismatch");
+    assert(u.rows() == ps_->xDim && "Vector size mismatch");
     l_ = l;
     u_ = u;
 }
@@ -187,8 +160,6 @@ void InitialStateLMPC::updateSystem()
 
 void InitialStateLMPC::makeQPForm()
 {
-    //don't call the function makeQPForm() of the base-class!
-
     // Get Costs
     for (auto& cost : spCost_) {
         Q_ += cost->Q();
@@ -197,9 +168,8 @@ void InitialStateLMPC::makeQPForm()
         f_ += cost->f();
     }
 
-    int nrLines;
+    int nrLines = 0;
     // Get Equality constraints
-    nrLines = 0;
     for (auto& cstr : constraints_.spEqConstr) {
         Aeq_.block(nrLines, 0, cstr->nrConstr(), ps_->fullUDim) = cstr->A();
         beq_.segment(nrLines, cstr->nrConstr()) = cstr->b();
@@ -207,6 +177,7 @@ void InitialStateLMPC::makeQPForm()
         zeq_.segment(nrLines, cstr->nrConstr()) = cstr->z();
         nrLines += cstr->nrConstr();
     }
+
     // Get Inequality constraints
     nrLines = 0;
     for (auto& cstr : constraints_.spIneqConstr) {
@@ -216,6 +187,7 @@ void InitialStateLMPC::makeQPForm()
         zineq_.segment(nrLines, cstr->nrConstr()) = cstr->z();
         nrLines += cstr->nrConstr();
     }
+
     // Get Bound constraints
     nrLines = 0;
     for (auto& cstr : constraints_.spBoundConstr) {

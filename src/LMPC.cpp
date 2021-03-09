@@ -15,10 +15,6 @@ namespace copra {
 LMPC::Constraints::Constraints()
     : nrEqConstr(0)
     , nrIneqConstr(0)
-    , spConstr()
-    , spEqConstr()
-    , spIneqConstr()
-    , spBoundConstr()
 {
 }
 
@@ -28,8 +24,9 @@ void LMPC::Constraints::updateNr()
     nrIneqConstr = 0;
 
     auto countConstr = [](auto& spc, int& nreq) {
-        for (auto& sp : spc)
+        for (auto& sp : spc) {
             nreq += sp->nrConstr();
+        }
     };
 
     countConstr(spEqConstr, nrEqConstr);
@@ -53,34 +50,18 @@ void LMPC::Constraints::clear()
 LMPC::LMPC(SolverFlag sFlag)
     : ps_(nullptr)
     , sol_(solverFactory(sFlag))
-    , constraints_()
-    , Q_()
-    , Aineq_()
-    , Aeq_()
-    , c_()
-    , bineq_()
-    , beq_()
-    , lb_()
-    , ub_()
-    , solveTime_()
-    , solveAndBuildTime_()
 {
 }
 
 LMPC::LMPC(const std::shared_ptr<PreviewSystem>& ps, SolverFlag sFlag)
     : ps_(ps)
     , sol_(solverFactory(sFlag))
-    , constraints_()
     , Q_(ps_->fullUDim, ps_->fullUDim)
     , Aineq_(0, ps_->fullUDim)
     , Aeq_(0, ps_->fullUDim)
     , c_(ps_->fullUDim)
-    , bineq_()
-    , beq_()
     , lb_(ps_->fullUDim)
     , ub_(ps_->fullUDim)
-    , solveTime_()
-    , solveAndBuildTime_()
 {
     lb_.setConstant(-std::numeric_limits<double>::max());
     ub_.setConstant(std::numeric_limits<double>::max());
@@ -172,8 +153,9 @@ void LMPC::resetConstraints() noexcept
 void LMPC::removeCost(const std::shared_ptr<CostFunction>& costFun)
 {
     auto rCost = std::find(spCost_.begin(), spCost_.end(), costFun);
-    if (rCost != spCost_.end())
+    if (rCost != spCost_.end()) {
         spCost_.erase(rCost);
+    }
 }
 
 void LMPC::removeConstraint(const std::shared_ptr<Constraint>& constr)
@@ -248,8 +230,9 @@ void LMPC::updateSystem()
     c_.setZero();
 
     // Update the system
-    if (!ps_->isUpdated)
+    if (!ps_->isUpdated) {
         ps_->updateSystem();
+    }
 
     // Update the constraints
     constraints_.updateNr();
@@ -257,13 +240,14 @@ void LMPC::updateSystem()
     beq_.resize(constraints_.nrEqConstr);
     Aineq_.resize(constraints_.nrIneqConstr, ps_->fullUDim);
     bineq_.resize(constraints_.nrIneqConstr);
-
-    for (auto& cstr : constraints_.spConstr)
+    for (auto& cstr : constraints_.spConstr) {
         cstr->update(*ps_);
+    }
 
     // Update the costs
-    for (auto& sp : spCost_)
+    for (auto& sp : spCost_) {
         sp->update(*ps_);
+    }
 }
 
 void LMPC::makeQPForm()

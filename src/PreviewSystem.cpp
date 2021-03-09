@@ -16,16 +16,21 @@ PreviewSystem::PreviewSystem(const Eigen::MatrixXd& state, const Eigen::MatrixXd
 void PreviewSystem::system(const Eigen::MatrixXd& state, const Eigen::MatrixXd& control,
     const Eigen::VectorXd& bias, const Eigen::VectorXd& xInit, int numberOfSteps)
 {
-    if (xInit.rows() != state.rows())
+    if (xInit.rows() != state.rows()) {
         DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("xInit", "state", xInit, state));
-    if (state.rows() != state.cols())
+    }
+    if (state.rows() != state.cols()) {
         DOMAIN_ERROR_EXCEPTION(throwMsgOnSquareMat("state", state));
-    if (xInit.rows() != control.rows())
+    }
+    if (xInit.rows() != control.rows()) {
         DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("xInit", "control", xInit, control));
-    if (xInit.rows() != bias.rows())
+    }
+    if (xInit.rows() != bias.rows()) {
         DOMAIN_ERROR_EXCEPTION(throwMsgOnRows("xInit", "state", xInit, bias));
-    if (numberOfSteps <= 0) // This should disappear later
+    }
+    if (numberOfSteps <= 0) {
         DOMAIN_ERROR_EXCEPTION("The number of step sould be a positive number! ");
+    }
 
     isUpdated = false;
     nrUStep = numberOfSteps;
@@ -58,8 +63,9 @@ void PreviewSystem::updateSystem() noexcept
     for (auto i = 2; i < nrXStep; ++i) {
         Phi.block(i * xDim, 0, xDim, xDim).noalias() = A * Phi.block((i - 1) * xDim, 0, xDim, xDim);
         Psi.block(i * xDim, 0, xDim, uDim).noalias() = A * Psi.block((i - 1) * xDim, 0, xDim, uDim);
-        for (auto j = 1; j < i; ++j)
-            Psi.block(i * xDim, j * uDim, xDim, uDim) = Psi.block((i - 1) * xDim, (j - 1) * uDim, xDim, uDim);
+        for (auto j = 1; j < i; ++j) {
+            Psi.block(i * xDim, j * uDim, xDim, uDim).noalias() = Psi.block((i - 1) * xDim, (j - 1) * uDim, xDim, uDim);
+        }
 
         xi.segment(i * xDim, xDim).noalias() = A * xi.segment((i - 1) * xDim, xDim) + d;
     }

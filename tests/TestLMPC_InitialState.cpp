@@ -190,36 +190,36 @@ void run_comparison_test(const bool fullSizeEntry)
     lmpcB.removeConstraint(tbcstrB);
     lmpcB.removeConstraint(cbcstrB);
 
-    Eigen::MatrixXd lmpcA_Q = lmpcA.get_Q();
-    Eigen::MatrixXd lmpcA_Aineq = lmpcA.get_Aineq();
-    Eigen::MatrixXd lmpcA_Aeq = lmpcA.get_Aeq();
-    Eigen::VectorXd lmpcA_c = lmpcA.get_c();
-    Eigen::VectorXd lmpcA_bineq = lmpcA.get_bineq();
-    Eigen::VectorXd lmpcA_beq = lmpcA.get_beq();
-    Eigen::VectorXd lmpcA_lb = lmpcA.get_lb();
-    Eigen::VectorXd lmpcA_ub = lmpcA.get_ub();
+    Eigen::MatrixXd lmpcA_Q = lmpcA.Q();
+    Eigen::MatrixXd lmpcA_Aineq = lmpcA.Aineq();
+    Eigen::MatrixXd lmpcA_Aeq = lmpcA.Aeq();
+    Eigen::VectorXd lmpcA_c = lmpcA.c();
+    Eigen::VectorXd lmpcA_bineq = lmpcA.bineq();
+    Eigen::VectorXd lmpcA_beq = lmpcA.beq();
+    Eigen::VectorXd lmpcA_lb = lmpcA.lb();
+    Eigen::VectorXd lmpcA_ub = lmpcA.ub();
 
-    Eigen::MatrixXd lmpcB_Q = lmpcB.get_Q();
-    Eigen::MatrixXd lmpcB_Aineq = lmpcB.get_Aineq();
-    Eigen::MatrixXd lmpcB_Aeq = lmpcB.get_Aeq();
-    Eigen::VectorXd lmpcB_c = lmpcB.get_c();
-    Eigen::VectorXd lmpcB_bineq = lmpcB.get_bineq();
-    Eigen::VectorXd lmpcB_beq = lmpcB.get_beq();
-    Eigen::VectorXd lmpcB_lb = lmpcB.get_lb();
-    Eigen::VectorXd lmpcB_ub = lmpcB.get_ub();
+    Eigen::MatrixXd lmpcB_Q = lmpcB.Q();
+    Eigen::MatrixXd lmpcB_Aineq = lmpcB.Aineq();
+    Eigen::MatrixXd lmpcB_Aeq = lmpcB.Aeq();
+    Eigen::VectorXd lmpcB_c = lmpcB.c();
+    Eigen::VectorXd lmpcB_bineq = lmpcB.bineq();
+    Eigen::VectorXd lmpcB_beq = lmpcB.beq();
+    Eigen::VectorXd lmpcB_lb = lmpcB.lb();
+    Eigen::VectorXd lmpcB_ub = lmpcB.ub();
 
-    REQUIRE_EQ(lmpcA.get_nrEqConstr(), lmpcB.get_nrEqConstr());
-    REQUIRE_EQ(lmpcA.get_nrIneqConstr(), lmpcB.get_nrIneqConstr());
+    REQUIRE_EQ(lmpcA.nrEqConstr(), lmpcB.nrEqConstr());
+    REQUIRE_EQ(lmpcA.nrIneqConstr(), lmpcB.nrIneqConstr());
 
     REQUIRE_LE((lmpcA_Q - lmpcB_Q).cwiseAbs().maxCoeff(), 1e-6);
     REQUIRE_LE((lmpcA_c - lmpcB_c).cwiseAbs().maxCoeff(), 1e-6);
     REQUIRE_LE((lmpcA_lb - lmpcB_lb).cwiseAbs().maxCoeff(), 1e-6);
     REQUIRE_LE((lmpcA_ub - lmpcB_ub).cwiseAbs().maxCoeff(), 1e-6);
-    if (lmpcA.get_nrEqConstr()) {
+    if (lmpcA.nrEqConstr()) {
         REQUIRE_LE((lmpcA_Aeq - lmpcB_Aeq).cwiseAbs().maxCoeff(), 1e-6);
         REQUIRE_LE((lmpcA_beq - lmpcB_beq).cwiseAbs().maxCoeff(), 1e-6);
     }
-    if (lmpcA.get_nrEqConstr()) {
+    if (lmpcA.nrEqConstr()) {
         REQUIRE_LE((lmpcA_Aineq - lmpcB_Aineq).cwiseAbs().maxCoeff(), 1e-6);
         REQUIRE_LE((lmpcA_bineq - lmpcB_bineq).cwiseAbs().maxCoeff(), 1e-6);
     }

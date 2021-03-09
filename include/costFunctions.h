@@ -64,8 +64,9 @@ public:
             weights_ = std::forward<TVec>(weights);
         } else if (weights_.rows() % weights.rows() == 0) {
             auto size = weights_.rows() / weights.rows();
-            for (auto i = 0; i < size; ++i)
+            for (auto i = 0; i < size; ++i) {
                 weights_.segment(i * weights.rows(), weights.rows()) = weights;
+            }
         } else {
             DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsOnDim("weights", weights, weights_.rows()));
         }

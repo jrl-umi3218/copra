@@ -44,8 +44,9 @@ void TrajectoryCost::autoSpan()
 void TrajectoryCost::initializeCost(const PreviewSystem& ps)
 {
     CostFunction::initializeCost(ps);
-    if (M_.rows() != p_.rows())
+    if (M_.rows() != p_.rows()) {
         DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsAskAutoSpan("M", "p", M_, p_));
+    }
 
     if (M_.cols() == ps.xDim) {
         Q_.setZero();
@@ -87,11 +88,13 @@ void TrajectoryCost::update(const PreviewSystem& ps)
 void TargetCost::initializeCost(const PreviewSystem& ps)
 {
     CostFunction::initializeCost(ps);
-    if (M_.rows() != p_.rows())
+    if (M_.rows() != p_.rows()) {
         DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsAskAutoSpan("M", "p", M_, p_));
+    }
 
-    if (M_.cols() != ps.xDim)
+    if (M_.cols() != ps.xDim) {
         DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsOnPSxDim("M", M_, &ps));
+    }
 }
 
 void TargetCost::update(const PreviewSystem& ps)
@@ -119,16 +122,18 @@ void ControlCost::autoSpan()
 void ControlCost::initializeCost(const PreviewSystem& ps)
 {
     CostFunction::initializeCost(ps);
-    if (N_.rows() != p_.rows())
+    if (N_.rows() != p_.rows()) {
         DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsAskAutoSpan("N", "p", N_, p_));
+    }
 
     if (N_.cols() == ps.uDim) {
         Q_.setZero();
         E_.setZero();
-    } else if (N_.cols() == ps.fullUDim)
+    } else if (N_.cols() == ps.fullUDim) {
         fullSizeEntry_ = true;
-    else
+    } else {
         DOMAIN_ERROR_EXCEPTION(throwMsgOnColsOnPSUDim("N", N_, &ps));
+    }
 }
 
 void ControlCost::update(const PreviewSystem& ps)
@@ -168,10 +173,12 @@ void MixedCost::autoSpan()
 void MixedCost::initializeCost(const PreviewSystem& ps)
 {
     CostFunction::initializeCost(ps);
-    if (M_.rows() != p_.rows())
+    if (M_.rows() != p_.rows()) {
         DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsAskAutoSpan("M", "p", M_, p_));
-    if (N_.rows() != p_.rows())
+    }
+    if (N_.rows() != p_.rows()) {
         DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsAskAutoSpan("N", "p", N_, p_));
+    }
 
     if (M_.cols() == ps.xDim && N_.cols() == ps.uDim) {
         Q_.setZero();

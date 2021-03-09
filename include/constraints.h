@@ -356,8 +356,6 @@ public:
         : EqIneqConstraint("Trajectory bound", true)
         , lower_(std::forward<TVec1>(lower))
         , upper_(std::forward<TVec2>(upper))
-        , lowerLines_()
-        , upperLines_()
     {
         for (auto line = 0; line < lower_.rows(); ++line) {
             if (lower_(line) != -std::numeric_limits<double>::infinity())
@@ -424,8 +422,6 @@ public:
         : Constraint("Control bound constraint")
         , lower_(std::forward<TVec1>(lower))
         , upper_(std::forward<TVec2>(upper))
-        , lb_()
-        , ub_()
     {
     }
 

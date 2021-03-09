@@ -57,14 +57,9 @@ struct COPRA_DLLAPI PreviewSystem {
     void updateSystem() noexcept;
 
     /**
-     * \brief Update the initial state.
+     * \brief Modify the initial state without the need to update the system.
      */
     void xInit(const Eigen::VectorXd& xInit) { x0 = xInit; }
-
-    /**
-     * \brief Get the initial state.
-     */
-    Eigen::VectorXd& xInit() { return x0; }
 
     bool isUpdated = false; /**< State whether or not the preview system has been updated. This is done when calling the solve function of a mpc. Calling \see system or setting this to false will force a new update*/
     int nrUStep = 0; /**< The number of iteration to perform for U (it is the dimension of \f$U\f$, \f$N\f$). */

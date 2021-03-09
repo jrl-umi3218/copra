@@ -3,3 +3,4 @@
 build/
 build_and_install_config
 CMakeLists.txt.user*
+.vscode/

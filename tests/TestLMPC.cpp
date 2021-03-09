@@ -53,10 +53,11 @@ TEST_CASE_FIXTURE(BoundedSystem, "MPC_TARGET_COST_WITH_BOUND_CONSTRAINTS")
     controller.addConstraint(contConstr);
 
     auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver = nullptr) {
-        if (solver)
+        if (solver) {
             controller.useSolver(std::move(solver));
-        else
+        } else {
             controller.selectQPSolver(sFlag);
+        }
 
         REQUIRE(controller.solve());
         sTimers.st.emplace_back(solverName, controller.solveTime() * 1e3);
@@ -116,10 +117,11 @@ TEST_CASE_FIXTURE(BoundedSystem, "MPC_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS")
     controller.addConstraint(contConstr);
 
     auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver = nullptr) {
-        if (solver)
+        if (solver) {
             controller.useSolver(std::move(solver));
-        else
+        } else {
             controller.selectQPSolver(sFlag);
+        }
 
 #ifdef EIGEN_OSQP_FOUND
         // Increase precision
@@ -233,10 +235,11 @@ TEST_CASE_FIXTURE(IneqSystem, "MPC_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS")
     controller.addConstraint(contConstr);
 
     auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver = nullptr) {
-        if (solver)
+        if (solver) {
             controller.useSolver(std::move(solver));
-        else
+        } else {
             controller.selectQPSolver(sFlag);
+        }
 
 #ifdef EIGEN_OSQP_FOUND
         // Increase precision
@@ -310,10 +313,11 @@ TEST_CASE_FIXTURE(IneqSystem, "MPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS")
     controller.addConstraint(contConstr);
 
     auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver = nullptr) {
-        if (solver)
+        if (solver) {
             controller.useSolver(std::move(solver));
-        else
+        } else {
             controller.selectQPSolver(sFlag);
+        }
 
 #ifdef EIGEN_OSQP_FOUND
         // Increase precision
@@ -425,10 +429,11 @@ TEST_CASE_FIXTURE(MixedSystem, "MPC_TARGET_COST_WITH_MIXED_CONSTRAINTS")
     controller.addConstraint(mixedConstr);
 
     auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver = nullptr) {
-        if (solver)
+        if (solver) {
             controller.useSolver(std::move(solver));
-        else
+        } else {
             controller.selectQPSolver(sFlag);
+        }
 
         REQUIRE(controller.solve());
         sTimers.st.emplace_back(solverName, controller.solveTime() * 1e3);
@@ -452,8 +457,9 @@ TEST_CASE_FIXTURE(MixedSystem, "MPC_TARGET_COST_WITH_MIXED_CONSTRAINTS")
         REQUIRE_LE(posTraj.maxCoeff(), x0(0));
         for (int i = 0; i < nbStep; ++i) {
             auto res = E * fullTraj.segment(i * E.cols(), E.cols()) + G * control.segment(i * G.cols(), G.cols());
-            if (!(res(0) <= p(0) + 1e-6))
+            if (!(res(0) <= p(0) + 1e-6)) {
                 FAIL("Mixed constraint violated!");
+            }
         }
     };
 
@@ -489,10 +495,11 @@ TEST_CASE_FIXTURE(MixedSystem, "MPC_TRAJECTORY_COST_WITH_MIXED_CONSTRAINTS")
     controller.addConstraint(mixedConstr);
 
     auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver = nullptr) {
-        if (solver)
+        if (solver) {
             controller.useSolver(std::move(solver));
-        else
+        } else {
             controller.selectQPSolver(sFlag);
+        }
 
         REQUIRE(controller.solve());
         sTimers.st.emplace_back(solverName, controller.solveTime() * 1e3);
@@ -516,8 +523,9 @@ TEST_CASE_FIXTURE(MixedSystem, "MPC_TRAJECTORY_COST_WITH_MIXED_CONSTRAINTS")
         REQUIRE_LE(posTraj.maxCoeff(), x0(0));
         for (int i = 0; i < nbStep; ++i) {
             auto res = E * fullTraj.segment(i * E.cols(), E.cols()) + G * control.segment(i * G.cols(), G.cols());
-            if (!(res(0) <= p(0) + 1e-6))
+            if (!(res(0) <= p(0) + 1e-6)) {
                 FAIL("Mixed constraint violated!");
+            }
         }
     };
 
@@ -571,8 +579,9 @@ TEST_CASE_FIXTURE(MixedSystem, "MPC_MIXED_COST_WITH_MIXED_CONSTRAINTS")
     REQUIRE_LE(posTraj.maxCoeff(), x0(0));
     for (int i = 0; i < nbStep; ++i) {
         auto res = E * fullTraj.segment(i * E.cols(), E.cols()) + G * control.segment(i * G.cols(), G.cols());
-        if (!(res(0) <= p(0) + 1e-6))
+        if (!(res(0) <= p(0) + 1e-6)) {
             FAIL("Mixed constraint violated!");
+        }
     }
 }
 
@@ -598,10 +607,11 @@ TEST_CASE_FIXTURE(EqSystem, "MPC_TARGET_COST_WITH_EQUALITY_CONSTRAINTS")
     controller.addConstraint(trajConstr);
 
     auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver = nullptr) {
-        if (solver)
+        if (solver) {
             controller.useSolver(std::move(solver));
-        else
+        } else {
             controller.selectQPSolver(sFlag);
+        }
 
 #ifdef EIGEN_OSQP_FOUND
         // Increase precision
@@ -676,10 +686,11 @@ TEST_CASE_FIXTURE(EqSystem, "MPC_TRAJECTORY_COST_WITH_EQUALITY_CONSTRAINTS")
     controller.addConstraint(trajConstr);
 
     auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver = nullptr) {
-        if (solver)
+        if (solver) {
             controller.useSolver(std::move(solver));
-        else
+        } else {
             controller.selectQPSolver(sFlag);
+        }
 
         REQUIRE(controller.solve());
         sTimers.st.emplace_back(solverName, controller.solveTime() * 1e3);
@@ -921,10 +932,13 @@ TEST_CASE_FIXTURE(IneqSystem, "CHECK_AUTOSPAN_AND_WHOLE_MATRIX_ON_MIXED_COST")
     xdVec.push_back(xd);
     xdVec.push_back(tools::spanVector(xd, nbStep));
 
-    for (auto& i : MVec)
-        for (auto& j : nnVec)
-            for (auto& k : xdVec)
+    for (auto& i : MVec) {
+        for (auto& j : nnVec) {
+            for (auto& k : xdVec) {
                 checkSpan(i, j, k, wx);
+            }
+        }
+    }
 }
 
 /********************************************************************************************************

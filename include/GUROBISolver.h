@@ -29,7 +29,6 @@ public:
     void SI_feasibilityTolerance(double tol) override;
     int SI_maxIter() const override;
     void SI_maxIter(int maxIter) override;
-
     bool SI_warmStart() const override;
     void SI_warmStart(bool w) override;
 
