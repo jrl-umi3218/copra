@@ -15,8 +15,7 @@ namespace copra {
 /**
  * GUROBISolver solver for both dense matrix.
  */
-class COPRA_DLLAPI GUROBISolver : public SolverInterface // TODO: Enable sparse matrix
-{
+class COPRA_DLLAPI GUROBISolver : public SolverInterface { // TODO: Enable sparse matrix
 public:
     /**
      * GUROBISolver default constructor
@@ -63,4 +62,4 @@ private:
     Eigen::GurobiDense solver_;
 };
 
-} // namespace pc
+} // namespace copra

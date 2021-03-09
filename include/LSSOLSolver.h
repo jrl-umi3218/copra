@@ -78,4 +78,4 @@ private:
     Eigen::VectorXd bu_;
 };
 
-} // namespace pc
+} // namespace copra

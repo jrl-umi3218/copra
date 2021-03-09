@@ -4,11 +4,12 @@
 
 #pragma once
 
+#include "api.h"
+
 #include "LMPC.h"
 #include <Eigen/LU>
 
 namespace copra {
-
 
 /**
  * The controller itself.
@@ -52,7 +53,7 @@ public:
      * \return The initial-state vector \f$x_{0}\f$.
      */
     Eigen::VectorXd initialState() const noexcept;
-    
+
     /**
      * Get the solver result.
      * \return The control vector \f$U\f$.
@@ -76,7 +77,6 @@ public:
     void resetInitialStateBounds(const Eigen::VectorXd& l, const Eigen::VectorXd& u);
 
 protected:
-
     /**
      * Resize internal matrices and vectors to default.
      */
@@ -118,4 +118,4 @@ protected:
     Eigen::VectorXd control_;
 };
 
-} // namespace pc
+} // namespace copra

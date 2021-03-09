@@ -71,4 +71,4 @@ bool QuadProgDenseSolver::SI_solve(const Eigen::MatrixXd& Q, const Eigen::Vector
     return solver_.solve(Q, c, Aeq, beq, ineqMat, ineqVec);
 }
 
-} // namespace pc
+} // namespace copra

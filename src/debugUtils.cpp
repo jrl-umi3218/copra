@@ -109,4 +109,5 @@ std::string throwMsgOnBadNewDim(const Eigen::MatrixXd& mat, Eigen::Index new_dim
        << mat.rows() << ").";
     return os.str();
 }
-}
+
+} // namespace copra

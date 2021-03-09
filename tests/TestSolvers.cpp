@@ -2,8 +2,8 @@
  * Copyright 2016-2019 CNRS-UM LIRMM, CNRS-AIST JRL
  */
 
-#include "doctest.h"
 #include "QuadProgSolver.h"
+#include "doctest.h"
 #include "systems.h"
 #ifdef EIGEN_QLD_FOUND
 #include "QLDSolver.h"

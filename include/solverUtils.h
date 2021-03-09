@@ -70,4 +70,4 @@ COPRA_DLLAPI std::unique_ptr<SolverInterface> solverFactory(SolverFlag flag);
  */
 COPRA_DLLAPI SolverInterface* pythonSolverFactory(SolverFlag flag);
 
-} // namespace pc
+} // namespace copra

@@ -18,8 +18,7 @@
 #include "OSQPSolver.h"
 #include <iostream>
 
-namespace copra
-{
+namespace copra {
 
 /*
  * OSQP

@@ -73,4 +73,4 @@ private:
     double eps_;
 };
 
-} // namespace pc
+} // namespace copra

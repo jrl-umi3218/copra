@@ -72,4 +72,4 @@ private:
     Eigen::QuadProgDense solver_;
 };
 
-} // namespace pc
+} // namespace copra

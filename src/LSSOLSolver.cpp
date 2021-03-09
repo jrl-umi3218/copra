@@ -99,4 +99,4 @@ bool LSSOLSolver::SI_solve(const Eigen::MatrixXd& Q, const Eigen::VectorXd& c,
     return solver_.solve(XL, XU, Q_, c, A_, bl_, bu_);
 }
 
-} // namespace pc
+} // namespace copra

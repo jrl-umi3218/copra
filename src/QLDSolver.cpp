@@ -84,4 +84,4 @@ bool QLDSolver::SI_solve(const Eigen::MatrixXd& Q, const Eigen::VectorXd& c,
     return solver_.solve(Q, c, Aeq, beq, Aineq, bineq, XL, XU, false, eps_);
 }
 
-} // namespace pc
+} // namespace copra

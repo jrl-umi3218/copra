@@ -2,16 +2,14 @@
  * Copyright 2016-2019 CNRS-UM LIRMM, CNRS-AIST JRL
  */
 
+#include "LMPC.h"
+#include "PreviewSystem.h"
+#include "QuadProgSolver.h"
+#include "constraints.h"
+#include "costFunctions.h"
 #include "doctest.h"
 #include "systems.h"
 #include "tools.h"
-#include <Eigen/Core>
-#include <algorithm>
-#include "LMPC.h"
-#include "PreviewSystem.h"
-#include "constraints.h"
-#include "costFunctions.h"
-#include "QuadProgSolver.h"
 #ifdef EIGEN_QLD_FOUND
 #include "QLDSolver.h"
 #endif
@@ -25,6 +23,8 @@
 #include "OSQPSolver.h"
 #endif
 
+#include <Eigen/Core>
+#include <algorithm>
 #include <memory>
 #include <numeric>
 #include <vector>
@@ -122,15 +122,15 @@ TEST_CASE_FIXTURE(BoundedSystem, "MPC_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS")
             controller.selectQPSolver(sFlag);
 
 #ifdef EIGEN_OSQP_FOUND
-    // Increase precision
-    if (sFlag == copra::SolverFlag::OSQP) {
-        auto& bs = static_cast<copra::OSQPSolver&>(controller.solver()).baseSolver();
-        bs.scalingIter(0);
-        bs.absConvergenceTol(1e-6);
-        bs.relConvergenceTol(1e-6);
-        bs.primalInfeasibilityTol(1e-7);
-        bs.dualInfeasibilityTol(1e-7);
-    }
+        // Increase precision
+        if (sFlag == copra::SolverFlag::OSQP) {
+            auto& bs = static_cast<copra::OSQPSolver&>(controller.solver()).baseSolver();
+            bs.scalingIter(0);
+            bs.absConvergenceTol(1e-6);
+            bs.relConvergenceTol(1e-6);
+            bs.primalInfeasibilityTol(1e-7);
+            bs.dualInfeasibilityTol(1e-7);
+        }
 #endif
 
         REQUIRE(controller.solve());
@@ -239,17 +239,17 @@ TEST_CASE_FIXTURE(IneqSystem, "MPC_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS")
             controller.selectQPSolver(sFlag);
 
 #ifdef EIGEN_OSQP_FOUND
-    // Increase precision
-    if (sFlag == copra::SolverFlag::OSQP) {
-        auto& bs = static_cast<copra::OSQPSolver&>(controller.solver()).baseSolver();
-        bs.scalingIter(0);
-        bs.absConvergenceTol(1e-6);
-        bs.relConvergenceTol(1e-6);
-        bs.primalInfeasibilityTol(1e-7);
-        bs.dualInfeasibilityTol(1e-7);
-        bs.relaxationParam(1);
-        bs.maxIter(6000);
-    }
+        // Increase precision
+        if (sFlag == copra::SolverFlag::OSQP) {
+            auto& bs = static_cast<copra::OSQPSolver&>(controller.solver()).baseSolver();
+            bs.scalingIter(0);
+            bs.absConvergenceTol(1e-6);
+            bs.relConvergenceTol(1e-6);
+            bs.primalInfeasibilityTol(1e-7);
+            bs.dualInfeasibilityTol(1e-7);
+            bs.relaxationParam(1);
+            bs.maxIter(6000);
+        }
 #endif
 
         REQUIRE(controller.solve());
@@ -316,15 +316,15 @@ TEST_CASE_FIXTURE(IneqSystem, "MPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS")
             controller.selectQPSolver(sFlag);
 
 #ifdef EIGEN_OSQP_FOUND
-    // Increase precision
-    if (sFlag == copra::SolverFlag::OSQP) {
-        auto& bs = static_cast<copra::OSQPSolver&>(controller.solver()).baseSolver();
-        bs.scalingIter(0);
-        bs.absConvergenceTol(1e-6);
-        bs.relConvergenceTol(1e-6);
-        bs.primalInfeasibilityTol(1e-7);
-        bs.dualInfeasibilityTol(1e-7);
-    }
+        // Increase precision
+        if (sFlag == copra::SolverFlag::OSQP) {
+            auto& bs = static_cast<copra::OSQPSolver&>(controller.solver()).baseSolver();
+            bs.scalingIter(0);
+            bs.absConvergenceTol(1e-6);
+            bs.relConvergenceTol(1e-6);
+            bs.primalInfeasibilityTol(1e-7);
+            bs.dualInfeasibilityTol(1e-7);
+        }
 #endif
 
         REQUIRE(controller.solve());
@@ -604,16 +604,16 @@ TEST_CASE_FIXTURE(EqSystem, "MPC_TARGET_COST_WITH_EQUALITY_CONSTRAINTS")
             controller.selectQPSolver(sFlag);
 
 #ifdef EIGEN_OSQP_FOUND
-    // Increase precision
-    if (sFlag == copra::SolverFlag::OSQP) {
-        auto& bs = static_cast<copra::OSQPSolver&>(controller.solver()).baseSolver();
-        bs.scalingIter(0);
-        bs.absConvergenceTol(1e-7);
-        bs.relConvergenceTol(1e-7);
-        bs.primalInfeasibilityTol(1e-8);
-        bs.dualInfeasibilityTol(1e-8);
-        bs.relaxationParam(0.01);
-    }
+        // Increase precision
+        if (sFlag == copra::SolverFlag::OSQP) {
+            auto& bs = static_cast<copra::OSQPSolver&>(controller.solver()).baseSolver();
+            bs.scalingIter(0);
+            bs.absConvergenceTol(1e-7);
+            bs.relConvergenceTol(1e-7);
+            bs.primalInfeasibilityTol(1e-8);
+            bs.dualInfeasibilityTol(1e-8);
+            bs.relaxationParam(0.01);
+        }
 #endif
 
         REQUIRE(controller.solve());
@@ -641,7 +641,7 @@ TEST_CASE_FIXTURE(EqSystem, "MPC_TARGET_COST_WITH_EQUALITY_CONSTRAINTS")
             REQUIRE_LE(velTraj.maxCoeff(), p(0) + 1e-4); // I could not get a better precision...
         else
 #endif
-        REQUIRE_LE(velTraj.maxCoeff(), p(0) + 1e-6);
+            REQUIRE_LE(velTraj.maxCoeff(), p(0) + 1e-6);
     };
 
     for (auto s : tools::Solvers) {
@@ -706,7 +706,7 @@ TEST_CASE_FIXTURE(EqSystem, "MPC_TRAJECTORY_COST_WITH_EQUALITY_CONSTRAINTS")
             REQUIRE_LE(velTraj.maxCoeff(), p(0) + 1e-4); // I could not get a better precision...
         else
 #endif
-        REQUIRE_LE(velTraj.maxCoeff(), p(0) + 1e-6);
+            REQUIRE_LE(velTraj.maxCoeff(), p(0) + 1e-6);
     };
 
     for (auto s : tools::Solvers) {

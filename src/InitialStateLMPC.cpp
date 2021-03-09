@@ -8,55 +8,54 @@
 
 namespace copra {
 
-
 /*************************************************************************************************
  *                                             InitialStateLMPC                                               *
  *************************************************************************************************/
 InitialStateLMPC::InitialStateLMPC(SolverFlag sFlag)
-    : LMPC(sFlag), 
-    R_(), 
-    r_(),
-    E_(), 
-    f_(),
-    l_(),
-    u_(),
-    Yeq_(),
-    zeq_(),
-    Yineq_(),
-    zineq_(),
-    newQ_(), 
-    newc_(), 
-    newlb_(), 
-    newub_(),
-    newAeq_(),
-    newbeq_(),
-    newAineq_(),
-    newbineq_(),
-    control_()
+    : LMPC(sFlag)
+    , R_()
+    , r_()
+    , E_()
+    , f_()
+    , l_()
+    , u_()
+    , Yeq_()
+    , zeq_()
+    , Yineq_()
+    , zineq_()
+    , newQ_()
+    , newc_()
+    , newlb_()
+    , newub_()
+    , newAeq_()
+    , newbeq_()
+    , newAineq_()
+    , newbineq_()
+    , control_()
 {
 }
 
 InitialStateLMPC::InitialStateLMPC(const std::shared_ptr<PreviewSystem>& ps, SolverFlag sFlag)
-    : LMPC(ps, sFlag), 
-    R_(ps_->xDim,ps_->xDim), 
-    r_(ps_->xDim),
-    E_(ps_->xDim, ps_->fullUDim), 
-    f_(ps_->fullUDim),
-    l_(ps_->xDim),
-    u_(ps_->xDim),
-    Yeq_(),
-    zeq_(),
-    Yineq_(),
-    zineq_(),
-    newQ_(ps_->xDim+ps_->fullUDim, ps_->xDim+ps_->fullUDim), 
-    newc_(ps_->xDim+ps_->fullUDim), 
-    newlb_(ps_->xDim+ps_->fullUDim), 
-    newub_(ps_->xDim+ps_->fullUDim),
-    newAeq_(),
-    newbeq_(),
-    newAineq_(),
-    newbineq_(),
-    control_(ps_->fullUDim)
+    : LMPC(ps, sFlag)
+    , R_(ps_->xDim, ps_->xDim)
+    , r_(ps_->xDim)
+    , E_(ps_->xDim, ps_->fullUDim)
+    , f_(ps_->fullUDim)
+    , l_(ps_->xDim)
+    , u_(ps_->xDim)
+    , Yeq_()
+    , zeq_()
+    , Yineq_()
+    , zineq_()
+    , newQ_(ps_->xDim + ps_->fullUDim, ps_->xDim + ps_->fullUDim)
+    , newc_(ps_->xDim + ps_->fullUDim)
+    , newlb_(ps_->xDim + ps_->fullUDim)
+    , newub_(ps_->xDim + ps_->fullUDim)
+    , newAeq_()
+    , newbeq_()
+    , newAineq_()
+    , newbineq_()
+    , control_(ps_->fullUDim)
 {
     l_.setConstant(-std::numeric_limits<double>::max());
     u_.setConstant(std::numeric_limits<double>::max());
@@ -64,26 +63,25 @@ InitialStateLMPC::InitialStateLMPC(const std::shared_ptr<PreviewSystem>& ps, Sol
     newub_.setConstant(std::numeric_limits<double>::max());
 }
 
-
 void InitialStateLMPC::initializeController(const std::shared_ptr<PreviewSystem>& ps)
 {
     LMPC::initializeController(ps);
 
-    R_.resize(ps_->xDim,ps_->xDim);
+    R_.resize(ps_->xDim, ps_->xDim);
     r_.resize(ps_->xDim);
     E_.resize(ps_->xDim, ps_->fullUDim);
     f_.resize(ps_->fullUDim);
     l_.resize(ps_->xDim);
     u_.resize(ps_->xDim);
-    newQ_.resize(ps_->xDim+ps_->fullUDim, ps_->xDim+ps_->fullUDim);
-    newc_.resize(ps_->xDim+ps_->fullUDim);
-    newlb_.resize(ps_->xDim+ps_->fullUDim);
-    newub_.resize(ps_->xDim+ps_->fullUDim);
+    newQ_.resize(ps_->xDim + ps_->fullUDim, ps_->xDim + ps_->fullUDim);
+    newc_.resize(ps_->xDim + ps_->fullUDim);
+    newlb_.resize(ps_->xDim + ps_->fullUDim);
+    newub_.resize(ps_->xDim + ps_->fullUDim);
     control_.resize(ps_->fullUDim);
 
     Eigen::VectorXd xInit = ps->xInit();
-    resetInitialStateBounds(xInit,xInit); //this basically prevents optimization of the initial state
-    Eigen::MatrixXd R = (1e-6)*Eigen::MatrixXd::Identity(ps_->xDim,ps_->xDim); // ensure that R is positive definite
+    resetInitialStateBounds(xInit, xInit); //this basically prevents optimization of the initial state
+    Eigen::MatrixXd R = (1e-6) * Eigen::MatrixXd::Identity(ps_->xDim, ps_->xDim); // ensure that R is positive definite
     Eigen::VectorXd r = Eigen::VectorXd::Zero(ps_->xDim);
     resetInitialStateCost(R, r);
 }
@@ -99,7 +97,7 @@ bool InitialStateLMPC::solve()
     // TODO: Need to be rewrite to minimize building time accross the solvers.
     // It will be better to directly build all matrices in the solvers.
     makeQPForm();
-    sol_->SI_problem(ps_->xDim+ps_->fullUDim, constraints_.nrEqConstr, constraints_.nrIneqConstr);
+    sol_->SI_problem(ps_->xDim + ps_->fullUDim, constraints_.nrEqConstr, constraints_.nrIneqConstr);
 
     auto sTime = high_resolution_clock::now();
     bool success = sol_->SI_solve(newQ_, newc_, newAeq_, newbeq_, newAineq_, newbineq_, newlb_, newub_);
@@ -158,12 +156,12 @@ void InitialStateLMPC::clearConstraintMatrices()
     zeq_.resize(0);
     Yineq_.resize(0, ps_->xDim);
     zineq_.resize(0);
-    newAineq_.resize(0, ps_->xDim+ps_->fullUDim);
-    newAeq_.resize(0, ps_->xDim+ps_->fullUDim);
+    newAineq_.resize(0, ps_->xDim + ps_->fullUDim);
+    newAeq_.resize(0, ps_->xDim + ps_->fullUDim);
     newbineq_.resize(0);
     newbeq_.resize(0);
-    newlb_.resize(ps_->xDim+ps_->fullUDim);
-    newub_.resize(ps_->xDim+ps_->fullUDim);
+    newlb_.resize(ps_->xDim + ps_->fullUDim);
+    newub_.resize(ps_->xDim + ps_->fullUDim);
     newlb_.setConstant(-std::numeric_limits<double>::max());
     newub_.setConstant(std::numeric_limits<double>::max());
 }
@@ -181,16 +179,16 @@ void InitialStateLMPC::updateSystem()
     zeq_.resize(constraints_.nrEqConstr);
     Yineq_.resize(constraints_.nrIneqConstr, ps_->xDim);
     zineq_.resize(constraints_.nrIneqConstr);
-    newAeq_.resize(constraints_.nrEqConstr, ps_->xDim+ps_->fullUDim);
+    newAeq_.resize(constraints_.nrEqConstr, ps_->xDim + ps_->fullUDim);
     newbeq_.resize(constraints_.nrEqConstr);
-    newAineq_.resize(constraints_.nrIneqConstr, ps_->xDim+ps_->fullUDim);
+    newAineq_.resize(constraints_.nrIneqConstr, ps_->xDim + ps_->fullUDim);
     newbineq_.resize(constraints_.nrIneqConstr);
 }
 
 void InitialStateLMPC::makeQPForm()
 {
     //don't call the function makeQPForm() of the base-class!
-    
+
     // Get Costs
     for (auto& cost : spCost_) {
         Q_ += cost->Q();
@@ -227,10 +225,10 @@ void InitialStateLMPC::makeQPForm()
     }
 
     // prepare the new QP format
-    newQ_.topLeftCorner(ps_->xDim,ps_->xDim) = R_ + E_ * Q_.inverse() * E_.transpose(); //TODO we may want to use another method to compute the inverse of Q
-    newQ_.topRightCorner(ps_->xDim,ps_->fullUDim) = E_;
-    newQ_.bottomLeftCorner(ps_->fullUDim,ps_->xDim) = E_.transpose();
-    newQ_.bottomRightCorner(ps_->fullUDim,ps_->fullUDim) = Q_;
+    newQ_.topLeftCorner(ps_->xDim, ps_->xDim) = R_ + E_ * Q_.inverse() * E_.transpose(); //TODO we may want to use another method to compute the inverse of Q
+    newQ_.topRightCorner(ps_->xDim, ps_->fullUDim) = E_;
+    newQ_.bottomLeftCorner(ps_->fullUDim, ps_->xDim) = E_.transpose();
+    newQ_.bottomRightCorner(ps_->fullUDim, ps_->fullUDim) = Q_;
     newc_.head(ps_->xDim) = r_;
     newc_.tail(ps_->fullUDim) = f_;
 

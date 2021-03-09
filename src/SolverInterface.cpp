@@ -28,7 +28,6 @@ void SolverInterface::SI_maxIter(int /* maxIter */)
     std::cout << "No maxIter(int) function for this qp" << std::endl;
 }
 
-
 void SolverInterface::SI_printLevel(int /* pl */)
 {
     std::cout << "No printLevel(int) function for this qp" << std::endl;
@@ -56,4 +55,4 @@ void SolverInterface::SI_warmStart(bool /* w */)
     std::cout << "No warmStart(bool) function for this qp" << std::endl;
 }
 
-} // namespace pc
+} // namespace copra

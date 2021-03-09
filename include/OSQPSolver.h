@@ -64,7 +64,6 @@ public:
     const Eigen::VectorXd& SI_result() const override;
     void SI_problem(int nrVar, int nrEq, int nrInEq) override;
 
-
     bool SI_solve(const Eigen::MatrixXd& Q, const Eigen::VectorXd& c,
         const Eigen::MatrixXd& Aeq, const Eigen::VectorXd& beq,
         const Eigen::MatrixXd& Aineq, const Eigen::VectorXd& bineq,
@@ -76,4 +75,4 @@ private:
     Eigen::OSQP solver_;
 };
 
-} // namespace pc
+} // namespace copra

@@ -53,8 +53,8 @@ public:
     /**
      * Virtual destructor
      */
-    virtual ~LMPC() = default; 
-    
+    virtual ~LMPC() = default;
+
     LMPC(LMPC&&) = default;
     LMPC& operator=(LMPC&&) = default;
 
@@ -216,4 +216,4 @@ protected:
     std::chrono::duration<double> solveTime_, solveAndBuildTime_;
 };
 
-} // namespace pc
+} // namespace copra

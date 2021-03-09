@@ -122,12 +122,10 @@ void ControlCost::initializeCost(const PreviewSystem& ps)
     if (N_.rows() != p_.rows())
         DOMAIN_ERROR_EXCEPTION(throwMsgOnRowsAskAutoSpan("N", "p", N_, p_));
 
-    if (N_.cols() == ps.uDim)
-    {
+    if (N_.cols() == ps.uDim) {
         Q_.setZero();
         E_.setZero();
-    }
-    else if (N_.cols() == ps.fullUDim)
+    } else if (N_.cols() == ps.fullUDim)
         fullSizeEntry_ = true;
     else
         DOMAIN_ERROR_EXCEPTION(throwMsgOnColsOnPSUDim("N", N_, &ps));
