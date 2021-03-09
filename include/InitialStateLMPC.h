@@ -33,38 +33,26 @@ public:
      */
     InitialStateLMPC(const std::shared_ptr<PreviewSystem>& ps, SolverFlag sFlag = SolverFlag::DEFAULT);
 
-    /**
-     * Initialize the controller with regard to the preview system.
-     * This function needs to be called each time the system dimension changes.
-     * \param ps The preview system
-     */
-    void initializeController(const std::shared_ptr<PreviewSystem>& ps) override;
+    // /**
+    //  * Initialize the controller with regard to the preview system.
+    //  * This function needs to be called each time the system dimension changes.
+    //  * \param ps The preview system
+    //  */
+    // void initializeController(const std::shared_ptr<PreviewSystem>& ps) override;
 
-    /**
-     * Solve the system.
-     * \return True if a solution has been found.
-     * Fill Phi, Psi, xi in PreviewSystem
-     * Fill A, b in Constraints
-     */
-    bool solve() override;
+    // /**
+    //  * Solve the system.
+    //  * \return True if a solution has been found.
+    //  * Fill Phi, Psi, xi in PreviewSystem
+    //  * Fill A, b in Constraints
+    //  */
+    // bool solve() override;
 
     /**
      * Get the solver result.
      * \return The initial-state vector \f$x_{0}\f$.
      */
     Eigen::VectorXd initialState() const noexcept;
-
-    /**
-     * Get the solver result.
-     * \return The control vector \f$U\f$.
-     */
-    const Eigen::VectorXd& control() const noexcept override;
-
-    /**
-     * Get the preview trajectory.
-     * \return The trajectory vector \f$X\f$.
-     */
-    Eigen::VectorXd trajectory() const noexcept override;
 
     /**
      * Add a cost related to the initial state
@@ -76,46 +64,57 @@ public:
      */
     void resetInitialStateBounds(const Eigen::VectorXd& l, const Eigen::VectorXd& u);
 
-protected:
+private:
     /**
      * Resize internal matrices and vectors to default.
      */
     void clearConstraintMatrices() override;
 
     /**
-     * Update the system and its constraints.
+     * Resize Q, c from PreviewSystem.
      */
-    void updateSystem() override;
+    void updateQPMatrixSize() override;
+
+    /**
+     * Resize Aeq, beq, Aineq, bineq, ub, lb from constraints.
+     */
+    void updateConstraintMatrixSize() override;
 
     /**
      * QP-like format.
      */
     void makeQPForm() override;
 
+    /**
+     * Update trajectory and control.
+     */
+    void updateResults() override;
+
 protected:
     Eigen::MatrixXd R_;
     Eigen::VectorXd r_;
-    Eigen::MatrixXd E_;
-    Eigen::VectorXd f_;
-    Eigen::VectorXd l_; //initial state lower bound
-    Eigen::VectorXd u_; //initial state upper bound
+    Eigen::VectorXd x0lb_; //initial state lower bound
+    Eigen::VectorXd x0ub_; //initial state upper bound
+    // Eigen::MatrixXd E_;
+    // Eigen::VectorXd f_;
 
-    Eigen::MatrixXd Yeq_;
-    Eigen::VectorXd zeq_;
-    Eigen::MatrixXd Yineq_;
-    Eigen::VectorXd zineq_;
+    // Eigen::MatrixXd Yeq_;
+    // Eigen::VectorXd zeq_;
+    // Eigen::MatrixXd Yineq_;
+    // Eigen::VectorXd zineq_;
 
-    Eigen::MatrixXd newQ_;
-    Eigen::VectorXd newc_;
-    Eigen::VectorXd newlb_;
-    Eigen::VectorXd newub_;
+    // Eigen::MatrixXd baseQ_;
+    // Eigen::MatrixXd newQ_;
+    // Eigen::VectorXd newc_;
+    // Eigen::VectorXd newlb_;
+    // Eigen::VectorXd newub_;
 
-    Eigen::MatrixXd newAeq_;
-    Eigen::VectorXd newbeq_;
-    Eigen::MatrixXd newAineq_;
-    Eigen::VectorXd newbineq_;
+    // Eigen::MatrixXd newAeq_;
+    // Eigen::VectorXd newbeq_;
+    // Eigen::MatrixXd newAineq_;
+    // Eigen::VectorXd newbineq_;
 
-    Eigen::VectorXd control_;
+    // Eigen::VectorXd control_;
 };
 
 } // namespace copra
