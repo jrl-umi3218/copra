@@ -18,6 +18,10 @@ InitialStateLMPC::InitialStateLMPC(SolverFlag sFlag)
 
 InitialStateLMPC::InitialStateLMPC(const std::shared_ptr<PreviewSystem>& ps, SolverFlag sFlag)
     : LMPC(sFlag)
+    , R_(Eigen::MatrixXd::Zero(ps->xDim, ps->xDim))
+    , r_(Eigen::VectorXd::Zero(ps->xDim))
+    , x0lb_(ps->x0)
+    , x0ub_(ps->x0)
 {
     initializeController(ps);
 }
@@ -85,7 +89,6 @@ void InitialStateLMPC::clearConstraintMatrices()
     beq_.resize(0);
     lb_.setConstant(optSize, -std::numeric_limits<double>::max());
     ub_.setConstant(optSize, std::numeric_limits<double>::max());
-
     // Base QP matrix resize
     // Aineq_.resize(0, ps_->fullUDim);
     // Aeq_.resize(0, ps_->fullUDim);
@@ -109,7 +112,7 @@ void InitialStateLMPC::clearConstraintMatrices()
     // baseub_.setConstant(ps_->fullUDim, std::numeric_limits<double>::max());
 }
 
-void InitialStateLMPC::updateQPMatrixSize()
+void InitialStateLMPC::updateQPMatrix()
 {
     // Final QP matrix resize
     // newQ_.resize(ps_->xDim + ps_->fullUDim, ps_->xDim + ps_->fullUDim);
@@ -118,12 +121,8 @@ void InitialStateLMPC::updateQPMatrixSize()
     c_.resize(ps_->xDim + ps_->fullUDim);
 
     // Base QP matrix resize
-    R_.resize(ps_->xDim, ps_->xDim);
-    r_.resize(ps_->xDim);
     // E_.resize(ps_->xDim, ps_->fullUDim);
     // f_.resize(ps_->fullUDim);
-    x0lb_.resize(ps_->xDim);
-    x0ub_.resize(ps_->xDim);
     // Q_.resize(ps_->fullUDim, ps_->fullUDim);
     // c_.resize(ps_->fullUDim);
     // baseQ_.resize(ps_->fullUDim, ps_->fullUDim);

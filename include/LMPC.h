@@ -173,7 +173,7 @@ private: // TODO: make virtual function private
     /**
      * Resize Q, c from PreviewSystem.
      */
-    virtual void updateQPMatrixSize();
+    virtual void updateQPMatrix();
 
     /**
      * Resize Aeq, beq, Aineq, bineq, ub, lb from constraints.

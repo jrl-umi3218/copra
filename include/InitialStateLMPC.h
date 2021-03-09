@@ -73,7 +73,7 @@ private:
     /**
      * Resize Q, c from PreviewSystem.
      */
-    void updateQPMatrixSize() override;
+    void updateQPMatrix() override;
 
     /**
      * Resize Aeq, beq, Aineq, bineq, ub, lb from constraints.

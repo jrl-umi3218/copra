@@ -73,7 +73,7 @@ void LMPC::initializeController(const std::shared_ptr<PreviewSystem>& ps)
 {
     ps_ = ps;
     clearConstraintMatrices();
-    updateQPMatrixSize();
+    updateQPMatrix();
 }
 
 bool LMPC::solve()
@@ -203,7 +203,7 @@ void LMPC::clearConstraintMatrices()
     ub_.setConstant(ps_->fullUDim, std::numeric_limits<double>::max());
 }
 
-void LMPC::updateQPMatrixSize()
+void LMPC::updateQPMatrix()
 {
     Q_.resize(ps_->fullUDim, ps_->fullUDim);
     c_.resize(ps_->fullUDim);

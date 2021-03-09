@@ -147,7 +147,7 @@ void run_comparison_test(const bool fullSizeEntry)
 
     //specify and solve lmpc
     copra::LMPC lmpcA = copra::LMPC(previewSystem, solverFlag);
-    lmpcA.initializeController(previewSystem);
+    // lmpcA.initializeController(previewSystem);
     lmpcA.addCost(tcA);
     lmpcA.addCost(tacA);
     lmpcA.addCost(ccA);
@@ -169,7 +169,7 @@ void run_comparison_test(const bool fullSizeEntry)
     lmpcA.removeConstraint(cbcstrA);
 
     copra::InitialStateLMPC lmpcB = copra::InitialStateLMPC(previewSystem, solverFlag);
-    lmpcB.initializeController(previewSystem);
+    // lmpcB.initializeController(previewSystem);
     lmpcB.addCost(tcB);
     lmpcB.addCost(tacB);
     lmpcB.addCost(ccB);
@@ -352,7 +352,7 @@ void run_optimization_test(const bool fullSizeEntry)
 
     //specify and solve lmpc
     copra::InitialStateLMPC lmpc = copra::InitialStateLMPC(previewSystem, solverFlag);
-    lmpc.initializeController(previewSystem);
+    // lmpc.initializeController(previewSystem);
     const Eigen::VectorXd initialState_lowerBound = (-1) * Eigen::VectorXd::Ones(xDim); //this allows optimization of the initial state
     const Eigen::VectorXd initialState_upperBound = (+1) * Eigen::VectorXd::Ones(xDim); //this allows prevents optimization of the initial state
     lmpc.resetInitialStateBounds(initialState_lowerBound, initialState_upperBound);
