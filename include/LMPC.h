@@ -74,7 +74,7 @@ public:
      * This function needs to be called each time the system dimension changes.
      * \param ps The preview system
      */
-    virtual void initializeController(const std::shared_ptr<PreviewSystem>& ps);
+    void initializeController(const std::shared_ptr<PreviewSystem>& ps);
 
     /**
      * Solve the system.
@@ -82,7 +82,7 @@ public:
      * Fill Phi, Psi, xi in PreviewSystem
      * Fill A, b in Constraints
      */
-    virtual bool solve();
+    bool solve();
 
     /**
      * Print information on the QP solver status.
@@ -93,17 +93,7 @@ public:
      * Get a reference to the solver if any.
      * \return QP solver currently used.
      */
-    inline SolverInterface& solver() { return *sol_; }
-    /**
-     * Get the solver result.
-     * \return The control vector \f$U\f$.
-     */
-    virtual const Eigen::VectorXd& control() const noexcept;
-    /**
-     * Get the preview trajectory.
-     * \return The trajectory vector \f$X\f$.
-     */
-    virtual Eigen::VectorXd trajectory() const noexcept;
+    inline SolverInterface& solver() { return *sol_; } // TODO: delete this monstruosity
     /**
      * The time needed to solve the qp problem.
      * \return The elapsed time (in s) for solving.
@@ -147,6 +137,16 @@ public:
     /**
      * Getter Functions
      */
+    /**
+     * Get the preview control.
+     * \return The control vector \f$U\f$.
+     */
+    const Eigen::VectorXd& control() const noexcept { return control_; }
+    /**
+     * Get the preview trajectory.
+     * \return The trajectory vector \f$X\f$.
+     */
+    const Eigen::VectorXd& trajectory() const noexcept { return trajectory_; }
     inline int nrEqConstr() { return constraints_.nrEqConstr; }
     inline int nrIneqConstr() { return constraints_.nrIneqConstr; }
     inline const Eigen::MatrixXd& Q() { return Q_; }
@@ -158,7 +158,7 @@ public:
     inline const Eigen::VectorXd& lb() { return lb_; }
     inline const Eigen::VectorXd& ub() { return ub_; }
 
-protected:
+private: // TODO: make virtual function private
     /**
      * Add constraints into constraints_ \see Constraints
      * \param constr The constraint to add
@@ -166,9 +166,19 @@ protected:
     void addConstraintByType(const std::shared_ptr<Constraint>& constr);
 
     /**
-     * Resize Aeq, beq, Aineq, bineq, ub, lb to default.
+     * clear Aeq, beq, Aineq, bineq, ub, lb.
      */
     virtual void clearConstraintMatrices();
+
+    /**
+     * Resize Q, c from PreviewSystem.
+     */
+    virtual void updateQPMatrixSize();
+
+    /**
+     * Resize Aeq, beq, Aineq, bineq, ub, lb from constraints.
+     */
+    virtual void updateConstraintMatrixSize();
 
     /**
      * Update the system and its constraints.
@@ -180,6 +190,11 @@ protected:
      * QP-like format.
      */
     virtual void makeQPForm();
+
+    /**
+     * Update trajectory and control.
+     */
+    virtual void updateResults();
 
     /**
      * Check if a cost or a constraint still exist.
@@ -210,6 +225,7 @@ protected:
 
     Eigen::MatrixXd Q_, Aineq_, Aeq_;
     Eigen::VectorXd c_, bineq_, beq_, lb_, ub_;
+    Eigen::VectorXd trajectory_, control_;
 
     std::chrono::duration<double> solveTime_, solveAndBuildTime_;
 };

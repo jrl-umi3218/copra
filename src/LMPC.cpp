@@ -54,17 +54,9 @@ LMPC::LMPC(SolverFlag sFlag)
 }
 
 LMPC::LMPC(const std::shared_ptr<PreviewSystem>& ps, SolverFlag sFlag)
-    : ps_(ps)
-    , sol_(solverFactory(sFlag))
-    , Q_(ps_->fullUDim, ps_->fullUDim)
-    , Aineq_(0, ps_->fullUDim)
-    , Aeq_(0, ps_->fullUDim)
-    , c_(ps_->fullUDim)
-    , lb_(ps_->fullUDim)
-    , ub_(ps_->fullUDim)
+    : sol_(solverFactory(sFlag))
 {
-    lb_.setConstant(-std::numeric_limits<double>::max());
-    ub_.setConstant(std::numeric_limits<double>::max());
+    initializeController(ps);
 }
 
 void LMPC::selectQPSolver(SolverFlag flag)
@@ -81,9 +73,7 @@ void LMPC::initializeController(const std::shared_ptr<PreviewSystem>& ps)
 {
     ps_ = ps;
     clearConstraintMatrices();
-
-    Q_.resize(ps_->fullUDim, ps_->fullUDim);
-    c_.resize(ps_->fullUDim);
+    updateQPMatrixSize();
 }
 
 bool LMPC::solve()
@@ -95,13 +85,16 @@ bool LMPC::solve()
     // TODO: Need to be rewrite to minimize building time accross the solvers.
     // It will be better to directly build all matrices in the solvers.
     makeQPForm();
-    sol_->SI_problem(ps_->fullUDim, constraints_.nrEqConstr, constraints_.nrIneqConstr);
+    sol_->SI_problem(static_cast<int>(c_.size()), constraints_.nrEqConstr, constraints_.nrIneqConstr);
 
     auto sTime = high_resolution_clock::now();
     bool success = sol_->SI_solve(Q_, c_, Aeq_, beq_, Aineq_, bineq_, lb_, ub_);
     solveTime_ = duration_cast<duration<double>>(high_resolution_clock::now() - sTime);
 
     checkDeleteCostsAndConstraints();
+    if (success) {
+        updateResults();
+    }
 
     solveAndBuildTime_ = duration_cast<duration<double>>(high_resolution_clock::now() - sabTime);
     return success;
@@ -110,16 +103,6 @@ bool LMPC::solve()
 void LMPC::inform() const noexcept
 {
     sol_->SI_inform();
-}
-
-const Eigen::VectorXd& LMPC::control() const noexcept
-{
-    return sol_->SI_result();
-}
-
-Eigen::VectorXd LMPC::trajectory() const noexcept
-{
-    return ps_->Phi * ps_->x0 + ps_->Psi * control() + ps_->xi;
 }
 
 double LMPC::solveTime() const noexcept
@@ -216,10 +199,22 @@ void LMPC::clearConstraintMatrices()
     Aeq_.resize(0, ps_->fullUDim);
     bineq_.resize(0);
     beq_.resize(0);
-    lb_.resize(ps_->fullUDim);
-    ub_.resize(ps_->fullUDim);
-    lb_.setConstant(-std::numeric_limits<double>::max());
-    ub_.setConstant(std::numeric_limits<double>::max());
+    lb_.setConstant(ps_->fullUDim, -std::numeric_limits<double>::max());
+    ub_.setConstant(ps_->fullUDim, std::numeric_limits<double>::max());
+}
+
+void LMPC::updateQPMatrixSize()
+{
+    Q_.resize(ps_->fullUDim, ps_->fullUDim);
+    c_.resize(ps_->fullUDim);
+}
+
+void LMPC::updateConstraintMatrixSize()
+{
+    Aeq_.resize(constraints_.nrEqConstr, ps_->fullUDim);
+    beq_.resize(constraints_.nrEqConstr);
+    Aineq_.resize(constraints_.nrIneqConstr, ps_->fullUDim);
+    bineq_.resize(constraints_.nrIneqConstr);
 }
 
 void LMPC::updateSystem()
@@ -236,10 +231,7 @@ void LMPC::updateSystem()
 
     // Update the constraints
     constraints_.updateNr();
-    Aeq_.resize(constraints_.nrEqConstr, ps_->fullUDim);
-    beq_.resize(constraints_.nrEqConstr);
-    Aineq_.resize(constraints_.nrIneqConstr, ps_->fullUDim);
-    bineq_.resize(constraints_.nrIneqConstr);
+    updateConstraintMatrixSize();
     for (auto& cstr : constraints_.spConstr) {
         cstr->update(*ps_);
     }
@@ -280,6 +272,12 @@ void LMPC::makeQPForm()
         ub_.segment(nrLines, cstr->nrConstr()) = cstr->upper();
         nrLines += cstr->nrConstr();
     }
+}
+
+void LMPC::updateResults()
+{
+    control_ = sol_->SI_result();
+    trajectory_ = ps_->Phi * ps_->x0 + ps_->Psi * control_ + ps_->xi;
 }
 
 void LMPC::checkDeleteCostsAndConstraints()
