@@ -46,7 +46,7 @@ void InitialStateLMPC::resetInitialStateBounds(const Eigen::VectorXd& x0lb, cons
 }
 
 /*
- *  Protected methods
+ *  Private methods
  */
 
 void InitialStateLMPC::clearConstraintMatrices()
@@ -64,6 +64,7 @@ void InitialStateLMPC::updateQPMatrixSize()
 {
     Q_.resize(ps_->xDim + ps_->fullUDim, ps_->xDim + ps_->fullUDim);
     c_.resize(ps_->xDim + ps_->fullUDim);
+}
 
 void InitialStateLMPC::updateConstraintMatrixSize()
 {

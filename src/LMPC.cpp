@@ -167,7 +167,7 @@ void LMPC::removeConstraint(const std::shared_ptr<Constraint>& constr)
 }
 
 /*
- *  Protected methods
+ *  Private methods
  */
 
 void LMPC::addConstraintByType(const std::shared_ptr<Constraint>& constr)
