@@ -77,12 +77,6 @@ public:
     bool solve();
     /*! \brief Print information on the QP solver status. */
     void inform() const noexcept;
-
-    /**
-     * Get a reference to the solver if any.
-     * \return QP solver currently used.
-     */
-    inline SolverInterface& solver() { return *sol_; } // TODO: delete this monstruosity
     /*! \brief Return the time (in s) needed to solve the qp problem. */
     double solveTime() const noexcept;
     /*! \brief Return the time (in s) needed to build and solve the qp problem. */

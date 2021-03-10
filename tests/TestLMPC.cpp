@@ -117,16 +117,16 @@ TEST_CASE_FIXTURE(BoundedSystem, "MPC_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS")
     controller.addConstraint(contConstr);
 
     auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver = nullptr) {
+        std::unique_ptr<copra::SolverInterface> newSolver;
         if (solver) {
-            controller.useSolver(std::move(solver));
+            newSolver = std::move(solver);
         } else {
-            controller.selectQPSolver(sFlag);
+            newSolver = solverFactory(sFlag);
         }
-
 #ifdef EIGEN_OSQP_FOUND
         // Increase precision
         if (sFlag == copra::SolverFlag::OSQP) {
-            auto& bs = static_cast<copra::OSQPSolver&>(controller.solver()).baseSolver();
+            auto& bs = static_cast<copra::OSQPSolver&>(*newSolver).baseSolver();
             bs.scalingIter(0);
             bs.absConvergenceTol(1e-6);
             bs.relConvergenceTol(1e-6);
@@ -134,6 +134,7 @@ TEST_CASE_FIXTURE(BoundedSystem, "MPC_TRAJECTORY_COST_WITH_BOUND_CONSTRAINTS")
             bs.dualInfeasibilityTol(1e-7);
         }
 #endif
+        controller.useSolver(std::move(newSolver));
 
         REQUIRE(controller.solve());
         sTimers.st.emplace_back(solverName, controller.solveTime() * 1e3);
@@ -235,25 +236,24 @@ TEST_CASE_FIXTURE(IneqSystem, "MPC_TARGET_COST_WITH_INEQUALITY_CONSTRAINTS")
     controller.addConstraint(contConstr);
 
     auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver = nullptr) {
+        std::unique_ptr<copra::SolverInterface> newSolver;
         if (solver) {
-            controller.useSolver(std::move(solver));
+            newSolver = std::move(solver);
         } else {
-            controller.selectQPSolver(sFlag);
+            newSolver = solverFactory(sFlag);
         }
-
 #ifdef EIGEN_OSQP_FOUND
         // Increase precision
         if (sFlag == copra::SolverFlag::OSQP) {
-            auto& bs = static_cast<copra::OSQPSolver&>(controller.solver()).baseSolver();
+            auto& bs = static_cast<copra::OSQPSolver&>(*newSolver).baseSolver();
             bs.scalingIter(0);
             bs.absConvergenceTol(1e-6);
             bs.relConvergenceTol(1e-6);
             bs.primalInfeasibilityTol(1e-7);
             bs.dualInfeasibilityTol(1e-7);
-            bs.relaxationParam(1);
-            bs.maxIter(6000);
         }
 #endif
+        controller.useSolver(std::move(newSolver));
 
         REQUIRE(controller.solve());
         sTimers.st.emplace_back(solverName, controller.solveTime() * 1e3);
@@ -313,16 +313,16 @@ TEST_CASE_FIXTURE(IneqSystem, "MPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS")
     controller.addConstraint(contConstr);
 
     auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver = nullptr) {
+        std::unique_ptr<copra::SolverInterface> newSolver;
         if (solver) {
-            controller.useSolver(std::move(solver));
+            newSolver = std::move(solver);
         } else {
-            controller.selectQPSolver(sFlag);
+            newSolver = solverFactory(sFlag);
         }
-
 #ifdef EIGEN_OSQP_FOUND
         // Increase precision
         if (sFlag == copra::SolverFlag::OSQP) {
-            auto& bs = static_cast<copra::OSQPSolver&>(controller.solver()).baseSolver();
+            auto& bs = static_cast<copra::OSQPSolver&>(*newSolver).baseSolver();
             bs.scalingIter(0);
             bs.absConvergenceTol(1e-6);
             bs.relConvergenceTol(1e-6);
@@ -330,6 +330,7 @@ TEST_CASE_FIXTURE(IneqSystem, "MPC_TRAJECTORY_COST_WITH_INEQUALITY_CONSTRAINTS")
             bs.dualInfeasibilityTol(1e-7);
         }
 #endif
+        controller.useSolver(std::move(newSolver));
 
         REQUIRE(controller.solve());
         sTimers.st.emplace_back(solverName, controller.solveTime() * 1e3);
@@ -607,24 +608,24 @@ TEST_CASE_FIXTURE(EqSystem, "MPC_TARGET_COST_WITH_EQUALITY_CONSTRAINTS")
     controller.addConstraint(trajConstr);
 
     auto pcCheck = [&](const std::string& solverName, copra::SolverFlag sFlag, std::unique_ptr<copra::SolverInterface>&& solver = nullptr) {
+        std::unique_ptr<copra::SolverInterface> newSolver;
         if (solver) {
-            controller.useSolver(std::move(solver));
+            newSolver = std::move(solver);
         } else {
-            controller.selectQPSolver(sFlag);
+            newSolver = solverFactory(sFlag);
         }
-
 #ifdef EIGEN_OSQP_FOUND
         // Increase precision
         if (sFlag == copra::SolverFlag::OSQP) {
-            auto& bs = static_cast<copra::OSQPSolver&>(controller.solver()).baseSolver();
+            auto& bs = static_cast<copra::OSQPSolver&>(*newSolver).baseSolver();
             bs.scalingIter(0);
-            bs.absConvergenceTol(1e-7);
-            bs.relConvergenceTol(1e-7);
-            bs.primalInfeasibilityTol(1e-8);
-            bs.dualInfeasibilityTol(1e-8);
-            bs.relaxationParam(0.01);
+            bs.absConvergenceTol(1e-6);
+            bs.relConvergenceTol(1e-6);
+            bs.primalInfeasibilityTol(1e-7);
+            bs.dualInfeasibilityTol(1e-7);
         }
 #endif
+        controller.useSolver(std::move(newSolver));
 
         REQUIRE(controller.solve());
         sTimers.st.emplace_back(solverName, controller.solveTime() * 1e3);
