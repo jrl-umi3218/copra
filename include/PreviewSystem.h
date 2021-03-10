@@ -10,8 +10,7 @@
 
 namespace copra {
 
-/**
- * Structure representing all variables of a system for performing preview control.
+/*! \brief Structure representing all variables of a system for performing preview control.
  * Such system is defined as follow:
  * \f$x_{k+1} = Ax_{k} + Bu_{k} + d\f$.
  * After performing a recursion, this system can be represented in as:
@@ -21,44 +20,35 @@ namespace copra {
  * So, \f$X\f$ dimension is \f$N+1\f$ and \f$U\f$ dimension is \f$N\f$.
  */
 struct COPRA_DLLAPI PreviewSystem {
-    /**
-     * Default constructor.
-     */
-    PreviewSystem() {}
+    /*! \brief* Default constructor. */
+    PreviewSystem() = default;
 
-    /**
-     * Constructor of the class.
-     * \param state The state matrix of the system.
-     * \param control The control matrix of the system.
-     * \param bias The bias vector of the system.
-     * \param xInit The initial state.
-     * \param numberOfSteps The number of step to perform.
-     * \throw std::domain_error if the dimension of the matrices mismatch.
+    /*! \brief Constructor of the class.
+     * \param state The state matrix of the system
+     * \param control The control matrix of the system
+     * \param bias The bias vector of the system
+     * \param xInit The initial state
+     * \param numberOfSteps The number of step to perform
+     * \throw std::domain_error if the dimension of the matrices mismatch
      */
     PreviewSystem(const Eigen::MatrixXd& state, const Eigen::MatrixXd& control,
         const Eigen::VectorXd& bias, const Eigen::VectorXd& xInit, int numberOfSteps);
 
-    /**
-     * Create the system.
-     * \param state The state matrix of the system.
-     * \param control The control matrix of the system.
-     * \param bias The bias vector of the system.
-     * \param xInit The initial state.
-     * \param numberOfSteps The number of step to perform.
-     * \throw std::domain_error if the dimension of the matrices mismatch.
+    /*! \brief Create the system.
+     * \param state The state matrix of the system
+     * \param control The control matrix of the system
+     * \param bias The bias vector of the system
+     * \param xInit The initial state
+     * \param numberOfSteps The number of step to perform
+     * \throw std::domain_error if the dimension of the matrices mismatch
      */
     void system(const Eigen::MatrixXd& state, const Eigen::MatrixXd& control,
         const Eigen::VectorXd& bias, const Eigen::VectorXd& xInit, int numberOfSteps);
-
-    /**
-     * \brief Update the system.
-     * Fill Phi, Psi, xi in PreviewSystem
+    /*! \brief Update the system.
+     * Fill Phi, Psi, xi in PreviewSystem.
      */
     void updateSystem() noexcept;
-
-    /**
-     * \brief Modify the initial state without the need to update the system.
-     */
+    /*! \brief Modify the initial state without the need to update the system. */
     void xInit(const Eigen::VectorXd& xInit) { x0 = xInit; }
 
     bool isUpdated = false; /**< State whether or not the preview system has been updated. This is done when calling the solve function of a mpc. Calling \see system or setting this to false will force a new update*/

@@ -44,7 +44,7 @@ void LMPC::Constraints::clear()
 }
 
 /*************************************************************************************************
- *                                             LMPC                                               *
+ *                                             LMPC                                              *
  *************************************************************************************************/
 
 LMPC::LMPC(SolverFlag sFlag)
@@ -73,7 +73,7 @@ void LMPC::initializeController(const std::shared_ptr<PreviewSystem>& ps)
 {
     ps_ = ps;
     clearConstraintMatrices();
-    updateQPMatrix();
+    updateQPMatrixSize();
 }
 
 bool LMPC::solve()
@@ -127,7 +127,12 @@ void LMPC::addConstraint(const std::shared_ptr<Constraint>& constr)
     addConstraintByType(constr);
 }
 
-void LMPC::resetConstraints() noexcept
+void LMPC::clearCosts() noexcept
+{
+    spCost_.clear();
+}
+
+void LMPC::clearConstraints() noexcept
 {
     constraints_.clear();
     clearConstraintMatrices();
@@ -203,7 +208,7 @@ void LMPC::clearConstraintMatrices()
     ub_.setConstant(ps_->fullUDim, std::numeric_limits<double>::max());
 }
 
-void LMPC::updateQPMatrix()
+void LMPC::updateQPMatrixSize()
 {
     Q_.resize(ps_->fullUDim, ps_->fullUDim);
     c_.resize(ps_->fullUDim);

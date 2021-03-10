@@ -12,14 +12,10 @@
 
 namespace copra {
 
-/**
- * GUROBISolver solver for both dense matrix.
- */
+/*! \brief GUROBISolver solver for both dense matrix.*/
 class COPRA_DLLAPI GUROBISolver : public SolverInterface { // TODO: Enable sparse matrix
 public:
-    /**
-     * GUROBISolver default constructor
-     */
+    /*! \brief Default constructor. */
     GUROBISolver();
 
     int SI_fail() const override;
@@ -31,34 +27,17 @@ public:
     void SI_maxIter(int maxIter) override;
     bool SI_warmStart() const override;
     void SI_warmStart(bool w) override;
-
-    /**
-     * Get the solver's solution.
-     * \return The qp solver result.
-     */
     const Eigen::VectorXd& SI_result() const override;
-
-    /**
-     * Initialize the variables of the problem to solve.
-     * \see SolverInterface::SI_problem()
-     * \return The qp solver result.
-     */
     void SI_problem(int nrVar, int nrEq, int nrInEq) override;
-
-    /**
-     * Solve the problem.
-     * \see SolverInterface::SI_solve()
-     * \return The qp solver result.
-     */
     bool SI_solve(const Eigen::MatrixXd& Q, const Eigen::VectorXd& c,
         const Eigen::MatrixXd& Aeq, const Eigen::VectorXd& beq,
         const Eigen::MatrixXd& Aineq, const Eigen::VectorXd& bineq,
         const Eigen::VectorXd& XL, const Eigen::VectorXd& XU) override;
-
+    /*! \brief Return underlying solver. */
     Eigen::GurobiDense& baseSolver() noexcept { return solver_; }
 
 private:
-    Eigen::GurobiDense solver_;
+    Eigen::GurobiDense solver_; /*!< QP solver */
 };
 
 } // namespace copra

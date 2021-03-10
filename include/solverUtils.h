@@ -30,24 +30,22 @@ namespace copra {
 #pragma GCC diagnostic ignored "-Wattributes"
 #endif
 
-/**
- * Enum class that handles flag for selecting a qp solver.
- */
+/*! \brief Enum class that handles flag for selecting a qp solver. */
 enum class COPRA_DLLAPI SolverFlag {
-    DEFAULT, /**< Default solver (QuadProgDense solver) */
+    DEFAULT, /*!< Default solver (QuadProgDense solver) */
 #ifdef EIGEN_LSSOL_FOUND
-    LSSOL, /**< Stanford LSSOL solver */
+    LSSOL, /*!< Stanford LSSOL solver */
 #endif
 #ifdef EIGEN_GUROBI_FOUND
-    GUROBIDense, /**< Gurobi quadratic dense solver */
+    GUROBIDense, /*!< Gurobi quadratic dense solver */
 #endif
 #ifdef EIGEN_QLD_FOUND
-    QLD, /**< Scilab QLD solver */
+    QLD, /*!< Scilab QLD solver */
 #endif
 #ifdef EIGEN_OSQP_FOUND
     OSQP,
 #endif
-    QuadProgDense, /**< DenseMatrix version of QuadProg solver */
+    QuadProgDense, /*!< DenseMatrix version of QuadProg solver */
     // QuadProgSparse
 };
 
@@ -55,16 +53,14 @@ enum class COPRA_DLLAPI SolverFlag {
 #pragma GCC diagnostic pop
 #endif
 
-/**
- * Helper function to get an unique pointer to a desired solver.
+/*! \brief Helper function to get an unique pointer to a desired solver.
  * \param flag Flag of the solver.
  * \return An unique pointer to the desired solver.
  */
 COPRA_DLLAPI std::unique_ptr<SolverInterface> solverFactory(SolverFlag flag);
 
-/**
- * Helper function to get a desired solver.
- * This should only be used by python (unique_ptr are not bindable)
+/*! \brief Helper function to get a desired solver.
+ * This should only be used by python (unique_ptr are not bindable).
  * \param flag Flag of the solver.
  * \return The desired solver.
  */

@@ -25,8 +25,7 @@ class ControlBoundConstraint;
 class EqIneqConstraint;
 class CostFunction;
 
-/**
- * The controller itself.
+/*! \brief The Linear Model Predictive Controller (LMPC).
  * This class gives all the needed composants for performing a model preview control.
  * It solves:\n
  * \f$X = \Phi x_{0} + \Psi U + \Xi\f$, where \f$U\f$ is the optimization vector.
@@ -36,57 +35,47 @@ class CostFunction;
  */
 class COPRA_DLLAPI LMPC {
 public:
-    /**
-     * Initialize problem variables to default and get the desired solver
-     * You need to call initializeController before using the MPCTypeFull
-     * \param sFlag The flag corresponding to the desired solver.
+    /*! \brief Default constructor.
+     * Initialize problem variables to default and get the desired solver.
+     * You need to call initializeController before using the MPCTypeFull.
+     * \param sFlag The flag corresponding to the desired solver
      */
     LMPC(SolverFlag sFlag = SolverFlag::DEFAULT);
-    /**
-     * Initialize problem variables w.r.t. the PreviewSystem and get the desired
-     * solver
-     * \param ps A preview system to make a copy from.
-     * \param sFlag The flag corresponding to the desired solver.
+    /*! \brief Constructor.
+     * Initialize problem variables w.r.t. the PreviewSystem and get the desired solver.
+     * \param ps A preview system to make a copy from
+     * \param sFlag The flag corresponding to the desired solver
      */
     LMPC(const std::shared_ptr<PreviewSystem>& ps, SolverFlag sFlag = SolverFlag::DEFAULT);
-    /**
-     * Virtual destructor
-     */
+    /*! \brief Default virtual destructor. */
     virtual ~LMPC() = default;
+    /*! \brief Default move-constructor. */
     LMPC(LMPC&&) = default;
+    /*! \brief Default move-assign operator. */
     LMPC& operator=(LMPC&&) = default;
 
-    /**
-     * Select a solver. It will load a solver with default values.
-     * \see useSolver if you want to give to the MPC a solver with specific parameters
-     * \param flag The solver to use \see pc::SolverFlag.
+    /*! \brief Select a solver.
+     * It will load a solver with default values.
+     * \see useSolver if you want to give to the MPC a solver with specific parameters.
+     * \param flag The solver to use \see pc::SolverFlag
      */
     void selectQPSolver(SolverFlag flag);
-
-    /**
-     * Make the MPC uses a user-defined qp solver.
-     * \param solver The user-defined solver. It must inheritate from the SolverInterface.
+    /*! \brief Make the MPC uses a user-defined qp solver.
+     * \param solver The user-defined solver. It must inheritate from the SolverInterface
      */
     void useSolver(std::unique_ptr<SolverInterface>&& solver);
-
-    /**
-     * Initialize the controller with regard to the preview system.
+    /*! \brief Initialize the controller with regard to the preview system.
      * This function needs to be called each time the system dimension changes.
      * \param ps The preview system
      */
     void initializeController(const std::shared_ptr<PreviewSystem>& ps);
-
-    /**
-     * Solve the system.
+    /*! \brief Solve the system.
+     * Fill Phi, Psi, xi in PreviewSystem.
+     * Fill A, b in Constraints.
      * \return True if a solution has been found.
-     * Fill Phi, Psi, xi in PreviewSystem
-     * Fill A, b in Constraints
      */
     bool solve();
-
-    /**
-     * Print information on the QP solver status.
-     */
+    /*! \brief Print information on the QP solver status. */
     void inform() const noexcept;
 
     /**
@@ -94,109 +83,74 @@ public:
      * \return QP solver currently used.
      */
     inline SolverInterface& solver() { return *sol_; } // TODO: delete this monstruosity
-    /**
-     * The time needed to solve the qp problem.
-     * \return The elapsed time (in s) for solving.
-     */
+    /*! \brief Return the time (in s) needed to solve the qp problem. */
     double solveTime() const noexcept;
-    /**
-     * The time needed to build and solve the qp problem.
-     * \return The elapsed time (in s) for build and solving.
-     */
+    /*! \brief Return the time (in s) needed to build and solve the qp problem. */
     double solveAndBuildTime() const noexcept;
-
-    /**
-     * Add a cost function to the system.
+    /*! \brief Add a cost function to the system.
      * \param costFun A cost type \see TrajectoryCost \see TargetCost
      * \see ControlCost \see MixedTrajectoryCost \see MixedTargetCost
      */
     void addCost(const std::shared_ptr<CostFunction>& costFun);
-
-    /**
-     * Add a constraint to the system.
+    /*! \brief Add a constraint to the system.
      * \param constr A constraint type \see TrajectoryConstrain \see ControlConstraint
      * \see TrajectoryBoundConstraint \see ControlBoundConstraint
      */
     void addConstraint(const std::shared_ptr<Constraint>& constr);
-
-    /**
-     * Clear the constraints
-     */
-    void resetConstraints() noexcept;
-
-    /**
-     * Remove cost
-     */
+    /*! \brief Clear all costs. */
+    void clearCosts() noexcept;
+    /*! \brief Clear all constraints. */
+    void clearConstraints() noexcept;
+    /*! \brief Remove specified cost. */
     void removeCost(const std::shared_ptr<CostFunction>& costFun);
-
-    /**
-     * Remove cost
-     */
+    /*! \brief Remove specified constraint. */
     void removeConstraint(const std::shared_ptr<Constraint>& constr);
 
-    /**
-     * Getter Functions
-     */
-    /**
-     * Get the preview control.
-     * \return The control vector \f$U\f$.
-     */
+    // Getter Functions
+    /*! \brief Return the control vector \f$U\f$. */
     const Eigen::VectorXd& control() const noexcept { return control_; }
-    /**
-     * Get the preview trajectory.
-     * \return The trajectory vector \f$X\f$.
-     */
+    /*! \brief Return the trajectory vector \f$X\f$. */
     const Eigen::VectorXd& trajectory() const noexcept { return trajectory_; }
+    /*! \brief Return the number of equality constraint. */
     inline int nrEqConstr() { return constraints_.nrEqConstr; }
+    /*! \brief Return the number of inequality constraint. */
     inline int nrIneqConstr() { return constraints_.nrIneqConstr; }
+    /*! \brief Return cost matrix. */
     inline const Eigen::MatrixXd& Q() { return Q_; }
-    inline const Eigen::MatrixXd& Aineq() { return Aineq_; }
-    inline const Eigen::MatrixXd& Aeq() { return Aeq_; }
+    /*! \brief Return cost vector. */
     inline const Eigen::VectorXd& c() { return c_; }
+    /*! \brief Return inequality constraint matrix. */
+    inline const Eigen::MatrixXd& Aineq() { return Aineq_; }
+    /*! \brief Return inequality constraint vector. */
     inline const Eigen::VectorXd& bineq() { return bineq_; }
+    /*! \brief Return equality constraint matrix. */
+    inline const Eigen::MatrixXd& Aeq() { return Aeq_; }
+    /*! \brief Return equality constraint vector. */
     inline const Eigen::VectorXd& beq() { return beq_; }
+    /*! \brief Return lower bound constraint vector. */
     inline const Eigen::VectorXd& lb() { return lb_; }
+    /*! \brief Return upper bound constraint vector. */
     inline const Eigen::VectorXd& ub() { return ub_; }
 
-private: // TODO: make virtual function private
-    /**
-     * Add constraints into constraints_ \see Constraints
-     * \param constr The constraint to add
-     */
+private:
+    /*! \brief Append the constraint into the QP \see Constraints. */
     void addConstraintByType(const std::shared_ptr<Constraint>& constr);
 
-    /**
-     * clear Aeq, beq, Aineq, bineq, ub, lb.
-     */
+    /*! \brief Clear Aeq, beq, Aineq, bineq, ub, lb. */
     virtual void clearConstraintMatrices();
-
-    /**
-     * Resize Q, c from PreviewSystem.
-     */
-    virtual void updateQPMatrix();
-
-    /**
-     * Resize Aeq, beq, Aineq, bineq, ub, lb from constraints.
-     */
+    /*! \brief Resize Q, c size from PreviewSystem. */
+    virtual void updateQPMatrixSize();
+    /*! \brief Resize Aeq, beq, Aineq, bineq, ub, lb size from constraints. */
     virtual void updateConstraintMatrixSize();
-
-    /**
-     * Update the system and its constraints.
-     * Fill A, b in Constraints
+    /**! \brief Update the system and its constraints.
+     * Fill A, b in Constraints.
      */
     virtual void updateSystem();
-
-    /**
-     * QP-like format.
-     */
+    /*! \brief Generate the QP-like format matrices. */
     virtual void makeQPForm();
-
-    /**
-     * Update trajectory and control.
-     */
+    /*! \brief Update trajectory and control. */
     virtual void updateResults();
-
-    /**
+    /*! \brief Check for costs and constraints to delete.
      * Check if a cost or a constraint still exist.
      * In Debug mode: Output into std::cerr if a cost or a constraint has been deleted.
      * In Release mode: No output.
@@ -204,30 +158,42 @@ private: // TODO: make virtual function private
     void checkDeleteCostsAndConstraints();
 
 protected:
+    /*! \brief Nested representation of Constraints. */
     struct Constraints {
+        /*! \brief Default constructor. */
         Constraints();
+        /*! \brief Clear all constraints. */
         void clear();
+        /*! \brief Update the number of constraints. */
         void updateNr();
 
-        int nrEqConstr;
-        int nrIneqConstr;
-        std::vector<std::shared_ptr<Constraint>> spConstr;
-        std::vector<std::shared_ptr<EqIneqConstraint>> spEqConstr;
-        std::vector<std::shared_ptr<EqIneqConstraint>> spIneqConstr;
-        std::vector<std::shared_ptr<ControlBoundConstraint>> spBoundConstr;
+        int nrEqConstr; /*!< Number of equality constraint */
+        int nrIneqConstr; /*!< Number of inequality constraint */
+        std::vector<std::shared_ptr<Constraint>> spConstr; /*!< Vector of all constraints */
+        std::vector<std::shared_ptr<EqIneqConstraint>> spEqConstr; /*!< Vector of all equality constraints */
+        std::vector<std::shared_ptr<EqIneqConstraint>> spIneqConstr; /*!< Vector of all inequality constraints */
+        std::vector<std::shared_ptr<ControlBoundConstraint>> spBoundConstr; /*!< Vector of all bound constraints */
     };
 
 protected:
-    std::shared_ptr<PreviewSystem> ps_;
-    std::unique_ptr<SolverInterface> sol_;
-    std::vector<std::shared_ptr<CostFunction>> spCost_;
-    Constraints constraints_;
+    std::shared_ptr<PreviewSystem> ps_; /*!< Preview System to work with */
+    std::unique_ptr<SolverInterface> sol_; /*!< Underlying QP solver */
+    std::vector<std::shared_ptr<CostFunction>> spCost_; /*!< Vector of all costs */
+    Constraints constraints_; /*!< Set of all constraints */
 
-    Eigen::MatrixXd Q_, Aineq_, Aeq_;
-    Eigen::VectorXd c_, bineq_, beq_, lb_, ub_;
-    Eigen::VectorXd trajectory_, control_;
+    Eigen::MatrixXd Q_; /*!< Cost matrix */
+    Eigen::VectorXd c_; /*!< Cost vector */
+    Eigen::MatrixXd Aineq_; /*!< Inequality constraint matrix */
+    Eigen::VectorXd bineq_; /*!< Inequality constraint vector */
+    Eigen::MatrixXd Aeq_; /*!< Equality constraint matrix */
+    Eigen::VectorXd beq_; /*!< Equality constraint vector */
+    Eigen::VectorXd lb_; /*!< Lower bound constraint vector */
+    Eigen::VectorXd ub_; /*!< Upper bound constraint vector */
+    Eigen::VectorXd trajectory_; /*!< Trajectory result */
+    Eigen::VectorXd control_; /*!< Control result */
 
-    std::chrono::duration<double> solveTime_, solveAndBuildTime_;
+    std::chrono::duration<double> solveTime_; /*!< Solving time */
+    std::chrono::duration<double> solveAndBuildTime_; /*!< Solving + building time */
 };
 
 } // namespace copra
