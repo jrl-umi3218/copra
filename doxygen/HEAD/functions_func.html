@@ -78,11 +78,14 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 <li>addConstraint()
 : <a class="el" href="a00690.html#a8486f78f9bf6eb8a5c51f86e93a55ee7">copra::LMPC</a>
 </li>
-<li>addConstraintByType()
-: <a class="el" href="a00690.html#a1e11aa3124bd310f32353fc524ee94dd">copra::LMPC</a>
-</li>
 <li>addCost()
 : <a class="el" href="a00690.html#a070d0a4d570b9cd5cd38e268eeac2a08">copra::LMPC</a>
+</li>
+<li>Aeq()
+: <a class="el" href="a00690.html#a6a6183a462c06686deeb46b110a87ac3">copra::LMPC</a>
+</li>
+<li>Aineq()
+: <a class="el" href="a00690.html#a563cd8371b777d348df60bc00c8a009c">copra::LMPC</a>
 </li>
 <li>AutoSpan()
 : <a class="el" href="a00630.html#a2d27f2b3e87c20f8936423e6117c2eff">copra::AutoSpan</a>
@@ -113,22 +116,28 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 , <a class="el" href="a00710.html#ad50d8efd6b5b6da7c4dc818e5a5e2a90">copra::QLDSolver</a>
 , <a class="el" href="a00714.html#a0e00056ac7cbef847004d8f3644dddbd">copra::QuadProgDenseSolver</a>
 </li>
+<li>beq()
+: <a class="el" href="a00690.html#abde72fdec758619dec1384923e51f89c">copra::LMPC</a>
+</li>
+<li>bineq()
+: <a class="el" href="a00690.html#a65a72e2a5abbdef32f4a6bca44b7e691">copra::LMPC</a>
+</li>
 </ul>
 
 
 <h3><a id="index_c"></a>- c -</h3><ul>
 <li>c()
 : <a class="el" href="a00662.html#a42aa3eb4b7fa7d4802647adeaa5905a1">copra::CostFunction</a>
-</li>
-<li>checkDeleteCostsAndConstraints()
-: <a class="el" href="a00690.html#aa831df0b79b97a9787fa1bec2e4cc05e">copra::LMPC</a>
+, <a class="el" href="a00690.html#a41ac8e6eaf57c1e3a1ce68cffce7af1b">copra::LMPC</a>
 </li>
 <li>clear()
 : <a class="el" href="a00694.html#a34f65f0d9b783b58ea944c7f1cdb20c5">copra::LMPC::Constraints</a>
 </li>
-<li>clearConstraintMatrices()
-: <a class="el" href="a00686.html#a7e432181ce955d9c5585f338622ff20b">copra::InitialStateLMPC</a>
-, <a class="el" href="a00690.html#aebf53d4d63270ca63f4515864348fac6">copra::LMPC</a>
+<li>clearConstraints()
+: <a class="el" href="a00690.html#a164de006ebc6ba08c779f1dec26d5f36">copra::LMPC</a>
+</li>
+<li>clearCosts()
+: <a class="el" href="a00690.html#a14579244e720badedf90cd7a273c9fe4">copra::LMPC</a>
 </li>
 <li>Constraint()
 : <a class="el" href="a00634.html#af11566da4a71dff6d270d15371737525">copra::Constraint</a>
@@ -145,8 +154,7 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 , <a class="el" href="a00642.html#a84021f7fb9f14abfa54d7d2f1b7d4f3f">copra::TrajectoryConstraint</a>
 </li>
 <li>control()
-: <a class="el" href="a00686.html#aa88e8559d74314640ddb3d0e60896c27">copra::InitialStateLMPC</a>
-, <a class="el" href="a00690.html#adb9343a0b9e4841aeefc0f7d35b2d3a0">copra::LMPC</a>
+: <a class="el" href="a00690.html#a065ef18363713c239ee06e0e05943da7">copra::LMPC</a>
 </li>
 <li>ControlBoundConstraint()
 : <a class="el" href="a00658.html#a1346094c073c60e077e3baa284cbbd51">copra::ControlBoundConstraint</a>
@@ -181,36 +189,6 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 
 
 <h3><a id="index_g"></a>- g -</h3><ul>
-<li>get_Aeq()
-: <a class="el" href="a00690.html#a4ef5fb1abf97e033582d776efc5d06a3">copra::LMPC</a>
-</li>
-<li>get_Aineq()
-: <a class="el" href="a00690.html#af56d8965b19eb0013bef54fe8a528767">copra::LMPC</a>
-</li>
-<li>get_beq()
-: <a class="el" href="a00690.html#ac4b00f649afda86e380ec473f275ba4c">copra::LMPC</a>
-</li>
-<li>get_bineq()
-: <a class="el" href="a00690.html#a40bc72c183843fd2c6f7aa0fa64fc032">copra::LMPC</a>
-</li>
-<li>get_c()
-: <a class="el" href="a00690.html#a822492d810709328eb4a68a64cc13208">copra::LMPC</a>
-</li>
-<li>get_lb()
-: <a class="el" href="a00690.html#a501326f6c1b634c1b5f34790402b6bfa">copra::LMPC</a>
-</li>
-<li>get_nrEqConstr()
-: <a class="el" href="a00690.html#a6c434863faa61954226f1a8720951e93">copra::LMPC</a>
-</li>
-<li>get_nrIneqConstr()
-: <a class="el" href="a00690.html#a3df218d3c10d17b817e9c8e6141b76d6">copra::LMPC</a>
-</li>
-<li>get_Q()
-: <a class="el" href="a00690.html#a78f5ccdafa6416dc2ca32655cf1f65e5">copra::LMPC</a>
-</li>
-<li>get_ub()
-: <a class="el" href="a00690.html#a88486b00a6342cbd55a5b8d5cd17e6ec">copra::LMPC</a>
-</li>
 <li>GUROBISolver()
 : <a class="el" href="a00682.html#ad092208ffa4c4ecb22f0c44806996546">copra::GUROBISolver</a>
 </li>
@@ -230,8 +208,7 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 , <a class="el" href="a00642.html#a622b42be05a11d403b9155e1cf6dde96">copra::TrajectoryConstraint</a>
 </li>
 <li>initializeController()
-: <a class="el" href="a00686.html#ac75c2339e736fa620489b0a760bcaf1c">copra::InitialStateLMPC</a>
-, <a class="el" href="a00690.html#aeb407b38ece600ca2cebc72fe0f9ad65">copra::LMPC</a>
+: <a class="el" href="a00690.html#a4c7fcffb55415fc491a95b851f56397d">copra::LMPC</a>
 </li>
 <li>initializeCost()
 : <a class="el" href="a00674.html#a1bf486b29b693e358480b8a9fe3d013c">copra::ControlCost</a>
@@ -250,6 +227,9 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 
 
 <h3><a id="index_l"></a>- l -</h3><ul>
+<li>lb()
+: <a class="el" href="a00690.html#aa5417002d4a7224521aedc5093e30e9f">copra::LMPC</a>
+</li>
 <li>LMPC()
 : <a class="el" href="a00690.html#ac6241f9877b9bbb21ae159949831120f">copra::LMPC</a>
 </li>
@@ -263,10 +243,6 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 
 
 <h3><a id="index_m"></a>- m -</h3><ul>
-<li>makeQPForm()
-: <a class="el" href="a00686.html#a9f845c84f1ae5e0d7e29f95670468059">copra::InitialStateLMPC</a>
-, <a class="el" href="a00690.html#ab7d178d56f14d0439fb5377e243e9246">copra::LMPC</a>
-</li>
 <li>MixedConstraint()
 : <a class="el" href="a00650.html#abc261b7d0527fb762f0df1f590817fd9">copra::MixedConstraint</a>
 </li>
@@ -284,6 +260,12 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 <li>nrConstr()
 : <a class="el" href="a00634.html#a238e05f0ae0cffb775a75b56b7fc4d17">copra::Constraint</a>
 </li>
+<li>nrEqConstr()
+: <a class="el" href="a00690.html#a8965029e4d9d4181394e4ca178eb23e5">copra::LMPC</a>
+</li>
+<li>nrIneqConstr()
+: <a class="el" href="a00690.html#a8c8331c4496640b8b1ff1c5d1e9c564a">copra::LMPC</a>
+</li>
 </ul>
 
 
@@ -299,7 +281,7 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 
 <h3><a id="index_p"></a>- p -</h3><ul>
 <li>PreviewSystem()
-: <a class="el" href="a00706.html#af91ccd60f0d803b250cd2a8f81c24be0">copra::PreviewSystem</a>
+: <a class="el" href="a00706.html#a9445cbdc265f5e7c0570d497df9df7a4">copra::PreviewSystem</a>
 </li>
 </ul>
 
@@ -307,6 +289,7 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 <h3><a id="index_q"></a>- q -</h3><ul>
 <li>Q()
 : <a class="el" href="a00662.html#afaf5c0657a03ce01365e06adcd99c911">copra::CostFunction</a>
+, <a class="el" href="a00690.html#a7ffd5ba1cbd96ed70ecc36f3f35c8031">copra::LMPC</a>
 </li>
 <li>QLDSolver()
 : <a class="el" href="a00710.html#a688cb21805a5f3b7158692a07cc43e0a">copra::QLDSolver</a>
@@ -323,9 +306,6 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 </li>
 <li>removeCost()
 : <a class="el" href="a00690.html#ab9e9cbf1c221a2c6b05393c6048042a8">copra::LMPC</a>
-</li>
-<li>resetConstraints()
-: <a class="el" href="a00690.html#adb77833aac37af535172b40ad3902f92">copra::LMPC</a>
 </li>
 <li>resetInitialStateBounds()
 : <a class="el" href="a00686.html#ad28d1e3b0f49f0a831699148ea1fb541">copra::InitialStateLMPC</a>
@@ -414,14 +394,13 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 , <a class="el" href="a00718.html#aeb240e55210ed82f3fc0a96d3da22877">copra::SolverInterface</a>
 </li>
 <li>solve()
-: <a class="el" href="a00686.html#aed4152a31b744f2222d1407f8333ef51">copra::InitialStateLMPC</a>
-, <a class="el" href="a00690.html#a6a5514b88a0958cbe9cb168c97b00479">copra::LMPC</a>
+: <a class="el" href="a00690.html#a6741dab4d91e7c9c844317f19df30da6">copra::LMPC</a>
 </li>
 <li>solveAndBuildTime()
 : <a class="el" href="a00690.html#ac509b9a718cbb8e3ae1151fc1cc43ebe">copra::LMPC</a>
 </li>
-<li>solver()
-: <a class="el" href="a00690.html#ac238e44de1f7e192d56deee19b3ea8d5">copra::LMPC</a>
+<li>SolverInterface()
+: <a class="el" href="a00718.html#a8f6cd993d6d6b1a4efe08691980864a9">copra::SolverInterface</a>
 </li>
 <li>solveTime()
 : <a class="el" href="a00690.html#a0a20b1cf9dfd431657cea004a6d6cb7b">copra::LMPC</a>
@@ -443,8 +422,7 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 : <a class="el" href="a00670.html#adbcaf02a942b733b9f1973e68702ff5c">copra::TargetCost</a>
 </li>
 <li>trajectory()
-: <a class="el" href="a00686.html#afdbc257e2afc9515186aeeaf6e0f1dcd">copra::InitialStateLMPC</a>
-, <a class="el" href="a00690.html#a37e002859ca8e5eb79bdd7f5c238cf9a">copra::LMPC</a>
+: <a class="el" href="a00690.html#a8201fb30481ab46544fed33ce342518b">copra::LMPC</a>
 </li>
 <li>TrajectoryBoundConstraint()
 : <a class="el" href="a00654.html#a5869dd80ee8edbce7d5c049c6dbe242b">copra::TrajectoryBoundConstraint</a>
@@ -459,6 +437,9 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 
 
 <h3><a id="index_u"></a>- u -</h3><ul>
+<li>ub()
+: <a class="el" href="a00690.html#a81e5b3a00bdc75434304f454938942d3">copra::LMPC</a>
+</li>
 <li>update()
 : <a class="el" href="a00634.html#aae0f78b14981a50d29a7f7cf923b57fb">copra::Constraint</a>
 , <a class="el" href="a00658.html#a016249d73d1b645fa9cf548ec0df1303">copra::ControlBoundConstraint</a>
@@ -476,9 +457,7 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 : <a class="el" href="a00694.html#a908cc2607518d7403b36334d26dc8e33">copra::LMPC::Constraints</a>
 </li>
 <li>updateSystem()
-: <a class="el" href="a00686.html#a314e19f807eacb39dc3e187b80881841">copra::InitialStateLMPC</a>
-, <a class="el" href="a00690.html#abbfb4ca1162966b90395daf6fc64e8f1">copra::LMPC</a>
-, <a class="el" href="a00706.html#a38c98fae0a979a7a98bfe672ca20a318">copra::PreviewSystem</a>
+: <a class="el" href="a00706.html#a38c98fae0a979a7a98bfe672ca20a318">copra::PreviewSystem</a>
 </li>
 <li>upper()
 : <a class="el" href="a00658.html#a3a02604a8ab5ea9b3e35d0fbe4dddfd8">copra::ControlBoundConstraint</a>
@@ -540,7 +519,7 @@ $(document).ready(function(){initNavTree('functions_func.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Mon Mar 8 2021 10:20:15 for copra by
+    <li class="footer">Generated on Wed Mar 10 2021 10:26:54 for copra by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

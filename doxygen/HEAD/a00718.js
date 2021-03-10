@@ -1,5 +1,6 @@
 var a00718 =
 [
+    [ "SolverInterface", "a00718.html#a8f6cd993d6d6b1a4efe08691980864a9", null ],
     [ "~SolverInterface", "a00718.html#a16ede69f5f2c07f99f740fec0be831a6", null ],
     [ "SI_fail", "a00718.html#a25b0116f4c27637dc86d4e88ee34f4d6", null ],
     [ "SI_feasibilityTolerance", "a00718.html#a75e5f6caa56b31c74dd20f9ce65b6637", null ],

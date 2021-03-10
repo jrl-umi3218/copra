@@ -241,6 +241,7 @@
     <name>InitialStateLMPC.h</name>
     <path>/home/runner/work/copra/copra/include/</path>
     <filename>a00020</filename>
+    <includes id="a00002" name="api.h" local="yes" imported="no">api.h</includes>
     <includes id="a00023" name="LMPC.h" local="yes" imported="no">LMPC.h</includes>
     <class kind="class">copra::InitialStateLMPC</class>
     <namespace>copra</namespace>
@@ -1002,39 +1003,11 @@
       <arglist>(const std::shared_ptr&lt; PreviewSystem &gt; &amp;ps, SolverFlag sFlag=SolverFlag::DEFAULT)</arglist>
     </member>
     <member kind="function">
-      <type>void</type>
-      <name>initializeController</name>
-      <anchorfile>a00686.html</anchorfile>
-      <anchor>ac75c2339e736fa620489b0a760bcaf1c</anchor>
-      <arglist>(const std::shared_ptr&lt; PreviewSystem &gt; &amp;ps) override</arglist>
-    </member>
-    <member kind="function">
-      <type>bool</type>
-      <name>solve</name>
-      <anchorfile>a00686.html</anchorfile>
-      <anchor>aed4152a31b744f2222d1407f8333ef51</anchor>
-      <arglist>() override</arglist>
-    </member>
-    <member kind="function">
       <type>Eigen::VectorXd</type>
       <name>initialState</name>
       <anchorfile>a00686.html</anchorfile>
       <anchor>a198bb34f252a0ff0782efff22bbf3eb0</anchor>
       <arglist>() const noexcept</arglist>
-    </member>
-    <member kind="function">
-      <type>const Eigen::VectorXd &amp;</type>
-      <name>control</name>
-      <anchorfile>a00686.html</anchorfile>
-      <anchor>aa88e8559d74314640ddb3d0e60896c27</anchor>
-      <arglist>() const noexcept override</arglist>
-    </member>
-    <member kind="function">
-      <type>Eigen::VectorXd</type>
-      <name>trajectory</name>
-      <anchorfile>a00686.html</anchorfile>
-      <anchor>afdbc257e2afc9515186aeeaf6e0f1dcd</anchor>
-      <arglist>() const noexcept override</arglist>
     </member>
     <member kind="function">
       <type>void</type>
@@ -1049,27 +1022,6 @@
       <anchorfile>a00686.html</anchorfile>
       <anchor>ad28d1e3b0f49f0a831699148ea1fb541</anchor>
       <arglist>(const Eigen::VectorXd &amp;l, const Eigen::VectorXd &amp;u)</arglist>
-    </member>
-    <member kind="function" protection="protected">
-      <type>void</type>
-      <name>clearConstraintMatrices</name>
-      <anchorfile>a00686.html</anchorfile>
-      <anchor>a7e432181ce955d9c5585f338622ff20b</anchor>
-      <arglist>() override</arglist>
-    </member>
-    <member kind="function" protection="protected">
-      <type>void</type>
-      <name>updateSystem</name>
-      <anchorfile>a00686.html</anchorfile>
-      <anchor>a314e19f807eacb39dc3e187b80881841</anchor>
-      <arglist>() override</arglist>
-    </member>
-    <member kind="function" protection="protected">
-      <type>void</type>
-      <name>makeQPForm</name>
-      <anchorfile>a00686.html</anchorfile>
-      <anchor>a9f845c84f1ae5e0d7e29f95670468059</anchor>
-      <arglist>() override</arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>Eigen::MatrixXd</type>
@@ -1086,122 +1038,17 @@
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
-      <type>Eigen::MatrixXd</type>
-      <name>E_</name>
+      <type>Eigen::VectorXd</type>
+      <name>x0lb_</name>
       <anchorfile>a00686.html</anchorfile>
-      <anchor>a3442a3c457a39f283e7396f792e32b07</anchor>
+      <anchor>ad43d4fc5e7b96a2fd196ed117d9233c6</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
       <type>Eigen::VectorXd</type>
-      <name>f_</name>
+      <name>x0ub_</name>
       <anchorfile>a00686.html</anchorfile>
-      <anchor>a6a77847885181b3cfa2ff1796e47a0ba</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" protection="protected">
-      <type>Eigen::VectorXd</type>
-      <name>l_</name>
-      <anchorfile>a00686.html</anchorfile>
-      <anchor>a633296b24c776fd80a447a36797b1cc3</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" protection="protected">
-      <type>Eigen::VectorXd</type>
-      <name>u_</name>
-      <anchorfile>a00686.html</anchorfile>
-      <anchor>a7b3d7e0d9d68c85b21d0b4ba72aaf069</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" protection="protected">
-      <type>Eigen::MatrixXd</type>
-      <name>Yeq_</name>
-      <anchorfile>a00686.html</anchorfile>
-      <anchor>aac82e2a32fb70dbc4e8f102a4eda9934</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" protection="protected">
-      <type>Eigen::VectorXd</type>
-      <name>zeq_</name>
-      <anchorfile>a00686.html</anchorfile>
-      <anchor>a6cec6c23bc5a5f9f53cfde68c0b9eda0</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" protection="protected">
-      <type>Eigen::MatrixXd</type>
-      <name>Yineq_</name>
-      <anchorfile>a00686.html</anchorfile>
-      <anchor>ab4838386f7ce62f07e1d99b91c433158</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" protection="protected">
-      <type>Eigen::VectorXd</type>
-      <name>zineq_</name>
-      <anchorfile>a00686.html</anchorfile>
-      <anchor>a3d17d448d8ec15d507d5e40940528a48</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" protection="protected">
-      <type>Eigen::MatrixXd</type>
-      <name>newQ_</name>
-      <anchorfile>a00686.html</anchorfile>
-      <anchor>aa47b40a7fc738a9b4aadf7df9802f435</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" protection="protected">
-      <type>Eigen::VectorXd</type>
-      <name>newc_</name>
-      <anchorfile>a00686.html</anchorfile>
-      <anchor>aea54d25e04eb49cb55ba7b1ccb0ee958</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" protection="protected">
-      <type>Eigen::VectorXd</type>
-      <name>newlb_</name>
-      <anchorfile>a00686.html</anchorfile>
-      <anchor>aafdb44d70cbaa03535bf5b2dc5cf23c1</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" protection="protected">
-      <type>Eigen::VectorXd</type>
-      <name>newub_</name>
-      <anchorfile>a00686.html</anchorfile>
-      <anchor>a46d50f81ce0b057bd9d652ead804418e</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" protection="protected">
-      <type>Eigen::MatrixXd</type>
-      <name>newAeq_</name>
-      <anchorfile>a00686.html</anchorfile>
-      <anchor>aac6944477f31fc5c47f973eee05367f6</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" protection="protected">
-      <type>Eigen::VectorXd</type>
-      <name>newbeq_</name>
-      <anchorfile>a00686.html</anchorfile>
-      <anchor>acc8a1c3f20ae8ba58caf30fc9443a9da</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" protection="protected">
-      <type>Eigen::MatrixXd</type>
-      <name>newAineq_</name>
-      <anchorfile>a00686.html</anchorfile>
-      <anchor>a22a9e4d05ae5004350eda7d7304fdd5c</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" protection="protected">
-      <type>Eigen::VectorXd</type>
-      <name>newbineq_</name>
-      <anchorfile>a00686.html</anchorfile>
-      <anchor>a5087eded904b06d42201ba5c38d2ed1e</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" protection="protected">
-      <type>Eigen::VectorXd</type>
-      <name>control_</name>
-      <anchorfile>a00686.html</anchorfile>
-      <anchor>a778e624cff44bb31a44ca9aba13c4d7f</anchor>
+      <anchor>ad583c7f252338549897166efdade1786</anchor>
       <arglist></arglist>
     </member>
   </compound>
@@ -1300,18 +1147,18 @@
       <anchor>a221f5092f2ad3760416268f5ae7eb767</anchor>
       <arglist>(std::unique_ptr&lt; SolverInterface &gt; &amp;&amp;solver)</arglist>
     </member>
-    <member kind="function" virtualness="virtual">
-      <type>virtual void</type>
+    <member kind="function">
+      <type>void</type>
       <name>initializeController</name>
       <anchorfile>a00690.html</anchorfile>
-      <anchor>aeb407b38ece600ca2cebc72fe0f9ad65</anchor>
+      <anchor>a4c7fcffb55415fc491a95b851f56397d</anchor>
       <arglist>(const std::shared_ptr&lt; PreviewSystem &gt; &amp;ps)</arglist>
     </member>
-    <member kind="function" virtualness="virtual">
-      <type>virtual bool</type>
+    <member kind="function">
+      <type>bool</type>
       <name>solve</name>
       <anchorfile>a00690.html</anchorfile>
-      <anchor>a6a5514b88a0958cbe9cb168c97b00479</anchor>
+      <anchor>a6741dab4d91e7c9c844317f19df30da6</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
@@ -1319,27 +1166,6 @@
       <name>inform</name>
       <anchorfile>a00690.html</anchorfile>
       <anchor>a9eb24ba9b41a3176e3ef5f82b76b67a6</anchor>
-      <arglist>() const noexcept</arglist>
-    </member>
-    <member kind="function">
-      <type>SolverInterface &amp;</type>
-      <name>solver</name>
-      <anchorfile>a00690.html</anchorfile>
-      <anchor>ac238e44de1f7e192d56deee19b3ea8d5</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function" virtualness="virtual">
-      <type>virtual const Eigen::VectorXd &amp;</type>
-      <name>control</name>
-      <anchorfile>a00690.html</anchorfile>
-      <anchor>adb9343a0b9e4841aeefc0f7d35b2d3a0</anchor>
-      <arglist>() const noexcept</arglist>
-    </member>
-    <member kind="function" virtualness="virtual">
-      <type>virtual Eigen::VectorXd</type>
-      <name>trajectory</name>
-      <anchorfile>a00690.html</anchorfile>
-      <anchor>a37e002859ca8e5eb79bdd7f5c238cf9a</anchor>
       <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
@@ -1372,9 +1198,16 @@
     </member>
     <member kind="function">
       <type>void</type>
-      <name>resetConstraints</name>
+      <name>clearCosts</name>
       <anchorfile>a00690.html</anchorfile>
-      <anchor>adb77833aac37af535172b40ad3902f92</anchor>
+      <anchor>a14579244e720badedf90cd7a273c9fe4</anchor>
+      <arglist>() noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>void</type>
+      <name>clearConstraints</name>
+      <anchorfile>a00690.html</anchorfile>
+      <anchor>a164de006ebc6ba08c779f1dec26d5f36</anchor>
       <arglist>() noexcept</arglist>
     </member>
     <member kind="function">
@@ -1392,108 +1225,87 @@
       <arglist>(const std::shared_ptr&lt; Constraint &gt; &amp;constr)</arglist>
     </member>
     <member kind="function">
-      <type>int</type>
-      <name>get_nrEqConstr</name>
+      <type>const Eigen::VectorXd &amp;</type>
+      <name>control</name>
       <anchorfile>a00690.html</anchorfile>
-      <anchor>a6c434863faa61954226f1a8720951e93</anchor>
-      <arglist>()</arglist>
+      <anchor>a065ef18363713c239ee06e0e05943da7</anchor>
+      <arglist>() const noexcept</arglist>
+    </member>
+    <member kind="function">
+      <type>const Eigen::VectorXd &amp;</type>
+      <name>trajectory</name>
+      <anchorfile>a00690.html</anchorfile>
+      <anchor>a8201fb30481ab46544fed33ce342518b</anchor>
+      <arglist>() const noexcept</arglist>
     </member>
     <member kind="function">
       <type>int</type>
-      <name>get_nrIneqConstr</name>
+      <name>nrEqConstr</name>
       <anchorfile>a00690.html</anchorfile>
-      <anchor>a3df218d3c10d17b817e9c8e6141b76d6</anchor>
+      <anchor>a8965029e4d9d4181394e4ca178eb23e5</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>Eigen::MatrixXd</type>
-      <name>get_Q</name>
+      <type>int</type>
+      <name>nrIneqConstr</name>
       <anchorfile>a00690.html</anchorfile>
-      <anchor>a78f5ccdafa6416dc2ca32655cf1f65e5</anchor>
+      <anchor>a8c8331c4496640b8b1ff1c5d1e9c564a</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>Eigen::MatrixXd</type>
-      <name>get_Aineq</name>
+      <type>const Eigen::MatrixXd &amp;</type>
+      <name>Q</name>
       <anchorfile>a00690.html</anchorfile>
-      <anchor>af56d8965b19eb0013bef54fe8a528767</anchor>
+      <anchor>a7ffd5ba1cbd96ed70ecc36f3f35c8031</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>Eigen::MatrixXd</type>
-      <name>get_Aeq</name>
+      <type>const Eigen::VectorXd &amp;</type>
+      <name>c</name>
       <anchorfile>a00690.html</anchorfile>
-      <anchor>a4ef5fb1abf97e033582d776efc5d06a3</anchor>
+      <anchor>a41ac8e6eaf57c1e3a1ce68cffce7af1b</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>Eigen::VectorXd</type>
-      <name>get_c</name>
+      <type>const Eigen::MatrixXd &amp;</type>
+      <name>Aineq</name>
       <anchorfile>a00690.html</anchorfile>
-      <anchor>a822492d810709328eb4a68a64cc13208</anchor>
+      <anchor>a563cd8371b777d348df60bc00c8a009c</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>Eigen::VectorXd</type>
-      <name>get_bineq</name>
+      <type>const Eigen::VectorXd &amp;</type>
+      <name>bineq</name>
       <anchorfile>a00690.html</anchorfile>
-      <anchor>a40bc72c183843fd2c6f7aa0fa64fc032</anchor>
+      <anchor>a65a72e2a5abbdef32f4a6bca44b7e691</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>Eigen::VectorXd</type>
-      <name>get_beq</name>
+      <type>const Eigen::MatrixXd &amp;</type>
+      <name>Aeq</name>
       <anchorfile>a00690.html</anchorfile>
-      <anchor>ac4b00f649afda86e380ec473f275ba4c</anchor>
+      <anchor>a6a6183a462c06686deeb46b110a87ac3</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>Eigen::VectorXd</type>
-      <name>get_lb</name>
+      <type>const Eigen::VectorXd &amp;</type>
+      <name>beq</name>
       <anchorfile>a00690.html</anchorfile>
-      <anchor>a501326f6c1b634c1b5f34790402b6bfa</anchor>
+      <anchor>abde72fdec758619dec1384923e51f89c</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="function">
-      <type>Eigen::VectorXd</type>
-      <name>get_ub</name>
+      <type>const Eigen::VectorXd &amp;</type>
+      <name>lb</name>
       <anchorfile>a00690.html</anchorfile>
-      <anchor>a88486b00a6342cbd55a5b8d5cd17e6ec</anchor>
+      <anchor>aa5417002d4a7224521aedc5093e30e9f</anchor>
       <arglist>()</arglist>
     </member>
-    <member kind="function" protection="protected">
-      <type>void</type>
-      <name>addConstraintByType</name>
+    <member kind="function">
+      <type>const Eigen::VectorXd &amp;</type>
+      <name>ub</name>
       <anchorfile>a00690.html</anchorfile>
-      <anchor>a1e11aa3124bd310f32353fc524ee94dd</anchor>
-      <arglist>(const std::shared_ptr&lt; Constraint &gt; &amp;constr)</arglist>
-    </member>
-    <member kind="function" protection="protected" virtualness="virtual">
-      <type>virtual void</type>
-      <name>clearConstraintMatrices</name>
-      <anchorfile>a00690.html</anchorfile>
-      <anchor>aebf53d4d63270ca63f4515864348fac6</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function" protection="protected" virtualness="virtual">
-      <type>virtual void</type>
-      <name>updateSystem</name>
-      <anchorfile>a00690.html</anchorfile>
-      <anchor>abbfb4ca1162966b90395daf6fc64e8f1</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function" protection="protected" virtualness="virtual">
-      <type>virtual void</type>
-      <name>makeQPForm</name>
-      <anchorfile>a00690.html</anchorfile>
-      <anchor>ab7d178d56f14d0439fb5377e243e9246</anchor>
-      <arglist>()</arglist>
-    </member>
-    <member kind="function" protection="protected">
-      <type>void</type>
-      <name>checkDeleteCostsAndConstraints</name>
-      <anchorfile>a00690.html</anchorfile>
-      <anchor>aa831df0b79b97a9787fa1bec2e4cc05e</anchor>
+      <anchor>a81e5b3a00bdc75434304f454938942d3</anchor>
       <arglist>()</arglist>
     </member>
     <member kind="variable" protection="protected">
@@ -1532,20 +1344,6 @@
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
-      <type>Eigen::MatrixXd</type>
-      <name>Aineq_</name>
-      <anchorfile>a00690.html</anchorfile>
-      <anchor>a7b6ea878ca1a95e70f36a3eafd7e12bb</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" protection="protected">
-      <type>Eigen::MatrixXd</type>
-      <name>Aeq_</name>
-      <anchorfile>a00690.html</anchorfile>
-      <anchor>a6e1ecf4d0e6ad6279f6d27e13e256786</anchor>
-      <arglist></arglist>
-    </member>
-    <member kind="variable" protection="protected">
       <type>Eigen::VectorXd</type>
       <name>c_</name>
       <anchorfile>a00690.html</anchorfile>
@@ -1553,10 +1351,24 @@
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
+      <type>Eigen::MatrixXd</type>
+      <name>Aineq_</name>
+      <anchorfile>a00690.html</anchorfile>
+      <anchor>a7b6ea878ca1a95e70f36a3eafd7e12bb</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
       <type>Eigen::VectorXd</type>
       <name>bineq_</name>
       <anchorfile>a00690.html</anchorfile>
       <anchor>a30230364f4355dee2d743402028f5482</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>Eigen::MatrixXd</type>
+      <name>Aeq_</name>
+      <anchorfile>a00690.html</anchorfile>
+      <anchor>a6e1ecf4d0e6ad6279f6d27e13e256786</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
@@ -1578,6 +1390,20 @@
       <name>ub_</name>
       <anchorfile>a00690.html</anchorfile>
       <anchor>ae1031c267c293dbb02c9e7d128aa157e</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>Eigen::VectorXd</type>
+      <name>trajectory_</name>
+      <anchorfile>a00690.html</anchorfile>
+      <anchor>a31b0dd1f53dc8df86e38411b13aa3932</anchor>
+      <arglist></arglist>
+    </member>
+    <member kind="variable" protection="protected">
+      <type>Eigen::VectorXd</type>
+      <name>control_</name>
+      <anchorfile>a00690.html</anchorfile>
+      <anchor>a2fc55a8a9f27e91da40bfdfb5c713932</anchor>
       <arglist></arglist>
     </member>
     <member kind="variable" protection="protected">
@@ -1888,8 +1714,8 @@
       <type></type>
       <name>PreviewSystem</name>
       <anchorfile>a00706.html</anchorfile>
-      <anchor>af91ccd60f0d803b250cd2a8f81c24be0</anchor>
-      <arglist>()</arglist>
+      <anchor>a9445cbdc265f5e7c0570d497df9df7a4</anchor>
+      <arglist>()=default</arglist>
     </member>
     <member kind="function">
       <type></type>
@@ -1918,13 +1744,6 @@
       <anchorfile>a00706.html</anchorfile>
       <anchor>abb5c2270240ace3cdea7758b8092dc21</anchor>
       <arglist>(const Eigen::VectorXd &amp;xInit)</arglist>
-    </member>
-    <member kind="function">
-      <type>Eigen::VectorXd &amp;</type>
-      <name>xInit</name>
-      <anchorfile>a00706.html</anchorfile>
-      <anchor>add236c9b2fb09dbad80866ba4f81a233</anchor>
-      <arglist>()</arglist>
     </member>
     <member kind="variable">
       <type>bool</type>
@@ -2157,6 +1976,13 @@
   <compound kind="class">
     <name>copra::SolverInterface</name>
     <filename>a00718.html</filename>
+    <member kind="function">
+      <type></type>
+      <name>SolverInterface</name>
+      <anchorfile>a00718.html</anchorfile>
+      <anchor>a8f6cd993d6d6b1a4efe08691980864a9</anchor>
+      <arglist>()=default</arglist>
+    </member>
     <member kind="function" virtualness="virtual">
       <type>virtual</type>
       <name>~SolverInterface</name>

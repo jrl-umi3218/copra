@@ -93,16 +93,14 @@ Functions</h2></td></tr>
 <tr class="memdesc:a3b6b8555392998bd20c0a7dbe6305623"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function to get an unique pointer to a desired solver.  <a href="a00081.html#a3b6b8555392998bd20c0a7dbe6305623">More...</a><br /></td></tr>
 <tr class="separator:a3b6b8555392998bd20c0a7dbe6305623"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a11ad5b78f8b35292eeb62aff2c29afc1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="a00002.html#a317a8f7b36f8c630019f4b01688cb50b">COPRA_DLLAPI</a> SolverInterface *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00081.html#a11ad5b78f8b35292eeb62aff2c29afc1">copra::pythonSolverFactory</a> (SolverFlag flag)</td></tr>
-<tr class="memdesc:a11ad5b78f8b35292eeb62aff2c29afc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function to get a desired solver.  <a href="a00081.html#a11ad5b78f8b35292eeb62aff2c29afc1">More...</a><br /></td></tr>
+<tr class="memdesc:a11ad5b78f8b35292eeb62aff2c29afc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function to get a desired solver. This should only be used by python (unique_ptr are not bindable).  <a href="a00081.html#a11ad5b78f8b35292eeb62aff2c29afc1">More...</a><br /></td></tr>
 <tr class="separator:a11ad5b78f8b35292eeb62aff2c29afc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:ad20935afa9af8d1f162c113cfbbf111d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00044.html#ad20935afa9af8d1f162c113cfbbf111d">DEFAULT</a></td></tr>
-<tr class="memdesc:ad20935afa9af8d1f162c113cfbbf111d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default solver (QuadProgDense solver)  <a href="#ad20935afa9af8d1f162c113cfbbf111d">More...</a><br /></td></tr>
 <tr class="separator:ad20935afa9af8d1f162c113cfbbf111d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ed5551a07839c562e3aadc1c837573d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00044.html#a6ed5551a07839c562e3aadc1c837573d">QuadProgDense</a></td></tr>
-<tr class="memdesc:a6ed5551a07839c562e3aadc1c837573d"><td class="mdescLeft">&#160;</td><td class="mdescRight">DenseMatrix version of QuadProg solver.  <a href="#a6ed5551a07839c562e3aadc1c837573d">More...</a><br /></td></tr>
 <tr class="separator:a6ed5551a07839c562e3aadc1c837573d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Variable Documentation</h2>
@@ -117,7 +115,6 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
 <p>Default solver (QuadProgDense solver) </p>
 
 </div>
@@ -133,8 +130,7 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>DenseMatrix version of QuadProg solver. </p>
+<p>DenseMatrix version of QuadProg solver </p>
 
 <p class="reference">Referenced by <a class="el" href="a00714.html#a0e00056ac7cbef847004d8f3644dddbd">copra::QuadProgDenseSolver::baseSolver()</a>.</p>
 
@@ -147,7 +143,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="a00044.html">solverUtils.h</a></li>
-    <li class="footer">Generated on Mon Mar 8 2021 10:20:15 for copra by
+    <li class="footer">Generated on Wed Mar 10 2021 10:26:54 for copra by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

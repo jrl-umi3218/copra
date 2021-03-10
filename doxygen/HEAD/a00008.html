@@ -87,25 +87,27 @@ $(document).ready(function(){initNavTree('a00008.html','');});
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00634.html">copra::Constraint</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstract base class that represents constraints.  <a href="a00634.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstract base class that represents constraints. Any derived class of this one can be added to the MPC.  <a href="a00634.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00638.html">copra::EqIneqConstraint</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstract Class for Equality and Inequality constraints.  <a href="a00638.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstract Class for Equality and Inequality constraints. Even if Equality and Inequality constraints are different, their matrices are written the same way.  <a href="a00638.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00642.html">copra::TrajectoryConstraint</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Trajectory constraint class.  <a href="a00642.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Trajectory constraint class. Depending on the parameter 'isInequalityConstraint' during the construction it can be an Equality constraints ( \(Ex = f\) or \(EX = f\)) or an Inequality constraints ( \(Ex\leq f\) or \(EX\leq f\)) with \(X=[x_1^T ... x_{nrStep}^T]^T\).  <a href="a00642.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00646.html">copra::ControlConstraint</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Control constraint class.  <a href="a00646.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Control constraint class. Depending on the parameter 'isInequalityConstraint' during the construction it can be an Equality constraints ( \(Eu = f\) or \(EU = f\)) or an Inequality constraints ( \(Eu\leq f\) or \(EU\leq f\)) with \(U=[u_0^T ... u_{N-1}^T]^T\).  <a href="a00646.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00650.html">copra::MixedConstraint</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mixed constraint class.  <a href="a00650.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mixed constraint class. Depending on the parameter 'isInequalityConstraint' during the construction it can be an Equality constraints ( \(Ex + Gu = f\) or \(EX + GU = f\))<br />
+or an Inequality constraints ( \(Ex + Gu\leq f\) or \(EX + GU\leq f\))<br />
+with \(X=[x_1^T ... x_N^T]^T\) and \(U=[u_0^T ... u_{N-1}^T]^T\).  <a href="a00650.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00654.html">copra::TrajectoryBoundConstraint</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Trajectory Bound constraint.  <a href="a00654.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Trajectory Bound constraint. Even if it is a bound constraint, the optimization vector is \(U\) so this constraint has to be transformed to an Inequality constraint.  <a href="a00654.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00658.html">copra::ControlBoundConstraint</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Control Bound constraint.  <a href="a00658.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Control Bound constraint. It bounds the optimization \(\underline{u}\leq u \leq\overline{u}\).  <a href="a00658.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -116,13 +118,10 @@ Namespaces</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
 <tr class="memitem:ae09f44b989d381a387329fd0a0935926"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00008.html#ae09f44b989d381a387329fd0a0935926">Constraint</a></td></tr>
-<tr class="memdesc:ae09f44b989d381a387329fd0a0935926"><td class="mdescLeft">&#160;</td><td class="mdescRight">Any constraints.  <a href="#ae09f44b989d381a387329fd0a0935926">More...</a><br /></td></tr>
 <tr class="separator:ae09f44b989d381a387329fd0a0935926"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa6861ed19b7bbe33be79342661ed42e5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00008.html#aa6861ed19b7bbe33be79342661ed42e5">EqualityConstraint</a></td></tr>
-<tr class="memdesc:aa6861ed19b7bbe33be79342661ed42e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Equality constraint flag.  <a href="#aa6861ed19b7bbe33be79342661ed42e5">More...</a><br /></td></tr>
 <tr class="separator:aa6861ed19b7bbe33be79342661ed42e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0b4b3e4fcb2eaed79f2d5a2f76bd0a41"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00008.html#a0b4b3e4fcb2eaed79f2d5a2f76bd0a41">InequalityConstraint</a></td></tr>
-<tr class="memdesc:a0b4b3e4fcb2eaed79f2d5a2f76bd0a41"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inequality constraint flag.  <a href="#a0b4b3e4fcb2eaed79f2d5a2f76bd0a41">More...</a><br /></td></tr>
 <tr class="separator:a0b4b3e4fcb2eaed79f2d5a2f76bd0a41"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Variable Documentation</h2>
@@ -137,8 +136,7 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Any constraints. </p>
+<p>Any constraints </p>
 
 </div>
 </div>
@@ -153,8 +151,7 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Equality constraint flag. </p>
+<p>Equality constraint flag </p>
 
 </div>
 </div>
@@ -169,8 +166,7 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Inequality constraint flag. </p>
+<p>Inequality constraint flag </p>
 
 </div>
 </div>
@@ -181,7 +177,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="a00008.html">constraints.h</a></li>
-    <li class="footer">Generated on Mon Mar 8 2021 10:20:15 for copra by
+    <li class="footer">Generated on Wed Mar 10 2021 10:26:54 for copra by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

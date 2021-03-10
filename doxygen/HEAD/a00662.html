@@ -78,7 +78,7 @@ $(document).ready(function(){initNavTree('a00662.html','');});
 </div><!--header-->
 <div class="contents">
 
-<p>Abstract base class that represents cost functions.  
+<p>Abstract base class that represents cost functions. Any derived class of this one can be added to the MPC.  
  <a href="a00662.html#details">More...</a></p>
 
 <p><code>#include &lt;costFunctions.h&gt;</code></p>
@@ -88,52 +88,50 @@ Inheritance diagram for copra::CostFunction:</div>
  <div class="center">
   <img src="a00662.png" usemap="#copra::CostFunction_map" alt=""/>
   <map id="copra::CostFunction_map" name="copra::CostFunction_map">
-<area href="a00674.html" title="Control cost function class. " alt="copra::ControlCost" shape="rect" coords="0,56,134,80"/>
-<area href="a00678.html" title="Mixed cost function class. " alt="copra::MixedCost" shape="rect" coords="144,56,278,80"/>
-<area href="a00670.html" title="Target cost function class. " alt="copra::TargetCost" shape="rect" coords="288,56,422,80"/>
-<area href="a00666.html" title="Trajectory cost function class. " alt="copra::TrajectoryCost" shape="rect" coords="432,56,566,80"/>
+<area href="a00674.html" title="Control cost function class. This cost function looks for a minimization of the control. Mathematically, it is . " alt="copra::ControlCost" shape="rect" coords="0,56,134,80"/>
+<area href="a00678.html" title="Mixed cost function class. This cost function looks for a minimization of a linear combination of tra..." alt="copra::MixedCost" shape="rect" coords="144,56,278,80"/>
+<area href="a00670.html" title="Target cost function class. This cost function looks for target a final point. Mathematically, it is . " alt="copra::TargetCost" shape="rect" coords="288,56,422,80"/>
+<area href="a00666.html" title="Trajectory cost function class. This cost function looks for a minimization around a trajectory..." alt="copra::TrajectoryCost" shape="rect" coords="432,56,566,80"/>
 </map>
  </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ac10ca4ef5e8724a253e347d18ac6c016"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00662.html#ac10ca4ef5e8724a253e347d18ac6c016">CostFunction</a> (std::string &amp;&amp;<a class="el" href="a00662.html#a5eaa5c47c009da6a690cd71556c102d4">name</a>)</td></tr>
-<tr class="memdesc:ac10ca4ef5e8724a253e347d18ac6c016"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor of a cost function.  <a href="#ac10ca4ef5e8724a253e347d18ac6c016">More...</a><br /></td></tr>
 <tr class="separator:ac10ca4ef5e8724a253e347d18ac6c016"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6f7a4c91d63b5e179f3a610f71fa6962"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00662.html#a6f7a4c91d63b5e179f3a610f71fa6962">~CostFunction</a> ()=default</td></tr>
-<tr class="memdesc:a6f7a4c91d63b5e179f3a610f71fa6962"><td class="mdescLeft">&#160;</td><td class="mdescRight">Declare virtual desturctor.  <a href="#a6f7a4c91d63b5e179f3a610f71fa6962">More...</a><br /></td></tr>
+<tr class="memdesc:a6f7a4c91d63b5e179f3a610f71fa6962"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default virtual desturctor.  <a href="#a6f7a4c91d63b5e179f3a610f71fa6962">More...</a><br /></td></tr>
 <tr class="separator:a6f7a4c91d63b5e179f3a610f71fa6962"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aee898961a7e3f9a98ecb1a0c1c5a82c5"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00662.html#aee898961a7e3f9a98ecb1a0c1c5a82c5">autoSpan</a> ()</td></tr>
-<tr class="memdesc:aee898961a7e3f9a98ecb1a0c1c5a82c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate the full size matrices This allows one to give a cost constant matrix/vector for one step and another cost matrix/vector with the full horizon.  <a href="#aee898961a7e3f9a98ecb1a0c1c5a82c5">More...</a><br /></td></tr>
+<tr class="memdesc:aee898961a7e3f9a98ecb1a0c1c5a82c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate the full size matrices This allows one to give a cost constant matrix/vector for one step and another cost matrix/vector with the full horizon. It will expand the first matrix/vector to fit the full horizon.  <a href="#aee898961a7e3f9a98ecb1a0c1c5a82c5">More...</a><br /></td></tr>
 <tr class="separator:aee898961a7e3f9a98ecb1a0c1c5a82c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a26446ddca57f112e8caddaac0463f31b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00662.html#a26446ddca57f112e8caddaac0463f31b">initializeCost</a> (const <a class="el" href="a00706.html">PreviewSystem</a> &amp;ps)</td></tr>
 <tr class="memdesc:a26446ddca57f112e8caddaac0463f31b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the cost function.  <a href="#a26446ddca57f112e8caddaac0463f31b">More...</a><br /></td></tr>
 <tr class="separator:a26446ddca57f112e8caddaac0463f31b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7b86c3c64cefd847dcdc20e2133ad652"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00662.html#a7b86c3c64cefd847dcdc20e2133ad652">update</a> (const <a class="el" href="a00706.html">PreviewSystem</a> &amp;ps)=0</td></tr>
-<tr class="memdesc:a7b86c3c64cefd847dcdc20e2133ad652"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute \(Q\) and \(c\).  <a href="#a7b86c3c64cefd847dcdc20e2133ad652">More...</a><br /></td></tr>
 <tr class="separator:a7b86c3c64cefd847dcdc20e2133ad652"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeb4d0fff5319b62ce980a5b88ffd7350"><td class="memTemplParams" colspan="2">template&lt;typename TVec , typename  = std::enable_if_t&lt;!is_all_arithmetic&lt;TVec&gt;::value&gt;&gt; </td></tr>
 <tr class="memitem:aeb4d0fff5319b62ce980a5b88ffd7350"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="a00662.html#aeb4d0fff5319b62ce980a5b88ffd7350">weights</a> (TVec &amp;&amp;weights)</td></tr>
-<tr class="memdesc:aeb4d0fff5319b62ce980a5b88ffd7350"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the weights of the system.  <a href="#aeb4d0fff5319b62ce980a5b88ffd7350">More...</a><br /></td></tr>
+<tr class="memdesc:aeb4d0fff5319b62ce980a5b88ffd7350"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the weights of the system. Perform a move semantic if a fullsize vector is given as rvalue (this is faster).  <a href="#aeb4d0fff5319b62ce980a5b88ffd7350">More...</a><br /></td></tr>
 <tr class="separator:aeb4d0fff5319b62ce980a5b88ffd7350"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a504fabd9aef49e5cef64f471a610a579"><td class="memTemplParams" colspan="2">template&lt;typename T , typename  = std::enable_if_t&lt;is_all_arithmetic&lt;T&gt;::value&gt;&gt; </td></tr>
 <tr class="memitem:a504fabd9aef49e5cef64f471a610a579"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="a00662.html#a504fabd9aef49e5cef64f471a610a579">weight</a> (T weight)</td></tr>
-<tr class="memdesc:a504fabd9aef49e5cef64f471a610a579"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the weights of the system.  <a href="#a504fabd9aef49e5cef64f471a610a579">More...</a><br /></td></tr>
+<tr class="memdesc:a504fabd9aef49e5cef64f471a610a579"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the weights of the system. All variables are set to the same weight.  <a href="#a504fabd9aef49e5cef64f471a610a579">More...</a><br /></td></tr>
 <tr class="separator:a504fabd9aef49e5cef64f471a610a579"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5eaa5c47c009da6a690cd71556c102d4"><td class="memItemLeft" align="right" valign="top">const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00662.html#a5eaa5c47c009da6a690cd71556c102d4">name</a> () const noexcept</td></tr>
-<tr class="memdesc:a5eaa5c47c009da6a690cd71556c102d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function that return the name of the cost function.  <a href="#a5eaa5c47c009da6a690cd71556c102d4">More...</a><br /></td></tr>
+<tr class="memdesc:a5eaa5c47c009da6a690cd71556c102d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the name of the constraint.  <a href="#a5eaa5c47c009da6a690cd71556c102d4">More...</a><br /></td></tr>
 <tr class="separator:a5eaa5c47c009da6a690cd71556c102d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afaf5c0657a03ce01365e06adcd99c911"><td class="memItemLeft" align="right" valign="top">const Eigen::MatrixXd &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00662.html#afaf5c0657a03ce01365e06adcd99c911">Q</a> () const noexcept</td></tr>
-<tr class="memdesc:afaf5c0657a03ce01365e06adcd99c911"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function that return the Q matrix of the cost function A cost function is written \( \frac{1}{2} x^T Q x + c^T x\).  <a href="#afaf5c0657a03ce01365e06adcd99c911">More...</a><br /></td></tr>
+<tr class="memdesc:afaf5c0657a03ce01365e06adcd99c911"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the state-vector cost matrix.  <a href="#afaf5c0657a03ce01365e06adcd99c911">More...</a><br /></td></tr>
 <tr class="separator:afaf5c0657a03ce01365e06adcd99c911"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a42aa3eb4b7fa7d4802647adeaa5905a1"><td class="memItemLeft" align="right" valign="top">const Eigen::VectorXd &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00662.html#a42aa3eb4b7fa7d4802647adeaa5905a1">c</a> () const noexcept</td></tr>
-<tr class="memdesc:a42aa3eb4b7fa7d4802647adeaa5905a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function that return the c vector of the cost function A cost function is written \( \frac{1}{2} x^T Q x + c^T x\).  <a href="#a42aa3eb4b7fa7d4802647adeaa5905a1">More...</a><br /></td></tr>
+<tr class="memdesc:a42aa3eb4b7fa7d4802647adeaa5905a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the state-vector cost vector.  <a href="#a42aa3eb4b7fa7d4802647adeaa5905a1">More...</a><br /></td></tr>
 <tr class="separator:a42aa3eb4b7fa7d4802647adeaa5905a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a59614beadc05baca524c81510a6f9170"><td class="memItemLeft" align="right" valign="top">const Eigen::MatrixXd &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00662.html#a59614beadc05baca524c81510a6f9170">E</a> () const noexcept</td></tr>
-<tr class="memdesc:a59614beadc05baca524c81510a6f9170"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function that return the E matrix of the cost function A cost function is written \( \frac{1}{2} x^T Q x + c^T x\).  <a href="#a59614beadc05baca524c81510a6f9170">More...</a><br /></td></tr>
+<tr class="memdesc:a59614beadc05baca524c81510a6f9170"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the cross intial state-vector/state-vector cost matrix.  <a href="#a59614beadc05baca524c81510a6f9170">More...</a><br /></td></tr>
 <tr class="separator:a59614beadc05baca524c81510a6f9170"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a90501f6a9e455dda3302be5a058260b3"><td class="memItemLeft" align="right" valign="top">const Eigen::VectorXd &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00662.html#a90501f6a9e455dda3302be5a058260b3">f</a> () const noexcept</td></tr>
-<tr class="memdesc:a90501f6a9e455dda3302be5a058260b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function that return the f vector of the cost function A cost function is written \( \frac{1}{2} x^T Q x + c^T x\).  <a href="#a90501f6a9e455dda3302be5a058260b3">More...</a><br /></td></tr>
+<tr class="memdesc:a90501f6a9e455dda3302be5a058260b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the state-vector cost vector for extended version.  <a href="#a90501f6a9e455dda3302be5a058260b3">More...</a><br /></td></tr>
 <tr class="separator:a90501f6a9e455dda3302be5a058260b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
@@ -154,8 +152,8 @@ Protected Attributes</h2></td></tr>
 <tr class="separator:a6d31944a622d5ddf49dda76792e9d6af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Abstract base class that represents cost functions. </p>
-<p>Any derived class of this one can be added to the MPC </p><dl class="section see"><dt>See also</dt><dd>MPC::addCost. </dd></dl>
+<div class="textblock"><p>Abstract base class that represents cost functions. Any derived class of this one can be added to the MPC. </p>
+<dl class="section see"><dt>See also</dt><dd>MPC::addCost. A cost function is written \(\frac{1}{2} x^T Q x + c^T x\). Or is written by the extended version \(\frac{1}{2} x^T \tilde{Q} x + \tilde{c}^T x\) with \(\tilde{Q}=[RR^T+EQ^{\minus 1}E^T, E; E^T, Q]\) and \(\tilde{c}=[r; f]\) </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ac10ca4ef5e8724a253e347d18ac6c016"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac10ca4ef5e8724a253e347d18ac6c016">&#9670;&nbsp;</a></span>CostFunction()</h2>
@@ -172,9 +170,7 @@ Protected Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Constructor of a cost function. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Constructor. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>Name of the constraint </td></tr>
   </table>
@@ -206,7 +202,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Declare virtual desturctor. </p>
+<p>Default virtual desturctor. </p>
 
 </div>
 </div>
@@ -234,8 +230,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Generate the full size matrices This allows one to give a cost constant matrix/vector for one step and another cost matrix/vector with the full horizon. </p>
-<p>It will expand the first matrix/vector to fit the full horizon. </p>
+<p>Generate the full size matrices This allows one to give a cost constant matrix/vector for one step and another cost matrix/vector with the full horizon. It will expand the first matrix/vector to fit the full horizon. </p>
 
 <p>Reimplemented in <a class="el" href="a00678.html#a8c7d22386d28596cb3adbaadaac1a9a4">copra::MixedCost</a>, <a class="el" href="a00674.html#ae14141c7e3faca8990deabf89465d9f2">copra::ControlCost</a>, and <a class="el" href="a00666.html#a295f8e575e5817cad58d7ad4950c88d8">copra::TrajectoryCost</a>.</p>
 
@@ -264,8 +259,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Function that return the c vector of the cost function A cost function is written \( \frac{1}{2} x^T Q x + c^T x\). </p>
-<dl class="section return"><dt>Returns</dt><dd>The c vector matrix </dd></dl>
+<p>Return the state-vector cost vector. </p>
 
 </div>
 </div>
@@ -292,8 +286,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Function that return the E matrix of the cost function A cost function is written \( \frac{1}{2} x^T Q x + c^T x\). </p>
-<dl class="section return"><dt>Returns</dt><dd>The Q matrix </dd></dl>
+<p>Return the cross intial state-vector/state-vector cost matrix. </p>
 
 </div>
 </div>
@@ -320,8 +313,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Function that return the f vector of the cost function A cost function is written \( \frac{1}{2} x^T Q x + c^T x\). </p>
-<dl class="section return"><dt>Returns</dt><dd>The c vector matrix </dd></dl>
+<p>Return the state-vector cost vector for extended version. </p>
 
 </div>
 </div>
@@ -390,8 +382,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Function that return the name of the cost function. </p>
-<dl class="section return"><dt>Returns</dt><dd>The name of the constraint. </dd></dl>
+<p>Return the name of the constraint. </p>
 
 </div>
 </div>
@@ -418,8 +409,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Function that return the Q matrix of the cost function A cost function is written \( \frac{1}{2} x^T Q x + c^T x\). </p>
-<dl class="section return"><dt>Returns</dt><dd>The Q matrix </dd></dl>
+<p>Return the state-vector cost matrix. </p>
 
 </div>
 </div>
@@ -446,9 +436,7 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>Compute \(Q\) and \(c\). </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Compute \(Q\) and \(c\). </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">ps</td><td>The preview system. </td></tr>
   </table>
@@ -485,8 +473,8 @@ template&lt;typename T , typename  = std::enable_if_t&lt;is_all_arithmetic&lt;T&
 </table>
 </div><div class="memdoc">
 
-<p>Set the weights of the system. </p>
-<p>All variables are set to the same weight. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Set the weights of the system. All variables are set to the same weight. </p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">weight</td><td>Weight to apply. </td></tr>
   </table>
@@ -521,8 +509,8 @@ template&lt;typename TVec , typename  = std::enable_if_t&lt;!is_all_arithmetic&l
 </table>
 </div><div class="memdoc">
 
-<p>Set the weights of the system. </p>
-<p>Perform a move semantic if a fullsize vector is given as rvalue (this is faster). </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Set the weights of the system. Perform a move semantic if a fullsize vector is given as rvalue (this is faster). </p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">weights</td><td>of to set. </td></tr>
   </table>
@@ -559,6 +547,7 @@ template&lt;typename TVec , typename  = std::enable_if_t&lt;!is_all_arithmetic&l
   </tr>
 </table>
 </div><div class="memdoc">
+<p>State-vector cost vector </p>
 
 </div>
 </div>
@@ -581,6 +570,7 @@ template&lt;typename TVec , typename  = std::enable_if_t&lt;!is_all_arithmetic&l
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Initial State-vector cost matrix </p>
 
 </div>
 </div>
@@ -603,6 +593,7 @@ template&lt;typename TVec , typename  = std::enable_if_t&lt;!is_all_arithmetic&l
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Initial State-vector cost vector </p>
 
 </div>
 </div>
@@ -625,6 +616,7 @@ template&lt;typename TVec , typename  = std::enable_if_t&lt;!is_all_arithmetic&l
   </tr>
 </table>
 </div><div class="memdoc">
+<p>False if step-vector/step-matrix, True otherwise </p>
 
 </div>
 </div>
@@ -647,6 +639,7 @@ template&lt;typename TVec , typename  = std::enable_if_t&lt;!is_all_arithmetic&l
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Name of the cost function </p>
 
 </div>
 </div>
@@ -669,6 +662,7 @@ template&lt;typename TVec , typename  = std::enable_if_t&lt;!is_all_arithmetic&l
   </tr>
 </table>
 </div><div class="memdoc">
+<p>State-vector cost matrix </p>
 
 </div>
 </div>
@@ -691,6 +685,7 @@ template&lt;typename TVec , typename  = std::enable_if_t&lt;!is_all_arithmetic&l
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Cost weights </p>
 
 </div>
 </div>
@@ -701,7 +696,7 @@ template&lt;typename TVec , typename  = std::enable_if_t&lt;!is_all_arithmetic&l
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="a00081.html">copra</a></li><li class="navelem"><a class="el" href="a00662.html">CostFunction</a></li>
-    <li class="footer">Generated on Mon Mar 8 2021 10:20:15 for copra by
+    <li class="footer">Generated on Wed Mar 10 2021 10:26:54 for copra by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

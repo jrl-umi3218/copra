@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['q',['Q',['../a00662.html#afaf5c0657a03ce01365e06adcd99c911',1,'copra::CostFunction']]],
+  ['q',['Q',['../a00662.html#afaf5c0657a03ce01365e06adcd99c911',1,'copra::CostFunction::Q()'],['../a00690.html#a7ffd5ba1cbd96ed70ecc36f3f35c8031',1,'copra::LMPC::Q()']]],
   ['q_5f',['Q_',['../a00662.html#a4c0067736d9dd5f904aee153baf63f30',1,'copra::CostFunction::Q_()'],['../a00690.html#ab4499d3aebccad832902933b631072a0',1,'copra::LMPC::Q_()']]],
   ['qldsolver',['QLDSolver',['../a00710.html',1,'copra::QLDSolver'],['../a00710.html#a688cb21805a5f3b7158692a07cc43e0a',1,'copra::QLDSolver::QLDSolver()']]],
   ['qldsolver_2eh',['QLDSolver.h',['../a00035.html',1,'']]],

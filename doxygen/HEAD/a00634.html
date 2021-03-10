@@ -78,7 +78,7 @@ $(document).ready(function(){initNavTree('a00634.html','');});
 </div><!--header-->
 <div class="contents">
 
-<p>Abstract base class that represents constraints.  
+<p>Abstract base class that represents constraints. Any derived class of this one can be added to the MPC.  
  <a href="a00634.html#details">More...</a></p>
 
 <p><code>#include &lt;constraints.h&gt;</code></p>
@@ -88,40 +88,40 @@ Inheritance diagram for copra::Constraint:</div>
  <div class="center">
   <img src="a00634.png" usemap="#copra::Constraint_map" alt=""/>
   <map id="copra::Constraint_map" name="copra::Constraint_map">
-<area href="a00658.html" title="Control Bound constraint. " alt="copra::ControlBoundConstraint" shape="rect" coords="0,56,202,80"/>
-<area href="a00638.html" title="Abstract Class for Equality and Inequality constraints. " alt="copra::EqIneqConstraint" shape="rect" coords="318,56,520,80"/>
-<area href="a00646.html" title="Control constraint class. " alt="copra::ControlConstraint" shape="rect" coords="0,112,202,136"/>
-<area href="a00650.html" title="Mixed constraint class. " alt="copra::MixedConstraint" shape="rect" coords="212,112,414,136"/>
-<area href="a00654.html" title="Trajectory Bound constraint. " alt="copra::TrajectoryBoundConstraint" shape="rect" coords="424,112,626,136"/>
-<area href="a00642.html" title="Trajectory constraint class. " alt="copra::TrajectoryConstraint" shape="rect" coords="636,112,838,136"/>
+<area href="a00658.html" title="Control Bound constraint. It bounds the optimization . " alt="copra::ControlBoundConstraint" shape="rect" coords="0,56,202,80"/>
+<area href="a00638.html" title="Abstract Class for Equality and Inequality constraints. Even if Equality and Inequality constraints a..." alt="copra::EqIneqConstraint" shape="rect" coords="318,56,520,80"/>
+<area href="a00646.html" title="Control constraint class. Depending on the parameter &#39;isInequalityConstraint&#39; during the construction..." alt="copra::ControlConstraint" shape="rect" coords="0,112,202,136"/>
+<area href="a00650.html" title="Mixed constraint class. Depending on the parameter &#39;isInequalityConstraint&#39; during the construction i..." alt="copra::MixedConstraint" shape="rect" coords="212,112,414,136"/>
+<area href="a00654.html" title="Trajectory Bound constraint. Even if it is a bound constraint, the optimization vector is  so this co..." alt="copra::TrajectoryBoundConstraint" shape="rect" coords="424,112,626,136"/>
+<area href="a00642.html" title="Trajectory constraint class. Depending on the parameter &#39;isInequalityConstraint&#39; during the construct..." alt="copra::TrajectoryConstraint" shape="rect" coords="636,112,838,136"/>
 </map>
  </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:af11566da4a71dff6d270d15371737525"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00634.html#af11566da4a71dff6d270d15371737525">Constraint</a> (std::string &amp;&amp;<a class="el" href="a00634.html#a410a8822ba65980ac22454ea48e5da30">name</a>)</td></tr>
-<tr class="memdesc:af11566da4a71dff6d270d15371737525"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor of a constraint.  <a href="#af11566da4a71dff6d270d15371737525">More...</a><br /></td></tr>
+<tr class="memdesc:af11566da4a71dff6d270d15371737525"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#af11566da4a71dff6d270d15371737525">More...</a><br /></td></tr>
 <tr class="separator:af11566da4a71dff6d270d15371737525"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4de97e2ac0982f144a27c3534a7df505"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00634.html#a4de97e2ac0982f144a27c3534a7df505">~Constraint</a> ()=default</td></tr>
-<tr class="memdesc:a4de97e2ac0982f144a27c3534a7df505"><td class="mdescLeft">&#160;</td><td class="mdescRight">Declare virtual destructor.  <a href="#a4de97e2ac0982f144a27c3534a7df505">More...</a><br /></td></tr>
+<tr class="memdesc:a4de97e2ac0982f144a27c3534a7df505"><td class="mdescLeft">&#160;</td><td class="mdescRight">Virtual destructor.  <a href="#a4de97e2ac0982f144a27c3534a7df505">More...</a><br /></td></tr>
 <tr class="separator:a4de97e2ac0982f144a27c3534a7df505"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a11998e49d547c3e6e70b221a38fbcef7"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00634.html#a11998e49d547c3e6e70b221a38fbcef7">autoSpan</a> ()=0</td></tr>
-<tr class="memdesc:a11998e49d547c3e6e70b221a38fbcef7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate the full size matrices This allows one to give a constraint constant matrix/vector for one step and another constraint matrix/vector with the full horizon.  <a href="#a11998e49d547c3e6e70b221a38fbcef7">More...</a><br /></td></tr>
+<tr class="memdesc:a11998e49d547c3e6e70b221a38fbcef7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate the full size matrices. This allows one to give a constraint constant matrix/vector for one step and another constraint matrix/vector with the full horizon. It will expand the first matrix/vector to fit the full horizon.  <a href="#a11998e49d547c3e6e70b221a38fbcef7">More...</a><br /></td></tr>
 <tr class="separator:a11998e49d547c3e6e70b221a38fbcef7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa619d1b0446450a496d1f1077600bc07"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00634.html#aa619d1b0446450a496d1f1077600bc07">initializeConstraint</a> (const <a class="el" href="a00706.html">PreviewSystem</a> &amp;ps)=0</td></tr>
-<tr class="memdesc:aa619d1b0446450a496d1f1077600bc07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialization of the constraint.  <a href="#aa619d1b0446450a496d1f1077600bc07">More...</a><br /></td></tr>
+<tr class="memdesc:aa619d1b0446450a496d1f1077600bc07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialization of the constraint from the preview system.  <a href="#aa619d1b0446450a496d1f1077600bc07">More...</a><br /></td></tr>
 <tr class="separator:aa619d1b0446450a496d1f1077600bc07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aae0f78b14981a50d29a7f7cf923b57fb"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00634.html#aae0f78b14981a50d29a7f7cf923b57fb">update</a> (const <a class="el" href="a00706.html">PreviewSystem</a> &amp;ps)=0</td></tr>
-<tr class="memdesc:aae0f78b14981a50d29a7f7cf923b57fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the constraint.  <a href="#aae0f78b14981a50d29a7f7cf923b57fb">More...</a><br /></td></tr>
+<tr class="memdesc:aae0f78b14981a50d29a7f7cf923b57fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the constraint from the preview system. Compute \(Y\), \(A\), \(z\) and \(b\) from the constraint and the preview system.  <a href="#aae0f78b14981a50d29a7f7cf923b57fb">More...</a><br /></td></tr>
 <tr class="separator:aae0f78b14981a50d29a7f7cf923b57fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab68a9317a9cb40b847ea8f51be3c7065"><td class="memItemLeft" align="right" valign="top">virtual ConstraintFlag&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00634.html#ab68a9317a9cb40b847ea8f51be3c7065">constraintType</a> () const noexcept=0</td></tr>
-<tr class="memdesc:ab68a9317a9cb40b847ea8f51be3c7065"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the type of the constraint.  <a href="#ab68a9317a9cb40b847ea8f51be3c7065">More...</a><br /></td></tr>
+<tr class="memdesc:ab68a9317a9cb40b847ea8f51be3c7065"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the type of the constraint.  <a href="#ab68a9317a9cb40b847ea8f51be3c7065">More...</a><br /></td></tr>
 <tr class="separator:ab68a9317a9cb40b847ea8f51be3c7065"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a410a8822ba65980ac22454ea48e5da30"><td class="memItemLeft" align="right" valign="top">const std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00634.html#a410a8822ba65980ac22454ea48e5da30">name</a> () const noexcept</td></tr>
-<tr class="memdesc:a410a8822ba65980ac22454ea48e5da30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function that return the name of the constraint.  <a href="#a410a8822ba65980ac22454ea48e5da30">More...</a><br /></td></tr>
+<tr class="memdesc:a410a8822ba65980ac22454ea48e5da30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the name of the constraint.  <a href="#a410a8822ba65980ac22454ea48e5da30">More...</a><br /></td></tr>
 <tr class="separator:a410a8822ba65980ac22454ea48e5da30"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a238e05f0ae0cffb775a75b56b7fc4d17"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00634.html#a238e05f0ae0cffb775a75b56b7fc4d17">nrConstr</a> () noexcept</td></tr>
-<tr class="memdesc:a238e05f0ae0cffb775a75b56b7fc4d17"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function that return the number of constraints.  <a href="#a238e05f0ae0cffb775a75b56b7fc4d17">More...</a><br /></td></tr>
+<tr class="memdesc:a238e05f0ae0cffb775a75b56b7fc4d17"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the number of constraints.  <a href="#a238e05f0ae0cffb775a75b56b7fc4d17">More...</a><br /></td></tr>
 <tr class="separator:a238e05f0ae0cffb775a75b56b7fc4d17"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
@@ -136,8 +136,8 @@ Protected Attributes</h2></td></tr>
 <tr class="separator:a3528b957c39ecda07c0115310445b4f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Abstract base class that represents constraints. </p>
-<p>Any derived class of this one can be added to the MPC </p><dl class="section see"><dt>See also</dt><dd>MPC::addConstraint. </dd></dl>
+<div class="textblock"><p>Abstract base class that represents constraints. Any derived class of this one can be added to the MPC. </p>
+<dl class="section see"><dt>See also</dt><dd>MPC::addConstraint. </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="af11566da4a71dff6d270d15371737525"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af11566da4a71dff6d270d15371737525">&#9670;&nbsp;</a></span>Constraint()</h2>
@@ -155,7 +155,7 @@ Protected Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Constructor of a constraint. </p>
+<p>Default constructor. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>Name of the constraint </td></tr>
@@ -188,7 +188,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Declare virtual destructor. </p>
+<p>Virtual destructor. </p>
 
 </div>
 </div>
@@ -216,8 +216,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Generate the full size matrices This allows one to give a constraint constant matrix/vector for one step and another constraint matrix/vector with the full horizon. </p>
-<p>It will expand the first matrix/vector to fit the full horizon. </p>
+<p>Generate the full size matrices. This allows one to give a constraint constant matrix/vector for one step and another constraint matrix/vector with the full horizon. It will expand the first matrix/vector to fit the full horizon. </p>
 
 <p>Implemented in <a class="el" href="a00658.html#a90b55e5ff6f60adebe5388511a8864a0">copra::ControlBoundConstraint</a>, <a class="el" href="a00654.html#a853de588f832acf065356e58d8daf415">copra::TrajectoryBoundConstraint</a>, <a class="el" href="a00650.html#a28d1e4713204dac1d61ef7c5548607a0">copra::MixedConstraint</a>, <a class="el" href="a00646.html#a2a68841fc81a57332b62b02da2a020b9">copra::ControlConstraint</a>, and <a class="el" href="a00642.html#a5f94a5b0d8a9df124337197cc41d0db4">copra::TrajectoryConstraint</a>.</p>
 
@@ -246,8 +245,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Get the type of the constraint. </p>
-<dl class="section return"><dt>Returns</dt><dd>The type of the constraint </dd></dl>
+<p>Return the type of the constraint. </p>
 <dl class="section see"><dt>See also</dt><dd>ConstraintFlag </dd></dl>
 
 <p>Implemented in <a class="el" href="a00658.html#ae6155702e23c2028b30146a5a9d16349">copra::ControlBoundConstraint</a>, <a class="el" href="a00654.html#a7352e3259db1c1164db912e827d85c1d">copra::TrajectoryBoundConstraint</a>, <a class="el" href="a00650.html#aa7b479af8bffdc5f0a846c8e6788774e">copra::MixedConstraint</a>, <a class="el" href="a00646.html#a51178475967231c313583201a6bb8346">copra::ControlConstraint</a>, and <a class="el" href="a00642.html#a84021f7fb9f14abfa54d7d2f1b7d4f3f">copra::TrajectoryConstraint</a>.</p>
@@ -278,10 +276,16 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Initialization of the constraint. </p>
+<p>Initialization of the constraint from the preview system. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">ps</td><td>The <a class="el" href="a00706.html" title="Structure representing all variables of a system for performing preview control. ">PreviewSystem</a>. </td></tr>
+    <tr><td class="paramname">ps</td><td>The <a class="el" href="a00706.html" title="Structure representing all variables of a system for performing preview control. Such system is defin...">PreviewSystem</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Can</td><td>throw an std::domain_error the constraint matrix size differ from the preview system. </td></tr>
   </table>
   </dd>
 </dl>
@@ -313,8 +317,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Function that return the name of the constraint. </p>
-<dl class="section return"><dt>Returns</dt><dd>The name of the constraint. </dd></dl>
+<p>Return the name of the constraint. </p>
 
 </div>
 </div>
@@ -341,8 +344,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Function that return the number of constraints. </p>
-<dl class="section return"><dt>Returns</dt><dd>The number of constraints. </dd></dl>
+<p>Return the number of constraints. </p>
 
 </div>
 </div>
@@ -370,10 +372,10 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Update the constraint. </p>
+<p>Update the constraint from the preview system. Compute \(Y\), \(A\), \(z\) and \(b\) from the constraint and the preview system. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">ps</td><td>The <a class="el" href="a00706.html" title="Structure representing all variables of a system for performing preview control. ">PreviewSystem</a>. </td></tr>
+    <tr><td class="paramname">ps</td><td>The <a class="el" href="a00706.html" title="Structure representing all variables of a system for performing preview control. Such system is defin...">PreviewSystem</a> </td></tr>
   </table>
   </dd>
 </dl>
@@ -402,6 +404,7 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>False if step-vector/step-matrix, True otherwise. </p>
 
 </div>
 </div>
@@ -424,6 +427,7 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>True if constraint already initialized, False otherwise. </p>
 
 </div>
 </div>
@@ -446,6 +450,7 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Name of the constraint </p>
 
 </div>
 </div>
@@ -468,6 +473,7 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Number of constraints </p>
 
 </div>
 </div>
@@ -478,7 +484,7 @@ Protected Attributes</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="a00081.html">copra</a></li><li class="navelem"><a class="el" href="a00634.html">Constraint</a></li>
-    <li class="footer">Generated on Mon Mar 8 2021 10:20:15 for copra by
+    <li class="footer">Generated on Wed Mar 10 2021 10:26:54 for copra by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

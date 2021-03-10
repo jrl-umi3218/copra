@@ -78,16 +78,19 @@ $(document).ready(function(){initNavTree('a00706.html','');});
 </div><!--header-->
 <div class="contents">
 
-<p>Structure representing all variables of a system for performing preview control.  
+<p>Structure representing all variables of a system for performing preview control. Such system is defined as follow: \(x_{k+1} = Ax_{k} + Bu_{k} + d\). After performing a recursion, this system can be represented in as: \(X = \Phi x_{0} + \Psi U + \Xi\).  
  <a href="a00706.html#details">More...</a></p>
 
 <p><code>#include &lt;PreviewSystem.h&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:af91ccd60f0d803b250cd2a8f81c24be0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00706.html#af91ccd60f0d803b250cd2a8f81c24be0">PreviewSystem</a> ()</td></tr>
-<tr class="memdesc:af91ccd60f0d803b250cd2a8f81c24be0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#af91ccd60f0d803b250cd2a8f81c24be0">More...</a><br /></td></tr>
-<tr class="separator:af91ccd60f0d803b250cd2a8f81c24be0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9445cbdc265f5e7c0570d497df9df7a4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00706.html#a9445cbdc265f5e7c0570d497df9df7a4">PreviewSystem</a> ()=default</td></tr>
+<tr class="memdesc:a9445cbdc265f5e7c0570d497df9df7a4"><td class="mdescLeft">&#160;</td><td class="mdescRight"><ul>
+<li>Default constructor. </li>
+</ul>
+ <a href="#a9445cbdc265f5e7c0570d497df9df7a4">More...</a><br /></td></tr>
+<tr class="separator:a9445cbdc265f5e7c0570d497df9df7a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a99f68fdf2bcf075767973ba9121d24f4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00706.html#a99f68fdf2bcf075767973ba9121d24f4">PreviewSystem</a> (const Eigen::MatrixXd &amp;state, const Eigen::MatrixXd &amp;control, const Eigen::VectorXd &amp;bias, const Eigen::VectorXd &amp;<a class="el" href="a00706.html#abb5c2270240ace3cdea7758b8092dc21">xInit</a>, int numberOfSteps)</td></tr>
 <tr class="memdesc:a99f68fdf2bcf075767973ba9121d24f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor of the class.  <a href="#a99f68fdf2bcf075767973ba9121d24f4">More...</a><br /></td></tr>
 <tr class="separator:a99f68fdf2bcf075767973ba9121d24f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -95,14 +98,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a3d6dc4b05be38ecb5e4e0f255c0e7b24"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create the system.  <a href="#a3d6dc4b05be38ecb5e4e0f255c0e7b24">More...</a><br /></td></tr>
 <tr class="separator:a3d6dc4b05be38ecb5e4e0f255c0e7b24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a38c98fae0a979a7a98bfe672ca20a318"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00706.html#a38c98fae0a979a7a98bfe672ca20a318">updateSystem</a> () noexcept</td></tr>
-<tr class="memdesc:a38c98fae0a979a7a98bfe672ca20a318"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the system.  <a href="#a38c98fae0a979a7a98bfe672ca20a318">More...</a><br /></td></tr>
+<tr class="memdesc:a38c98fae0a979a7a98bfe672ca20a318"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the system. Fill Phi, Psi, xi in <a class="el" href="a00706.html" title="Structure representing all variables of a system for performing preview control. Such system is defin...">PreviewSystem</a>.  <a href="#a38c98fae0a979a7a98bfe672ca20a318">More...</a><br /></td></tr>
 <tr class="separator:a38c98fae0a979a7a98bfe672ca20a318"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb5c2270240ace3cdea7758b8092dc21"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00706.html#abb5c2270240ace3cdea7758b8092dc21">xInit</a> (const Eigen::VectorXd &amp;xInit)</td></tr>
-<tr class="memdesc:abb5c2270240ace3cdea7758b8092dc21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the initial state.  <a href="#abb5c2270240ace3cdea7758b8092dc21">More...</a><br /></td></tr>
+<tr class="memdesc:abb5c2270240ace3cdea7758b8092dc21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Modify the initial state without the need to update the system.  <a href="#abb5c2270240ace3cdea7758b8092dc21">More...</a><br /></td></tr>
 <tr class="separator:abb5c2270240ace3cdea7758b8092dc21"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:add236c9b2fb09dbad80866ba4f81a233"><td class="memItemLeft" align="right" valign="top">Eigen::VectorXd &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="a00706.html#add236c9b2fb09dbad80866ba4f81a233">xInit</a> ()</td></tr>
-<tr class="memdesc:add236c9b2fb09dbad80866ba4f81a233"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the initial state.  <a href="#add236c9b2fb09dbad80866ba4f81a233">More...</a><br /></td></tr>
-<tr class="separator:add236c9b2fb09dbad80866ba4f81a233"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -150,12 +150,12 @@ Public Attributes</h2></td></tr>
 <tr class="separator:ade48db75f1290f5d89d8200b38e7c198"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Structure representing all variables of a system for performing preview control. </p>
-<p>Such system is defined as follow: \(x_{k+1} = Ax_{k} + Bu_{k} + d\). After performing a recursion, this system can be represented in as: \(X = \Phi x_{0} + \Psi U + \Xi\). </p><dl class="section note"><dt>Note</dt><dd>\(X = [x_0^T x_1^T ... x_N^T]^T\) and \(U = [u_0^T u_1^T ... u_{N-1}^T]^T\) where \(N\) is the dimension of the system (the number of steps).<br />
+<div class="textblock"><p>Structure representing all variables of a system for performing preview control. Such system is defined as follow: \(x_{k+1} = Ax_{k} + Bu_{k} + d\). After performing a recursion, this system can be represented in as: \(X = \Phi x_{0} + \Psi U + \Xi\). </p>
+<dl class="section note"><dt>Note</dt><dd>\(X = [x_0^T x_1^T ... x_N^T]^T\) and \(U = [u_0^T u_1^T ... u_{N-1}^T]^T\) where \(N\) is the dimension of the system (the number of steps).<br />
 So, \(X\) dimension is \(N+1\) and \(U\) dimension is \(N\). </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="af91ccd60f0d803b250cd2a8f81c24be0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af91ccd60f0d803b250cd2a8f81c24be0">&#9670;&nbsp;</a></span>PreviewSystem() <span class="overload">[1/2]</span></h2>
+<a id="a9445cbdc265f5e7c0570d497df9df7a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9445cbdc265f5e7c0570d497df9df7a4">&#9670;&nbsp;</a></span>PreviewSystem() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -172,12 +172,15 @@ So, \(X\) dimension is \(N+1\) and \(U\) dimension is \(N\). </dd></dl>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Default constructor. </p>
+<p><ul>
+<li>Default constructor. </li>
+</ul>
+</p>
 
 </div>
 </div>
@@ -228,17 +231,17 @@ So, \(X\) dimension is \(N+1\) and \(U\) dimension is \(N\). </dd></dl>
 <p>Constructor of the class. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">state</td><td>The state matrix of the system. </td></tr>
-    <tr><td class="paramname">control</td><td>The control matrix of the system. </td></tr>
-    <tr><td class="paramname">bias</td><td>The bias vector of the system. </td></tr>
-    <tr><td class="paramname">xInit</td><td>The initial state. </td></tr>
-    <tr><td class="paramname">numberOfSteps</td><td>The number of step to perform. </td></tr>
+    <tr><td class="paramname">state</td><td>The state matrix of the system </td></tr>
+    <tr><td class="paramname">control</td><td>The control matrix of the system </td></tr>
+    <tr><td class="paramname">bias</td><td>The bias vector of the system </td></tr>
+    <tr><td class="paramname">xInit</td><td>The initial state </td></tr>
+    <tr><td class="paramname">numberOfSteps</td><td>The number of step to perform </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">std::domain_error</td><td>if the dimension of the matrices mismatch. </td></tr>
+    <tr><td class="paramname">std::domain_error</td><td>if the dimension of the matrices mismatch </td></tr>
   </table>
   </dd>
 </dl>
@@ -293,17 +296,17 @@ So, \(X\) dimension is \(N+1\) and \(U\) dimension is \(N\). </dd></dl>
 <p>Create the system. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">state</td><td>The state matrix of the system. </td></tr>
-    <tr><td class="paramname">control</td><td>The control matrix of the system. </td></tr>
-    <tr><td class="paramname">bias</td><td>The bias vector of the system. </td></tr>
-    <tr><td class="paramname">xInit</td><td>The initial state. </td></tr>
-    <tr><td class="paramname">numberOfSteps</td><td>The number of step to perform. </td></tr>
+    <tr><td class="paramname">state</td><td>The state matrix of the system </td></tr>
+    <tr><td class="paramname">control</td><td>The control matrix of the system </td></tr>
+    <tr><td class="paramname">bias</td><td>The bias vector of the system </td></tr>
+    <tr><td class="paramname">xInit</td><td>The initial state </td></tr>
+    <tr><td class="paramname">numberOfSteps</td><td>The number of step to perform </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">std::domain_error</td><td>if the dimension of the matrices mismatch. </td></tr>
+    <tr><td class="paramname">std::domain_error</td><td>if the dimension of the matrices mismatch </td></tr>
   </table>
   </dd>
 </dl>
@@ -333,13 +336,12 @@ So, \(X\) dimension is \(N+1\) and \(U\) dimension is \(N\). </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p>Update the system. </p>
-<p>Fill Phi, Psi, xi in <a class="el" href="a00706.html" title="Structure representing all variables of a system for performing preview control. ">PreviewSystem</a> </p>
+<p>Update the system. Fill Phi, Psi, xi in <a class="el" href="a00706.html" title="Structure representing all variables of a system for performing preview control. Such system is defin...">PreviewSystem</a>. </p>
 
 </div>
 </div>
 <a id="abb5c2270240ace3cdea7758b8092dc21"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abb5c2270240ace3cdea7758b8092dc21">&#9670;&nbsp;</a></span>xInit() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#abb5c2270240ace3cdea7758b8092dc21">&#9670;&nbsp;</a></span>xInit()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -362,38 +364,11 @@ So, \(X\) dimension is \(N+1\) and \(U\) dimension is \(N\). </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p>Update the initial state. </p>
+<p>Modify the initial state without the need to update the system. </p>
 
 <p class="reference">References <a class="el" href="a00706.html#abb5c2270240ace3cdea7758b8092dc21">xInit()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="a00706.html#abb5c2270240ace3cdea7758b8092dc21">xInit()</a>.</p>
-
-</div>
-</div>
-<a id="add236c9b2fb09dbad80866ba4f81a233"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#add236c9b2fb09dbad80866ba4f81a233">&#9670;&nbsp;</a></span>xInit() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Eigen::VectorXd&amp; copra::PreviewSystem::xInit </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Get the initial state. </p>
 
 </div>
 </div>
@@ -630,7 +605,7 @@ So, \(X\) dimension is \(N+1\) and \(U\) dimension is \(N\). </dd></dl>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="a00081.html">copra</a></li><li class="navelem"><a class="el" href="a00706.html">PreviewSystem</a></li>
-    <li class="footer">Generated on Mon Mar 8 2021 10:20:15 for copra by
+    <li class="footer">Generated on Wed Mar 10 2021 10:26:54 for copra by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

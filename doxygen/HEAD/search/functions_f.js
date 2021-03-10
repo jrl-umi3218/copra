@@ -11,7 +11,7 @@ var searchData=
   ['throwmsgonrowsonpsudim',['throwMsgOnRowsOnPSUDim',['../a00081.html#a5076504e70112feddcdf1ae6aa004730',1,'copra']]],
   ['throwmsgonrowsonpsxdim',['throwMsgOnRowsOnPSXDim',['../a00081.html#ad9588afa8536a77d9d41ded1ea6ed82b',1,'copra::throwMsgOnRowsOnPSXDim(const char *matName, const Eigen::MatrixXd &amp;mat, const PreviewSystem *ps)'],['../a00081.html#a3b423fae04c63c08d415900bc19daa3f',1,'copra::throwMsgOnRowsOnPSxDim(const char *matName, const Eigen::MatrixXd &amp;mat, const PreviewSystem *ps)']]],
   ['throwmsgonsquaremat',['throwMsgOnSquareMat',['../a00081.html#a8397402c8d9243290d84dcf60e91cff7',1,'copra']]],
-  ['trajectory',['trajectory',['../a00686.html#afdbc257e2afc9515186aeeaf6e0f1dcd',1,'copra::InitialStateLMPC::trajectory()'],['../a00690.html#a37e002859ca8e5eb79bdd7f5c238cf9a',1,'copra::LMPC::trajectory()']]],
+  ['trajectory',['trajectory',['../a00690.html#a8201fb30481ab46544fed33ce342518b',1,'copra::LMPC']]],
   ['trajectoryboundconstraint',['TrajectoryBoundConstraint',['../a00654.html#a5869dd80ee8edbce7d5c049c6dbe242b',1,'copra::TrajectoryBoundConstraint']]],
   ['trajectoryconstraint',['TrajectoryConstraint',['../a00642.html#a11fc64735cf72454a890738f58cbe5c2',1,'copra::TrajectoryConstraint']]],
   ['trajectorycost',['TrajectoryCost',['../a00666.html#afa167debb3f44bdd63ca8ad8bab80461',1,'copra::TrajectoryCost']]]
