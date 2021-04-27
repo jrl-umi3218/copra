@@ -107,14 +107,10 @@ jobs:
         fi
         if $USE_HEAD
         then
-          echo "BINTRAY_REPO=multi-contact-head" >> $GITHUB_ENV
-          echo "BINTRAY_VERSION=HEAD" >> $GITHUB_ENV
-          echo "EXTRA_MIRROR=https://dl.bintray.com/gergondet/multi-contact-head" >> $GITHUB_ENV
+          echo "CLOUDSMITH_REPO=mc-rtc/head" >> $GITHUB_ENV
           echo "PACKAGE_JOB=package-master" >> $GITHUB_ENV
         else
-          echo "BINTRAY_REPO=multi-contact-release" >> $GITHUB_ENV
-          echo "BINTRAY_VERSION=${REF}" >> $GITHUB_ENV
-          echo "EXTRA_MIRROR=https://dl.bintray.com/gergondet/multi-contact-release" >> $GITHUB_ENV
+          echo "CLOUDSMITH_REPO=mc-rtc/stable" >> $GITHUB_ENV
           echo "PACKAGE_JOB=package-release" >> $GITHUB_ENV
         fi
         echo "PACKAGE_UPLOAD=${PACKAGE_UPLOAD}" >> $GITHUB_ENV
@@ -123,8 +119,7 @@ jobs:
       with:
         dist: "${{ matrix.dist }}"
         arch: "${{ matrix.arch }}"
-        other-mirrors: "${{ env.EXTRA_MIRROR }}"
-        other-gpg-keys: '0x892EA6EE273707C6495A6FB6220D644C64666806'
+        cloudsmith-repo: "${{ env.CLOUDSMITH_REPO }}"
     - uses: actions/upload-artifact@v1
       with:
         name: packages-${{ matrix.dist }}-${{ matrix.arch }}
@@ -177,14 +172,10 @@ jobs:
         fi
         if $USE_HEAD
         then
-          echo "BINTRAY_REPO=multi-contact-head" >> $GITHUB_ENV
-          echo "BINTRAY_VERSION=HEAD" >> $GITHUB_ENV
-          echo "EXTRA_MIRROR=https://dl.bintray.com/gergondet/multi-contact-head" >> $GITHUB_ENV
+          echo "CLOUDSMITH_REPO=mc-rtc/head" >> $GITHUB_ENV
           echo "PACKAGE_JOB=package-master" >> $GITHUB_ENV
         else
-          echo "BINTRAY_REPO=multi-contact-release" >> $GITHUB_ENV
-          echo "BINTRAY_VERSION=${REF}" >> $GITHUB_ENV
-          echo "EXTRA_MIRROR=https://dl.bintray.com/gergondet/multi-contact-release" >> $GITHUB_ENV
+          echo "CLOUDSMITH_REPO=mc-rtc/stable" >> $GITHUB_ENV
           echo "PACKAGE_JOB=package-release" >> $GITHUB_ENV
         fi
         echo "PACKAGE_UPLOAD=${PACKAGE_UPLOAD}" >> $GITHUB_ENV
@@ -196,66 +187,8 @@ jobs:
     - name: Upload
       uses: jrl-umi3218/github-actions/upload-package@master
       with:
-        dist: "${{ matrix.dist }}"
-        arch: "${{ matrix.arch }}"
-        subject: gergondet
-        repo: "${{ env.BINTRAY_REPO }}"
-        package: |
-          name: copra
-          desc: "Control and preview algorithms, a C++ library for linear model predictive control relying on quadratic programming"
-          licenses: [BSD 2-Clause]
-          vcs_url: https://github.com/jrl-umi3218/copra
-        version: "${{ env.BINTRAY_VERSION }}"
+        dist: ubuntu/${{ matrix.dist }}
+        repo: "${{ env.CLOUDSMITH_REPO }}"
         path: packages-${{ matrix.dist }}-${{ matrix.arch }}
-        BINTRAY_API_KEY: "${{ secrets.BINTRAY_API_KEY }}"
-        GPG_PASSPHRASE: "${{ secrets.GPG_PASSPHRASE }}"
-      if: env.PACKAGE_UPLOAD == 'true'
-  mirror-sync-and-trigger:
-    needs: upload-packages
-    runs-on: ubuntu-18.04
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        submodules: recursive
-    - name: Choose extra mirror
-      run: |
-        # We upload in all conditions except when building on PR or branch other than master
-        export PACKAGE_UPLOAD=true
-        if ${{ startsWith(github.ref, 'refs/tags/') }}
-        then
-          export USE_HEAD=false
-        elif [ "${{ github.event.action }}" == "package-master" ]
-        then
-          export USE_HEAD=true
-        elif [ "${{ github.event.action }}" == "package-release" ]
-        then
-          export USE_HEAD=false
-          export REF=`git tag --sort=committerdate --list 'v[0-9]*'|tail -1`
-          git checkout $REF
-          git submodule sync && git submodule update
-        else
-          export REF=`echo ${{ github.ref }} | sed -e 's@refs/[a-z]*/@@'`
-          export USE_HEAD=true
-          if [ $REF != "master" ]
-          then
-            export PACKAGE_UPLOAD=false
-          fi
-        fi
-        if $USE_HEAD
-        then
-          echo "BINTRAY_REPO=multi-contact-head" >> $GITHUB_ENV
-          echo "BINTRAY_VERSION=HEAD" >> $GITHUB_ENV
-          echo "EXTRA_MIRROR=https://dl.bintray.com/gergondet/multi-contact-head" >> $GITHUB_ENV
-          echo "PACKAGE_JOB=package-master" >> $GITHUB_ENV
-        else
-          echo "BINTRAY_REPO=multi-contact-release" >> $GITHUB_ENV
-          echo "BINTRAY_VERSION=${REF}" >> $GITHUB_ENV
-          echo "EXTRA_MIRROR=https://dl.bintray.com/gergondet/multi-contact-release" >> $GITHUB_ENV
-          echo "PACKAGE_JOB=package-release" >> $GITHUB_ENV
-        fi
-        echo "PACKAGE_UPLOAD=${PACKAGE_UPLOAD}" >> $GITHUB_ENV
-    - name: Request mirror sync
-      run: 'curl -ugergondet:${{ secrets.BINTRAY_API_KEY }} --header "X-GPG-PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}" -X POST https://api.bintray.com/calc_metadata/gergondet/${{ env.BINTRAY_REPO }}
-
-        '
+        CLOUDSMITH_API_KEY: "${{ secrets.CLOUDSMITH_API_KEY }}"
       if: env.PACKAGE_UPLOAD == 'true'
