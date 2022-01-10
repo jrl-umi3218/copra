@@ -73,4 +73,10 @@ void PreviewSystem::updateSystem() noexcept
     isUpdated = true;
 }
 
+void PreviewSystem::computeTrajectory(const Eigen::VectorXd& control, Eigen::VectorXd& trajectory) noexcept
+{
+    trajectory.resize(fullXDim);
+    trajectory = this->Phi * this->x0 + this->Psi * control + this->xi;
+}
+
 } // namespace copra

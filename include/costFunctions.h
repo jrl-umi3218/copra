@@ -41,6 +41,12 @@ public:
      */
     virtual void initializeCost(const PreviewSystem& ps);
 
+    /*! \brief Compute the cost value for a particular control input
+     * \param control The control vector \f$U\f$.
+     * \throw Throw an error if cost is not yet initialized.
+     */
+    virtual double getCostValue(const Eigen::VectorXd& control);
+
     /*! Compute \f$Q\f$ and \f$c\f$.
      * \param ps The preview system.
      */
