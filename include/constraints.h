@@ -64,6 +64,11 @@ public:
      * \param ps The PreviewSystem
      */
     virtual void update(const PreviewSystem& ps) = 0;
+    /*! \brief Check if the constraint is satisfied for a particular control vector.
+     * \param control The control vector
+     * \param tolerance The tolerance
+     */
+    virtual bool isSatisfied(const Eigen::VectorXd& control, const double tolerance=0) = 0;
     /*! \brief Return the type of the constraint. \see ConstraintFlag */
     virtual ConstraintFlag constraintType() const noexcept = 0;
     /*! \brief Return the name of the constraint. */
@@ -134,6 +139,7 @@ public:
     void autoSpan() override;
     void initializeConstraint(const PreviewSystem& ps) override;
     void update(const PreviewSystem& ps) override;
+    bool isSatisfied(const Eigen::VectorXd& control, const double tolerance=0) override;
     ConstraintFlag constraintType() const noexcept override;
 
 private:
@@ -170,6 +176,7 @@ public:
     void autoSpan() override;
     void initializeConstraint(const PreviewSystem& ps) override;
     void update(const PreviewSystem& ps) override;
+    bool isSatisfied(const Eigen::VectorXd& control, const double tolerance=0) override;
     ConstraintFlag constraintType() const noexcept override;
 
 private:
@@ -211,6 +218,7 @@ public:
     void autoSpan() override;
     void initializeConstraint(const PreviewSystem& ps) override;
     void update(const PreviewSystem& ps) override;
+    bool isSatisfied(const Eigen::VectorXd& control, const double tolerance=0) override;
     ConstraintFlag constraintType() const noexcept override;
 
 private:
@@ -257,6 +265,7 @@ public:
     void autoSpan() override;
     void initializeConstraint(const PreviewSystem& ps) override;
     void update(const PreviewSystem& ps) override;
+    bool isSatisfied(const Eigen::VectorXd& control, const double tolerance=0) override;
     ConstraintFlag constraintType() const noexcept override;
 
 private:
@@ -293,6 +302,7 @@ public:
     void autoSpan() override;
     void initializeConstraint(const PreviewSystem& ps) override;
     void update(const PreviewSystem& ps) override;
+    bool isSatisfied(const Eigen::VectorXd& control, const double tolerance=0) override;
     ConstraintFlag constraintType() const noexcept override;
     /*! \brief Return the lower bound of the constraint */
     const Eigen::VectorXd& lower() { return lb_; }

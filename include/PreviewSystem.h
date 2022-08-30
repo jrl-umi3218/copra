@@ -48,6 +48,11 @@ struct COPRA_DLLAPI PreviewSystem {
      * Fill Phi, Psi, xi in PreviewSystem.
      */
     void updateSystem() noexcept;
+    /*! \brief Compute the trajectory for a particular control vector.
+     * \param control The control vector
+     * \param trajectory The resulting trajectory
+     */
+    void computeTrajectory(const Eigen::VectorXd& control, Eigen::VectorXd& trajectory) noexcept;
     /*! \brief Modify the initial state without the need to update the system. */
     void xInit(const Eigen::VectorXd& xInit) { x0 = xInit; }
 

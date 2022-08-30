@@ -29,6 +29,12 @@ void CostFunction::initializeCost(const PreviewSystem& ps)
     f_.resize(ps.fullUDim);
 }
 
+double CostFunction::getCostValue(const Eigen::VectorXd& control)
+{
+    //assert control-vector has the correct dimensions
+    return (0.5 * control.transpose() * Q_ * control - control.transpose() * c_)[0];
+}
+
 /*************************************************************************************************
  *                                  Trajectory Cost Function                                     *
  *************************************************************************************************/

@@ -83,6 +83,27 @@ void TrajectoryConstraint::update(const PreviewSystem& ps)
     }
 }
 
+bool TrajectoryConstraint::isSatisfied(const Eigen::VectorXd& control, const double tolerance)
+{
+    assert(tolerance>=0);
+    if(isIneq_){
+        if((A_ * control - b_).maxCoeff() > tolerance){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+    else{
+        if((A_ * control - b_).maxCoeff() > tolerance || (A_ * control - b_).minCoeff() < -tolerance){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+}
+
 ConstraintFlag TrajectoryConstraint::constraintType() const noexcept
 {
     if (isIneq_) {
@@ -144,6 +165,27 @@ void ControlConstraint::update(const PreviewSystem& ps)
         }
         Y_.setZero();
         z_ = b_;
+    }
+}
+
+bool ControlConstraint::isSatisfied(const Eigen::VectorXd& control, const double tolerance)
+{
+    assert(tolerance>=0);
+    if(isIneq_){
+        if((A_ * control - b_).maxCoeff() > tolerance){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+    else{
+        if((A_ * control - b_).maxCoeff() > tolerance || (A_ * control - b_).minCoeff() < -tolerance){
+            return false;
+        }
+        else{
+            return true;
+        }
     }
 }
 
@@ -221,6 +263,27 @@ void MixedConstraint::update(const PreviewSystem& ps)
             // b_.segment(i * nrLines, nrLines) = f_ - E_ * (ps.Phi.block(i * xDim, 0, xDim, xDim) * ps.x0 + ps.xi.segment(i * xDim, xDim));
             z_.segment(i * nrLines, nrLines) = f_ - E_ * ps.xi.segment(i * xDim, xDim);
             b_.segment(i * nrLines, nrLines) = z_.segment(i * nrLines, nrLines) - Y_.block(i * nrLines, 0, nrLines, xDim) * ps.x0;
+        }
+    }
+}
+
+bool MixedConstraint::isSatisfied(const Eigen::VectorXd& control, const double tolerance)
+{
+    assert(tolerance>=0);
+    if(isIneq_){
+        if((A_ * control - b_).maxCoeff() > tolerance){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+    else{
+        if((A_ * control - b_).maxCoeff() > tolerance || (A_ * control - b_).minCoeff() < -tolerance){
+            return false;
+        }
+        else{
+            return true;
         }
     }
 }
@@ -314,6 +377,17 @@ void TrajectoryBoundConstraint::update(const PreviewSystem& ps)
     }
 }
 
+bool TrajectoryBoundConstraint::isSatisfied(const Eigen::VectorXd& control, const double tolerance)
+{
+    assert(tolerance>=0);
+    if((A_ * control - b_).maxCoeff() > tolerance){
+        return false;
+    }
+    else{
+        return true;
+    }
+}
+
 ConstraintFlag TrajectoryBoundConstraint::constraintType() const noexcept
 {
     return ConstraintFlag::InequalityConstraint;
@@ -363,6 +437,17 @@ void ControlBoundConstraint::update(const PreviewSystem& ps)
             ub_.segment(i * ps.uDim, ps.uDim) = upper_;
             lb_.segment(i * ps.uDim, ps.uDim) = lower_;
         }
+    }
+}
+
+bool ControlBoundConstraint::isSatisfied(const Eigen::VectorXd& control, const double tolerance)
+{
+    assert(tolerance>=0);
+    if((control - ub_).maxCoeff() > tolerance || (control - lb_).minCoeff() < -tolerance ){
+        return false;
+    }
+    else{
+        return true;
     }
 }
 
