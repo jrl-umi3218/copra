@@ -131,4 +131,3 @@ Linear model predictive control including optimization of the initial state empl
 
 Writing code takes time.
 If this implementation is useful for your research, please cite the related publication.
-

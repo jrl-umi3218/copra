@@ -13,7 +13,7 @@
 #include <pygen/converters.h>
 #include <string>
 
-//TODO: Add python docstring
+// TODO: Add python docstring
 
 namespace boost {
 
@@ -119,7 +119,7 @@ BOOST_PYTHON_MODULE(pyCopra)
         .add_property("Psi", py::make_getter(&PreviewSystem::Psi, py::return_value_policy<py::copy_non_const_reference>()), py::make_setter(&PreviewSystem::Psi))
         .add_property("xi", py::make_getter(&PreviewSystem::xi, py::return_value_policy<py::copy_non_const_reference>()), py::make_setter(&PreviewSystem::xi));
 
-    //AutoSpan
+    // AutoSpan
     py::class_<AutoSpan, boost::noncopyable>("AutoSpan", "Helper functions to automatically extend a matrix to a desired dimension.", py::no_init)
         .def("span_matrix", py::make_function(autoSpanMatrix0))
         .def("span_matrix", py::make_function(autoSpanMatrix1))
@@ -127,7 +127,7 @@ BOOST_PYTHON_MODULE(pyCopra)
         .def("span_vector", py::make_function(autoSpanVector))
         .staticmethod("span_vector");
 
-    //Constraint
+    // Constraint
     py::enum_<ConstraintFlag>("ConstraintFlag", "Flag to constraint type")
         .value("Constraint", ConstraintFlag::Constraint)
         .value("EqualityConstraint", ConstraintFlag::EqualityConstraint)
@@ -211,7 +211,7 @@ BOOST_PYTHON_MODULE(pyCopra)
         .def("lower", &ControlBoundConstraint::lower, py::return_value_policy<py::copy_const_reference>())
         .def("upper", &ControlBoundConstraint::upper, py::return_value_policy<py::copy_const_reference>());
 
-    //Cost Functions
+    // Cost Functions
     struct CostFunctionWrap : CostFunction, py::wrapper<CostFunction> {
         using CostFunction::CostFunction;
 

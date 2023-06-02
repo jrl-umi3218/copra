@@ -15,12 +15,13 @@
 #define CONSTRAINT_DELETION_WARN(warn, format, ...) (void)warn
 #else
 #define CONSTRAINT_DELETION_WARN(warn, format, ...) \
-    if (warn) fprintf(stderr, format, __VA_ARGS__)
+    if (warn)                                       \
+    fprintf(stderr, format, __VA_ARGS__)
 #endif
 
 namespace copra {
 
-//see http://stackoverflow.com/questions/37181621/easy-way-of-constructing-information-message-for-throwing-stdexception-using-p
+// see http://stackoverflow.com/questions/37181621/easy-way-of-constructing-information-message-for-throwing-stdexception-using-p
 /*! \brief Fancy throw.
  * \tparam An std::exception class
  * \param msg Message to show

@@ -249,7 +249,7 @@ class TestCopra(unittest2.TestCase):
         controlCost = copra.ControlCost(self.N, -self.ud)
         M_mixed = np.ones((1, 2))
         mixedCost = copra.MixedCost(M_mixed, self.N, -self.ud)
-        
+
         controller.add_constraint(trajConstr)
         controller.add_constraint(contConstr)
         controller.add_constraint(trajEqConstr)

@@ -34,4 +34,4 @@ __all__ = ["AutoSpan",
            "NewTrajectoryCost",
            "PreviewSystem",
            "SolverFlag",
-           "TrajectoryConstraint"]           
+           "TrajectoryConstraint"]

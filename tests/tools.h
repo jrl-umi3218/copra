@@ -41,4 +41,4 @@ Eigen::VectorXd spanVector(const Eigen::VectorXd& v, int size);
 
 std::string getSortedTimers(SolverTimers& solT);
 
-} // namespace
+} // namespace tools

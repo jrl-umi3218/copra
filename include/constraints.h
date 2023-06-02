@@ -14,7 +14,7 @@
 
 namespace copra {
 
-//forward declaration
+// forward declaration
 struct PreviewSystem;
 
 #if defined(__GNUC__)
@@ -220,15 +220,15 @@ private:
 };
 
 /*! \brief Trajectory Bound constraint.
- * Even if it is a bound constraint, the optimization vector is \f$U\f$ 
+ * Even if it is a bound constraint, the optimization vector is \f$U\f$
  * so this constraint has to be transformed to an Inequality constraint.
- * \warning This constraint is defined in the QP as an Inequality constraint. 
+ * \warning This constraint is defined in the QP as an Inequality constraint.
  * It might be faster to transform yourself this constraint into an inequality constraint.
  */
 class COPRA_DLLAPI TrajectoryBoundConstraint final : public EqIneqConstraint {
 public:
     /*! \brief Constructor of the trajectory bound constraint.
-     * Create a constraint of type \f$\underline{x}\leq x\leq\overline{x}\f$ or \f$\underline{X}\leq X\leq\overline{X}\f$ 
+     * Create a constraint of type \f$\underline{x}\leq x\leq\overline{x}\f$ or \f$\underline{X}\leq X\leq\overline{X}\f$
      * with \f$X=[x_1^T ... x_N^T]^T\f$.\n
      * As \f$U\f$ is the optimization variable,
      * \f$\underline{x}\leq x\leq\overline{x}\f$ is transformed to be \f$AU\leq b\f$.
@@ -272,7 +272,7 @@ private:
 class COPRA_DLLAPI ControlBoundConstraint final : public Constraint {
 public:
     /*! \brief Constructor of the control bound constraint.
-     * Create a constraint of type \f$\underline{u}\leq u\leq\overline{u}\f$ or \f$\underline{U}\leq U\leq\overline{U}\f$ 
+     * Create a constraint of type \f$\underline{u}\leq u\leq\overline{u}\f$ or \f$\underline{U}\leq U\leq\overline{U}\f$
      * with \f$U=[u_0^T ... u_{N-1}^T]^T\f$.\n
      * As \f$U\f$ is the optimization variable,
      * \f$\underline{u}\leq u\leq\overline{u}\f$ is transformed to be \f$\underline{U}\leq U\leq\overline{U}\f$.

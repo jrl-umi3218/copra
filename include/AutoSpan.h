@@ -12,7 +12,7 @@
 namespace copra {
 
 /*! \brief A class made of static helper function.
- * It can't be instantiated. 
+ * It can't be instantiated.
  * This class has helper functions for automatically extending a matrix to a given dimension.
  * The result is a block diagonal matrix.
  */

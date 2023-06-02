@@ -28,7 +28,7 @@
 
 void run_comparison_test(const bool fullSizeEntry)
 {
-    //define costs and constraints
+    // define costs and constraints
     const int numCost = 1;
     const int numCstr = 1;
     const int xDim = 2;
@@ -38,11 +38,11 @@ void run_comparison_test(const bool fullSizeEntry)
     int U;
     int X;
     if (fullSizeEntry) {
-        //this option results for all costs and constraints in fullSizeEntry==true
-        U = nbSteps_; //NOTE: nbSteps_ == previewSystem_->fullUDim
-        X = nbSteps_ + 1; //NOTE: nbSteps_+1 == previewSystem_->fullXDim
+        // this option results for all costs and constraints in fullSizeEntry==true
+        U = nbSteps_; // NOTE: nbSteps_ == previewSystem_->fullUDim
+        X = nbSteps_ + 1; // NOTE: nbSteps_+1 == previewSystem_->fullXDim
     } else {
-        //this option results for all costs and constraints in fullSizeEntry==false
+        // this option results for all costs and constraints in fullSizeEntry==false
         U = 1;
         X = 1;
     }
@@ -134,7 +134,7 @@ void run_comparison_test(const bool fullSizeEntry)
     ccB->weight(1);
     mcB->weight(1);
 
-    //initialize preview-system and lmpc
+    // initialize preview-system and lmpc
     const Eigen::MatrixXd combi = Eigen::MatrixXd::Ones(xDim + uDim, xDim + uDim);
     const Eigen::VectorXd biasVector = Eigen::VectorXd::Zero(xDim);
     const Eigen::VectorXd s_init = Eigen::VectorXd::Zero(xDim);
@@ -143,9 +143,9 @@ void run_comparison_test(const bool fullSizeEntry)
     previewSystem->system(combi.topLeftCorner(xDim, xDim),
         combi.topRightCorner(xDim, uDim),
         biasVector, s_init, nbSteps_);
-    const copra::SolverFlag solverFlag = copra::SolverFlag::QLD; //or use another flag
+    const copra::SolverFlag solverFlag = copra::SolverFlag::QLD; // or use another flag
 
-    //specify and solve lmpc
+    // specify and solve lmpc
     copra::LMPC lmpcA = copra::LMPC(previewSystem, solverFlag);
     // lmpcA.initializeController(previewSystem);
     lmpcA.addCost(tcA);
@@ -238,7 +238,7 @@ void run_comparison_test(const bool fullSizeEntry)
     MESSAGE("initialStateA: \n " << initialStateA.transpose());
     MESSAGE("initialStateB: \n " << initialStateB.transpose());
 
-    //check if initial state is within its bounds
+    // check if initial state is within its bounds
     for (auto i = 0; i < xDim; ++i) {
         CHECK_LE(initialStateA(i), s_init(i) + 1e-6);
         CHECK_LE(s_init(i), initialStateA(i) + 1e-6);
@@ -254,7 +254,7 @@ void run_comparison_test(const bool fullSizeEntry)
 
 TEST_CASE_FIXTURE(BoundedSystem, "LMPC_AND_INITIAL-STATE-LMPC_COMPARISON")
 {
-    //NOTE: there are no equality constraints in this test
+    // NOTE: there are no equality constraints in this test
     run_comparison_test(true);
     run_comparison_test(false);
 }
@@ -265,7 +265,7 @@ TEST_CASE_FIXTURE(BoundedSystem, "LMPC_AND_INITIAL-STATE-LMPC_COMPARISON")
 
 void run_optimization_test(const bool fullSizeEntry)
 {
-    //define costs and constraints
+    // define costs and constraints
     const int numCost = 1;
     const int numCstr = 1;
     const int xDim = 2;
@@ -275,11 +275,11 @@ void run_optimization_test(const bool fullSizeEntry)
     int U;
     int X;
     if (fullSizeEntry) {
-        //this option results for all costs and constraints in fullSizeEntry==true
-        U = nbSteps_; //NOTE: nbSteps_ == previewSystem_->fullUDim
-        X = nbSteps_ + 1; //NOTE: nbSteps_+1 == previewSystem_->fullXDim
+        // this option results for all costs and constraints in fullSizeEntry==true
+        U = nbSteps_; // NOTE: nbSteps_ == previewSystem_->fullUDim
+        X = nbSteps_ + 1; // NOTE: nbSteps_+1 == previewSystem_->fullXDim
     } else {
-        //this option results for all costs and constraints in fullSizeEntry==false
+        // this option results for all costs and constraints in fullSizeEntry==false
         U = 1;
         X = 1;
     }
@@ -339,7 +339,7 @@ void run_optimization_test(const bool fullSizeEntry)
     cc->weight(1);
     mc->weight(1);
 
-    //initialize preview-system and lmpc
+    // initialize preview-system and lmpc
     const Eigen::MatrixXd combi = Eigen::MatrixXd::Ones(xDim + uDim, xDim + uDim);
     const Eigen::VectorXd biasVector = Eigen::VectorXd::Zero(xDim);
     const Eigen::VectorXd s_init = Eigen::VectorXd::Zero(xDim);
@@ -348,13 +348,13 @@ void run_optimization_test(const bool fullSizeEntry)
     previewSystem->system(combi.topLeftCorner(xDim, xDim),
         combi.topRightCorner(xDim, uDim),
         biasVector, s_init, nbSteps_);
-    const copra::SolverFlag solverFlag = copra::SolverFlag::QLD; //or use another flag
+    const copra::SolverFlag solverFlag = copra::SolverFlag::QLD; // or use another flag
 
-    //specify and solve lmpc
+    // specify and solve lmpc
     copra::InitialStateLMPC lmpc = copra::InitialStateLMPC(previewSystem, solverFlag);
     // lmpc.initializeController(previewSystem);
-    const Eigen::VectorXd initialState_lowerBound = (-1) * Eigen::VectorXd::Ones(xDim); //this allows optimization of the initial state
-    const Eigen::VectorXd initialState_upperBound = (+1) * Eigen::VectorXd::Ones(xDim); //this allows prevents optimization of the initial state
+    const Eigen::VectorXd initialState_lowerBound = (-1) * Eigen::VectorXd::Ones(xDim); // this allows optimization of the initial state
+    const Eigen::VectorXd initialState_upperBound = (+1) * Eigen::VectorXd::Ones(xDim); // this allows prevents optimization of the initial state
     lmpc.resetInitialStateBounds(initialState_lowerBound, initialState_upperBound);
     Eigen::MatrixXd R = (1e-6) * Eigen::MatrixXd::Identity(xDim, xDim); // ensure that R is positive definite
     Eigen::VectorXd r = Eigen::VectorXd::Zero(xDim);
@@ -386,7 +386,7 @@ void run_optimization_test(const bool fullSizeEntry)
     MESSAGE("states: \n " << states.transpose());
     MESSAGE("initialState: \n " << initialState.transpose());
 
-    //check if initial state is within its bounds
+    // check if initial state is within its bounds
     for (auto i = 0; i < xDim; ++i) {
         CHECK_LE(initialState(i), initialState_upperBound(i) + 1e-6);
         CHECK_LE(initialState_lowerBound(i), initialState(i) + 1e-6);
@@ -397,7 +397,7 @@ void run_optimization_test(const bool fullSizeEntry)
 
 TEST_CASE_FIXTURE(BoundedSystem, "INITIAL-STATE-OPTIMIZATION")
 {
-    //NOTE: there are no equality constraints in this test
+    // NOTE: there are no equality constraints in this test
     run_optimization_test(true);
     run_optimization_test(false);
 }

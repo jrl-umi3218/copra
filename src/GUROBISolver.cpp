@@ -39,7 +39,7 @@ double GUROBISolver::SI_feasibilityTolerance() const
 
 void GUROBISolver::SI_feasibilityTolerance(double tol)
 {
-    solver_.feasibilityTolerance(tol); //primal feasible tolerance
+    solver_.feasibilityTolerance(tol); // primal feasible tolerance
 }
 
 int GUROBISolver::SI_maxIter() const
@@ -49,7 +49,7 @@ int GUROBISolver::SI_maxIter() const
 
 void GUROBISolver::SI_maxIter(int maxIter)
 {
-    solver_.optimalityTolerance(tol); //dual feasible tolerance
+    solver_.optimalityTolerance(tol); // dual feasible tolerance
 }
 
 bool GUROBISolver::SI_warmStart() const
