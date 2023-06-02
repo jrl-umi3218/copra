@@ -1,0 +1,8 @@
+digraph "Graphical Class Hierarchy"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node0 [label="copra::PreviewSystem",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structcopra_1_1PreviewSystem.html",tooltip="Structure representing all variables of a system for performing preview control. Such system is defin..."];
+}

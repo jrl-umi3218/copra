@@ -1,0 +1,11 @@
+digraph "copra::InitialStateLMPC"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="copra::InitialStateLMPC",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="LMPC with optimization of initial state. This class gives all the needed composants for performing a ..."];
+  Node2 -> Node1 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="copra::LMPC",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classcopra_1_1LMPC.html",tooltip="The Linear Model Predictive Controller (LMPC). This class gives all the needed composants for perform..."];
+  Node3 -> Node2 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" constraints_" ,fontname="Helvetica"];
+  Node3 [label="copra::LMPC::Constraints",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structcopra_1_1LMPC_1_1Constraints.html",tooltip="Nested representation of Constraints."];
+}

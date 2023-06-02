@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['autospan_189',['AutoSpan',['../a00898.html',1,'copra']]]
+  ['autospan_189',['AutoSpan',['../structcopra_1_1AutoSpan.html',1,'copra']]]
 ];

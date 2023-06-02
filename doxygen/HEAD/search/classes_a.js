@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['solverinterface_212',['SolverInterface',['../a00986.html',1,'copra']]]
+  ['solverinterface_212',['SolverInterface',['../classcopra_1_1SolverInterface.html',1,'copra']]]
 ];

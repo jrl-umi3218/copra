@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['gurobisolver_197',['GUROBISolver',['../a00950.html',1,'copra']]]
+  ['gurobisolver_197',['GUROBISolver',['../classcopra_1_1GUROBISolver.html',1,'copra']]]
 ];

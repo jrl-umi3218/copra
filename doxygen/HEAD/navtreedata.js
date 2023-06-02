@@ -63,8 +63,8 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"a00002.html",
-"a00970.html#a72fdd1506ba521c68f537b47b63efd50"
+"AutoSpan_8h.html",
+"classcopra_1_1TrajectoryConstraint.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

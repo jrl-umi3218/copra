@@ -1,0 +1,18 @@
+digraph "copra::SolverInterface"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="copra::SolverInterface",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="An interface to the quadratic solvers. This interface is more like a pseudo-interface (it is not an a..."];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="copra::GUROBISolver",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classcopra_1_1GUROBISolver.html",tooltip="GUROBISolver solver for both dense matrix."];
+  Node1 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="copra::LSSOLSolver",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classcopra_1_1LSSOLSolver.html",tooltip="LSSOLSolver solver for both dense matrix."];
+  Node1 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="copra::OSQPSolver",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classcopra_1_1OSQPSolver.html",tooltip="OSQP solver for dense matrix."];
+  Node1 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="copra::QLDSolver",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classcopra_1_1QLDSolver.html",tooltip="QLD solver for both dense matrix."];
+  Node1 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="copra::QuadProgDenseSolver",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classcopra_1_1QuadProgDenseSolver.html",tooltip="QuadProg solver for dense matrix."];
+}

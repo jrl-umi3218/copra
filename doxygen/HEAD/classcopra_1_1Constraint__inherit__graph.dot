@@ -1,0 +1,20 @@
+digraph "copra::Constraint"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="copra::Constraint",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="Abstract base class that represents constraints. Any derived class of this one can be added to the MP..."];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="copra::ControlBoundConstraint",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classcopra_1_1ControlBoundConstraint.html",tooltip="Control Bound constraint. It bounds the optimization ."];
+  Node1 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="copra::EqIneqConstraint",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classcopra_1_1EqIneqConstraint.html",tooltip="Abstract Class for Equality and Inequality constraints. Even if Equality and Inequality constraints a..."];
+  Node3 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="copra::ControlConstraint",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classcopra_1_1ControlConstraint.html",tooltip="Control constraint class. Depending on the parameter 'isInequalityConstraint' during the construction..."];
+  Node3 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="copra::MixedConstraint",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classcopra_1_1MixedConstraint.html",tooltip="Mixed constraint class. Depending on the parameter 'isInequalityConstraint' during the construction i..."];
+  Node3 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="copra::TrajectoryBoundConstraint",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classcopra_1_1TrajectoryBoundConstraint.html",tooltip="Trajectory Bound constraint. Even if it is a bound constraint, the optimization vector is  so this co..."];
+  Node3 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="copra::TrajectoryConstraint",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classcopra_1_1TrajectoryConstraint.html",tooltip="Trajectory constraint class. Depending on the parameter 'isInequalityConstraint' during the construct..."];
+}
