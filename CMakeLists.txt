@@ -28,6 +28,8 @@ project(
   LANGUAGES CXX
   VERSION ${PROJECT_VERSION})
 
+set_default_cmake_build_type(RelWithDebInfo)
+
 set(INSTALL_GENERATED_HEADERS OFF)
 
 if(MSVC)
