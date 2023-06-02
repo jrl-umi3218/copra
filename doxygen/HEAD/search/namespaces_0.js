@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['copra',['copra',['../a00081.html',1,'']]]
+  ['copra_217',['copra',['../a00081.html',1,'']]]
 ];

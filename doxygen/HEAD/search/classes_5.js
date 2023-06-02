@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['lmpc',['LMPC',['../a00690.html',1,'copra']]],
-  ['lssolsolver',['LSSOLSolver',['../a00698.html',1,'copra']]]
+  ['lmpc_204',['LMPC',['../a00958.html',1,'copra']]],
+  ['lssolsolver_205',['LSSOLSolver',['../a00966.html',1,'copra']]]
 ];
