@@ -10,7 +10,7 @@ set(PROJECT_DESCRIPTION
     "This library is an implementation of a linear model predictive control")
 set(PROJECT_URL "https://github.com/jrl-umi3218/copra")
 set(PROJECT_DEBUG_POSTFIX "_d")
-set(PROJECT_VERSION 1.3.1)
+set(PROJECT_VERSION 1.3.2)
 
 include(cmake/base.cmake)
 include(cmake/msvc-specific.cmake)
