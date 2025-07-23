@@ -20,7 +20,7 @@ Copra is licensed under the [BSD-2-Clause](https://opensource.org/licenses/BSD-2
 
 Copra should compiles and is tested on Linux, macOS and Windows.
 
-### Ubuntu LTS (16.04, 18.04, 20.04)
+### Ubuntu LTS (16.04, 18.04, 20.04, 22.04, 24.04)
 
 You must first setup our package mirror:
 
