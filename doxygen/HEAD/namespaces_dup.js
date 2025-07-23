@@ -1,5 +1,5 @@
 var namespaces_dup =
 [
-    [ "copra", "namespacecopra.html", null ],
+    [ "copra", "namespacecopra.html", "namespacecopra" ],
     [ "Eigen", "namespaceEigen.html", null ]
 ];

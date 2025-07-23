@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
-<tagfile>
+<tagfile doxygen_version="1.9.1">
   <compound kind="file">
     <name>mainpage.md</name>
     <path>/home/runner/work/copra/copra/doc/</path>
@@ -2226,30 +2226,30 @@
     <filename>namespacecopra.html</filename>
     <class kind="struct">copra::AutoSpan</class>
     <class kind="class">copra::Constraint</class>
-    <class kind="class">copra::ControlBoundConstraint</class>
-    <class kind="class">copra::ControlConstraint</class>
-    <class kind="class">copra::ControlCost</class>
-    <class kind="class">copra::CostFunction</class>
     <class kind="class">copra::EqIneqConstraint</class>
+    <class kind="class">copra::TrajectoryConstraint</class>
+    <class kind="class">copra::ControlConstraint</class>
+    <class kind="class">copra::MixedConstraint</class>
+    <class kind="class">copra::TrajectoryBoundConstraint</class>
+    <class kind="class">copra::ControlBoundConstraint</class>
+    <class kind="class">copra::CostFunction</class>
+    <class kind="class">copra::TrajectoryCost</class>
+    <class kind="class">copra::TargetCost</class>
+    <class kind="class">copra::ControlCost</class>
+    <class kind="class">copra::MixedCost</class>
     <class kind="class">copra::GUROBISolver</class>
     <class kind="class">copra::InitialStateLMPC</class>
-    <class kind="struct">copra::is_all_arithmetic</class>
-    <class kind="struct">copra::is_all_arithmetic&lt; std::false_type, T2, T3 &gt;</class>
-    <class kind="struct">copra::is_all_arithmetic&lt; std::true_type, std::true_type, std::true_type &gt;</class>
-    <class kind="struct">copra::is_all_arithmetic&lt; std::true_type, T2, T3 &gt;</class>
     <class kind="class">copra::LMPC</class>
     <class kind="class">copra::LSSOLSolver</class>
-    <class kind="class">copra::MixedConstraint</class>
-    <class kind="class">copra::MixedCost</class>
     <class kind="class">copra::OSQPSolver</class>
     <class kind="struct">copra::PreviewSystem</class>
     <class kind="class">copra::QLDSolver</class>
     <class kind="class">copra::QuadProgDenseSolver</class>
     <class kind="class">copra::SolverInterface</class>
-    <class kind="class">copra::TargetCost</class>
-    <class kind="class">copra::TrajectoryBoundConstraint</class>
-    <class kind="class">copra::TrajectoryConstraint</class>
-    <class kind="class">copra::TrajectoryCost</class>
+    <class kind="struct">copra::is_all_arithmetic</class>
+    <class kind="struct">copra::is_all_arithmetic&lt; std::false_type, T2, T3 &gt;</class>
+    <class kind="struct">copra::is_all_arithmetic&lt; std::true_type, T2, T3 &gt;</class>
+    <class kind="struct">copra::is_all_arithmetic&lt; std::true_type, std::true_type, std::true_type &gt;</class>
     <member kind="function">
       <type>void COPRA_DLLAPI</type>
       <name>fancy_throw</name>
@@ -2363,6 +2363,7 @@
   <compound kind="page">
     <name>index</name>
     <title>Copra</title>
-    <filename>index</filename>
+    <filename>index.html</filename>
+    <docanchor file="index.html">mainpage</docanchor>
   </compound>
 </tagfile>

@@ -7,16 +7,16 @@ digraph "include/typedefs.h"
   Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node2 [label="include/AutoSpan.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$AutoSpan_8h.html",tooltip=" "];
   Node1 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node3 [label="include/debugUtils.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$debugUtils_8h.html",tooltip=" "];
-  Node3 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node4 [label="include/constraints.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$constraints_8h.html",tooltip=" "];
-  Node3 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node5 [label="include/costFunctions.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$costFunctions_8h.html",tooltip=" "];
-  Node3 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="include/constraints.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$constraints_8h.html",tooltip=" "];
+  Node1 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="include/costFunctions.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$costFunctions_8h.html",tooltip=" "];
+  Node1 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="include/debugUtils.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$debugUtils_8h.html",tooltip=" "];
+  Node5 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node6 [label="include/LMPC.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$LMPC_8h.html",tooltip=" "];
   Node6 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node7 [label="include/InitialStateLMPC.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$InitialStateLMPC_8h.html",tooltip=" "];
-  Node1 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node1 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node1 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
 }
