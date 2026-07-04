@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-22.04, ubuntu-24.04, macos-latest, windows-latest]
+        os: [ubuntu-22.04, ubuntu-24.04, ubuntu-26.04, macos-latest, windows-latest]
         build-type: [Debug, RelWithDebInfo]
         compiler: [gcc, clang]
         exclude:
@@ -44,8 +44,8 @@ jobs:
           brew: eigen boost gcc
         windows: |
           github:
-            - path: eigenteam/eigen-git-mirror
-              ref: 3.3.7
+            - path: eigen-mirror/eigen
+              ref: 3.4.1
         github: |
           - path: jrl-umi3218/eigen-quadprog
             options: -DPYTHON_BINDING:BOOL=OFF

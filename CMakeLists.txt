@@ -1,9 +1,9 @@
 #
-# Copyright 2016-2019 CNRS-UM LIRMM, CNRS-AIST JRL
+# Copyright 2016-2026 CNRS-UM LIRMM, CNRS-AIST JRL
 #
 
 # Version minimum
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.22)
 
 set(PROJECT_NAME copra)
 set(PROJECT_DESCRIPTION
@@ -11,14 +11,36 @@ set(PROJECT_DESCRIPTION
 set(PROJECT_URL "https://github.com/jrl-umi3218/copra")
 set(PROJECT_DEBUG_POSTFIX "_d")
 set(PROJECT_VERSION 1.3.2)
-
-include(cmake/base.cmake)
-include(cmake/msvc-specific.cmake)
-include(optional_qps.cmake)
-
 # SET(CXX_DISABLE_WERROR True)
 set(DOXYGEN_USE_MATHJAX "YES")
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
+
+# Check if the submodule cmake have been initialized
+set(JRL_CMAKE_MODULES "${CMAKE_CURRENT_LIST_DIR}/cmake")
+if(EXISTS "${JRL_CMAKE_MODULES}/base.cmake")
+  message(STATUS "JRL cmakemodules found in 'cmake/' git submodule")
+else()
+  find_package(jrl-cmakemodules QUIET CONFIG)
+  if(jrl-cmakemodules_FOUND)
+    get_property(
+      JRL_CMAKE_MODULES
+      TARGET jrl-cmakemodules::jrl-cmakemodules
+      PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
+    message(STATUS "JRL cmakemodules found on system at ${JRL_CMAKE_MODULES}")
+  else()
+    message(STATUS "JRL cmakemodules not found. Let's fetch it.")
+    include(FetchContent)
+    FetchContent_Declare(
+      "jrl-cmakemodules"
+      GIT_REPOSITORY "https://github.com/jrl-umi3218/jrl-cmakemodules.git")
+    FetchContent_MakeAvailable("jrl-cmakemodules")
+    FetchContent_GetProperties("jrl-cmakemodules" SOURCE_DIR JRL_CMAKE_MODULES)
+  endif()
+endif()
+
+include(${JRL_CMAKE_MODULES}/base.cmake)
+include(${JRL_CMAKE_MODULES}/msvc-specific.cmake)
+include(optional_qps.cmake)
 
 option(PYTHON_BINDING "Generate python bindings." OFF)
 option(BUILD_TESTING "Build unit tests." ON)

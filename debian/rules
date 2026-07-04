@@ -10,4 +10,4 @@ TMP = $(CURDIR)/debian/tmp
 	dh $@ --parallel
 
 override_dh_auto_configure:
-	dh_auto_configure -- -DPYTHON_BINDING:BOOL=OFF
+	dh_auto_configure -- -DPYTHON_BINDING:BOOL=OFF -DFETCHCONTENT_FULLY_DISCONNECTED=OFF

@@ -10,7 +10,7 @@ on:
     - README.md
     - ".github/workflows/build.yml"
     branches:
-    - "**"
+    - "master"
     tags:
     - v*
   pull_request:
@@ -19,16 +19,6 @@ on:
 jobs:
   package:
     uses: jrl-umi3218/github-actions/.github/workflows/package-project.yml@master
-    with:
-      matrix: |
-          {
-            "dist": ["bionic", "focal", "jammy", "noble"],
-            "arch": ["amd64"],
-            "include":
-            [
-              {"dist": "bionic", "arch": "i386" }
-            ]
-          }
     secrets:
       CLOUDSMITH_API_KEY: ${{ secrets.CLOUDSMITH_API_KEY }}
       GH_TOKEN: ${{ secrets.GH_PAGES_TOKEN }}
