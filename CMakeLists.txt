@@ -10,7 +10,7 @@ set(PROJECT_DESCRIPTION
     "This library is an implementation of a linear model predictive control")
 set(PROJECT_URL "https://github.com/jrl-umi3218/copra")
 set(PROJECT_DEBUG_POSTFIX "_d")
-set(PROJECT_VERSION 1.3.2)
+set(PROJECT_VERSION 1.3.3)
 # SET(CXX_DISABLE_WERROR True)
 set(DOXYGEN_USE_MATHJAX "YES")
 set(CMAKE_CXX_STANDARD 17)
