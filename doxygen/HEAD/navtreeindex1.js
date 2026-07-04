@@ -83,6 +83,8 @@ var NAVTREEINDEX1 =
 "index.html#autotoc_md6":[0,4],
 "index.html#autotoc_md7":[1],
 "namespaceEigen.html":[2,0,1],
+"namespaceEigen.html#a18071e8a41973e397737334385593da4":[2,0,1,1],
+"namespaceEigen.html#ad3bfb7eb46287440d2e75a2396a76c7f":[2,0,1,0],
 "namespacecopra.html":[2,0,0],
 "namespacecopra.html#a11ad5b78f8b35292eeb62aff2c29afc1":[2,0,0,27],
 "namespacecopra.html#a2dd349b87894ca53152eaeefc669187c":[2,0,0,34],

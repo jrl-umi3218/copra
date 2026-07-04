@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['solverinterface_2eh_239',['SolverInterface.h',['../SolverInterface_8h.html',1,'']]],
-  ['solverutils_2eh_240',['solverUtils.h',['../solverUtils_8h.html',1,'']]]
+  ['qldsolver_2eh_263',['QLDSolver.h',['../QLDSolver_8h.html',1,'']]],
+  ['quadprog_2eh_264',['QuadProg.h',['/usr/local/share/doc/eigen-quadprog/doxygen-html/QuadProg_8h.html',1,'']]],
+  ['quadprogsolver_2eh_265',['QuadProgSolver.h',['../QuadProgSolver_8h.html',1,'']]]
 ];

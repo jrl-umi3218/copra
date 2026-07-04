@@ -1,10 +1,15 @@
 var searchData=
 [
-  ['q_107',['Q',['../classcopra_1_1CostFunction.html#afaf5c0657a03ce01365e06adcd99c911',1,'copra::CostFunction::Q()'],['../classcopra_1_1LMPC.html#a7ffd5ba1cbd96ed70ecc36f3f35c8031',1,'copra::LMPC::Q()']]],
-  ['q_5f_108',['Q_',['../classcopra_1_1CostFunction.html#a4c0067736d9dd5f904aee153baf63f30',1,'copra::CostFunction::Q_()'],['../classcopra_1_1LMPC.html#ab4499d3aebccad832902933b631072a0',1,'copra::LMPC::Q_()']]],
-  ['qldsolver_109',['QLDSolver',['../classcopra_1_1QLDSolver.html',1,'copra::QLDSolver'],['../classcopra_1_1QLDSolver.html#a688cb21805a5f3b7158692a07cc43e0a',1,'copra::QLDSolver::QLDSolver()']]],
-  ['qldsolver_2eh_110',['QLDSolver.h',['../QLDSolver_8h.html',1,'']]],
-  ['quadprogdense_111',['QuadProgDense',['../solverUtils_8h.html#a6ed5551a07839c562e3aadc1c837573d',1,'solverUtils.h']]],
-  ['quadprogdensesolver_112',['QuadProgDenseSolver',['../classcopra_1_1QuadProgDenseSolver.html',1,'copra::QuadProgDenseSolver'],['../classcopra_1_1QuadProgDenseSolver.html#ad6057a80df22b38caca1edad7c64d77e',1,'copra::QuadProgDenseSolver::QuadProgDenseSolver()']]],
-  ['quadprogsolver_2eh_113',['QuadProgSolver.h',['../QuadProgSolver_8h.html',1,'']]]
+  ['q_119',['Q',['../classcopra_1_1CostFunction.html#afaf5c0657a03ce01365e06adcd99c911',1,'copra::CostFunction::Q()'],['../classcopra_1_1LMPC.html#a7ffd5ba1cbd96ed70ecc36f3f35c8031',1,'copra::LMPC::Q()']]],
+  ['q_5f_120',['Q_',['../classcopra_1_1LMPC.html#ab4499d3aebccad832902933b631072a0',1,'copra::LMPC::Q_()'],['/usr/local/share/doc/eigen-quadprog/doxygen-html/classEigen_1_1QuadProgCommon.html#ade6b3b7402c19d572f55a18f79c8d212',1,'Eigen::QuadProgCommon::Q_()'],['../classcopra_1_1CostFunction.html#a4c0067736d9dd5f904aee153baf63f30',1,'copra::CostFunction::Q_()']]],
+  ['qldsolver_121',['QLDSolver',['../classcopra_1_1QLDSolver.html',1,'copra::QLDSolver'],['../classcopra_1_1QLDSolver.html#a688cb21805a5f3b7158692a07cc43e0a',1,'copra::QLDSolver::QLDSolver()']]],
+  ['qldsolver_2eh_122',['QLDSolver.h',['../QLDSolver_8h.html',1,'']]],
+  ['qpgen1_5f_123',['qpgen1_',['/usr/local/share/doc/eigen-quadprog/doxygen-html/namespaceEigen.html#ad3bfb7eb46287440d2e75a2396a76c7f',1,'Eigen']]],
+  ['qpgen2_5f_124',['qpgen2_',['/usr/local/share/doc/eigen-quadprog/doxygen-html/namespaceEigen.html#a18071e8a41973e397737334385593da4',1,'Eigen']]],
+  ['quadprog_2eh_125',['QuadProg.h',['/usr/local/share/doc/eigen-quadprog/doxygen-html/QuadProg_8h.html',1,'']]],
+  ['quadprogcommon_126',['QuadProgCommon',['/usr/local/share/doc/eigen-quadprog/doxygen-html/classEigen_1_1QuadProgCommon.html',1,'Eigen::QuadProgCommon'],['/usr/local/share/doc/eigen-quadprog/doxygen-html/classEigen_1_1QuadProgCommon.html#ac7a006b9cb25fc5c1fa27d45bb78bdde',1,'Eigen::QuadProgCommon::QuadProgCommon()']]],
+  ['quadprogdense_127',['QuadProgDense',['/usr/local/share/doc/eigen-quadprog/doxygen-html/classEigen_1_1QuadProgDense.html',1,'Eigen::QuadProgDense'],['/usr/local/share/doc/eigen-quadprog/doxygen-html/classEigen_1_1QuadProgDense.html#af69191d271c49086c0e05086f6899c29',1,'Eigen::QuadProgDense::QuadProgDense()'],['/usr/local/share/doc/eigen-quadprog/doxygen-html/classEigen_1_1QuadProgDense.html#a6395fd3fc28d3bd997e4c9a4a2a17a82',1,'Eigen::QuadProgDense::QuadProgDense(int nrvar, int nreq, int nrineq)'],['../solverUtils_8h.html#a6ed5551a07839c562e3aadc1c837573d',1,'QuadProgDense():&#160;solverUtils.h']]],
+  ['quadprogdensesolver_128',['QuadProgDenseSolver',['../classcopra_1_1QuadProgDenseSolver.html',1,'copra::QuadProgDenseSolver'],['../classcopra_1_1QuadProgDenseSolver.html#ad6057a80df22b38caca1edad7c64d77e',1,'copra::QuadProgDenseSolver::QuadProgDenseSolver()']]],
+  ['quadprogsolver_2eh_129',['QuadProgSolver.h',['../QuadProgSolver_8h.html',1,'']]],
+  ['quadprogsparse_130',['QuadProgSparse',['/usr/local/share/doc/eigen-quadprog/doxygen-html/classEigen_1_1QuadProgSparse.html',1,'Eigen::QuadProgSparse'],['/usr/local/share/doc/eigen-quadprog/doxygen-html/classEigen_1_1QuadProgSparse.html#a20557d201a5862329863f24d13ebea55',1,'Eigen::QuadProgSparse::QuadProgSparse()'],['/usr/local/share/doc/eigen-quadprog/doxygen-html/classEigen_1_1QuadProgSparse.html#afe7edd184831041f1fe7c8f05e984a97',1,'Eigen::QuadProgSparse::QuadProgSparse(int nrvar, int nreq, int nrineq)']]]
 ];

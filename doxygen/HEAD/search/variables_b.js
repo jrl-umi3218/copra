@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['q_5f_382',['Q_',['../classcopra_1_1CostFunction.html#a4c0067736d9dd5f904aee153baf63f30',1,'copra::CostFunction::Q_()'],['../classcopra_1_1LMPC.html#ab4499d3aebccad832902933b631072a0',1,'copra::LMPC::Q_()']]],
-  ['quadprogdense_383',['QuadProgDense',['../solverUtils_8h.html#a6ed5551a07839c562e3aadc1c837573d',1,'solverUtils.h']]]
+  ['phi_424',['Phi',['../structcopra_1_1PreviewSystem.html#a902da5a586a676fe634bca01464e6531',1,'copra::PreviewSystem']]],
+  ['ps_5f_425',['ps_',['../classcopra_1_1LMPC.html#afa357443f1b9ccf5ba3d4f86af9e4db4',1,'copra::LMPC']]],
+  ['psi_426',['Psi',['../structcopra_1_1PreviewSystem.html#a0fa054e26f0dbe6688f1b06827935e85',1,'copra::PreviewSystem']]]
 ];

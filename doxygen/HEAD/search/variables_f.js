@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['ub_5f_395',['ub_',['../classcopra_1_1LMPC.html#ae1031c267c293dbb02c9e7d128aa157e',1,'copra::LMPC']]],
-  ['udim_396',['uDim',['../structcopra_1_1PreviewSystem.html#a4df70e0a6a669e1f68e2d26341e05acf',1,'copra::PreviewSystem']]]
+  ['tol_5f_439',['tol_',['/usr/local/share/doc/eigen-quadprog/doxygen-html/classEigen_1_1QuadProgCommon.html#a7363aa4e1cfa960e70996110c12dcec1',1,'Eigen::QuadProgCommon']]],
+  ['trajectory_5f_440',['trajectory_',['../classcopra_1_1LMPC.html#a31b0dd1f53dc8df86e38411b13aa3932',1,'copra::LMPC']]]
 ];

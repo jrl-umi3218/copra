@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['osqpsolver_2eh_235',['OSQPSolver.h',['../OSQPSolver_8h.html',1,'']]]
+  ['mainpage_2emd_260',['mainpage.md',['../mainpage_8md.html',1,'']]]
 ];
